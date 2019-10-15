@@ -18,25 +18,25 @@ import UserScreen from '../../screen/User/UserScreen'
 import DetailScreen from '../../screen/DetailScreen'
 
 const HomeStack = createStackNavigator({
-    Home: HomeScreen,
-    Detail: DetailScreen,
+    cateringapp_Home: HomeScreen,
+    cateringapp_Detail: DetailScreen,
 
 })
 
 const MapStack = createStackNavigator({
-    Map: MapScreen,
-    Detail: DetailScreen,
+    cateringapp_Map: MapScreen,
+    cateringapp_Detail: DetailScreen,
 
 })
 
 const CateringStack = createStackNavigator({
-    Catering: CateringScreen,
-    Detail: DetailScreen,
+    cateringapp_Catering: CateringScreen,
+    cateringapp_Detail: DetailScreen,
 
 })
 const UserStack = createStackNavigator({
-    User: UserScreen,
-    Detail: DetailScreen,
+    cateringapp_User: UserScreen,
+    cateringapp_Detail: DetailScreen,
 
 
 })
