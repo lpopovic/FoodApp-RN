@@ -7,7 +7,7 @@
  */
 
 import React, { Component } from 'react';
-import Navigation from './src/components/TabNavigation/Navigation'
+import Navigation from './src/components/TabNavigation/TabNavigator'
 
 export default class App extends Component {
   render() {
