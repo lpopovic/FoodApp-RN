@@ -7,8 +7,6 @@ class BaseScreen extends Component {
 
     componentDidMount() {
         this._isMounted = true
-
-        this.setNewStateHandler({ color: 'red' })
     }
 
     componentWillUnmount() {
