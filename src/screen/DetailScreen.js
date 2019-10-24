@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-
-class DetailScreen extends Component {
+import BaseScreen from './BaseScreen/BaseScreen'
+class DetailScreen extends BaseScreen {
 
     render() {
         return (

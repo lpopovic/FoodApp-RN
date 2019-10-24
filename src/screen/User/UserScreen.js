@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { SreenName } from '../../helpers'
-
-class UserScreen extends Component {
+import BaseScreen from "../BaseScreen/BaseScreen"
+class UserScreen extends BaseScreen {
 
     render() {
         return (
