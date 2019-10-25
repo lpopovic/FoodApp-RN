@@ -19,7 +19,8 @@ class DetailScreen extends BaseScreen {
         return (
 
             <View style={[styles.mainContainer, { justifyContent: 'center', alignItems: 'center', backgroundColor: this.state.color }]}>
-                <Text onPress = {()=>this.closeScreen()}>Detail!</Text>
+                <Text onPress = {()=>this.setNewStateHandler({color:this.state.color === 'green' ? 'blue':'green'})}>Press Change Color Detail!</Text>
+                <Text onPress = {()=>this.closeScreen()}>Press Close Screen!</Text>
             </View>
 
         )

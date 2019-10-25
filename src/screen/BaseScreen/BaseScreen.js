@@ -14,6 +14,7 @@ class BaseScreen extends Component {
         this._isMounted = false
         this._navListener = null
         this.state = {
+            color :'green'
         }
     }
 
