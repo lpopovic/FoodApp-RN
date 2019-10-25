@@ -1,5 +1,5 @@
 
-export const ROOT_URL = '';
+const ROOT_URL = '';
 const withKey = url => `${ROOT_URL}${url}`
 
 class RestUrl {

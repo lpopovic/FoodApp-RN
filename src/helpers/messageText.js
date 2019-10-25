@@ -1,0 +1,5 @@
+export const MESSAGE_NO_PLACE = "There is no nearly places!"
+export const MESSAGE_NO_DISH = "There is no nearly results!"
+export const MESSAGE_NO_VALIDE_INPUT_FORM = "All fields are required!"
+export const MESSAGE_NO_VALIDE_ID = "Selected item is not currently available!"
+export const DESCRIPTION_IS_EMPTY = "Description is not available at this moment"
