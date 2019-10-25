@@ -1,16 +1,30 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import {
+    StyleSheet,
+    StatusBar,
+} from 'react-native';
+import {
+    isAndroid
+} from '../../helpers'
 
 class BaseScreen extends Component {
 
-    _isMounted = false
+    constructor(props) {
+        super(props)
+        this._isMounted = false
+        this._navListener = null
+        this.state = {
+        }
+    }
 
     componentDidMount() {
         this._isMounted = true
+
     }
 
     componentWillUnmount() {
         this._isMounted = false
+        this.removeNavListener()
     }
 
     setNewStateHandler = (newStateAtributeValue) => {
@@ -18,13 +32,31 @@ class BaseScreen extends Component {
             this.setState(newStateAtributeValue)
         }
     }
-
+    setStatusBarStyle = (color) => {
+        this._navListener = this.props.navigation.addListener('didFocus', () => {
+            StatusBar.setBarStyle('light-content');
+            if (isAndroid) {
+                StatusBar.setBackgroundColor(color);
+            } else {
+                StatusBar.setBarStyle('dark-content');
+            }
+        });
+    }
+    removeNavListener = () => {
+        this._navListener.remove();
+    }
+    pushNewScreen = (newScreenAtributeValue) => {
+        this.props.navigation.navigate(newScreenAtributeValue)
+    }
+    closeScreen = ()=> {
+        this.props.navigation.goBack()
+    }
 
 }
 
 const styles = StyleSheet.create({
     mainContainer: {
-        backgroundColor: 'red'
+        flex: 1
     }
 });
 
