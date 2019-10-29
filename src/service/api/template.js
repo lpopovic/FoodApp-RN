@@ -9,10 +9,12 @@ class TemplateNetwork {
                 resolve(data)
 
             } catch (error) {
-                if (error.response) {
-                    reject(error.response.data)
-                } else {
+                try {
+                    const { message } = error.response.data.error
+                    reject(message)
+                } catch  {
                     reject(error.message)
+
                 }
             }
         });

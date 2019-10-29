@@ -6,22 +6,24 @@ import {
 } from 'react-native';
 import BaseScreen from '../BaseScreen/BaseScreen';
 import SafeAreaView from 'react-native-safe-area-view';
+import { SreenName } from '../../helpers'
+import { BASE_COLOR } from '../../styles';
 
 class LoginScreen extends BaseScreen {
     constructor(props) {
         super(props)
     }
-    componentDidMount(){
+    componentDidMount() {
         super.componentDidMount()
-        this.setStatusBarStyle('blue')
+        this.setStatusBarStyle(BASE_COLOR.blue)
     }
-    componentWillUnmount(){
+    componentWillUnmount() {
         super.componentWillUnmount()
     }
     render() {
         return (
             <SafeAreaView style={styles.mainContainer}>
-                <Text>LoginScreen</Text>
+                <Text onPress={() => this.resetNavigationStack(SreenName.TabNavigatorScreen())}>LoginScreen</Text>
             </SafeAreaView>
         )
     }
@@ -31,7 +33,7 @@ const styles = StyleSheet.create({
     mainContainer: {
         flex: 1,
         alignItems: 'center',
-        backgroundColor: 'blue'
+        backgroundColor: BASE_COLOR.blue
     }
 });
 

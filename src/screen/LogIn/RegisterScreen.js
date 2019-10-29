@@ -5,6 +5,7 @@ import {
     StyleSheet
 } from 'react-native';
 import BaseScreen from '../BaseScreen/BaseScreen';
+import { BASE_COLOR } from '../../styles';
 
 class RegisterScreen extends BaseScreen {
 
@@ -14,7 +15,7 @@ class RegisterScreen extends BaseScreen {
 
     componentDidMount() {
         super.componentDidMount()
-        this.setStatusBarStyle('red')
+        this.setStatusBarStyle(BASE_COLOR.blue)
     }
     componentWillUnmount() {
         super.componentWillUnmount()
@@ -32,7 +33,7 @@ const styles = StyleSheet.create({
     mainContainer: {
         flex: 1,
         alignContent: 'center',
-        backgroundColor: 'red'
+        backgroundColor: BASE_COLOR.blue
     }
 });
 

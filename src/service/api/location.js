@@ -10,10 +10,12 @@ class LocationNetwork {
                 const object = City.createArrayCity(data)
                 resolve(object)
             } catch (error) {
-                if (error.response.data) {
-                    reject(error.response.data.error.message)
-                } else {
+                try {
+                    const { message } = error.response.data.error
+                    reject(message)
+                } catch  {
                     reject(error.message)
+
                 }
             }
         });

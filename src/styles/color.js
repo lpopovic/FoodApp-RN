@@ -1,4 +1,5 @@
 const BASE_COLOR = {
+    blue: "#073A69",
     red: '#BD2D2D',
     gray: '#C1C0C9',
     white: '#FFFFFF',

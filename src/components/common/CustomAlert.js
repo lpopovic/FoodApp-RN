@@ -9,7 +9,7 @@ class CustomAlert extends Component {
         // Works on both iOS and Android
 
         Alert.alert(
-            'CATERING',
+            'KLOPA',
             message,
             [
                 { text: 'OK'},
@@ -22,7 +22,7 @@ class CustomAlert extends Component {
         // Works on both iOS and Android
 
         Alert.alert(
-            'CATERING',
+            'KLOPA',
             message,
             [
                 {

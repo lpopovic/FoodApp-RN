@@ -5,18 +5,18 @@ import {
     Image,
     Text,
     TextInput,
-    Button,
     Keyboard,
     StyleSheet,
 } from 'react-native';
 import SafeAreaView from 'react-native-safe-area-view';
 import BaseScreen from '../BaseScreen/BaseScreen';
 import { TestAssets, IconAssets } from '../../assets'
-import { SreenName, isAndroid } from '../../helpers'
+import { SreenName } from '../../helpers'
 import { BASE_COLOR } from '../../styles'
 import { LocationNetwork } from '../../service/api'
 import CountryCityList from '../../components/Location/CountryCityList';
-
+import { connect } from 'react-redux';
+import { locationUpdateCity } from '../../store/actions'
 class MainLocationScreen extends BaseScreen {
 
     constructor(props) {
@@ -33,7 +33,7 @@ class MainLocationScreen extends BaseScreen {
     }
     componentDidMount() {
         super.componentDidMount()
-        this.setStatusBarStyle('blue')
+        this.setStatusBarStyle(BASE_COLOR.black)
         this.apiCallHandler()
     }
     componentWillUnmount() {
@@ -96,7 +96,15 @@ class MainLocationScreen extends BaseScreen {
     onItemSelectedHandler = (item) => {
         Keyboard.dismiss()
         this.setNewStateHandler({ currentItem: item })
-        // this.resetNavigationStack(SreenName.TabNavigatorScreen())
+        // this.pushNewScreen({ routeName: SreenName.LoginScreen(), key: `${Math.random() * 10000}` })
+        this.props.locationUpdateCityHandler(item)
+        clearTimeout(this.pressItem)
+        this.pressItem = setTimeout(() => {
+            this.showAlertMessage(this.props.city.name)
+            this.resetNavigationStack(SreenName.LoginScreen())
+
+        }, 200);
+
     }
     mainContent = () => (
         <SafeAreaView style={styles.mainContainer}>
@@ -108,8 +116,14 @@ class MainLocationScreen extends BaseScreen {
                         resizeMode="contain" />
                 </View>
                 <View style={styles.textContainer}>
-                    <Text style={[styles.baseTextStyle, styles.titleTextStyle]}>{this.titleText}</Text>
-                    <Text style={[styles.baseTextStyle, styles.subTextStyle]}>{this.subTitleText}</Text>
+                    <Text
+                        style={[styles.baseTextStyle, styles.titleTextStyle]}>
+                        {this.titleText}
+                    </Text>
+                    <Text
+                        style={[styles.baseTextStyle, styles.subTextStyle]}>
+                        {this.subTitleText}
+                    </Text>
                 </View>
             </View>
 
@@ -129,7 +143,7 @@ class MainLocationScreen extends BaseScreen {
     )
     render() {
         const { loading } = this.state
-        const mainDisplay = loading ? this.activityIndicatorContent("blue") : this.mainContent()
+        const mainDisplay = loading ? this.activityIndicatorContent(BASE_COLOR.blue) : this.mainContent()
         return (
             < ImageBackground
                 style={styles.imageBackgroundContainer}
@@ -143,11 +157,12 @@ class MainLocationScreen extends BaseScreen {
 
 const styles = StyleSheet.create({
     mainContainer: {
-        flex: 10,
+        flex: 1,
         backgroundColor: 'rgba(0, 0, 0, 0.5)'
     },
     imageBackgroundContainer: {
-        flex: 10,
+        flex: 1,
+        backgroundColor:BASE_COLOR.blue
     },
     topContainer: {
         justifyContent: 'center',
@@ -184,6 +199,16 @@ const styles = StyleSheet.create({
 
     }
 });
+const mapStateToProps = state => {
+    return {
+        city: state.location.city
+    };
+};
 
+const mapDispatchToProps = dispatch => {
+    return {
+        locationUpdateCityHandler: (city) => dispatch(locationUpdateCity(city)),
+    };
+};
 
-export default MainLocationScreen;
+export default connect(mapStateToProps, mapDispatchToProps)(MainLocationScreen);

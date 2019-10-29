@@ -2,9 +2,11 @@ import { createStore, combineReducers, compose, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 
 import uiReducer from './reducers/ui';
+import locationReducer from './reducers/location'
 
 const rootReducer = combineReducers({
-    ui: uiReducer
+    ui: uiReducer,
+    location:locationReducer,
 });
 
 // debug redux
