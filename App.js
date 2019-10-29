@@ -7,7 +7,7 @@
  */
 
 import React, { Component } from 'react';
-import Navigation from './src/components/TabNavigation/TabNavigator'
+import Navigator  from './src/components/TabNavigation/Navigator'
 
 import { Provider } from 'react-redux'
 import configurateStore from './src/store/configureStore'
@@ -16,7 +16,7 @@ export default class App extends Component {
   render() {
     return (
       <Provider store={store}>
-        <Navigation />
+        <Navigator />
       </Provider>
     );
   }

@@ -1,4 +1,4 @@
 const TestAssets = {
-    // icon: require('./icon.png'),
+    backgroudImage: require('./backgroudImage.png'),
 }
 export { TestAssets }

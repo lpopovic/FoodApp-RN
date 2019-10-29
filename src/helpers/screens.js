@@ -8,5 +8,13 @@ class SreenName {
     static UserScreen = () => { return this.withKey(`User`) }
     static DetailScreen = () => { return this.withKey(`Detail`) }
 
+    static TabNavigatorScreen = () =>{return this.withKey(`TabNavigator`)}
+    
+    static LoginScreen = () => { return this.withKey(`Login`) }
+    static RegisterScreen = () => { return this.withKey(`Register`) }
+
+    static MainLocationScreen = () => { return this.withKey(`MainLocation`) }
+    
+
 }
 export { SreenName };

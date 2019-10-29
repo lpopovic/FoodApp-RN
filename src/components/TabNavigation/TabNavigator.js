@@ -1,5 +1,5 @@
 import React from 'react';
-import { createAppContainer } from 'react-navigation';
+
 import { createBottomTabNavigator } from 'react-navigation-tabs';
 import { HomeStack, MapStack, CateringStack, UserStack } from './StackNavigator';
 import { TAB_COLOR } from '../../styles'
@@ -36,4 +36,4 @@ const TabNavigatorScreen = (props) = createBottomTabNavigator(
 }
 );
 
-export default createAppContainer(TabNavigatorScreen);
+export default TabNavigatorScreen;
