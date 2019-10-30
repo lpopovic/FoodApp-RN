@@ -7,6 +7,9 @@ const defaultInput = props => (
     <TextInput
 
         {...props}
+        paddingRight={16}
+        paddingLeft={16}
+        placeholderTextColor={BASE_COLOR.white}
         style={[styles.input,props.style, styleInvalideSetter(props.touched, props.valid) ? styles.ivalid : null]}
     />
 
@@ -26,14 +29,15 @@ const styleInvalideSetter = (touched, valid) => {
 
 const styles = StyleSheet.create({
     input: {
-        backgroundColor: BASE_COLOR.white,
+        backgroundColor: BASE_COLOR.lightBlue,
         fontSize: 15,
         padding: 5,
-        borderBottomColor: BASE_COLOR.gray,
-        borderBottomWidth: 0.7,
+        height:40,
+        borderRadius:20,
+        color:BASE_COLOR.white
     },
     ivalid: {
-        backgroundColor: '#f9c0c0',
+        backgroundColor: BASE_COLOR.red,
         // borderColor: 'red'
 
     }

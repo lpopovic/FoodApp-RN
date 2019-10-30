@@ -1,4 +1,6 @@
 const BASE_COLOR = {
+    orange:'#FD7A23',
+    lightBlue:'#6585A0',
     blue: "#073A69",
     red: '#BD2D2D',
     gray: '#C1C0C9',
@@ -8,7 +10,7 @@ const BASE_COLOR = {
     darkGray: '#333333',
     backgroundColor: '#F8F8F8',
     facebookBlue: '#3b5998',
-    green: '#3CB371',
+    green: '#40B36D',
 
 }
 

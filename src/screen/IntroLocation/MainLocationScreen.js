@@ -11,7 +11,7 @@ import {
 import SafeAreaView from 'react-native-safe-area-view';
 import BaseScreen from '../BaseScreen/BaseScreen';
 import { TestAssets, IconAssets } from '../../assets'
-import { SreenName } from '../../helpers'
+import { ScreenName } from '../../helpers'
 import { BASE_COLOR } from '../../styles'
 import { LocationNetwork } from '../../service/api'
 import CountryCityList from '../../components/Location/CountryCityList';
@@ -23,18 +23,19 @@ class MainLocationScreen extends BaseScreen {
         super(props)
         this.titleText = 'DOBRO DOŠLI'
         this.subTitleText = 'Izaberite grad'
-        this.setNewStateHandler({
+        this.state = {
             searchText: '',
             arrayCities: [],
             displayArrayCities: [],
             currentItem: null,
             loading: true
-        })
+        }
     }
     componentDidMount() {
         super.componentDidMount()
         this.setStatusBarStyle(BASE_COLOR.black)
         this.apiCallHandler()
+        
     }
     componentWillUnmount() {
         super.componentWillUnmount()
@@ -42,7 +43,7 @@ class MainLocationScreen extends BaseScreen {
 
     apiCallHandler = () => {
         this.setNewStateHandler({ loading: true })
-        LocationNetwork.getAllCities()
+        LocationNetwork.fetchGetAllCities()
             .then(
                 res => {
                     this.setNewStateHandler({
@@ -51,6 +52,7 @@ class MainLocationScreen extends BaseScreen {
                         loading: false
 
                     })
+                    this.searchInput.focus()
                 },
                 error => {
                     this.showAlertMessage(error)
@@ -96,12 +98,11 @@ class MainLocationScreen extends BaseScreen {
     onItemSelectedHandler = (item) => {
         Keyboard.dismiss()
         this.setNewStateHandler({ currentItem: item })
-        // this.pushNewScreen({ routeName: SreenName.LoginScreen(), key: `${Math.random() * 10000}` })
         this.props.locationUpdateCityHandler(item)
         clearTimeout(this.pressItem)
         this.pressItem = setTimeout(() => {
-            this.showAlertMessage(this.props.city.name)
-            this.resetNavigationStack(SreenName.LoginScreen())
+            // this.showAlertMessage(this.props.city.name)
+            this.resetNavigationStack(ScreenName.LoginScreen())
 
         }, 200);
 
@@ -112,7 +113,7 @@ class MainLocationScreen extends BaseScreen {
                 <View style={styles.logoContainer}>
                     <Image
                         style={styles.imageLogoStyle}
-                        source={IconAssets.appIcon80}
+                        source={IconAssets.appIcon256}
                         resizeMode="contain" />
                 </View>
                 <View style={styles.textContainer}>
@@ -129,6 +130,7 @@ class MainLocationScreen extends BaseScreen {
 
             <View style={styles.searchTextContainer}>
                 <TextInput
+                    ref={ref => this.searchInput = ref}
                     style={[styles.baseTextStyle, styles.searchTextStyle]}
                     value={this.state.searchText}
                     onChangeText={(searchText) => this.onChangeTextInput(searchText)}
@@ -162,7 +164,7 @@ const styles = StyleSheet.create({
     },
     imageBackgroundContainer: {
         flex: 1,
-        backgroundColor:BASE_COLOR.blue
+        backgroundColor: BASE_COLOR.blue
     },
     topContainer: {
         justifyContent: 'center',

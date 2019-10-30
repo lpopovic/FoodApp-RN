@@ -4,7 +4,7 @@ import {
     Text, 
     StyleSheet 
 } from 'react-native';
-import { SreenName } from '../../helpers'
+import {ScreenName } from '../../helpers'
 import BaseScreen from "../BaseScreen/BaseScreen"
 class CateringScreen extends BaseScreen {
     
@@ -22,7 +22,7 @@ class CateringScreen extends BaseScreen {
     render() {
         return (
             <View style={[styles.mainContainer, { justifyContent: 'center', alignItems: 'center' }]}>
-                <Text onPress={() => this.pushNewScreen({ routeName: SreenName.DetailScreen(), key: `${Math.random() * 10000}` })}>Catering Home!</Text>
+                <Text onPress={() => this.pushNewScreen({ routeName: ScreenName.DetailScreen(), key: `${Math.random() * 10000}` })}>Catering Home!</Text>
             </View>
         )
     }

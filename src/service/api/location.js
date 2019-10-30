@@ -2,7 +2,7 @@ import axios from '../axios'
 import { RestUrl } from './url'
 import { City } from '../../model'
 class LocationNetwork {
-    static getAllCities = () =>
+    static fetchGetAllCities = () =>
         new Promise(async (resolve, reject) => {
             const url = RestUrl.getAllCities
             try {

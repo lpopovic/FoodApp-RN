@@ -2,7 +2,7 @@ import axios from 'axios';
 
 
 const fetch = axios.create({
-    timeout:5000,
+    timeout:10000,
     headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',

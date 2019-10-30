@@ -18,7 +18,7 @@ const validate = (val, rules, connectedValue) => {
             case "notEmpty":
                 isValid = isValid && notEmptyValidator(val);
                 break;
-                case "isPhone":
+            case "isPhone":
                 isValid = isValid && notEmptyValidator(val) && isNumber(val);
                 break;
             default:
@@ -50,12 +50,12 @@ const isNumber = val => {
     // var phoneno = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;          bez plusa 10 karaktera
     // var phoneno = /^\+?([0-9]{2})\)?[-. ]?([0-9]{4})[-. ]?([0-9]{4})$/;          sa plusom 10 karaktera
     var phoneno = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
-    if(val.match(phoneno)) {
-      return true;
+    if (val.match(phoneno)) {
+        return true;
     }
     else {
-      return false;
+        return false;
     }
 };
 
-export default validate;
+export { validate };

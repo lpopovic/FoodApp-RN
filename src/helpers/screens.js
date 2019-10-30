@@ -1,4 +1,4 @@
-class SreenName {
+class ScreenName {
     
     static withKey = screen => `cateringapp_${screen}`
 
@@ -9,12 +9,13 @@ class SreenName {
     static DetailScreen = () => { return this.withKey(`Detail`) }
 
     static TabNavigatorScreen = () =>{return this.withKey(`TabNavigator`)}
-    
+    static OnboardingScreen = ()=>{return this.withKey(`Onboarding`)}
     static LoginScreen = () => { return this.withKey(`Login`) }
     static RegisterScreen = () => { return this.withKey(`Register`) }
 
     static MainLocationScreen = () => { return this.withKey(`MainLocation`) }
     
+    static SplashScreen = () => { return this.withKey(`Splash`) }
 
 }
-export { SreenName };
+export { ScreenName };

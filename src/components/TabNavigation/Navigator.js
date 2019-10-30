@@ -15,13 +15,26 @@ import TabNavigatorScreen from './TabNavigator'
 import LoginScreen from '../../screen/LogIn/LoginScreen'
 import RegisterScreen from '../../screen/LogIn/RegisterScreen'
 import MainLocationScreen from '../../screen/IntroLocation/MainLocationScreen'
-
-import { SreenName } from '../../helpers'
+import OnboardingScreen from '../../screen/Intro/OnboardingScreen'
+import SplashScreen from '../../screen/Intro/SplashScreen'
+import { ScreenName } from '../../helpers'
 
 
 // cateringapp_NAME: NAME_SCREEN
 const Navigator = createStackNavigator({
 
+    cateringapp_Splash:{
+        screen: SplashScreen,
+        navigationOptions: () => ({
+            header: null
+        })
+    },
+    cateringapp_Onboarding:{
+        screen: OnboardingScreen,
+        navigationOptions: () => ({
+            header: null
+        })
+    },
     cateringapp_MainLocation :{
         screen: MainLocationScreen,
         navigationOptions: () => ({
@@ -47,7 +60,7 @@ const Navigator = createStackNavigator({
         })
     },
 }, {
-    initialRouteName: SreenName.MainLocationScreen(),
+    initialRouteName: ScreenName.SplashScreen(),
     // headerMode: 'none',
     transitionConfig,
     defaultNavigationOptions: {

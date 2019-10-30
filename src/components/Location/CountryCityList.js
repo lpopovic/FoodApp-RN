@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, FlatList, StyleSheet,Keyboard } from 'react-native';
+import { View, FlatList, StyleSheet, Keyboard } from 'react-native';
 import CountryCity from './CountryCity'
 
 class CountryCityList extends Component {
@@ -16,6 +16,7 @@ class CountryCityList extends Component {
         return (
             <View style={styles.mainContainer}>
                 <FlatList
+                    bounces={false}
                     onScroll={Keyboard.dismiss}
                     keyboardShouldPersistTaps={this.props.keyboardShouldPersistTaps}
                     extraData={this.props.extraData}

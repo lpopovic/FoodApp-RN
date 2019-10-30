@@ -2,16 +2,53 @@ import React, { Component } from 'react';
 import {
     View,
     Text,
-    StyleSheet
+    Image,
+    TouchableOpacity,
+    StyleSheet,
+   
 } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import BaseScreen from '../BaseScreen/BaseScreen';
 import SafeAreaView from 'react-native-safe-area-view';
-import { SreenName } from '../../helpers'
+import DefaultInput from '../../components/common/DefaultInput'
+import { ScreenName, MESSAGE_NO_VALIDE_INPUT_FORM } from '../../helpers'
+import { IconAssets } from '../../assets'
 import { BASE_COLOR } from '../../styles';
-
+import { validate } from '../../helpers'
+import { UserNetwork } from '../../service/api'
 class LoginScreen extends BaseScreen {
     constructor(props) {
         super(props)
+        this.title = "ULOGUJ SE"
+        this.state = {
+            loading: false,
+            controls: {
+                email: {
+                    value: "",
+                    valid: false,
+                    validationRules: {
+                        isEmail: true
+                    },
+                    touched: false
+                },
+                password: {
+                    value: "",
+                    valid: false,
+                    validationRules: {
+                        minLenght: 6
+                    },
+                    touched: false
+                },
+                confirmPassword: {
+                    value: "",
+                    valid: false,
+                    validationRules: {
+                        equalTo: 'password'
+                    },
+                    touched: false
+                }
+            }
+        }
     }
     componentDidMount() {
         super.componentDidMount()
@@ -20,21 +57,226 @@ class LoginScreen extends BaseScreen {
     componentWillUnmount() {
         super.componentWillUnmount()
     }
+    apiCallSignUpHandler = (email, password) => {
+        this.setNewStateHandler({ loading: true })
+        UserNetwork.fetchUserLogin(email, password).then(
+            res => {
+                this.setNewStateHandler({ loading: false })
+                this.resetNavigationStack(ScreenName.TabNavigatorScreen())
+            },
+            err => {
+                this.setNewStateHandler({ loading: false })
+                this.showAlertMessage(err)
+            }
+        )
+    }
+
+    onPressSignInHandler = () => {
+        disabled = !this.state.controls.email.valid || !this.state.controls.password.valid
+        const { controls } = this.state
+        if (!disabled) {
+            this.apiCallSignUpHandler(controls.email.value, controls.password.value)
+        } else {
+            if (controls.email.value !== '' && controls.password.value !== '') {
+                if (!this.state.controls.email.valid) {
+
+                    this.showAlertMessage("Must be email addrese.")
+                } else if (!this.state.controls.password.valid) {
+
+                    this.showAlertMessage("Password must be minumum 6 characters and include both numbers and letters.")
+                }
+            } else {
+                this.showAlertMessage(MESSAGE_NO_VALIDE_INPUT_FORM)
+            }
+        }
+    }
+    onPressRegisterHandler = () => {
+        this.pushNewScreen({ routeName: ScreenName.RegisterScreen(), key: `${Math.random() * 10000}` })
+    }
+    mainContent = () => (
+        <KeyboardAwareScrollView
+            style={styles.mainDisplay}
+            resetScrollToCoords={{ x: 0, y: 0 }}
+            contentContainerStyle={{ flexGrow: 10 }}
+            scrollEnabled={false}
+            keyboardShouldPersistTaps='handled'
+            enableOnAndroid={true} >
+            <View style={{ flex: 0.8 }}>
+
+                <View style={styles.headerContainer}>
+                    <View style={styles.logoContainer} >
+                        <Image source={IconAssets.appIcon256} style={styles.logoImage} resizeMode='contain' />
+                    </View>
+                    <View style={styles.titleContainer}>
+                        <Text style={styles.textHeaderStyle}>{this.title}</Text>
+                    </View>
+                </View>
+                <View style={{ marginTop: 20, marginBottom: 20, justifyContent: 'center' }}>
+
+                    <DefaultInput
+                        placeholder='Email'
+                        value={this.state.controls.email.value}
+                        onChangeText={(val) => this.updateInputState('email', val)}
+                        valid={this.state.controls.email.valid}
+                        touched={this.state.controls.email.touched}
+                        autoCapitalize="none"
+                        autoCorrect={false}
+                        keyboardType="email-address"
+
+                    />
+
+                    <DefaultInput
+                        placeholder='Password'
+                        style={{ marginTop: 16 }}
+                        value={this.state.controls.password.value}
+                        onChangeText={val => this.updateInputState('password', val)}
+                        valid={this.state.controls.password.valid}
+                        touched={this.state.controls.password.touched}
+                        secureTextEntry={true}
+                        returnKeyType='done'
+                    />
+
+                </View>
+                <View style={styles.buttonsContainer}>
+                    <View style={{ width: 130, margin: 8, alignSelf: 'center', }}>
+                        <TouchableOpacity
+                            onPress={() => this.onPressSignInHandler()}>
+                            <View style={styles.buttonSignIn}>
+                                <Text style={styles.textButtonStyle}>OK</Text>
+                            </View>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+
+            </View>
+            <View style={{ flex: 0.2, margin: 8, alignSelf: 'center', }}>
+                <TouchableOpacity
+                    onPress={() => this.onPressRegisterHandler()}>
+                    <View style={styles.buttonRegister}>
+                        <Text style={styles.titleBtnRegister}>Nemaš nalog?</Text>
+                        <Text style={[styles.titleBtnRegister, { fontWeight: 'bold' }]}>PRIJAVI SE</Text>
+                    </View>
+                </TouchableOpacity>
+            </View>
+
+
+        </KeyboardAwareScrollView>
+
+    )
+
     render() {
+        const { loading } = this.state
+        const mainDisplay = loading ? this.activityIndicatorContent(BASE_COLOR.white) : this.mainContent();
+
         return (
             <SafeAreaView style={styles.mainContainer}>
-                <Text onPress={() => this.resetNavigationStack(SreenName.TabNavigatorScreen())}>LoginScreen</Text>
+                {mainDisplay}
             </SafeAreaView>
         )
+    }
+    updateInputState = (key, value) => {
+        let connectedValue = {};
+        if (this.state.controls[key].validationRules.equalTo) {
+
+            const equalControl = this.state.controls[key].validationRules.equalTo;
+            const equalValue = this.state.controls[equalControl].value;
+            connectedValue = {
+                ...connectedValue,
+                equalTo: equalValue
+            };
+        }
+        if (key === 'password') {
+
+            connectedValue = {
+                ...connectedValue,
+                equalTo: value
+            };
+        }
+        this.setState(prevState => {
+            return {
+                controls: {
+                    ...prevState.controls,
+                    [key]: {
+                        ...prevState.controls[key],
+                        value: value,
+                        valid: validate(value, prevState.controls[key].validationRules, connectedValue),
+                        touched: true
+                    }
+
+                }
+            };
+        });
     }
 }
 
 const styles = StyleSheet.create({
     mainContainer: {
         flex: 1,
+        justifyContent: 'center',
+        backgroundColor: BASE_COLOR.blue,
+
+    },
+    mainDisplay: {
+        flex: 1,
+        marginLeft: 20,
+        marginRight: 20,
+
+    },
+    headerContainer: {
+        marginTop: 20,
+        justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: BASE_COLOR.blue
+    }, logoImage: {
+        height: 120,
+        width: 120,
+    },
+    titleContainer: {
+        marginBottom: 20,
+        marginTop: 20,
+    },
+    textHeaderStyle: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        color: BASE_COLOR.white
+    },
+    buttonsContainer: {
+        marginTop: 16,
+        justifyContent: 'center',
+    },
+    buttonSignIn: {
+        height: 40,
+        backgroundColor: BASE_COLOR.green,
+        borderWidth: 0.5,
+        borderRadius: 25,
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: '100%',
+    },
+    buttonRegister: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: '100%',
+    },
+    titleBtnRegister: {
+        color: BASE_COLOR.white,
+        fontSize: 15,
+    },
+    imageStyle: {
+        height: 20,
+        width: 20,
+        tintColor: '#FFF',
+        marginRight: 20
+
+    },
+    textButtonStyle: {
+        textAlign: 'center',
+        textAlignVertical: 'center',
+        color: BASE_COLOR.white,
+        fontWeight: 'bold',
+        fontSize: 20,
+
     }
+
 });
 
 
