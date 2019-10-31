@@ -137,9 +137,9 @@ class RegisterScreen extends BaseScreen {
                         valid={this.state.controls.username.valid}
                         touched={this.state.controls.username.touched}
                         autoCapitalize="none"
-                        returnKeyType={"next"}
-                        autoCorrect={true}
-                        textContentType='none'
+                        autoCorrect={false}
+                        keyboardType="email-address"
+                        
                     />
                     <DefaultInput
                         style={{ marginTop: 16 }}
@@ -151,7 +151,7 @@ class RegisterScreen extends BaseScreen {
                         autoCapitalize="none"
                         autoCorrect={false}
                         keyboardType="email-address"
-                        rreturnKeyType={"next"}
+                        returnKeyType={"next"}
                         textContentType='none'
                     />
                     <DefaultInput
