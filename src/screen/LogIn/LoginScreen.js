@@ -235,7 +235,7 @@ const styles = StyleSheet.create({
 
     },
     headerContainer: {
-        marginTop: 20,
+        marginTop: 60,
         justifyContent: 'center',
         alignItems: 'center',
     }, logoImage: {
