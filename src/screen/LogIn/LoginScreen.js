@@ -27,7 +27,7 @@ import { connect } from 'react-redux';
 class LoginScreen extends BaseScreen {
     constructor(props) {
         super(props)
-        this.title = "ULOGUJ SE"
+        this.title = "ULOGUJ SE";
         this.state = {
             loading: false,
             controls: {
@@ -71,8 +71,8 @@ class LoginScreen extends BaseScreen {
             res => {
                 this.setNewStateHandler({ loading: false })
                 this.props.updateUserJWTHandler(res)
-                 this.props.fetchUserProfileHandler()
-                 this.resetNavigationStack(ScreenName.MainLocationScreen())
+                this.props.fetchUserProfileHandler()
+                this.resetNavigationStack(ScreenName.MainLocationScreen())
             },
             err => {
                 this.setNewStateHandler({ loading: false })
@@ -132,7 +132,8 @@ class LoginScreen extends BaseScreen {
                         autoCapitalize="none"
                         autoCorrect={false}
                         keyboardType="email-address"
-
+                        returnKeyType='next'
+                        onSubmitEditing={() => this.pass.getInnerRef().focus()}
                     />
 
                     <DefaultInput
@@ -144,6 +145,7 @@ class LoginScreen extends BaseScreen {
                         touched={this.state.controls.password.touched}
                         secureTextEntry={true}
                         returnKeyType='done'
+                        ref={(input) => this.pass = input}
                     />
 
                 </View>

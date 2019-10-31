@@ -21,7 +21,7 @@ class RegisterScreen extends BaseScreen {
 
     constructor(props) {
         super(props)
-        this.title = "PRIJAVI SE"
+        this.title = "PRIJAVI SE";
         this.state = {
             loading: false,
             controls: {
@@ -138,8 +138,9 @@ class RegisterScreen extends BaseScreen {
                         touched={this.state.controls.username.touched}
                         autoCapitalize="none"
                         autoCorrect={false}
+                        returnKeyType={"next"}
                         keyboardType="email-address"
-                        
+                        onSubmitEditing={() => this.email.getInnerRef().focus()}
                     />
                     <DefaultInput
                         style={{ marginTop: 16 }}
@@ -153,6 +154,8 @@ class RegisterScreen extends BaseScreen {
                         keyboardType="email-address"
                         returnKeyType={"next"}
                         textContentType='none'
+                        ref={(input) => this.email = input}
+                        onSubmitEditing={() => this.pass.getInnerRef().focus()}
                     />
                     <DefaultInput
                         placeholder='Choose Password'
@@ -164,6 +167,8 @@ class RegisterScreen extends BaseScreen {
                         returnKeyType={"next"}
                         secureTextEntry={true}
                         textContentType='none'
+                        ref={(input) => this.pass = input}
+                        onSubmitEditing={() => this.confirmPass.getInnerRef().focus()}
                     />
                     <DefaultInput
                         placeholder="Confirm Password"
@@ -175,6 +180,7 @@ class RegisterScreen extends BaseScreen {
                         returnKeyType={"done"}
                         secureTextEntry={true}
                         textContentType='none'
+                        ref={(input) => this.confirmPass = input}
                     />
 
                 </View>
