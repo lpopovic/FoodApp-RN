@@ -5,17 +5,25 @@ import {
     Image,
     TouchableOpacity,
     StyleSheet,
-   
+
 } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import BaseScreen from '../BaseScreen/BaseScreen';
 import SafeAreaView from 'react-native-safe-area-view';
 import DefaultInput from '../../components/common/DefaultInput'
-import { ScreenName, MESSAGE_NO_VALIDE_INPUT_FORM } from '../../helpers'
+import {
+    ScreenName,
+    MESSAGE_NO_VALIDE_INPUT_FORM
+} from '../../helpers'
 import { IconAssets } from '../../assets'
 import { BASE_COLOR } from '../../styles';
 import { validate } from '../../helpers'
 import { UserNetwork } from '../../service/api'
+import {
+    updateUserJWT,
+    fetchUserProfile,
+} from '../../store/actions'
+import { connect } from 'react-redux';
 class LoginScreen extends BaseScreen {
     constructor(props) {
         super(props)
@@ -62,7 +70,9 @@ class LoginScreen extends BaseScreen {
         UserNetwork.fetchUserLogin(email, password).then(
             res => {
                 this.setNewStateHandler({ loading: false })
-                this.resetNavigationStack(ScreenName.TabNavigatorScreen())
+                this.props.updateUserJWTHandler(res)
+                 this.props.fetchUserProfileHandler()
+                 this.resetNavigationStack(ScreenName.MainLocationScreen())
             },
             err => {
                 this.setNewStateHandler({ loading: false })
@@ -279,5 +289,13 @@ const styles = StyleSheet.create({
 
 });
 
+const mapDispatchToProps = dispatch => {
+    return {
+        updateUserJWTHandler: (token) => dispatch(updateUserJWT(token)),
+        fetchUserProfileHandler: () => dispatch(fetchUserProfile()),
 
-export default LoginScreen;
+    };
+};
+
+
+export default connect(null, mapDispatchToProps)(LoginScreen);

@@ -1,16 +1,27 @@
-import React, { Component } from 'react';
-import { View, Image, Text, Animated, StyleSheet, } from 'react-native';
+import React from 'react';
+import {
+    View,
+    Image,
+    Animated,
+    StyleSheet,
+} from 'react-native';
 
 import { IconAssets } from '../../assets'
+import {
+    updateUserJWT,
+    updateUserProfile,
+    fetchUserProfile,
+} from '../../store/actions'
 import { connect } from 'react-redux';
 import BaseScreen from '../BaseScreen/BaseScreen';
 import { BASE_COLOR } from '../../styles';
 import {
     ScreenName,
-    FIRST_TIME_START_APP,
+    STORAGE_KEY,
     getStorageData,
     saveStorageData
 } from '../../helpers';
+import { User } from '../../model';
 
 
 class SplashScreen extends BaseScreen {
@@ -32,14 +43,25 @@ class SplashScreen extends BaseScreen {
 
 
     nextPageHandler = async () => {
-        const firstLaunch = await getStorageData(FIRST_TIME_START_APP)
+        const firstLaunch = await getStorageData(STORAGE_KEY.FIRST_TIME_START_APP)
         if (firstLaunch === null) {
-            saveStorageData(true,FIRST_TIME_START_APP)
+            saveStorageData(true, STORAGE_KEY.FIRST_TIME_START_APP)
             this.resetNavigationStack(ScreenName.OnboardingScreen())
-        }else {
-            this.resetNavigationStack(ScreenName.MainLocationScreen())
+        } else {
+            const token = await getStorageData(STORAGE_KEY.JWT_APP_USER)
+            const user = await getStorageData(STORAGE_KEY.USER_APP_DATA)
+            if (token !== null) {
+                if (user !== null) {
+                    this.props.updateUserProfileHandler(new User(user))
+                }
+                this.props.updateUserJWTHandler(token)
+                this.props.fetchUserProfileHandler()
+                this.resetNavigationStack(ScreenName.MainLocationScreen())
+            } else {
+                this.resetNavigationStack(ScreenName.LoginScreen())
+            }
         }
-        
+
     }
     animatedViewHandler = () => {
         setTimeout(
@@ -103,17 +125,13 @@ const styles = StyleSheet.create({
     }
 });
 
-const mapStateToProps = state => {
-    return {
-
-    };
-};
-
 const mapDispatchToProps = dispatch => {
     return {
-
+        updateUserJWTHandler: (token) => dispatch(updateUserJWT(token)),
+        updateUserProfileHandler: (user) => dispatch(updateUserProfile(user)),
+        fetchUserProfileHandler: () => dispatch(fetchUserProfile()),
     };
 };
 
 
-export default connect(null, null)(SplashScreen);
+export default connect(null, mapDispatchToProps)(SplashScreen);

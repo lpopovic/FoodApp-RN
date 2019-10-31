@@ -9,10 +9,5 @@ const fetch = axios.create({
     }
 })
 
-fetch.defaults.headers.common['lat'] = "null";
-fetch.defaults.headers.common['lng'] = "null";
-fetch.defaults.headers.common['stateID'] = "null";
-fetch.defaults.headers.common['cityID'] = "null";
-
 
 export default fetch 

@@ -16,7 +16,7 @@ export default class OnboardingScreen extends BaseScreen {
     }
     componentDidMount() {
         super.componentDidMount()
-        this.setStatusBarStyle(BASE_COLOR.blue)
+        this.setStatusBarStyle(BASE_COLOR.red)
     }
 
     componentWillUnmount() {
@@ -32,7 +32,7 @@ export default class OnboardingScreen extends BaseScreen {
     };
     showNextScreenHandler = () => {
         // uslov dal da se loguje ili ulazi direktno u aplikaciju
-        this.resetNavigationStack(ScreenName.MainLocationScreen());
+        this.resetNavigationStack(ScreenName.LoginScreen());
 
     }
     getStartedHandler() {
@@ -92,7 +92,7 @@ export default class OnboardingScreen extends BaseScreen {
                 onSkip={this._onSkip}
                 renderItem={this._renderItem}
                 buttonTextStyle={{
-                    color: BASE_COLOR.orange,
+                    color: BASE_COLOR.red,
                     fontWeight: 'bold'
                 }}
                 dotStyle={{
@@ -101,7 +101,7 @@ export default class OnboardingScreen extends BaseScreen {
                     width: 30
                 }}
                 activeDotStyle={{
-                    backgroundColor: BASE_COLOR.orange,
+                    backgroundColor: BASE_COLOR.red,
                     borderRadius: 4,
                     width: 30
                 }}
@@ -145,7 +145,7 @@ const styles = StyleSheet.create({
         margin: 16
     },
     searchButton: {
-        backgroundColor: BASE_COLOR.orange,
+        backgroundColor: BASE_COLOR.red,
         borderRadius: 8,
         padding: 10,
         width: 180

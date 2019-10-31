@@ -1,6 +1,9 @@
-import { 
-    UPDATE_CURRENT_CITY 
+import {
+    UPDATE_CURRENT_CITY
 } from "./actionTypes";
+import {
+    updateHederLocationForAxios
+}from '../../helpers'
 
 export const locationUpdateCity = (city) => {
     return {
@@ -8,4 +11,12 @@ export const locationUpdateCity = (city) => {
         payload: city
     };
 };
+
+export const setLocationCity = (city) =>{
+    updateHederLocationForAxios(city)
+    return dispatch => {
+        dispatch(locationUpdateCity(city))
+        
+    }
+}
 

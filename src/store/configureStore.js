@@ -3,10 +3,12 @@ import thunk from 'redux-thunk';
 
 import uiReducer from './reducers/ui';
 import locationReducer from './reducers/location'
+import userReducer from './reducers/user'
 
 const rootReducer = combineReducers({
     ui: uiReducer,
     location:locationReducer,
+    user: userReducer
 });
 
 // debug redux

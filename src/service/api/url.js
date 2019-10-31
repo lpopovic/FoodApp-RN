@@ -8,6 +8,7 @@ class RestUrl {
 
     static userLogin = withKey(`auth/login`)
     static userRegister = withKey(`auth/register`)
+    static userInfo = withKey(`auth/me`)
 }
 
 export { RestUrl };

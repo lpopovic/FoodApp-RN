@@ -16,7 +16,7 @@ import { BASE_COLOR } from '../../styles'
 import { LocationNetwork } from '../../service/api'
 import CountryCityList from '../../components/Location/CountryCityList';
 import { connect } from 'react-redux';
-import { locationUpdateCity } from '../../store/actions'
+import { setLocationCity } from '../../store/actions'
 class MainLocationScreen extends BaseScreen {
 
     constructor(props) {
@@ -35,7 +35,7 @@ class MainLocationScreen extends BaseScreen {
         super.componentDidMount()
         this.setStatusBarStyle(BASE_COLOR.black)
         this.apiCallHandler()
-        
+
     }
     componentWillUnmount() {
         super.componentWillUnmount()
@@ -99,11 +99,10 @@ class MainLocationScreen extends BaseScreen {
         Keyboard.dismiss()
         this.setNewStateHandler({ currentItem: item })
         this.props.locationUpdateCityHandler(item)
+      
         clearTimeout(this.pressItem)
         this.pressItem = setTimeout(() => {
-            // this.showAlertMessage(this.props.city.name)
-            this.resetNavigationStack(ScreenName.LoginScreen())
-
+            this.resetNavigationStack(ScreenName.TabNavigatorScreen())
         }, 200);
 
     }
@@ -203,13 +202,13 @@ const styles = StyleSheet.create({
 });
 const mapStateToProps = state => {
     return {
-        city: state.location.city
+         city: state.location.city,
     };
 };
 
 const mapDispatchToProps = dispatch => {
     return {
-        locationUpdateCityHandler: (city) => dispatch(locationUpdateCity(city)),
+        locationUpdateCityHandler: (city) => dispatch(setLocationCity(city)),
     };
 };
 
