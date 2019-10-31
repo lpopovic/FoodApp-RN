@@ -14,6 +14,7 @@ import {
 } from '../../store/actions'
 import { connect } from 'react-redux';
 import BaseScreen from '../BaseScreen/BaseScreen';
+import WelcomeScreen from 'react-native-splash-screen'
 import { BASE_COLOR } from '../../styles';
 import {
     ScreenName,
@@ -35,6 +36,7 @@ class SplashScreen extends BaseScreen {
         super.componentDidMount()
         this.setStatusBarStyle(BASE_COLOR.black)
         this.animatedViewHandler()
+        WelcomeScreen.hide();
 
     }
     componentWillUnmount() {
