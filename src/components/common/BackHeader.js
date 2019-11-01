@@ -16,6 +16,8 @@ class BackHeader extends Component {
         this.leftBtnTitle = 'Back'
     }
     render() {
+        const tintColor = this.props.tintColor ? this.props.tintColor : BASE_COLOR.white
+
         return (
             <View style={[styles.mainContainer, { backgroundColor: this.props.backgroundColor }]}>
                 <View style={{ flex: 1, justifyContent: 'space-between', flexDirection: 'row', alignItems: 'center' }}>
@@ -24,10 +26,10 @@ class BackHeader extends Component {
                             <View style={styles.imageContainer}>
                                 <Image
                                     source={IconAssets.leftArrow}
-                                    style={styles.backImage}
+                                    style={[styles.backImage, { tintColor }]}
                                     resizeMode='cover' />
                             </View>
-                            <Text style={styles.text}>{this.leftBtnTitle}</Text>
+                            <Text style={[styles.text, { color: tintColor }]}>{this.leftBtnTitle}</Text>
                         </View>
                     </TouchableOpacity>
                     {/* <View style={styles.rightBtn}>
@@ -61,12 +63,10 @@ const styles = StyleSheet.create({
     backImage: {
         height: 20,
         width: 20,
-        tintColor:BASE_COLOR.white
     },
     text: {
         fontSize: 19,
         fontWeight: 'bold',
-        color: BASE_COLOR.white,
     }
 });
 
