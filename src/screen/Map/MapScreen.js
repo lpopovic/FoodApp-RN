@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet, Dimensions } from 'react-native';
-import { SreenName } from '../../helpers'
+import { ScreenName } from '../../helpers'
 import BaseScreen from "../BaseScreen/BaseScreen"
 import { IndicatorViewPager, PagerTitleIndicator } from 'react-native-best-viewpager';
 class MapScreen extends BaseScreen {
@@ -47,7 +47,7 @@ class MapScreen extends BaseScreen {
                     </View>
                 </IndicatorViewPager>
 
-                {/* <Text onPress={() => this.pushNewScreen({ routeName: SreenName.DetailScreen(), key: `${Math.random() * 10000}` })}>Map!</Text> */}
+                {/* <Text onPress={() => this.pushNewScreen({ routeName: ScreenName.DetailScreen(), key: `${Math.random() * 10000}` })}>Map!</Text> */}
             </View>
         )
     }

@@ -1,9 +1,9 @@
 import React from 'react';
-import { Text, View, Image } from 'react-native';
-import { createAppContainer } from 'react-navigation';
+import { Image } from 'react-native';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
 import { HomeStack, MapStack, CateringStack, UserStack } from './StackNavigator';
 import { homeTabIcon, mapTabIcon, ceteringTabIcon, userTabIcon } from '../../helpers'
+import { TAB_COLOR } from '../../styles'
 
 
 const TabNavigatorScreen = (props) = createBottomTabNavigator(
@@ -66,19 +66,17 @@ const TabNavigatorScreen = (props) = createBottomTabNavigator(
       }
     },
 
-  },
-  {
-    tabBarOptions: {
-      showIcon: true,
-      activeTintColor: '#399BF1',
-      // inactiveTintColor: 'red',
-      // style: {
-      //   backgroundColor: 'white',
-      // }
-    }
+  }, {
+  tabBarOptions: {
+    showLabel: false,
+    activeTintColor: TAB_COLOR.activeTintColor,
+    inactiveTintColor: TAB_COLOR.inactiveTintColor,
+    style: {
+      backgroundColor: TAB_COLOR.backgroundColor,
+      borderTopColor: TAB_COLOR.borderTopColor,
+    },
   }
-
-
+}
 );
 
-export default createAppContainer(TabNavigatorScreen);
+export default TabNavigatorScreen;

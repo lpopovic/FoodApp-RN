@@ -5,11 +5,24 @@ class CustomAlert extends Component {
 
     static messageFallow = 'Are you sure to unfollow?'
 
-    static showAlert = (message, onPressOkFunc) => {
+    static showAlert = (message) => {
         // Works on both iOS and Android
 
         Alert.alert(
-            'TITLE',
+            'KLOPA',
+            message,
+            [
+                { text: 'OK'},
+            ],
+            { cancelable: true },
+        );
+    }
+
+    static showDialogAlert = (message, onPressOkFunc) => {
+        // Works on both iOS and Android
+
+        Alert.alert(
+            'KLOPA',
             message,
             [
                 {

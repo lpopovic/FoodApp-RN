@@ -6,7 +6,7 @@ import {
     SafeAreaView,
     FlatList
 } from 'react-native';
-import { SreenName } from '../../helpers'
+import {ScreenName } from '../../helpers'
 import BaseScreen from "../BaseScreen/BaseScreen"
 // import CateringCalendarStrip from '../../components/Catering/CateringCalendarStrip';
 import PlaceCard from '../../components/Catering/PlaceCard';
@@ -182,7 +182,7 @@ class CateringScreen extends BaseScreen {
     }
 
     placeSelectHandler() {
-        this.pushNewScreen({ routeName: SreenName.PlaceDetailScreen(), key: `${Math.random() * 10000}` })
+        this.pushNewScreen({ routeName: ScreenName.PlaceDetailScreen(), key: `${Math.random() * 10000}` })
     }
 
 
