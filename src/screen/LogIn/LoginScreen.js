@@ -107,8 +107,9 @@ class LoginScreen extends BaseScreen {
         <KeyboardAwareScrollView
             style={styles.mainDisplay}
             resetScrollToCoords={{ x: 0, y: 0 }}
-            contentContainerStyle={{ flexGrow: 10 }}
-            scrollEnabled={false}
+            contentContainerStyle={{ flex: 1 }}
+            scrollEnabled={true}
+            bounces={false}
             keyboardShouldPersistTaps='handled'
             enableOnAndroid={true} >
             <View style={{ flex: 0.8 }}>
@@ -161,7 +162,7 @@ class LoginScreen extends BaseScreen {
                 </View>
 
             </View>
-            <View style={{ flex: 0.2, margin: 8, alignSelf: 'center', }}>
+            <View style={{ flex: 0.2, alignSelf: 'center', alignContent: 'center', justifyContent: 'center' }}>
                 <TouchableOpacity
                     onPress={() => this.onPressRegisterHandler()}>
                     <View style={styles.buttonRegister}>
@@ -170,7 +171,6 @@ class LoginScreen extends BaseScreen {
                     </View>
                 </TouchableOpacity>
             </View>
-
 
         </KeyboardAwareScrollView>
 

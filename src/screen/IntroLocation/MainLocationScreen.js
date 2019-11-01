@@ -17,6 +17,7 @@ import { LocationNetwork } from '../../service/api'
 import CountryCityList from '../../components/Location/CountryCityList';
 import { connect } from 'react-redux';
 import { setLocationCity } from '../../store/actions'
+import Header from '../../components/common/BackHeader'
 class MainLocationScreen extends BaseScreen {
 
     constructor(props) {
@@ -99,7 +100,7 @@ class MainLocationScreen extends BaseScreen {
         Keyboard.dismiss()
         this.setNewStateHandler({ currentItem: item })
         this.props.locationUpdateCityHandler(item)
-      
+
         clearTimeout(this.pressItem)
         this.pressItem = setTimeout(() => {
             this.resetNavigationStack(ScreenName.TabNavigatorScreen())
@@ -108,25 +109,7 @@ class MainLocationScreen extends BaseScreen {
     }
     mainContent = () => (
         <SafeAreaView style={styles.mainContainer}>
-            <View style={styles.topContainer}>
-                <View style={styles.logoContainer}>
-                    <Image
-                        style={styles.imageLogoStyle}
-                        source={IconAssets.appIcon256}
-                        resizeMode="contain" />
-                </View>
-                <View style={styles.textContainer}>
-                    <Text
-                        style={[styles.baseTextStyle, styles.titleTextStyle]}>
-                        {this.titleText}
-                    </Text>
-                    <Text
-                        style={[styles.baseTextStyle, styles.subTextStyle]}>
-                        {this.subTitleText}
-                    </Text>
-                </View>
-            </View>
-
+            {this.topContent()}
             <View style={styles.searchTextContainer}>
                 <TextInput
                     ref={ref => this.searchInput = ref}
@@ -142,6 +125,47 @@ class MainLocationScreen extends BaseScreen {
 
         </SafeAreaView>
     )
+    topContent = () => {
+        const backToMainScreen = this.props.navigation.getParam('backToMainScreen', null)
+        if (backToMainScreen) {
+            return (
+                <>
+                    <Header
+                        backgroundColor={'transparent'} />
+                    <View style={styles.topContainer}>
+                        <View style={styles.textContainer}>
+                            <Text
+                                style={[styles.baseTextStyle, styles.subTextStyle]}>
+                                {this.subTitleText}
+                            </Text>
+                        </View>
+                    </View>
+                </>
+            )
+        } else {
+            return (
+                <View style={styles.topContainer}>
+                    <View style={styles.logoContainer}>
+                        <Image
+                            style={styles.imageLogoStyle}
+                            source={IconAssets.appIcon256}
+                            resizeMode="contain" />
+                    </View>
+                    <View style={styles.textContainer}>
+                        <Text
+                            style={[styles.baseTextStyle, styles.titleTextStyle]}>
+                            {this.titleText}
+                        </Text>
+                        <Text
+                            style={[styles.baseTextStyle, styles.subTextStyle]}>
+                            {this.subTitleText}
+                        </Text>
+                    </View>
+                </View>
+            )
+        }
+
+    }
     render() {
         const { loading } = this.state
         const mainDisplay = loading ? this.activityIndicatorContent(BASE_COLOR.backgroundBlue) : this.mainContent()
@@ -202,7 +226,7 @@ const styles = StyleSheet.create({
 });
 const mapStateToProps = state => {
     return {
-         city: state.location.city,
+        city: state.location.city,
     };
 };
 

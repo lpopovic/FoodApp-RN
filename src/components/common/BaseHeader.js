@@ -7,13 +7,17 @@ import {
     StyleSheet,
 } from 'react-native';
 import { TestAssets, IconAssets } from '../../assets'
-import {  NAV_COLOR } from '../../styles'
+import { NAV_COLOR, headerStyles } from '../../styles'
 import { connect } from 'react-redux';
-
+import { withNavigation } from 'react-navigation'
+import { ScreenName } from '../../helpers'
 class BaseHeader extends Component {
 
     constructor(props) {
         super(props)
+    }
+    onPressChangeLocation = () => {
+        this.props.navigation.navigate(ScreenName.MainLocationScreen(), { backToMainScreen: true })
     }
     render() {
         const tintColor = NAV_COLOR.darkGray
@@ -32,7 +36,7 @@ class BaseHeader extends Component {
                                     resizeMode='cover' />
                             </View>
                         </TouchableOpacity>
-                        <TouchableOpacity onPress={() => alert("PRESS LOCATION")}>
+                        <TouchableOpacity onPress={() => this.onPressChangeLocation()}>
                             <View style={styles.btnLocationContainer}>
                                 <View style={styles.imageContainer}>
                                     <Image
@@ -83,38 +87,29 @@ class BaseHeader extends Component {
 
 const styles = StyleSheet.create({
     mainContainer: {
-        height: 50,
-        width: "100%",
-        paddingLeft: 8,
-        paddingRight: 8,
+        ...headerStyles.mainContainer,
         borderBottomColor: NAV_COLOR.borderBottomColor,
         borderBottomWidth: 0.7,
-       
+
     },
     contentBtns: {
         flex: 1,
         width: '100%',
-        justifyContent: 'space-between',
-        flexDirection: 'row',
-        alignItems: 'center',
+        ...headerStyles.alignCentarBetweenRow,
     },
     leftBtn: {
+        ...headerStyles.alignCentarBetweenRow,
         justifyContent: 'flex-start',
-        alignItems: 'center',
-        flexDirection: 'row',
     },
     rightBtn: {
+        ...headerStyles.alignCentarBetweenRow,
         justifyContent: 'flex-end',
-        alignItems: 'center',
-        flexDirection: 'row',
     },
     btnLocationContainer: {
         backgroundColor: NAV_COLOR.locationContent,
         padding: 5,
         borderRadius: 5,
-        justifyContent: 'space-between',
-        flexDirection: 'row',
-        alignItems: 'center'
+        ...headerStyles.alignCentarBetweenRow,
     },
     imageContainer: {
         marginRight: 4
@@ -146,4 +141,4 @@ const mapStateToProps = state => {
     };
 };
 
-export default connect(mapStateToProps, null)(BaseHeader);
+export default connect(mapStateToProps, null)(withNavigation(BaseHeader));

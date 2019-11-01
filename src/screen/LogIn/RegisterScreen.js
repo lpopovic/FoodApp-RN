@@ -11,7 +11,7 @@ import BaseScreen from '../BaseScreen/BaseScreen';
 import SafeAreaView from 'react-native-safe-area-view';
 import DefaultInput from '../../components/common/DefaultInput'
 import Header from '../../components/common/BackHeader'
-import { ScreenName, MESSAGE_NO_VALIDE_INPUT_FORM } from '../../helpers'
+import { MESSAGE_NO_VALIDE_INPUT_FORM } from '../../helpers'
 import { IconAssets } from '../../assets'
 import { BASE_COLOR } from '../../styles';
 import { validate } from '../../helpers'
@@ -114,16 +114,16 @@ class RegisterScreen extends BaseScreen {
         <KeyboardAwareScrollView
             style={styles.mainDisplay}
             resetScrollToCoords={{ x: 0, y: 0 }}
-            contentContainerStyle={{ flexGrow: 10 }}
-            scrollEnabled={false}
+            scrollEnabled={true}
+            bounces={false}
             keyboardShouldPersistTaps='handled'
             enableOnAndroid={true} >
             <View style={{ flex: 0.8 }}>
 
                 <View style={styles.headerContainer}>
-                    <View style={styles.logoContainer} >
+                    {/* <View style={styles.logoContainer} >
                         <Image source={IconAssets.appIcon256} style={styles.logoImage} resizeMode='contain' />
-                    </View>
+                    </View> */}
                     <View style={styles.titleContainer}>
                         <Text style={styles.textHeaderStyle}>{this.title}</Text>
                     </View>
@@ -207,8 +207,7 @@ class RegisterScreen extends BaseScreen {
         return (
             <SafeAreaView style={styles.mainContainer}>
                 <Header
-                    backgroundColor={BASE_COLOR.backgroundBlue}
-                    backPressHandler={() => this.closeScreen()} />
+                    backgroundColor={BASE_COLOR.backgroundBlue} />
                 {mainDisplay}
             </SafeAreaView>
         )
@@ -265,7 +264,8 @@ const styles = StyleSheet.create({
         marginTop: 20,
         justifyContent: 'center',
         alignItems: 'center',
-    }, logoImage: {
+    },
+    logoImage: {
         height: 120,
         width: 120,
     },

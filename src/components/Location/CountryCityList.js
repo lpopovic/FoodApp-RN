@@ -16,7 +16,7 @@ class CountryCityList extends Component {
         return (
             <View style={styles.mainContainer}>
                 <FlatList
-                    bounces={false}
+                    bounces={true}
                     onScroll={Keyboard.dismiss}
                     keyboardShouldPersistTaps={this.props.keyboardShouldPersistTaps}
                     extraData={this.props.extraData}

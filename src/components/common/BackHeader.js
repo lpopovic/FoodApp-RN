@@ -8,29 +8,32 @@ import {
 } from 'react-native';
 import { withNavigation } from 'react-navigation'
 import { IconAssets } from '../../assets'
-import { BASE_COLOR } from '../../styles'
+import { BASE_COLOR, headerStyles } from '../../styles'
 class BackHeader extends Component {
 
     constructor(props) {
         super(props)
         this.leftBtnTitle = 'Back'
     }
+    backPressHandler = ()=> {
+        this.props.navigation.goBack()
+    }
     render() {
         const tintColor = this.props.tintColor ? this.props.tintColor : BASE_COLOR.white
         const backgroundColor = this.props.backgroundColor ? this.props.backgroundColor : BASE_COLOR.backgroundBlue
 
         return (
-            <View style={[styles.mainContainer, { backgroundColor }]}>
+            <View style={[headerStyles.mainContainer, { backgroundColor }]}>
                 <View style={{ flex: 1, justifyContent: 'space-between', flexDirection: 'row', alignItems: 'center' }}>
-                    <TouchableOpacity onPress={() => this.props.backPressHandler()}>
+                    <TouchableOpacity onPress={() => this.backPressHandler()}>
                         <View style={styles.leftBtn}>
                             <View style={styles.imageContainer}>
                                 <Image
                                     source={IconAssets.leftArrow}
-                                    style={[styles.backImage, { tintColor }]}
-                                    resizeMode='cover' />
+                                    style={[headerStyles.btnImage, { tintColor }]}
+                                    resizeMode='contain' />
                             </View>
-                            <Text style={[styles.text, { color: tintColor }]}>{this.leftBtnTitle}</Text>
+                            <Text style={[headerStyles.btnText, { color: tintColor }]}>{this.leftBtnTitle}</Text>
                         </View>
                     </TouchableOpacity>
                     {/* <View style={styles.rightBtn}>
@@ -43,20 +46,11 @@ class BackHeader extends Component {
 }
 
 const styles = StyleSheet.create({
-    mainContainer: {
-        height: 40,
-        paddingLeft: 16,
-        paddingRight: 16,
-    },
     leftBtn: {
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        flexDirection: 'row'
+        ...headerStyles.alignCentarBetweenRow,
     },
     rightBtn: {
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        flexDirection: 'row'
+        ...headerStyles.alignCentarBetweenRow,
     },
     imageContainer: {
         marginRight: 4
@@ -66,10 +60,10 @@ const styles = StyleSheet.create({
         width: 20,
     },
     text: {
-        fontSize: 19,
-        fontWeight: 'bold',
+        fontSize: 17,
+        fontWeight: '500',
     }
 });
 
 
-export default BackHeader;
+export default withNavigation(BackHeader);
