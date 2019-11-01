@@ -1,5 +1,6 @@
 export * from './screens';
 export * from './image';
+export * from './icons';
 export * from './extension';
 export * from './validation';
 export * from './numberHelper';

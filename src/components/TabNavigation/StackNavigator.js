@@ -9,6 +9,7 @@ import MapScreen from '../../screen/Map/MapScreen'
 
 // CATERING TAB
 import CateringScreen from '../../screen/Catering/CateringScreen'
+import PlaceDetailScreen from '../../screen/Catering/PlaceDetailsScreen'
 
 // USER TAB
 import UserScreen from '../../screen/User/UserScreen'
@@ -32,6 +33,7 @@ const MapStack = createStackNavigator({
 const CateringStack = createStackNavigator({
     cateringapp_Catering: CateringScreen,
     cateringapp_Detail: DetailScreen,
+    cateringapp_PlaceDetail: PlaceDetailScreen,
 
 })
 const UserStack = createStackNavigator({

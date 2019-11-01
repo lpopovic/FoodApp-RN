@@ -44,7 +44,9 @@ class BaseScreen extends Component {
         });
     }
     removeNavListener = () => {
-        this._navListener.remove();
+        if (this._navListener != null) {
+            this._navListener.remove();
+        }
     }
     pushNewScreen = (newScreenAtributeValue) => {
         this.props.navigation.navigate(newScreenAtributeValue)

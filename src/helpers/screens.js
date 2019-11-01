@@ -7,6 +7,7 @@ class SreenName {
     static CateringScreen = () => { return this.withKey(`Catering`) }
     static UserScreen = () => { return this.withKey(`User`) }
     static DetailScreen = () => { return this.withKey(`Detail`) }
+    static PlaceDetailScreen = () => { return this.withKey('PlaceDetail')}
 
 }
 export { SreenName };
