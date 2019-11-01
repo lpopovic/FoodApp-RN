@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import CalendarStrip from 'react-native-calendar-strip';
 import Moment from 'moment';
+import { BASE_COLOR } from '../../styles';
 
 class CateringCalendarStrip extends Component {
 
@@ -48,7 +49,7 @@ class CateringCalendarStrip extends Component {
                 date: '2019-10-26',
                 dots: [
                     // { key: 1, color: this.state.selectedDate == Moment('2019-10-26').format("YYYY-MM-DD") ? 'white' : 'red', selectedDotColor: 'white' },
-                    { key: 22, color: '#399BF1', selectedDotColor: 'white' },
+                    { key: 22, color: BASE_COLOR.blue, selectedDotColor: 'white' },
                 ],
             },
             {
@@ -71,7 +72,7 @@ class CateringCalendarStrip extends Component {
             startDate: this.state.selectedDate,
             dateNameStyle: styles.dateNameStyle,
             dateNumberStyle: styles.dateNumberStyle,
-            dateContainerStyle: { backgroundColor: '#399BF1', },
+            dateContainerStyle: { backgroundColor: BASE_COLOR.blue, },
         }];
 
         return (
@@ -91,7 +92,7 @@ class CateringCalendarStrip extends Component {
                     }}
                     style={{ height: 120, paddingTop: 20, paddingBottom: 10 }}
                     locale={locale}
-                    daySelectionAnimation={{ type: 'background', duration: 200, highlightColor: '#399BF1' }}
+                    daySelectionAnimation={{ type: 'background', duration: 200, highlightColor: BASE_COLOR.blue }}
                     minDate={Moment().subtract(21, 'd')}
                     maxDate={Moment().add(7, 'd')}
                     updateWeek={true}

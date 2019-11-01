@@ -14,6 +14,7 @@ import PlaceList from '../../components/Catering/PlaceList';
 import DishCard from '../../components/Catering/DishCard';
 import CalendarStrip from 'react-native-calendar-strip';
 import Moment from 'moment';
+import { BASE_COLOR } from '../../styles';
 
 class CateringScreen extends BaseScreen {
 
@@ -69,26 +70,26 @@ class CateringScreen extends BaseScreen {
     };
 
     cateringCalendarStrip = () => {
-        let markedDates = [
-            {
-                date: '2019-10-26',
-                dots: [
-                    { key: 22, color: 'red', selectedDotColor: 'yellow' },
-                ],
-            },
-            {
-                date: '2019-10-23',
-                dots: [
-                    { key: 2, color: 'red', selectedDotColor: 'yellow' },
-                ],
-            },
-            {
-                date: Moment().format('YYYY-M-DD'),
-                dots: [
-                    { key: 3, color: 'red', selectedDotColor: 'yellow' },
-                ],
-            },
-        ]
+        // let markedDates = [
+        //     {
+        //         date: '2019-10-26',
+        //         dots: [
+        //             { key: 22, color: 'red', selectedDotColor: 'yellow' },
+        //         ],
+        //     },
+        //     {
+        //         date: '2019-10-23',
+        //         dots: [
+        //             { key: 2, color: 'red', selectedDotColor: 'yellow' },
+        //         ],
+        //     },
+        //     {
+        //         date: Moment().format('YYYY-M-DD'),
+        //         dots: [
+        //             { key: 3, color: 'red', selectedDotColor: 'yellow' },
+        //         ],
+        //     },
+        // ]
 
         const locale = {
             name: 'sr',
@@ -109,7 +110,7 @@ class CateringScreen extends BaseScreen {
                 ref={component => this._calendar = component}
                 onDateSelected={(value) => this.onDateSelected(value)}
                 responsiveSizingOffset={-6}
-                markedDates={markedDates}
+                markedDates={this.state.markedDates}
                 // markedDatesStyle={{backgroundColor: 'red', color: 'red'}}
                 onWeekChanged={(date) => {
                     const { _calendar } = this
@@ -119,7 +120,7 @@ class CateringScreen extends BaseScreen {
                 }}
                 style={{ height: 120, paddingTop: 20, paddingBottom: 10 }}
                 locale={locale}
-                daySelectionAnimation={{ type: 'background', duration: 200, highlightColor: '#399BF1' }}
+                daySelectionAnimation={{ type: 'background', duration: 200, highlightColor: BASE_COLOR.blue }}
                 minDate={Moment().subtract(21, 'd')}
                 maxDate={Moment().add(7, 'd')}
                 updateWeek={true}

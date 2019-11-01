@@ -1,7 +1,7 @@
 const BASE_COLOR = {
     orange:'#FD7A23',
     lightBlue:'#6585A0',
-    blue: "#073A69",
+    backgroundBlue: "#073A69",
     red: '#BD2D2D',
     gray: '#C1C0C9',
     white: '#FFFFFF',
@@ -11,11 +11,11 @@ const BASE_COLOR = {
     backgroundColor: '#F8F8F8',
     facebookBlue: '#3b5998',
     green: '#40B36D',
-
+    blue: '#399BF1',
 }
 
 const TAB_COLOR =  {
-    activeTintColor: BASE_COLOR.red,
+    activeTintColor: BASE_COLOR.blue,
     inactiveTintColor: BASE_COLOR.gray,
     backgroundColor: BASE_COLOR.white,
     borderTopColor:BASE_COLOR.black, //"transparent" bez boje

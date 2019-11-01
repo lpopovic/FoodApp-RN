@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, Image } from 'react-native';
 import {
     starIcon
 } from '../../helpers';
+import { BASE_COLOR } from '../../styles';
 
 class DishCard extends Component {
 
@@ -55,7 +56,7 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         height: 100,
         // borderWidth: 2,
-        // borderColor: '#399BF1'
+        // borderColor: BASE_COLOR.blue
     }
 });
 

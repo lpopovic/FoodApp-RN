@@ -60,7 +60,7 @@ class LoginScreen extends BaseScreen {
     }
     componentDidMount() {
         super.componentDidMount()
-        this.setStatusBarStyle(BASE_COLOR.blue)
+        this.setStatusBarStyle(BASE_COLOR.backgroundBlue)
     }
     componentWillUnmount() {
         super.componentWillUnmount()
@@ -225,7 +225,7 @@ const styles = StyleSheet.create({
     mainContainer: {
         flex: 1,
         justifyContent: 'center',
-        backgroundColor: BASE_COLOR.blue,
+        backgroundColor: BASE_COLOR.backgroundBlue,
 
     },
     mainDisplay: {

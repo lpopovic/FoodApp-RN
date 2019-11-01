@@ -64,7 +64,7 @@ class RegisterScreen extends BaseScreen {
 
     componentDidMount() {
         super.componentDidMount()
-        this.setStatusBarStyle(BASE_COLOR.blue)
+        this.setStatusBarStyle(BASE_COLOR.backgroundBlue)
     }
     componentWillUnmount() {
         super.componentWillUnmount()
@@ -207,7 +207,7 @@ class RegisterScreen extends BaseScreen {
         return (
             <SafeAreaView style={styles.mainContainer}>
                 <Header
-                    backgroundColor={BASE_COLOR.blue}
+                    backgroundColor={BASE_COLOR.backgroundBlue}
                     backPressHandler={() => this.closeScreen()} />
                 {mainDisplay}
             </SafeAreaView>
@@ -252,7 +252,7 @@ const styles = StyleSheet.create({
     mainContainer: {
         flex: 1,
         justifyContent: 'center',
-        backgroundColor: BASE_COLOR.blue,
+        backgroundColor: BASE_COLOR.backgroundBlue,
 
     },
     mainDisplay: {

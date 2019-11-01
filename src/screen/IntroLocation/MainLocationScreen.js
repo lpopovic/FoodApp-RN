@@ -144,7 +144,7 @@ class MainLocationScreen extends BaseScreen {
     )
     render() {
         const { loading } = this.state
-        const mainDisplay = loading ? this.activityIndicatorContent(BASE_COLOR.blue) : this.mainContent()
+        const mainDisplay = loading ? this.activityIndicatorContent(BASE_COLOR.backgroundBlue) : this.mainContent()
         return (
             < ImageBackground
                 style={styles.imageBackgroundContainer}
@@ -163,7 +163,7 @@ const styles = StyleSheet.create({
     },
     imageBackgroundContainer: {
         flex: 1,
-        backgroundColor: BASE_COLOR.blue
+        backgroundColor: BASE_COLOR.backgroundBlue
     },
     topContainer: {
         justifyContent: 'center',

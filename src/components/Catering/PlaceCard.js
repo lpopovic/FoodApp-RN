@@ -5,6 +5,7 @@ import {
     heartIcon,
     KFC_logo,
 } from '../../helpers';
+import { BASE_COLOR } from '../../styles';
 
 class PlaceCard extends Component {
 
@@ -57,7 +58,7 @@ class PlaceCard extends Component {
                                 </View>
                             </TouchableOpacity>
                             <TouchableOpacity onPress={() => this.props.onClick()} activeOpacity={0.5} style={{ flex: 3, marginTop: 10, marginLeft: 10 }}>
-                                <View style={{ backgroundColor: '#399BF1', height: 26, justifyContent: 'center', alignItems: 'center', borderRadius: 5 }}>
+                                <View style={{ backgroundColor: BASE_COLOR.blue, height: 26, justifyContent: 'center', alignItems: 'center', borderRadius: 5 }}>
                                     <Text style={{ color: 'white', fontWeight: '600', fontSize: 16 }}>Meni</Text>
                                 </View>
                             </TouchableOpacity>
@@ -77,7 +78,7 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         height: 100,
         borderWidth: 2,
-        borderColor: '#399BF1'
+        borderColor: BASE_COLOR.blue
     }
 });
 

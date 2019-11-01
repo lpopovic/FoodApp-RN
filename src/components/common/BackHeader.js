@@ -17,7 +17,7 @@ class BackHeader extends Component {
     }
     render() {
         const tintColor = this.props.tintColor ? this.props.tintColor : BASE_COLOR.white
-        const backgroundColor = this.props.backgroundColor ? this.props.backgroundColor : BASE_COLOR.blue
+        const backgroundColor = this.props.backgroundColor ? this.props.backgroundColor : BASE_COLOR.backgroundBlue
 
         return (
             <View style={[styles.mainContainer, { backgroundColor }]}>
