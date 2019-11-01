@@ -17,9 +17,10 @@ class BackHeader extends Component {
     }
     render() {
         const tintColor = this.props.tintColor ? this.props.tintColor : BASE_COLOR.white
+        const backgroundColor = this.props.backgroundColor ? this.props.backgroundColor : BASE_COLOR.blue
 
         return (
-            <View style={[styles.mainContainer, { backgroundColor: this.props.backgroundColor }]}>
+            <View style={[styles.mainContainer, { backgroundColor }]}>
                 <View style={{ flex: 1, justifyContent: 'space-between', flexDirection: 'row', alignItems: 'center' }}>
                     <TouchableOpacity onPress={() => this.props.backPressHandler()}>
                         <View style={styles.leftBtn}>
