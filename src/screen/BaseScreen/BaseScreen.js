@@ -12,6 +12,7 @@ import {
 } from 'react-navigation';
 import CustomAlert from '../../components/common/CustomAlert'
 import CustomActivityIndicator from '../../components/common/CustomActivityIndicator'
+
 class BaseScreen extends Component {
 
     constructor(props) {
@@ -38,19 +39,19 @@ class BaseScreen extends Component {
             this.setState(newStateAtributeValue)
         }
     }
-    setStatusBarStyle = (color) => {
+    setStatusBarStyle = (color, darkContent) => {
         this._navListener = this.props.navigation.addListener('didFocus', () => {
-            StatusBar.setBarStyle('light-content');
+            StatusBar.setBarStyle(darkContent ? 'dark-content' : 'light-content');
             if (isAndroid) {
                 StatusBar.setBackgroundColor(color);
             }
         });
     }
     removeNavListener = () => {
-        if(this._navListener !== null){
+        if (this._navListener !== null) {
             this._navListener.remove();
         }
-        
+
     }
     pushNewScreen = (newScreenAtributeValue) => {
         this.props.navigation.navigate(newScreenAtributeValue)

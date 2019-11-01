@@ -6,7 +6,7 @@ import {
     SafeAreaView,
     FlatList
 } from 'react-native';
-import {ScreenName } from '../../helpers'
+import { ScreenName } from '../../helpers'
 import BaseScreen from "../BaseScreen/BaseScreen"
 // import CateringCalendarStrip from '../../components/Catering/CateringCalendarStrip';
 import PlaceCard from '../../components/Catering/PlaceCard';
@@ -14,7 +14,7 @@ import PlaceList from '../../components/Catering/PlaceList';
 import DishCard from '../../components/Catering/DishCard';
 import CalendarStrip from 'react-native-calendar-strip';
 import Moment from 'moment';
-import { BASE_COLOR } from '../../styles';
+import { BASE_COLOR, NAV_COLOR } from '../../styles';
 
 class CateringScreen extends BaseScreen {
 
@@ -57,14 +57,14 @@ class CateringScreen extends BaseScreen {
 
     componentDidMount() {
         super.componentDidMount()
-        this.setStatusBarStyle('red')
+        this.setStatusBarStyle(NAV_COLOR.headerBackground, true)
     }
     componentWillUnmount() {
         super.componentWillUnmount()
     }
 
     onDateSelected(value) {
-        
+
         this.setState({ selectedDate: Moment(value).format('YYYY-M-DD') })
         alert(Moment(value).format("DD MMM YYYY"))
     };
@@ -118,7 +118,7 @@ class CateringScreen extends BaseScreen {
                     alert(Moment(date).format("DD MMM YYYY"))
                     // alert(Moment(date).week())
                 }}
-                style={{ height: 120, paddingTop: 20, paddingBottom: 10 }}
+                style={{ height: 120, paddingTop: 20, paddingBottom: 10, backgroundColor: NAV_COLOR.headerBackground }}
                 locale={locale}
                 daySelectionAnimation={{ type: 'background', duration: 200, highlightColor: BASE_COLOR.blue }}
                 minDate={Moment().subtract(21, 'd')}
@@ -170,14 +170,14 @@ class CateringScreen extends BaseScreen {
         ]
 
         const { markedDates } = this.state
-        if ( markedDates.some(item => item.date === this.state.selectedDate)) {
+        if (markedDates.some(item => item.date === this.state.selectedDate)) {
             return (
-                <DishCard name={DishData[0].name} image={DishData[0].link} description={DishData[0].description}/>
+                <DishCard name={DishData[0].name} image={DishData[0].link} description={DishData[0].description} />
             )
         } else {
             return (
-                <PlaceList data={PlaceData} clickOnPlace={() => this.placeSelectHandler()}/>
-            //    <PlaceCard />
+                <PlaceList data={PlaceData} clickOnPlace={() => this.placeSelectHandler()} />
+                //    <PlaceCard />
             )
         }
     }
@@ -189,24 +189,30 @@ class CateringScreen extends BaseScreen {
 
     render() {
         return (
-            <View style={styles.mainContainer}>
-                <SafeAreaView>
+            <SafeAreaView style={styles.safeAreaHeader}>
+                <View style={styles.mainContainer}>
                     {/* <CateringCalendarStrip /> */}
                     {this.cateringCalendarStrip()}
                     {this.renderList()}
                     {/* <PlaceCard
                         onClick={() => this.placeSelectHandler()}
                     /> */}
-                </SafeAreaView>
+                </View>
+            </SafeAreaView>
 
-            </View>
+
         )
     }
 }
 
 const styles = StyleSheet.create({
+    safeAreaHeader: {
+        backgroundColor: NAV_COLOR.headerBackground,
+        flex: 1,
+    },
     mainContainer: {
-        flex: 1
+        flex: 1,
+        backgroundColor: BASE_COLOR.white
     }
 });
 
