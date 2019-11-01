@@ -2,7 +2,7 @@ import React from 'react';
 import { Image } from 'react-native';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
 import { HomeStack, MapStack, CateringStack, UserStack } from './StackNavigator';
-import { homeTabIcon, mapTabIcon, ceteringTabIcon, userTabIcon } from '../../helpers'
+import { IconAssets } from '../../assets'
 import { TAB_COLOR } from '../../styles'
 
 
@@ -14,7 +14,7 @@ const TabNavigatorScreen = (props) = createBottomTabNavigator(
         tabBarLabel: () => { null },
         tabBarIcon: ({ focused, tintColor }) => (
           <Image
-            source={homeTabIcon}
+            source={IconAssets.homeTabIcon}
             resizeMode='contain'
             style={{ width: 34, height: 34, tintColor }}
           >
@@ -28,7 +28,7 @@ const TabNavigatorScreen = (props) = createBottomTabNavigator(
         tabBarLabel: () => { null },
         tabBarIcon: ({ focused, tintColor }) => (
           <Image
-            source={mapTabIcon}
+            source={IconAssets.mapTabIcon}
             resizeMode='contain'
             style={{ width: 34, height: 34, tintColor }}
           >
@@ -42,7 +42,7 @@ const TabNavigatorScreen = (props) = createBottomTabNavigator(
         tabBarLabel: () => { null },
         tabBarIcon: ({ focused, tintColor }) => (
           <Image
-            source={ceteringTabIcon}
+            source={IconAssets.ceteringTabIcon}
             resizeMode='contain'
             style={{ width: 34, height: 34, tintColor }}
           >
@@ -57,7 +57,7 @@ const TabNavigatorScreen = (props) = createBottomTabNavigator(
         tabBarLabel: () => { null },
         tabBarIcon: ({ focused, tintColor }) => (
           <Image
-            source={userTabIcon}
+            source={IconAssets.userTabIcon}
             resizeMode='contain'
             style={{ width: 34, height: 34, tintColor }}
           >

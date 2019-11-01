@@ -7,11 +7,9 @@ import BaseScreen from '../BaseScreen/BaseScreen';
 import DishCard from '../../components/Catering/DishCard';
 import DishList from '../../components/Catering/DishList';
 import {
-    starIcon,
-    heartIcon,
-    KFC_logo,
-    backIcon
-} from '../../helpers';
+    IconAssets,
+    TestAssets,
+} from '../../assets';
 
 class PlaceDetailsScreen extends BaseScreen {
 
@@ -58,7 +56,7 @@ class PlaceDetailsScreen extends BaseScreen {
                     <View>
                         <Image
                             style={{}}
-                            source={backIcon}>
+                            source={IconAssets.backIcon}>
                         </Image>
                     </View>
                 </TouchableOpacity>
@@ -72,7 +70,7 @@ class PlaceDetailsScreen extends BaseScreen {
                     // headerContainerStyle={{color: 'red'}}
                     // headerContainerStyle={{ width: '100%', height: Dimensions.get('screen').width * 16/9}}
                     // headerImage={require("./images/star-full.png")}
-                    renderHeader={() => <Image source={KFC_logo} style={{ height: Dimensions.get('screen').width * 9 / 16, width: Dimensions.get('window').width }} />}
+                    renderHeader={() => <Image source={TestAssets.KFC_logo} style={{ height: Dimensions.get('screen').width * 9 / 16, width: Dimensions.get('window').width }} />}
 
                     // renderForeground={() => (
                     //     <View style={{ height: 150, justifyContent: "center", alignItems: "center" }} >
@@ -106,7 +104,7 @@ class PlaceDetailsScreen extends BaseScreen {
                                         width: 17,
                                         height: 16,
                                     }}
-                                    source={starIcon}
+                                    source={IconAssets.starIcon}
                                 />
                                 <Text style={{ color: '#646464', fontWeight: '400', fontSize: 11, marginLeft: 2 }}>8.9</Text>
                             </View>
@@ -118,7 +116,7 @@ class PlaceDetailsScreen extends BaseScreen {
                                             height: 20,
                                             tintColor: '#646464'
                                         }}
-                                        source={heartIcon}
+                                        source={IconAssets.heartIcon}
                                     />
                                 </TouchableOpacity>
                             </View>

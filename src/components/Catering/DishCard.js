@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet, Image } from 'react-native';
 import {
-    starIcon
-} from '../../helpers';
+    IconAssets
+} from '../../assets';
 import { BASE_COLOR } from '../../styles';
 
 class DishCard extends Component {
@@ -33,7 +33,7 @@ class DishCard extends Component {
                                         width: 17,
                                         height: 16,
                                     }}
-                                    source={starIcon}
+                                    source={IconAssets.starIcon}
                                 />
                                 <Text style={{ color: '#646464', fontWeight: '400', fontSize: 11, marginLeft: 2 }}>8.9</Text>
                             </View>

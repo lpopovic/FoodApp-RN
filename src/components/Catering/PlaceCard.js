@@ -1,10 +1,8 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import {
-    starIcon,
-    heartIcon,
-    KFC_logo,
-} from '../../helpers';
+    IconAssets
+} from '../../assets';
 import { BASE_COLOR } from '../../styles';
 
 class PlaceCard extends Component {
@@ -38,7 +36,7 @@ class PlaceCard extends Component {
                                                 width: 21,
                                                 height: 18,
                                             }}
-                                            source={heartIcon}
+                                            source={IconAssets.heartIcon}
                                         />
                                     </View>
                                 </TouchableOpacity>
@@ -52,7 +50,7 @@ class PlaceCard extends Component {
                                             width: 17,
                                             height: 16,
                                         }}
-                                        source={starIcon}
+                                        source={IconAssets.starIcon}
                                     />
                                     <Text style={{ color: '#646464', fontWeight: '400', fontSize: 11, marginLeft: 2 }}>8.9</Text>
                                 </View>
