@@ -1,0 +1,149 @@
+import React, { Component } from 'react';
+import {
+    View,
+    Image,
+    Text,
+    TouchableOpacity,
+    StyleSheet,
+} from 'react-native';
+import { TestAssets, IconAssets } from '../../assets'
+import {  NAV_COLOR } from '../../styles'
+import { connect } from 'react-redux';
+
+class BaseHeader extends Component {
+
+    constructor(props) {
+        super(props)
+    }
+    render() {
+        const tintColor = NAV_COLOR.darkGray
+        const backgroundColor = this.props.backgroundColor ? this.props.backgroundColor : NAV_COLOR.headerBackground
+
+        return (
+            <View style={[styles.mainContainer, { backgroundColor }]}>
+                <View style={styles.contentBtns}>
+
+                    <View style={styles.leftBtn}>
+                        <TouchableOpacity onPress={() => alert("PRESS LOGO")}>
+                            <View style={styles.imageContainer}>
+                                <Image
+                                    source={IconAssets.appIcon256}
+                                    style={[styles.logoImage,]}
+                                    resizeMode='cover' />
+                            </View>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={() => alert("PRESS LOCATION")}>
+                            <View style={styles.btnLocationContainer}>
+                                <View style={styles.imageContainer}>
+                                    <Image
+                                        source={TestAssets.locationMarkerIcon}
+                                        style={[styles.markerImage, { tintColor: tintColor }]}
+                                        resizeMode='cover' />
+                                </View>
+                                <Text
+                                    numberOfLines={1}
+                                    ellipsizeMode="tail"
+                                    style={[styles.text, { color: tintColor }]}>
+                                    {this.props.city.name}</Text>
+                            </View>
+                        </TouchableOpacity>
+                    </View>
+
+                    <View style={styles.rightBtn}>
+                        <TouchableOpacity onPress={() => alert("PRESS SEARCH")}>
+                            <View style={[styles.imageOtherContainer, styles.imageContainer]}>
+                                <Image
+                                    source={TestAssets.searchIcon}
+                                    style={[styles.baseImage, { tintColor: tintColor }]}
+                                    resizeMode='cover' />
+                            </View>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={() => alert("PRESS FILTER")}>
+                            <View style={[styles.imageOtherContainer, styles.imageContainer]}>
+                                <Image
+                                    source={TestAssets.filterIcon}
+                                    style={[styles.baseImage, { tintColor: tintColor }]}
+                                    resizeMode='cover' />
+                            </View>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={() => alert("PRESS SHOP BAG")}>
+                            <View style={[styles.imageOtherContainer]}>
+                                <Image
+                                    source={TestAssets.shopBagIcon}
+                                    style={[styles.baseImage, { tintColor: tintColor }]}
+                                    resizeMode='cover' />
+                            </View>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            </View>
+        )
+    }
+}
+
+const styles = StyleSheet.create({
+    mainContainer: {
+        height: 50,
+        width: "100%",
+        paddingLeft: 8,
+        paddingRight: 8,
+        borderBottomColor: NAV_COLOR.borderBottomColor,
+        borderBottomWidth: 0.7,
+       
+    },
+    contentBtns: {
+        flex: 1,
+        width: '100%',
+        justifyContent: 'space-between',
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    leftBtn: {
+        justifyContent: 'flex-start',
+        alignItems: 'center',
+        flexDirection: 'row',
+    },
+    rightBtn: {
+        justifyContent: 'flex-end',
+        alignItems: 'center',
+        flexDirection: 'row',
+    },
+    btnLocationContainer: {
+        backgroundColor: NAV_COLOR.locationContent,
+        padding: 5,
+        borderRadius: 5,
+        justifyContent: 'space-between',
+        flexDirection: 'row',
+        alignItems: 'center'
+    },
+    imageContainer: {
+        marginRight: 4
+    },
+    imageOtherContainer: {
+        padding: 4,
+    },
+    logoImage: {
+        height: 35,
+        aspectRatio: 1
+    },
+    markerImage: {
+        height: 20,
+        aspectRatio: 1
+    },
+    baseImage: {
+        height: 25,
+        aspectRatio: 1
+    },
+    text: {
+        fontSize: 12,
+        fontWeight: '500',
+        maxWidth: 130,
+    }
+});
+const mapStateToProps = state => {
+    return {
+        city: state.location.city,
+    };
+};
+
+export default connect(mapStateToProps, null)(BaseHeader);

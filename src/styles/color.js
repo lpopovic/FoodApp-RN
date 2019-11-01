@@ -23,6 +23,9 @@ const TAB_COLOR = {
 
 const NAV_COLOR = {
     headerBackground: 'rgb(250, 250, 250)',
+    tintColor:BASE_COLOR.darkGray,
+    locationContent:BASE_COLOR.lightGray,
+    borderBottomColor:TAB_COLOR.borderTopColor,
 }
 
 export { BASE_COLOR, TAB_COLOR, NAV_COLOR };
