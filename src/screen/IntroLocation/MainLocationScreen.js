@@ -35,6 +35,7 @@ class MainLocationScreen extends BaseScreen {
     componentDidMount() {
         super.componentDidMount()
         this.setStatusBarStyle(BASE_COLOR.black)
+        this.setNewStateHandler({ currentItem: this.props.city })
         this.apiCallHandler()
 
     }

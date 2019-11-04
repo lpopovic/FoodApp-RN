@@ -4,6 +4,7 @@ export const STORAGE_KEY = {
     FIRST_TIME_START_APP: 'FIRST_TIME_START_APP',
     JWT_APP_USER: 'JWT_APP_USER',
     USER_APP_DATA: 'USER_APP_DATA',
+    USER_LAST_LOCATION: 'USER_LAST_LOCATION',
 }
 
 export const saveStorageData = async (object, key) => {

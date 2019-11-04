@@ -6,6 +6,7 @@ import {
 export const updateHederLocationForAxios = (city) => {
     // axios.defaults.headers.common['stateID'] = String(coordinate.stateID);
     axios.defaults.headers.common['cityID'] = String(city._id);
+    saveStorageData(city,STORAGE_KEY.USER_LAST_LOCATION)
    
 }
 

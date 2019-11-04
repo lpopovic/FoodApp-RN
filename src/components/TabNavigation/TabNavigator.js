@@ -16,7 +16,7 @@ const TabNavigatorScreen = (props) = createBottomTabNavigator(
           <Image
             source={IconAssets.homeTabIcon}
             resizeMode='contain'
-            style={{ width: 34, height: 34, tintColor }}
+            style={{ width: 34, height: 34, tintColor, marginBottom: tintColor === TAB_COLOR.activeTintColor ? 2 : 0 }}
           >
           </Image>
         )
@@ -30,7 +30,7 @@ const TabNavigatorScreen = (props) = createBottomTabNavigator(
           <Image
             source={IconAssets.mapTabIcon}
             resizeMode='contain'
-            style={{ width: 34, height: 34, tintColor }}
+            style={{ width: 34, height: 34, tintColor, marginBottom: tintColor === TAB_COLOR.activeTintColor ? 2 : 0 }}
           >
           </Image>
         )
@@ -44,7 +44,7 @@ const TabNavigatorScreen = (props) = createBottomTabNavigator(
           <Image
             source={IconAssets.ceteringTabIcon}
             resizeMode='contain'
-            style={{ width: 34, height: 34, tintColor }}
+            style={{ width: 34, height: 34, tintColor, marginBottom: tintColor === TAB_COLOR.activeTintColor ? 2 : 0 }}
           >
           </Image>
         )
@@ -59,7 +59,7 @@ const TabNavigatorScreen = (props) = createBottomTabNavigator(
           <Image
             source={IconAssets.userTabIcon}
             resizeMode='contain'
-            style={{ width: 34, height: 34, tintColor }}
+            style={{ width: 34, height: 34, tintColor, marginBottom: tintColor === TAB_COLOR.activeTintColor ? 2 : 0 }}
           >
           </Image>
         )

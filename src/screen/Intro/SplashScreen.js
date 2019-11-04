@@ -11,6 +11,7 @@ import {
     updateUserJWT,
     updateUserProfile,
     fetchUserProfile,
+    setLocationCity,
 } from '../../store/actions'
 import { connect } from 'react-redux';
 import BaseScreen from '../BaseScreen/BaseScreen';
@@ -51,14 +52,24 @@ class SplashScreen extends BaseScreen {
             this.resetNavigationStack(ScreenName.OnboardingScreen())
         } else {
             const token = await getStorageData(STORAGE_KEY.JWT_APP_USER)
-            const user = await getStorageData(STORAGE_KEY.USER_APP_DATA)
+
             if (token !== null) {
+
+                const user = await getStorageData(STORAGE_KEY.USER_APP_DATA)
                 if (user !== null) {
                     this.props.updateUserProfileHandler(new User(user))
                 }
                 this.props.updateUserJWTHandler(token)
                 this.props.fetchUserProfileHandler()
-                this.resetNavigationStack(ScreenName.MainLocationScreen())
+
+                const city = await getStorageData(STORAGE_KEY.USER_LAST_LOCATION)
+                if (city !== null) {
+                    this.props.locationUpdateCityHandler(city)
+                    this.resetNavigationStack(ScreenName.TabNavigatorScreen())
+                } else {
+                    this.resetNavigationStack(ScreenName.MainLocationScreen())
+                }
+
             } else {
                 this.resetNavigationStack(ScreenName.LoginScreen())
             }
@@ -132,6 +143,7 @@ const mapDispatchToProps = dispatch => {
         updateUserJWTHandler: (token) => dispatch(updateUserJWT(token)),
         updateUserProfileHandler: (user) => dispatch(updateUserProfile(user)),
         fetchUserProfileHandler: () => dispatch(fetchUserProfile()),
+        locationUpdateCityHandler: (city) => dispatch(setLocationCity(city)),
     };
 };
 
