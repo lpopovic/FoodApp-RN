@@ -1,7 +1,6 @@
 import React from 'react';
-import { TextInput, StyleSheet } from 'react-native';
+import {  TextInput, StyleSheet } from 'react-native';
 import { BASE_COLOR } from '../../styles'
-
 class defaultInput extends React.Component {
 
     getInnerRef = () => this.textInput;
@@ -9,15 +8,14 @@ class defaultInput extends React.Component {
     render() {
 
         return (
-            <TextInput
-                {...this.props}
-                ref={input => this.textInput = input}
-                paddingRight={16}
-                paddingLeft={16}
-                placeholderTextColor={BASE_COLOR.white}
-                style={[styles.input, this.props.style, styleInvalideSetter(this.props.touched, this.props.valid) ? styles.ivalid : null]}
-            />
-
+                <TextInput
+                    placeholderTextColor={BASE_COLOR.white}
+                    {...this.props}
+                    ref={input => this.textInput = input}
+                    paddingRight={16}
+                    paddingLeft={16}
+                    style={[styles.input, this.props.style, styleInvalideSetter(this.props.touched, this.props.valid) ? styles.ivalid : null]}
+                />
         );
     }
 }

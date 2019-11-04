@@ -1,9 +1,14 @@
-import React, { Component } from 'react';
-import { View, Text, StyleSheet, Dimensions } from 'react-native';
+import React from 'react';
+import {
+    View,
+    TouchableWithoutFeedback,
+    StyleSheet,
+    Keyboard,
+} from 'react-native';
 import { ScreenName } from '../../helpers'
 import { NAV_COLOR, BASE_COLOR, segmentedControlStyles } from '../../styles'
 import BaseScreen from "../BaseScreen/BaseScreen"
-import Header from '../../components/common/BaseHeader'
+import Header from '../../components/common/SearchHeader'
 import SegmentedControlTab from "react-native-segmented-control-tab";
 import SafeAreaView from 'react-native-safe-area-view';
 class MapScreen extends BaseScreen {
@@ -24,7 +29,7 @@ class MapScreen extends BaseScreen {
 
     componentDidMount() {
         super.componentDidMount()
-        this.setStatusBarStyle(NAV_COLOR.headerBackground,true)
+        this.setStatusBarStyle(NAV_COLOR.headerBackground, true)
     }
     componentWillUnmount() {
         super.componentWillUnmount()
@@ -40,23 +45,29 @@ class MapScreen extends BaseScreen {
         return (
 
             <SafeAreaView style={styles.safeAreaHeader}>
-                <View style={styles.mainContainer}>
-                    <Header backgroundColor={NAV_COLOR.headerBackground} />
-                    <View style={styles.segmentedControlContainer}>
-                        <SegmentedControlTab
-                            values={this.typeOfSortRestMap}
-                            selectedIndex={this.state.selectedIndex}
-                            onTabPress={this.handleOnTabPress}
-                            borderRadius={8}
-                            tabsContainerStyle={segmentedControlStyles.container}
-                            tabStyle={segmentedControlStyles.commonStyle}
-                            activeTabStyle={{ ...segmentedControlStyles.commonStyle, ...segmentedControlStyles.activeStyle }}
-                            tabTextStyle={segmentedControlStyles.text}
-                            activeTabTextStyle={segmentedControlStyles.text}
+                <TouchableWithoutFeedback onPress={Keyboard.dismiss} >
+                    <View style={styles.mainContainer} keyboardShouldPersistTaps={true}>
+                        <Header
+                            backgroundColor={NAV_COLOR.headerBackground}
+                            borderBottomColor='transparent'
+                            searchTextChange={(text) => this.showAlertMessage(text)}
                         />
-                    </View>
+                        <View style={styles.segmentedControlContainer}>
+                            <SegmentedControlTab
+                                values={this.typeOfSortRestMap}
+                                selectedIndex={this.state.selectedIndex}
+                                onTabPress={this.handleOnTabPress}
+                                borderRadius={8}
+                                tabsContainerStyle={segmentedControlStyles.container}
+                                tabStyle={segmentedControlStyles.commonStyle}
+                                activeTabStyle={{ ...segmentedControlStyles.commonStyle, ...segmentedControlStyles.activeStyle }}
+                                tabTextStyle={segmentedControlStyles.text}
+                                activeTabTextStyle={segmentedControlStyles.text}
+                            />
+                        </View>
 
-                </View>
+                    </View>
+                </TouchableWithoutFeedback>
             </SafeAreaView >
 
 

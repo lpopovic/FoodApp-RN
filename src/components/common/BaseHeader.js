@@ -33,7 +33,7 @@ class BaseHeader extends Component {
                                 <Image
                                     source={IconAssets.appIcon256}
                                     style={[styles.logoImage,]}
-                                    resizeMode='cover' />
+                                    resizeMode='contain' />
                             </View>
                         </TouchableOpacity>
                         <TouchableOpacity onPress={() => this.onPressChangeLocation()}>
@@ -59,7 +59,7 @@ class BaseHeader extends Component {
                                 <Image
                                     source={TestAssets.searchIcon}
                                     style={[styles.baseImage, { tintColor: tintColor }]}
-                                    resizeMode='cover' />
+                                    resizeMode='contain' />
                             </View>
                         </TouchableOpacity>
                         <TouchableOpacity onPress={() => alert("PRESS FILTER")}>
@@ -67,7 +67,7 @@ class BaseHeader extends Component {
                                 <Image
                                     source={TestAssets.filterIcon}
                                     style={[styles.baseImage, { tintColor: tintColor }]}
-                                    resizeMode='cover' />
+                                    resizeMode='contain' />
                             </View>
                         </TouchableOpacity>
                         <TouchableOpacity onPress={() => alert("PRESS SHOP BAG")}>
@@ -75,7 +75,7 @@ class BaseHeader extends Component {
                                 <Image
                                     source={TestAssets.shopBagIcon}
                                     style={[styles.baseImage, { tintColor: tintColor }]}
-                                    resizeMode='cover' />
+                                    resizeMode='contain' />
                             </View>
                         </TouchableOpacity>
                     </View>
