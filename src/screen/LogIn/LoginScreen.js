@@ -108,10 +108,10 @@ class LoginScreen extends BaseScreen {
             style={styles.mainDisplay}
             resetScrollToCoords={{ x: 0, y: 0 }}
             contentContainerStyle={{ flex: 1 }}
-            scrollEnabled={true}
+            scrollEnabled={false}
             bounces={false}
             keyboardShouldPersistTaps='handled'
-            enableOnAndroid={true} >
+            enableOnAndroid={false} >
             <View style={{ flex: 0.8 }}>
 
                 <View style={styles.headerContainer}>

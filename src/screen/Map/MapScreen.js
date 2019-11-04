@@ -1,62 +1,86 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet, Dimensions } from 'react-native';
 import { ScreenName } from '../../helpers'
+import { NAV_COLOR, BASE_COLOR, segmentedControlStyles } from '../../styles'
 import BaseScreen from "../BaseScreen/BaseScreen"
-import { IndicatorViewPager, PagerTitleIndicator } from 'react-native-best-viewpager';
+import Header from '../../components/common/BaseHeader'
+import SegmentedControlTab from "react-native-segmented-control-tab";
+import SafeAreaView from 'react-native-safe-area-view';
 class MapScreen extends BaseScreen {
+
+    static navigationOptions = {
+        header: null,
+        // headerVisible: false,
+        // headerBackTitle: "Photo",
+    };
 
     constructor(props) {
         super(props)
+        this.typeOfSortRestMap = ["Near me", "Pickup", "Delivery"]
+        this.state = {
+            selectedIndex: 0
+        }
     }
 
     componentDidMount() {
         super.componentDidMount()
-        this.setStatusBarStyle('black')
+        this.setStatusBarStyle(NAV_COLOR.headerBackground,true)
     }
     componentWillUnmount() {
         super.componentWillUnmount()
     }
-
-    _renderTitleIndicator() {
-        return <PagerTitleIndicator
-            titles={['Nearby', 'Delivery', 'Pick up']}
-            style={{ backgroundColor: 'white', marginLeft: 0, marginRight: 0, height: 50 }}
-            itemStyle={{ width: (Dimensions.get('window').width) / 3, borderBottomColor: "#E5E5E5", borderBottomWidth: 1 }}
-            selectedItemStyle={{ width: (Dimensions.get('window').width) / 3 }}
-            selectedItemTextStyle={{ color: '#646464', fontSize: 16, fontWeight: '500' }}
-            selectedBorderStyle={{ backgroundColor: '#646464', height: 4.5 }}
-            itemTextStyle={{ fontSize: 16, fontWeight: '500', color: '#A5A5A5' }}
-        />;
-    }
-
+    handleOnTabPress = index => {
+        this.setNewStateHandler({
+            ...this.state,
+            selectedIndex: index
+        });
+        this.showAlertMessage(this.typeOfSortRestMap[index])
+    };
     render() {
         return (
-            <View style={styles.mainContainer}>
-                <IndicatorViewPager
-                    style={{ flex: 1, paddingTop: 0, flexDirection: 'column-reverse' }}
-                    indicator={this._renderTitleIndicator()}
-                >
-                    <View style={{ backgroundColor: 'cadetblue' }}>
-                        <Text>page one</Text>
-                    </View>
-                    <View style={{ backgroundColor: 'cornflowerblue' }}>
-                        <Text>page two</Text>
-                    </View>
-                    <View style={{ backgroundColor: '#1AA094' }}>
-                        <Text>page three</Text>
-                    </View>
-                </IndicatorViewPager>
 
-                {/* <Text onPress={() => this.pushNewScreen({ routeName: ScreenName.DetailScreen(), key: `${Math.random() * 10000}` })}>Map!</Text> */}
-            </View>
+            <SafeAreaView style={styles.safeAreaHeader}>
+                <View style={styles.mainContainer}>
+                    <Header backgroundColor={NAV_COLOR.headerBackground} />
+                    <View style={styles.segmentedControlContainer}>
+                        <SegmentedControlTab
+                            values={this.typeOfSortRestMap}
+                            selectedIndex={this.state.selectedIndex}
+                            onTabPress={this.handleOnTabPress}
+                            borderRadius={8}
+                            tabsContainerStyle={segmentedControlStyles.container}
+                            tabStyle={segmentedControlStyles.commonStyle}
+                            activeTabStyle={{ ...segmentedControlStyles.commonStyle, ...segmentedControlStyles.activeStyle }}
+                            tabTextStyle={segmentedControlStyles.text}
+                            activeTabTextStyle={segmentedControlStyles.text}
+                        />
+                    </View>
+
+                </View>
+            </SafeAreaView >
+
+
         )
     }
 }
 
 const styles = StyleSheet.create({
     mainContainer: {
-        flex: 1
-    }
+        flex: 1,
+        backgroundColor: BASE_COLOR.red
+    },
+    safeAreaHeader: {
+        backgroundColor: NAV_COLOR.headerBackground,
+        flex: 1,
+    },
+    segmentedControlContainer: {
+        paddingLeft: 16,
+        paddingRight: 16,
+        paddingTop: 8,
+        paddingBottom: 8,
+        backgroundColor: NAV_COLOR.headerBackground
+    },
+
 });
 
 

@@ -73,6 +73,7 @@ class SplashScreen extends BaseScreen {
             } else {
                 this.resetNavigationStack(ScreenName.LoginScreen())
             }
+            // this.resetNavigationStack(ScreenName.LoginScreen())
         }
 
     }
