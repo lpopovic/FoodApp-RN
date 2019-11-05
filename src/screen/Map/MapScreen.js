@@ -89,7 +89,9 @@ const styles = StyleSheet.create({
         paddingRight: 16,
         paddingTop: 8,
         paddingBottom: 8,
-        backgroundColor: NAV_COLOR.headerBackground
+        backgroundColor: NAV_COLOR.headerBackground,
+        borderBottomColor: NAV_COLOR.borderBottomColor,
+        borderBottomWidth: 0.7
     },
 
 });
