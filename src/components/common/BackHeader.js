@@ -8,14 +8,14 @@ import {
 } from 'react-native';
 import { withNavigation } from 'react-navigation'
 import { IconAssets } from '../../assets'
-import { BASE_COLOR, headerStyles } from '../../styles'
+import { BASE_COLOR, headerStyles, NAV_COLOR } from '../../styles'
 class BackHeader extends Component {
 
     constructor(props) {
         super(props)
         this.leftBtnTitle = 'Back'
     }
-    backPressHandler = ()=> {
+    backPressHandler = () => {
         this.props.navigation.goBack()
     }
     render() {
@@ -23,7 +23,7 @@ class BackHeader extends Component {
         const backgroundColor = this.props.backgroundColor ? this.props.backgroundColor : BASE_COLOR.backgroundBlue
 
         return (
-            <View style={[headerStyles.mainContainer, { backgroundColor }]}>
+            <View style={[headerStyles.mainContainer, { backgroundColor, borderBottomColor: NAV_COLOR.borderBottomColor, borderBottomWidth: tintColor == BASE_COLOR ? 0 : 0.7 }]}>
                 <View style={{ flex: 1, justifyContent: 'space-between', flexDirection: 'row', alignItems: 'center' }}>
                     <TouchableOpacity onPress={() => this.backPressHandler()}>
                         <View style={styles.leftBtn}>
@@ -37,7 +37,7 @@ class BackHeader extends Component {
                         </View>
                     </TouchableOpacity>
                     {/* <View style={styles.rightBtn}>
-                        <Text style={styles.text}>Right BTN</Text>
+                        <Text style={styles.text}>KATEGORIJE</Text>
                     </View> */}
                 </View>
             </View>

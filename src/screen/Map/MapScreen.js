@@ -46,7 +46,7 @@ class MapScreen extends BaseScreen {
 
             <SafeAreaView style={styles.safeAreaHeader}>
                 <TouchableWithoutFeedback onPress={Keyboard.dismiss} >
-                    <View style={styles.mainContainer} keyboardShouldPersistTaps={true}>
+                    <View style={styles.mainContainer}>
                         <Header
                             backgroundColor={NAV_COLOR.headerBackground}
                             borderBottomColor='transparent'

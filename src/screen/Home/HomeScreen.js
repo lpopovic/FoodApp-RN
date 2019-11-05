@@ -6,6 +6,7 @@ import Header from '../../components/common/BaseHeader'
 import SafeAreaView from 'react-native-safe-area-view';
 import { connect } from 'react-redux';
 import { NAV_COLOR, BASE_COLOR } from '../../styles';
+import { CategorySectionList } from '../../components/Category/CategoryList'
 class HomeScreen extends BaseScreen {
     static navigationOptions = {
         header: null,
@@ -28,7 +29,11 @@ class HomeScreen extends BaseScreen {
             <SafeAreaView style={styles.safeAreaHeader}>
                 <View style={styles.mainContainer}>
                     <Header backgroundColor={NAV_COLOR.headerBackground} />
-
+                    <CategorySectionList
+                        arrayObject={["", "asda", "lazar", "", "asda", "lazar", "", "asda", "lazar", "", "asda", "lazar", "", "asda", "lazar"]}
+                        onPressItem={(item) => alert(item)}
+                        onPressSeeMore={() => this.pushNewScreen(ScreenName.CategoryScreen())}
+                    />
                 </View>
             </SafeAreaView>
         )
