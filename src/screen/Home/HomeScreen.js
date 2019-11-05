@@ -24,16 +24,20 @@ class HomeScreen extends BaseScreen {
     componentWillUnmount() {
         super.componentWillUnmount()
     }
+    categoryListContent = () => (
+        <CategorySectionList
+            arrayObject={["", "asda", "lazar", "", "asda", "lazar", "", "asda", "lazar", "", "asda", "lazar", "", "asda", "lazar"]}
+            onPressItem={(item) => alert(item)}
+            onPressSeeMore={() => this.pushNewScreen(ScreenName.CategoryScreen())}
+        />
+    )
     render() {
+        const mainDisplay = this.categoryList()
         return (
             <SafeAreaView style={styles.safeAreaHeader}>
                 <View style={styles.mainContainer}>
                     <Header backgroundColor={NAV_COLOR.headerBackground} />
-                    <CategorySectionList
-                        arrayObject={["", "asda", "lazar", "", "asda", "lazar", "", "asda", "lazar", "", "asda", "lazar", "", "asda", "lazar"]}
-                        onPressItem={(item) => alert(item)}
-                        onPressSeeMore={() => this.pushNewScreen(ScreenName.CategoryScreen())}
-                    />
+                    {mainDisplay}
                 </View>
             </SafeAreaView>
         )
