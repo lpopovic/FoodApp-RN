@@ -7,7 +7,7 @@ import {
     StyleSheet
 } from 'react-native';
 import { withNavigation } from 'react-navigation'
-import { IconAssets } from '../../assets'
+import { IconAssets, TestAssets } from '../../assets'
 import { BASE_COLOR, headerStyles, NAV_COLOR } from '../../styles'
 class BackHeader extends Component {
 
@@ -18,10 +18,25 @@ class BackHeader extends Component {
     backPressHandler = () => {
         this.props.navigation.goBack()
     }
+    filterPressHandler = () => {
+        alert("Press Filter")
+    }
+    filterContent = (tintColor) => (
+        <TouchableOpacity onPress={() => this.filterPressHandler()}>
+            <View style={styles.rightBtn}>
+                <View style={[styles.imageOtherContainer, styles.imageContainer]}>
+                    <Image
+                        source={TestAssets.filterIcon}
+                        style={[styles.baseImage, { tintColor: tintColor }]}
+                        resizeMode='contain' />
+                </View>
+            </View>
+        </TouchableOpacity>
+    )
     render() {
         const tintColor = this.props.tintColor ? this.props.tintColor : BASE_COLOR.white
         const backgroundColor = this.props.backgroundColor ? this.props.backgroundColor : BASE_COLOR.backgroundBlue
-
+        const filterDisplay = this.props.showFilter ? this.filterContent() : null
         return (
             <View style={[headerStyles.mainContainer, { backgroundColor, borderBottomColor: NAV_COLOR.borderBottomColor, borderBottomWidth: tintColor == BASE_COLOR ? 0 : 0.7 }]}>
                 <View style={{ flex: 1, justifyContent: 'space-between', flexDirection: 'row', alignItems: 'center' }}>
@@ -36,9 +51,7 @@ class BackHeader extends Component {
                             <Text style={[headerStyles.btnText, { color: tintColor }]}>{this.leftBtnTitle}</Text>
                         </View>
                     </TouchableOpacity>
-                    {/* <View style={styles.rightBtn}>
-                        <Text style={styles.text}>KATEGORIJE</Text>
-                    </View> */}
+                    {filterDisplay}
                 </View>
             </View>
         )
@@ -62,7 +75,17 @@ const styles = StyleSheet.create({
     text: {
         fontSize: 17,
         fontWeight: '500',
-    }
+    },
+    imageContainer: {
+        marginRight: 4
+    },
+    imageOtherContainer: {
+        padding: 4,
+    },
+    baseImage: {
+        height: 25,
+        aspectRatio: 1
+    },
 });
 
 

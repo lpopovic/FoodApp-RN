@@ -4,6 +4,7 @@ import { createStackNavigator } from 'react-navigation-stack';
 // HOME TAB
 import HomeScreen from '../../screen/Home/HomeScreen'
 import CategoryScreen from '../../screen/Home/CategoryScreen'
+import PlaceListScreen from '../../screen/Home/PlaceListScreen'
 // MAP TAB
 import MapScreen from '../../screen/Map/MapScreen'
 
@@ -20,7 +21,8 @@ import DetailScreen from '../../screen/DetailScreen'
 
 const HomeStack = createStackNavigator({
     cateringapp_Home: HomeScreen,
-    cateringapp_Category:CategoryScreen,
+    cateringapp_Category: CategoryScreen,
+    cateringapp_PlaceList: PlaceListScreen,
     cateringapp_Detail: DetailScreen,
 
 })

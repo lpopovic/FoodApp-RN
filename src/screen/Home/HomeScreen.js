@@ -32,7 +32,7 @@ class HomeScreen extends BaseScreen {
         />
     )
     render() {
-        const mainDisplay = this.categoryList()
+        const mainDisplay = this.categoryListContent()
         return (
             <SafeAreaView style={styles.safeAreaHeader}>
                 <View style={styles.mainContainer}>
