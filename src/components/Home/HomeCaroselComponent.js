@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, Dimensions, Image, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, Dimensions, Image, ImageBackground, TouchableOpacity } from 'react-native';
 import Carousel, { Pagination } from 'react-native-snap-carousel'
 import { BASE_COLOR } from '../../styles';
-import { TestAssets } from '../../assets'
+import { IconAssets, } from '../../assets'
 const SLIDER_FIRST_ITEM = 1;
 
 class HomeCaroselComponent extends Component {
@@ -14,17 +14,61 @@ class HomeCaroselComponent extends Component {
         }
     }
 
+    deliveryIcon = (index) => {
+
+
+        if (index % 2 == 0) {
+            return (
+                <View style={{ position: 'absolute', right: 8, top: 8, padding: 4 ,position: 'absolute', flexDirection: 'row', alignItems: 'center' }}>
+
+                    <Image
+                        style={[[styles.heartImage]]}
+                        source={IconAssets.deliveryIcon}
+                        resizeMode='contain' />
+                    <Text style={[styles.baseText, { marginLeft: 4 }]}>45 min.</Text>
+
+                </View>
+
+            )
+        } else {
+            return (
+                <View />
+            )
+        }
+
+    }
     _renderItem = ({ item, index }) => {
         return (
             <View key={index} style={{ alignItems: 'center', alignContent: 'center', justifyContent: 'center' }}>
-                <TouchableOpacity activeOpacity={1} onPress={() => alert("Click carosel index:" + (index - 3 ))}>
-                    <Image style={{ height: Dimensions.get('window').width * 9 / 16, width: Dimensions.get('window').width, resizeMode: 'cover' }} source={{ uri: item.image }} />
+                <TouchableOpacity activeOpacity={1} onPress={() => alert("Click carosel index:" + (index - 3))}>
+                    <ImageBackground style={{ height: Dimensions.get('window').width * 9 / 16, width: Dimensions.get('window').width, resizeMode: 'cover', backgroundColor: BASE_COLOR.blue }} source={{ uri: item.image }} >
+                        <View style={styles.imageContainer}>
+                            {this.deliveryIcon(index)}
+                            <TouchableOpacity
+                                onPress={() => alert("press heart image")}
+                                style={{ marginLeft: 8, padding: 4, flexDirection: 'row', alignContent: 'center', alignItems: 'center' }}>
+                                <Image
+                                    style={[styles.heartImage]}
+                                    source={IconAssets.heartIcon}
+                                    resizeMode='contain' />
+                                <Text style={[styles.baseText, { marginLeft: 4 }]}>31{index}</Text>
+                            </TouchableOpacity>
+                            <View style={styles.titleContainer}>
+                                <Text
+                                    numberOfLines={3}
+                                    ellipsizeMode="tail"
+                                    style={[styles.baseText, styles.title]}>
+                                    Mali Leskovac {index - 3}
+                                </Text>
+                            </View>
+                        </View>
+                    </ImageBackground>
                 </TouchableOpacity>
             </View>
         );
     }
     snapIndexCarosel = (index) => {
-         this.setState({ sliderActiveSlide: index })
+        this.setState({ sliderActiveSlide: index })
     }
 
     render() {
@@ -73,7 +117,32 @@ class HomeCaroselComponent extends Component {
 const styles = StyleSheet.create({
     mainContainer: {
         // flex: 1
-    }
+    },
+    imageContainer: {
+        width: '100%',
+        height: '100%',
+        backgroundColor: 'rgba(0, 0, 0,0.5)',
+        justifyContent: 'flex-end'
+    },
+    titleContainer: {
+        margin: 8,
+    },
+    baseText: {
+        color: BASE_COLOR.white,
+        textAlign: 'center',
+        fontWeight: 'bold',
+        fontSize: 16,
+    },
+    title: {
+        fontSize: 24,
+        fontWeight: 'bold',
+        textAlign: 'left',
+    },
+    heartImage: {
+        height: 25,
+        width: 25,
+        tintColor: BASE_COLOR.white,
+    },
 });
 
 

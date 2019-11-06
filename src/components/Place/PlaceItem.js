@@ -60,7 +60,7 @@ class PlaceItem extends Component {
                                             numberOfLines={2}
                                             ellipsizeMode="tail"
                                             style={[styles.baseText, styles.title]}>
-                                            Mali Leskovac
+                                            Mali Leskovac 
                                         </Text>
                                     </View>
                                     <View style={{ marginLeft: 16, marginBottom: 8, marginRight: 16, marginTop: 0, }}>
@@ -109,13 +109,13 @@ const styles = StyleSheet.create({
     imageBackground: {
         width: "100%",
         aspectRatio: 16 / 9,
+        backgroundColor:BASE_COLOR.blue,
     },
     imageContainer: {
         width: '100%',
         height: '100%',
         backgroundColor: 'rgba(0, 0, 0,0.5)',
         justifyContent: 'flex-end'
-
     },
     otherImage: {
         height: 15,

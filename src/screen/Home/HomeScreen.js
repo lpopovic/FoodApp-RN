@@ -91,7 +91,6 @@ class HomeScreen extends BaseScreen {
                     <View>
                         {this.categoryListContent()}
                     </View>
-
                 </View>
             </ScrollView>
         )
@@ -104,7 +103,6 @@ class HomeScreen extends BaseScreen {
                 <View style={styles.mainContainer}>
                     <Header backgroundColor={NAV_COLOR.headerBackground} />
                     {mainDisplay}
-
                 </View>
             </SafeAreaView>
         )

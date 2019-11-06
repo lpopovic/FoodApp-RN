@@ -38,7 +38,7 @@ class BackHeader extends Component {
         const backgroundColor = this.props.backgroundColor ? this.props.backgroundColor : BASE_COLOR.backgroundBlue
         const filterDisplay = this.props.showFilter ? this.filterContent() : null
         return (
-            <View style={[headerStyles.mainContainer, { backgroundColor, borderBottomColor: NAV_COLOR.borderBottomColor, borderBottomWidth: tintColor == BASE_COLOR ? 0 : 0.7 }]}>
+            <View style={[headerStyles.mainContainer, { backgroundColor, borderBottomColor: NAV_COLOR.borderBottomColor, borderBottomWidth: tintColor == BASE_COLOR.white ? 0 : 0.7 }]}>
                 <View style={{ flex: 1, justifyContent: 'space-between', flexDirection: 'row', alignItems: 'center' }}>
                     <TouchableOpacity onPress={() => this.backPressHandler()}>
                         <View style={styles.leftBtn}>
