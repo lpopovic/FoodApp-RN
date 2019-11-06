@@ -8,6 +8,10 @@ import PlaceListScreen from '../../screen/Home/PlaceListScreen'
 // MAP TAB
 import MapScreen from '../../screen/Map/MapScreen'
 
+// SEARCH TAB
+
+import SearchScreen from '../../screen/Search/SearchScreen'
+
 // CATERING TAB
 import CateringScreen from '../../screen/Catering/CateringScreen'
 import PlaceDetailScreen from '../../screen/Catering/PlaceDetailsScreen'
@@ -33,7 +37,10 @@ const MapStack = createStackNavigator({
     cateringapp_Detail: DetailScreen,
 
 })
+const SearchStack = createStackNavigator({
+    cateringapp_Search: SearchScreen,
 
+})
 const CateringStack = createStackNavigator({
     cateringapp_Catering: CateringScreen,
     cateringapp_Detail: DetailScreen,
@@ -48,4 +55,4 @@ const UserStack = createStackNavigator({
 })
 
 
-export { HomeStack, MapStack, CateringStack, UserStack };
+export { HomeStack, MapStack, CateringStack, UserStack, SearchStack };

@@ -1,8 +1,8 @@
 import React from 'react';
 import { Image } from 'react-native';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
-import { HomeStack, MapStack, CateringStack, UserStack } from './StackNavigator';
-import { IconAssets } from '../../assets'
+import { HomeStack, MapStack, CateringStack, UserStack, SearchStack} from './StackNavigator';
+import { IconAssets, TestAssets } from '../../assets'
 import { TAB_COLOR } from '../../styles'
 
 
@@ -29,6 +29,20 @@ const TabNavigatorScreen = (props) = createBottomTabNavigator(
         tabBarIcon: ({ focused, tintColor }) => (
           <Image
             source={IconAssets.mapTabIcon}
+            resizeMode='contain'
+            style={{ width: 34, height: 34, tintColor, marginBottom: tintColor === TAB_COLOR.activeTintColor ? 2 : 0 }}
+          >
+          </Image>
+        )
+      }
+    },
+    Search: {
+      screen: SearchStack,
+      navigationOptions: {
+        tabBarLabel: () => { null },
+        tabBarIcon: ({ focused, tintColor }) => (
+          <Image
+            source={TestAssets.searchIcon}
             resizeMode='contain'
             style={{ width: 34, height: 34, tintColor, marginBottom: tintColor === TAB_COLOR.activeTintColor ? 2 : 0 }}
           >

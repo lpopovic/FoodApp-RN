@@ -5,7 +5,7 @@ import {
     Text,
     TouchableOpacity,
     StyleSheet,
-Dimensions
+    Dimensions
 } from 'react-native';
 import { BASE_COLOR } from '../../styles';
 const cardSmallWidth = 80
@@ -17,7 +17,7 @@ class CategoryItem extends Component {
 
     render() {
         const { setSmall, item } = this.props
-        const { image, name,} = item
+        const { image, name, } = item
         return (
             <View style={[styles.mainContainer, { width: setSmall ? cardSmallWidth : cardBigWidth }]}>
                 <TouchableOpacity onPress={() => this.props.onPress()}>
@@ -63,6 +63,7 @@ const styles = StyleSheet.create({
     image: {
         width: '100%',
         height: '100%',
+        backgroundColor: BASE_COLOR.blue
     },
     textContainer: {
         marginTop: 4,
