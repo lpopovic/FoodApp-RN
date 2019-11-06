@@ -27,8 +27,8 @@ class HomeScreen extends BaseScreen {
     categoryListContent = () => (
         <CategorySectionList
             arrayObject={["", "asda", "lazar", "", "asda", "lazar", "", "asda", "lazar", "", "asda", "lazar", "", "asda", "lazar"]}
-            onPressItem={(item) => alert(item)}
-            onPressSeeMore={() => this.pushNewScreen(ScreenName.CategoryScreen())}
+            onPressItem={(item) => this.pushNewScreen(ScreenName.CategoryScreen())}
+            onPressSeeMore={() => this.pushNewScreen(ScreenName.PlaceListScreen())}
         />
     )
     render() {
