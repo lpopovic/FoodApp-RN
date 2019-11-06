@@ -19,7 +19,7 @@ class HomeCaroselComponent extends Component {
 
         if (index % 2 == 0) {
             return (
-                <View style={{ position: 'absolute', right: 8, top: 8, padding: 4 ,position: 'absolute', flexDirection: 'row', alignItems: 'center' }}>
+                <View style={{ position: 'absolute', right: 8, top: 8, padding: 4, position: 'absolute', flexDirection: 'row', alignItems: 'center' }}>
 
                     <Image
                         style={[[styles.heartImage]]}
@@ -40,19 +40,23 @@ class HomeCaroselComponent extends Component {
     _renderItem = ({ item, index }) => {
         return (
             <View key={index} style={{ alignItems: 'center', alignContent: 'center', justifyContent: 'center' }}>
-                <TouchableOpacity activeOpacity={1} onPress={() => alert("Click carosel index:" + (index - 3))}>
+                <TouchableOpacity activeOpacity={1} onPress={() => this.props.onPressItem(index - 3)}>
                     <ImageBackground style={{ height: Dimensions.get('window').width * 9 / 16, width: Dimensions.get('window').width, resizeMode: 'cover', backgroundColor: BASE_COLOR.blue }} source={{ uri: item.image }} >
                         <View style={styles.imageContainer}>
                             {this.deliveryIcon(index)}
-                            <TouchableOpacity
-                                onPress={() => alert("press heart image")}
-                                style={{ marginLeft: 8, padding: 4, flexDirection: 'row', alignContent: 'center', alignItems: 'center' }}>
-                                <Image
-                                    style={[styles.heartImage]}
-                                    source={IconAssets.heartIcon}
-                                    resizeMode='contain' />
-                                <Text style={[styles.baseText, { marginLeft: 4 }]}>31{index}</Text>
-                            </TouchableOpacity>
+
+                            <View style={{ marginLeft: 8, alignContent: 'center', alignItems: 'flex-start' }}>
+                                <TouchableOpacity
+                                    onPress={() => alert("press heart image")}>
+                                    <View style={{ padding: 4, flexDirection: 'row', alignItems: 'center' }}>
+                                        <Image
+                                            style={[styles.heartImage]}
+                                            source={IconAssets.heartIcon}
+                                            resizeMode='contain' />
+                                        <Text style={[styles.baseText, { marginLeft: 4 }]}>31{index}</Text>
+                                    </View>
+                                </TouchableOpacity>
+                            </View>
                             <View style={styles.titleContainer}>
                                 <Text
                                     numberOfLines={3}
@@ -63,8 +67,8 @@ class HomeCaroselComponent extends Component {
                             </View>
                         </View>
                     </ImageBackground>
-                </TouchableOpacity>
-            </View>
+                </TouchableOpacity >
+            </View >
         );
     }
     snapIndexCarosel = (index) => {

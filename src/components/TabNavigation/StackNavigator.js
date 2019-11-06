@@ -23,6 +23,7 @@ const HomeStack = createStackNavigator({
     cateringapp_Home: HomeScreen,
     cateringapp_Category: CategoryScreen,
     cateringapp_PlaceList: PlaceListScreen,
+    cateringapp_PlaceDetail: PlaceDetailScreen,
     cateringapp_Detail: DetailScreen,
 
 })

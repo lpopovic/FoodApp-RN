@@ -9,6 +9,7 @@ import SafeAreaView from 'react-native-safe-area-view';
 import BaseScreen from '../BaseScreen/BaseScreen';
 import Header from '../../components/common/BackHeader'
 import { NAV_COLOR, BASE_COLOR } from '../../styles'
+import { ScreenName } from '../../helpers'
 class CategoryScreen extends BaseScreen {
     static navigationOptions = {
         header: null,
@@ -53,7 +54,7 @@ class CategoryScreen extends BaseScreen {
                     />
                 }
                 arrayObject={["", "asda", "lazar", "", "asda", "lazar", "", "asda", "lazar", "", "asda", "lazar", "", "asda", "lazar"]}
-                onPressItem={(item) => alert(item)} />
+                onPressItem={(item) => this.pushNewScreen({ routeName: ScreenName.PlaceListScreen(), key: `${Math.random() * 10000}`, params: { title: "KATEGORIJA" } })} />
         )
     }
     render() {

@@ -33,6 +33,17 @@ class BackHeader extends Component {
             </View>
         </TouchableOpacity>
     )
+    titleDisplay = (tintColor) => {
+        const title = this.props.navigation.getParam('title',null)
+        if(title) {
+            return (
+                <View style={styles.titleContainer}>
+                    <Text style={[headerStyles.btnText, { color: tintColor }]}>{title}</Text>
+                </View>
+            )
+        }
+     
+    }
     render() {
         const tintColor = this.props.tintColor ? this.props.tintColor : BASE_COLOR.white
         const backgroundColor = this.props.backgroundColor ? this.props.backgroundColor : BASE_COLOR.backgroundBlue
@@ -51,6 +62,7 @@ class BackHeader extends Component {
                             <Text style={[headerStyles.btnText, { color: tintColor }]}>{this.leftBtnTitle}</Text>
                         </View>
                     </TouchableOpacity>
+                    {this.titleDisplay(tintColor)}
                     {filterDisplay}
                 </View>
             </View>

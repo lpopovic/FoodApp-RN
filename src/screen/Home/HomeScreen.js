@@ -12,6 +12,7 @@ import SafeAreaView from 'react-native-safe-area-view';
 import { connect } from 'react-redux';
 import { NAV_COLOR, BASE_COLOR } from '../../styles';
 import { CategorySectionList } from '../../components/Category/CategoryList'
+import { PlaceSectionList } from '../../components/Place/PlaceList'
 import HomeCaroselComponent from '../../components/Home/HomeCaroselComponent';
 
 class HomeScreen extends BaseScreen {
@@ -54,15 +55,51 @@ class HomeScreen extends BaseScreen {
     componentWillUnmount() {
         super.componentWillUnmount()
     }
+    placeListNewContent = () => (
+        <PlaceSectionList
+            titleSection="NOVO"
+            arrayObject={["", "asda", "lazar", "", "asda", "lazar", "", "asda", "lazar", "", "asda", "lazar", "", "asda", "lazar"]}
+            onPressItem={(item) => this.pushNewScreen({ routeName: ScreenName.PlaceDetailScreen(), key: `${Math.random() * 10000}` })}
+            onPressSeeMore={() => this.pushNewScreen({ routeName: ScreenName.PlaceListScreen(), key: `${Math.random() * 10000}`, params: { title: "NOVO" } })}
+        />
+    )
+    placeListMostRatingContent = () => (
+        <PlaceSectionList
+            titleSection="NAJBOLJE OCENE"
+            arrayObject={["", "asda", "lazar", "", "asda", "lazar", "", "asda", "lazar", "", "asda", "lazar", "", "asda", "lazar"]}
+            onPressItem={(item) => this.pushNewScreen({ routeName: ScreenName.PlaceDetailScreen(), key: `${Math.random() * 10000}` })}
+            onPressSeeMore={() => this.pushNewScreen({ routeName: ScreenName.PlaceListScreen(), key: `${Math.random() * 10000}`, params: { title: "NAJBOLJE OCENE" } })}
+        />
+    )
+    placeListRecommendedContent = () => (
+        <PlaceSectionList
+            titleSection="PREPORUČENO"
+            arrayObject={["", "asda", "lazar", "", "asda", "lazar", "", "asda", "lazar", "", "asda", "lazar", "", "asda", "lazar"]}
+            onPressItem={(item) => this.pushNewScreen({ routeName: ScreenName.PlaceDetailScreen(), key: `${Math.random() * 10000}` })}
+            onPressSeeMore={() => this.pushNewScreen({ routeName: ScreenName.PlaceListScreen(), key: `${Math.random() * 10000}`, params: { title: "PREPORUČENO" } })}
+        />
+    )
+    placeListActionContent = () => (
+        <PlaceSectionList
+            titleSection={"AKCIJE"}
+            arrayObject={["", "asda", "lazar", "", "asda", "lazar", "", "asda", "lazar", "", "asda", "lazar", "", "asda", "lazar"]}
+            onPressItem={(item) => this.pushNewScreen({ routeName: ScreenName.PlaceDetailScreen(), key: `${Math.random() * 10000}` })}
+            onPressSeeMore={() => this.pushNewScreen({ routeName: ScreenName.PlaceListScreen(), key: `${Math.random() * 10000}`, params: { title: "AKCIJE" } })}
+        />
+    )
     categoryListContent = () => (
         <CategorySectionList
             arrayObject={["", "asda", "lazar", "", "asda", "lazar", "", "asda", "lazar", "", "asda", "lazar", "", "asda", "lazar"]}
-            onPressItem={(item) => this.pushNewScreen(ScreenName.CategoryScreen())}
-            onPressSeeMore={() => this.pushNewScreen(ScreenName.PlaceListScreen())}
+            onPressItem={(item) => this.pushNewScreen({ routeName: ScreenName.PlaceListScreen(), key: `${Math.random() * 10000}`, params: { title: "KATEGORIJA REST." } })}
+            onPressSeeMore={() => this.pushNewScreen(ScreenName.CategoryScreen())}
         />
     )
     caroselContent = () => (
-        <HomeCaroselComponent data={this.state.carosel} />
+        <HomeCaroselComponent
+            data={this.state.carosel}
+            onPressItem={(index) => this.pushNewScreen({ routeName: ScreenName.PlaceDetailScreen(), key: `${Math.random() * 10000}` })}
+
+        />
     )
     _onRefresh = () => {
         this.setNewStateHandler({ refreshing: true });
@@ -88,8 +125,21 @@ class HomeScreen extends BaseScreen {
                     <View>
                         {this.caroselContent()}
                     </View>
-                    <View>
+                    <View style={{ marginTop: 8 }}>
+                        {this.placeListRecommendedContent()}
+                    </View>
+
+                    <View style={{ marginTop: 8 }}>
                         {this.categoryListContent()}
+                    </View>
+                    <View >
+                        {this.placeListNewContent()}
+                    </View>
+                    <View style={{ marginTop: 8 }}>
+                        {this.placeListMostRatingContent()}
+                    </View>
+                    <View style={{ marginTop: 8 }}>
+                        {this.placeListActionContent()}
                     </View>
                 </View>
             </ScrollView>

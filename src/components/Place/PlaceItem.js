@@ -12,7 +12,7 @@ import { TestAssets, IconAssets } from '../../assets'
 
 class PlaceItem extends Component {
 
-    deliveryIcon = () => {
+    deliveryIcon = (time) => {
 
 
         if (this.props.item % 2 == 0) {
@@ -23,7 +23,7 @@ class PlaceItem extends Component {
                         style={[[styles.heartImage]]}
                         source={IconAssets.deliveryIcon}
                         resizeMode='contain' />
-                    <Text style={[styles.baseText, { marginLeft: 4 }]}>45 min.</Text>
+                    <Text style={[styles.baseText, { marginLeft: 4 }]}>{time}</Text>
 
                 </View>
 
@@ -36,9 +36,13 @@ class PlaceItem extends Component {
 
     }
     render() {
+        const title = 'Mali Leskovac'
+        const rating = '4.6'
+        const distance = '4.5 km'
+        const timeDelivery = '45 min.'
         return (
             <View style={styles.mainContainer}>
-                <TouchableOpacity activeOpacity={1} onPress={() => alert("Press Place Item")}>
+                <TouchableOpacity activeOpacity={1} onPress={() => this.props.onPress()}>
                     <>
                         <View style={styles.imageBackgroundContainer}>
                             <ImageBackground
@@ -60,7 +64,7 @@ class PlaceItem extends Component {
                                             numberOfLines={2}
                                             ellipsizeMode="tail"
                                             style={[styles.baseText, styles.title]}>
-                                            Mali Leskovac 
+                                            {title}
                                         </Text>
                                     </View>
                                     <View style={{ marginLeft: 16, marginBottom: 8, marginRight: 16, marginTop: 0, }}>
@@ -69,7 +73,7 @@ class PlaceItem extends Component {
                                                 style={[styles.otherImage]}
                                                 source={IconAssets.starIcon}
                                                 resizeMode='contain' />
-                                            <Text style={[styles.baseText]}>4.6</Text>
+                                            <Text style={[styles.baseText]}>{rating}</Text>
 
                                         </View>
                                         <View style={{ justifyContent: 'space-between', flexDirection: 'row' }}>
@@ -78,9 +82,9 @@ class PlaceItem extends Component {
                                                     style={[styles.otherImage, { tintColor: BASE_COLOR.blue, }]}
                                                     source={TestAssets.locationMarkerIcon}
                                                     resizeMode='contain' />
-                                                <Text style={[styles.baseText]}>4.5km od tebe</Text>
+                                                <Text style={[styles.baseText]}>{distance} od tebe</Text>
                                             </View>
-                                            {this.deliveryIcon()}
+                                            {this.deliveryIcon(timeDelivery)}
                                         </View>
 
                                     </View>
@@ -109,7 +113,7 @@ const styles = StyleSheet.create({
     imageBackground: {
         width: "100%",
         aspectRatio: 16 / 9,
-        backgroundColor:BASE_COLOR.blue,
+        backgroundColor: BASE_COLOR.blue,
     },
     imageContainer: {
         width: '100%',
@@ -143,6 +147,135 @@ const styles = StyleSheet.create({
         textAlign: 'left',
     }
 });
+class PlaceSmallItem extends Component {
+
+    render() {
+        const title = 'Mali Leskovac'
+        const rating = '4.6'
+        // const distance = '4.5 km'
+        const timeDelivery = '45 min.'
+        const priceTag = '$$$'
+        return (
+            <View style={stylesSmall.mainContainer}>
+                <TouchableOpacity activeOpacity={1} onPress={() => this.props.onPress()}>
+                    <>
+                        <View style={stylesSmall.imageBackgroundContainer}>
+                            <ImageBackground
+                                style={[stylesSmall.imageBackground]}
+                                source={{ uri: "https://api.ketering.rtech.rs/uploads/c54153e5-b287-7307-aa52-b0c49f205a4a-11.png?caption=Kod%20Dzamboa" }}
+                                resizeMode='cover'>
+                                <View style={stylesSmall.imageContainer}>
+
+                                    <View style={stylesSmall.titleContainer}>
+                                        <Text
+                                            numberOfLines={2}
+                                            ellipsizeMode="tail"
+                                            style={[stylesSmall.baseText, stylesSmall.title]}>
+                                            {title}
+                                        </Text>
+                                    </View>
+                                </View>
+                            </ImageBackground>
+
+                        </View>
+                        <View style={stylesSmall.otherContainer}>
+                            <View style={stylesSmall.itemOtherContainer}>
+                                <Text style={[stylesSmall.baseText]}>{priceTag}</Text>
+                            </View>
+                            <View style={stylesSmall.spaceView} />
+                            <View style={stylesSmall.itemOtherContainer}>
+                                <Text style={[stylesSmall.baseText]}>{timeDelivery}</Text>
+                            </View>
+                            <View style={stylesSmall.spaceView} />
+                            <View style={stylesSmall.itemOtherContainer}>
+                                <Image
+                                    style={[stylesSmall.otherImage]}
+                                    source={IconAssets.starIcon}
+                                    resizeMode='contain' />
+                                <Text style={[stylesSmall.baseText]}>{rating}</Text>
+                            </View>
+
+                        </View>
+                    </>
+                </TouchableOpacity>
+            </View>
+        )
+    }
+}
+const stylesSmall = StyleSheet.create({
+    mainContainer: {
+        marginTop: 4,
+        marginLeft: 8,
+        borderRadius: 8,
+        overflow: 'hidden',
+        borderWidth: 1,
+        borderColor: BASE_COLOR.blue,
+        width: 150,
+    },
+    imageBackgroundContainer: {
+    },
+    imageBackground: {
+        width: "100%",
+        aspectRatio: 16 / 9,
+        backgroundColor: BASE_COLOR.blue,
+    },
+    imageContainer: {
+        width: '100%',
+        height: '100%',
+        backgroundColor: 'rgba(0, 0, 0,0.5)',
+        justifyContent: 'flex-end'
+    },
+    otherImage: {
+        height: 12,
+        width: 12,
+        marginRight: 4
+    },
+    heartImage: {
+        height: 25,
+        width: 25,
+        tintColor: BASE_COLOR.white,
+    },
+    titleContainer: {
+        marginLeft: 8,
+        marginRight: 8,
+    },
+    baseText: {
+        color: BASE_COLOR.darkGray,
+        textAlign: 'center',
+        fontWeight: 'bold',
+        fontSize: 10,
+    },
+    title: {
+        fontSize: 14,
+        textAlign: 'left',
+        color: BASE_COLOR.white
+    },
+    otherContainer: {
+        height: 30,
+        flexDirection: 'row',
+        alignContent: 'center',
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    spaceView: {
+        marginLeft: 4,
+        marginRight: 4,
+        width: 4,
+        aspectRatio: 1,
+        backgroundColor: BASE_COLOR.darkGray,
+        borderRadius: 2
+    },
+    itemOtherContainer: {
+        flexDirection: 'row',
+        alignContent: 'center',
+        justifyContent: 'center',
+        alignItems: 'center'
+    }
+});
 
 
-export default PlaceItem;
+
+
+
+
+export { PlaceItem, PlaceSmallItem };
