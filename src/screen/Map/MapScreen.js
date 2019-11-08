@@ -11,6 +11,7 @@ import BaseScreen from "../BaseScreen/BaseScreen"
 import Header from '../../components/common/SearchHeader'
 import SegmentedControlTab from "react-native-segmented-control-tab";
 import SafeAreaView from 'react-native-safe-area-view';
+import MapView from 'react-native-maps';
 class MapScreen extends BaseScreen {
 
     static navigationOptions = {
@@ -65,7 +66,17 @@ class MapScreen extends BaseScreen {
                                 activeTabTextStyle={segmentedControlStyles.text}
                             />
                         </View>
-
+                        <MapView
+                            style={styles.map}
+                            region={{
+                                latitude: 37.78825,
+                                longitude: -122.4324,
+                                latitudeDelta: 0.015,
+                                longitudeDelta: 0.0121,
+                            }}
+                            showsUserLocation={true}
+                        >
+                        </MapView>
                     </View>
                 </TouchableWithoutFeedback>
             </SafeAreaView >
@@ -93,7 +104,9 @@ const styles = StyleSheet.create({
         borderBottomColor: NAV_COLOR.borderBottomColor,
         borderBottomWidth: 0.7
     },
-
+    map: {
+        flex: 1,
+      },
 });
 
 
