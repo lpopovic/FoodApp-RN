@@ -12,10 +12,10 @@ import { TestAssets, IconAssets } from '../../assets'
 
 class PlaceItem extends Component {
 
-    deliveryIcon = (time) => {
+    deliveryIcon = (delivery) => {
+        const time = '45 min.' 
 
-
-        if (this.props.item % 2 == 0) {
+        if (delivery == true) {
             return (
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
 
@@ -36,10 +36,15 @@ class PlaceItem extends Component {
 
     }
     render() {
-        const title = 'Mali Leskovac'
-        const rating = '4.6'
-        const distance = '4.5 km'
-        const timeDelivery = '45 min.'
+        const { item } = this.props
+        const title = item.name
+        const rating = item.avgRating
+        const timeDelivery = item.delivery
+        // const priceTag = item.avgPriceTag
+        // const title = 'Mali Leskovac'
+        // const rating = '4.6'
+         const distance = '4.5 km'
+        // const timeDelivery = '45 min.'
         return (
             <View style={styles.mainContainer}>
                 <TouchableOpacity activeOpacity={1} onPress={() => this.props.onPress()}>
@@ -47,7 +52,7 @@ class PlaceItem extends Component {
                         <View style={styles.imageBackgroundContainer}>
                             <ImageBackground
                                 style={styles.imageBackground}
-                                source={{ uri: "https://api.ketering.rtech.rs/uploads/c54153e5-b287-7307-aa52-b0c49f205a4a-11.png?caption=Kod%20Dzamboa" }}
+                                source={{ uri: item.image.image169t}}
                                 resizeMode='cover'>
                                 <View style={styles.imageContainer}>
                                     <TouchableOpacity
@@ -150,11 +155,13 @@ const styles = StyleSheet.create({
 class PlaceSmallItem extends Component {
 
     render() {
-        const title = 'Mali Leskovac'
-        const rating = '4.6'
-        // const distance = '4.5 km'
-        const timeDelivery = '45 min.'
-        const priceTag = '$$$'
+        const { item } = this.props
+        const title = item.name
+        const rating = item.avgRating
+        const timeDelivery = item.delivery == true ? '45 min.' : 'No delivery'
+        const priceTag = item.avgPriceTag
+
+
         return (
             <View style={stylesSmall.mainContainer}>
                 <TouchableOpacity activeOpacity={1} onPress={() => this.props.onPress()}>
@@ -162,7 +169,7 @@ class PlaceSmallItem extends Component {
                         <View style={stylesSmall.imageBackgroundContainer}>
                             <ImageBackground
                                 style={[stylesSmall.imageBackground]}
-                                source={{ uri: "https://api.ketering.rtech.rs/uploads/c54153e5-b287-7307-aa52-b0c49f205a4a-11.png?caption=Kod%20Dzamboa" }}
+                                source={{ uri: item.image.image169t }}
                                 resizeMode='cover'>
                                 <View style={stylesSmall.imageContainer}>
 

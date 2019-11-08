@@ -14,10 +14,10 @@ class HomeCaroselComponent extends Component {
         }
     }
 
-    deliveryIcon = (index) => {
+    deliveryIcon = (delivery) => {
 
 
-        if (index % 2 == 0) {
+        if (delivery == true) {
             return (
                 <View style={{ position: 'absolute', right: 8, top: 8, padding: 4, position: 'absolute', flexDirection: 'row', alignItems: 'center' }}>
 
@@ -40,10 +40,10 @@ class HomeCaroselComponent extends Component {
     _renderItem = ({ item, index }) => {
         return (
             <View key={index} style={{ alignItems: 'center', alignContent: 'center', justifyContent: 'center' }}>
-                <TouchableOpacity activeOpacity={1} onPress={() => this.props.onPressItem(index - 3)}>
-                    <ImageBackground style={{ height: Dimensions.get('window').width * 9 / 16, width: Dimensions.get('window').width, resizeMode: 'cover', backgroundColor: BASE_COLOR.blue }} source={{ uri: item.image }} >
+                <TouchableOpacity activeOpacity={1} onPress={() => this.props.onPressItem(this.props.data.length > 3 ? index - 3 : index)}>
+                    <ImageBackground style={{ height: Dimensions.get('window').width * 9 / 16, width: Dimensions.get('window').width, resizeMode: 'cover', backgroundColor: BASE_COLOR.blue }} source={{ uri: item.image.image169t }} >
                         <View style={styles.imageContainer}>
-                            {this.deliveryIcon(index)}
+                            {this.deliveryIcon(item.delivery)}
 
                             <View style={{ marginLeft: 8, alignContent: 'center', alignItems: 'flex-start' }}>
                                 <TouchableOpacity
@@ -62,7 +62,7 @@ class HomeCaroselComponent extends Component {
                                     numberOfLines={3}
                                     ellipsizeMode="tail"
                                     style={[styles.baseText, styles.title]}>
-                                    Mali Leskovac {index - 3}
+                                    {item.name}
                                 </Text>
                             </View>
                         </View>

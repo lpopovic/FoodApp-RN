@@ -6,6 +6,7 @@ import {
     TextInput,
     TouchableOpacity,
     StyleSheet,
+    Keyboard
 } from 'react-native';
 import { TestAssets, IconAssets } from '../../assets'
 import { NAV_COLOR, headerStyles, BASE_COLOR } from '../../styles'
@@ -30,14 +31,15 @@ class SearchHeader extends Component {
             const { searchText } = this.state
             if (searchText.trim() !== '') {
                 this.props.searchTextChange(searchText)
+            }else {
+                this.props.clearText()
             }
-
         }, 500);
 
 
     }
     handleKeySearch = () => {
-        alert("SEARCH PRESS BTN KEYBOARD")
+        Keyboard.dismiss()
     }
     render() {
         const tintColor = this.props.tintColor ? this.props.tintColor : NAV_COLOR.darkGray
@@ -58,7 +60,7 @@ class SearchHeader extends Component {
                         value={this.state.searchText}
                         style={[styles.searchInput, { color: tintColor }]}
                         onChangeText={text => this.searchTextChange(text)}
-                        returnKeyType='search'
+                        returnKeyType='done'
                         autoCapitalize="none"
                         autoCorrect={false}
                         onSubmitEditing={() => this.handleKeySearch()}

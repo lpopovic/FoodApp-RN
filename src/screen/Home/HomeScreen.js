@@ -14,6 +14,7 @@ import { NAV_COLOR, BASE_COLOR } from '../../styles';
 import { CategorySectionList } from '../../components/Category/CategoryList'
 import { PlaceSectionList } from '../../components/Place/PlaceList'
 import HomeCaroselComponent from '../../components/Home/HomeCaroselComponent';
+import { PlaceNetwork } from '../../service/api'
 
 class HomeScreen extends BaseScreen {
     static navigationOptions = {
@@ -23,7 +24,7 @@ class HomeScreen extends BaseScreen {
     constructor(props) {
         super(props)
         this.state = {
-            loading: false,
+            loading: true,
             refreshing: false,
             carosel: [
                 {
@@ -39,74 +40,117 @@ class HomeScreen extends BaseScreen {
                     image: "https://images.startups.co.uk/wp-content/uploads/2018/12/20162418/business-ideas-2019-plant-based-foods.jpg"
                 },
 
-            ]
+            ],
+            categories: [],
+            caroselPlaces: [],
+            newPlaces: [],
+            actionPlaces: [],
+            mostRatingPlaces: [],
+            recommendedPlaces: [],
+
+
         }
     }
 
     componentDidMount() {
         super.componentDidMount()
         this.setStatusBarStyle(NAV_COLOR.headerBackground, true)
-        this.setNewStateHandler({ loading: true })
-
-        setTimeout(() => {
-            this.setNewStateHandler({ loading: false })
-        }, 1000);
+        this.apiCallHandler()
     }
     componentWillUnmount() {
         super.componentWillUnmount()
     }
-    placeListNewContent = () => (
-        <PlaceSectionList
-            titleSection="NOVO"
-            arrayObject={["", "asda", "lazar", "", "asda", "lazar", "", "asda", "lazar", "", "asda", "lazar", "", "asda", "lazar"]}
-            onPressItem={(item) => this.pushNewScreen({ routeName: ScreenName.PlaceDetailScreen(), key: `${Math.random() * 10000}` })}
-            onPressSeeMore={() => this.pushNewScreen({ routeName: ScreenName.PlaceListScreen(), key: `${Math.random() * 10000}`, params: { title: "NOVO" } })}
-        />
-    )
-    placeListMostRatingContent = () => (
-        <PlaceSectionList
-            titleSection="NAJBOLJE OCENE"
-            arrayObject={["", "asda", "lazar", "", "asda", "lazar", "", "asda", "lazar", "", "asda", "lazar", "", "asda", "lazar"]}
-            onPressItem={(item) => this.pushNewScreen({ routeName: ScreenName.PlaceDetailScreen(), key: `${Math.random() * 10000}` })}
-            onPressSeeMore={() => this.pushNewScreen({ routeName: ScreenName.PlaceListScreen(), key: `${Math.random() * 10000}`, params: { title: "NAJBOLJE OCENE" } })}
-        />
-    )
-    placeListRecommendedContent = () => (
-        <PlaceSectionList
-            titleSection="PREPORUČENO"
-            arrayObject={["", "asda", "lazar", "", "asda", "lazar", "", "asda", "lazar", "", "asda", "lazar", "", "asda", "lazar"]}
-            onPressItem={(item) => this.pushNewScreen({ routeName: ScreenName.PlaceDetailScreen(), key: `${Math.random() * 10000}` })}
-            onPressSeeMore={() => this.pushNewScreen({ routeName: ScreenName.PlaceListScreen(), key: `${Math.random() * 10000}`, params: { title: "PREPORUČENO" } })}
-        />
-    )
-    placeListActionContent = () => (
-        <PlaceSectionList
-            titleSection={"AKCIJE"}
-            arrayObject={["", "asda", "lazar", "", "asda", "lazar", "", "asda", "lazar", "", "asda", "lazar", "", "asda", "lazar"]}
-            onPressItem={(item) => this.pushNewScreen({ routeName: ScreenName.PlaceDetailScreen(), key: `${Math.random() * 10000}` })}
-            onPressSeeMore={() => this.pushNewScreen({ routeName: ScreenName.PlaceListScreen(), key: `${Math.random() * 10000}`, params: { title: "AKCIJE" } })}
-        />
-    )
-    categoryListContent = () => (
-        <CategorySectionList
-            arrayObject={["", "asda", "lazar", "", "asda", "lazar", "", "asda", "lazar", "", "asda", "lazar", "", "asda", "lazar"]}
-            onPressItem={(item) => this.pushNewScreen({ routeName: ScreenName.PlaceListScreen(), key: `${Math.random() * 10000}`, params: { title: "KATEGORIJA REST." } })}
-            onPressSeeMore={() => this.pushNewScreen(ScreenName.CategoryScreen())}
-        />
-    )
-    caroselContent = () => (
-        <HomeCaroselComponent
-            data={this.state.carosel}
-            onPressItem={(index) => this.pushNewScreen({ routeName: ScreenName.PlaceDetailScreen(), key: `${Math.random() * 10000}` })}
 
-        />
-    )
+    apiCallHandler = () => {
+        PlaceNetwork.fetchTest().then(
+            res => {
+                this.setNewStateHandler({
+                    loading: false,
+                    refreshing: false,
+                    caroselPlaces: res,
+                    newPlaces: res,
+                    actionPlaces: res,
+                    mostRatingPlaces: res,
+                    recommendedPlaces: res,
+                })
+            },
+            err => {
+                this.showAlertMessage(err)
+                this.setNewStateHandler({
+                    loading: false,
+                    refreshing: false,
+                })
+            }
+        )
+    }
+
+    placeListNewContent = () => {
+        const { newPlaces } = this.state
+        return (
+            <PlaceSectionList
+                titleSection="NOVO"
+                arrayObject={newPlaces}
+                onPressItem={(item) => this.pushNewScreen({ routeName: ScreenName.PlaceDetailScreen(), key: `${Math.random() * 10000}${item._id}` })}
+                onPressSeeMore={() => this.pushNewScreen({ routeName: ScreenName.PlaceListScreen(), key: `${Math.random() * 10000}`, params: { title: "NOVO" } })}
+            />
+        )
+    }
+    placeListMostRatingContent = () => {
+        const { mostRatingPlaces } = this.state
+        return (
+            <PlaceSectionList
+                titleSection="NAJBOLJE OCENE"
+                arrayObject={mostRatingPlaces}
+                onPressItem={(item) => this.pushNewScreen({ routeName: ScreenName.PlaceDetailScreen(), key: `${Math.random() * 10000}${item._id}` })}
+                onPressSeeMore={() => this.pushNewScreen({ routeName: ScreenName.PlaceListScreen(), key: `${Math.random() * 10000}`, params: { title: "NAJBOLJE OCENE" } })}
+            />
+        )
+    }
+    placeListRecommendedContent = () => {
+        const { recommendedPlaces } = this.state
+        return (
+            <PlaceSectionList
+                titleSection="PREPORUČENO"
+                arrayObject={recommendedPlaces}
+                onPressItem={(item) => this.pushNewScreen({ routeName: ScreenName.PlaceDetailScreen(), key: `${Math.random() * 10000}${item._id}` })}
+                onPressSeeMore={() => this.pushNewScreen({ routeName: ScreenName.PlaceListScreen(), key: `${Math.random() * 10000}`, params: { title: "PREPORUČENO" } })}
+            />
+        )
+    }
+    placeListActionContent = () => {
+        const { actionPlaces } = this.state
+        return (
+            <PlaceSectionList
+                titleSection={"AKCIJE"}
+                arrayObject={actionPlaces}
+                onPressItem={(item) => this.pushNewScreen({ routeName: ScreenName.PlaceDetailScreen(), key: `${Math.random() * 10000}${item._id}` })}
+                onPressSeeMore={() => this.pushNewScreen({ routeName: ScreenName.PlaceListScreen(), key: `${Math.random() * 10000}`, params: { title: "AKCIJE" } })}
+            />
+        )
+    }
+    categoryListContent = () => {
+        return (
+            <CategorySectionList
+                arrayObject={["", "asda", "lazar", "", "asda", "lazar", "", "asda", "lazar", "", "asda", "lazar", "", "asda", "lazar"]}
+                onPressItem={(item) => this.pushNewScreen({ routeName: ScreenName.PlaceListScreen(), key: `${Math.random() * 10000}`, params: { title: "KATEGORIJA REST." } })}
+                onPressSeeMore={() => this.pushNewScreen(ScreenName.CategoryScreen())}
+            />
+        )
+    }
+
+    caroselContent = () => {
+        const { caroselPlaces } = this.state
+        return (
+            <HomeCaroselComponent
+                data={caroselPlaces}
+                onPressItem={(index) => this.pushNewScreen({ routeName: ScreenName.PlaceDetailScreen(), key: `${Math.random() * 10000}${caroselPlaces[index]._id}` })}
+
+            />
+        )
+    }
     _onRefresh = () => {
         this.setNewStateHandler({ refreshing: true });
-        clearTimeout(this.refreshTimeout)
-        this.refreshTimeout = setTimeout(() => {
-            this.setNewStateHandler({ refreshing: false });
-        }, 1000);
+        this.apiCallHandler()
     }
     mainContent = () => {
         const { refreshing } = this.state

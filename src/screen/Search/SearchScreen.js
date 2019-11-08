@@ -2,6 +2,8 @@ import React from 'react';
 import {
     View,
     TouchableWithoutFeedback,
+    Image,
+    Text,
     StyleSheet,
     Keyboard,
 } from 'react-native';
@@ -11,6 +13,10 @@ import BaseScreen from "../BaseScreen/BaseScreen"
 import Header from '../../components/common/SearchHeader'
 import SegmentedControlTab from "react-native-segmented-control-tab";
 import SafeAreaView from 'react-native-safe-area-view';
+import { PlaceList } from '../../components/Place/PlaceList'
+import { PlaceNetwork, ParamsUrl } from '../../service/api'
+import { TestAssets } from '../../assets'
+import { TouchableOpacity } from 'react-native-gesture-handler';
 class SearchScreen extends BaseScreen {
 
     static navigationOptions = {
@@ -21,13 +27,19 @@ class SearchScreen extends BaseScreen {
         super(props)
         this.typeOfSortRestMap = ["Near me", "Pickup", "Delivery"]
         this.state = {
-            selectedIndex: 0
+            selectedIndex: 0,
+            loading: false,
+            searchPlaces: [],
+            searchText: '',
+            showNoResult: false,
+            showError: false,
         }
     }
 
     componentDidMount() {
         super.componentDidMount()
         this.setStatusBarStyle(NAV_COLOR.headerBackground, true)
+        // this.searchApiHandler({ index: this.state.electedIndex })
     }
     componentWillUnmount() {
         super.componentWillUnmount()
@@ -37,9 +49,102 @@ class SearchScreen extends BaseScreen {
             ...this.state,
             selectedIndex: index
         });
-        this.showAlertMessage(this.typeOfSortRestMap[index])
+
+        this.searchApiHandler({ index })
     };
+
+    searchApiHandler = ({ text, index }) => {
+
+        const selectedIndex = index ? index : this.state.selectedIndex
+        let sort = null
+        let search = null
+        let params = []
+        switch (selectedIndex) {
+            case 1:
+                sort = ParamsUrl.pickup(true)
+                break
+            case 2:
+                sort = ParamsUrl.delivery(true)
+                break
+            default:
+                break
+        }
+        if (sort !== null) {
+            params.push(sort)
+        }
+        if (text) {
+            this.setNewStateHandler({
+                searchText: text,
+                loading: true,
+            })
+            search = ParamsUrl.search(text)
+        } else {
+            search = this.state.searchText !== '' ? ParamsUrl.search(this.state.searchText) : null
+        }
+        if (search !== null) {
+            params.push(search)
+            PlaceNetwork.fetchPlaces(params).then(
+                res => {
+                    this.setNewStateHandler({
+                        loading: false,
+                        searchPlaces: res,
+                        showNoResult: res.length > 0 ? false : true,
+                        showError: false,
+                    })
+                },
+                err => {
+                    this.showAlertMessage(err)
+                    this.setNewStateHandler({
+                        loading: false,
+                        searchPlaces: [],
+                        showError: true,
+                    })
+                }
+            )
+        }
+    }
+    clearTextHandler = () => {
+        this.setNewStateHandler({ searchText: '' })
+    }
+    placesContent = () => {
+        const { searchPlaces } = this.state
+        return (
+            <PlaceList
+                arrayObject={searchPlaces}
+                onPressItem={(item) => this.pushNewScreen({ routeName: ScreenName.PlaceDetailScreen(), key: `${Math.random() * 10000}${item._id}` })} />
+        )
+    }
+    showNoResultContent = () => (
+        <View style={styles.centarContainer}>
+            <Image source={TestAssets.noResultFountImage} resizeMode='contain' style={{ height: 200, aspectRatio: 16 / 9 }} />
+        </View>
+    )
+    showErrorContent = () => (
+        <View style={styles.centarContainer}>
+            <Image source={TestAssets.httpErrorImage} resizeMode='contain' style={{ height: 200, aspectRatio: 1.4, }} />
+            <TouchableOpacity onPress={() => this.searchApiHandler({})}>
+                <View style={{ height: 40, width: 200, backgroundColor: BASE_COLOR.blue, justifyContent: 'center', alignContent: 'center', alignItems: 'center', borderRadius: 8 }}>
+                    <Text style={{ color: BASE_COLOR.white, fontSize: 15, fontWeight: 'bold' }}>Pokusaj ponovo</Text>
+                </View>
+            </TouchableOpacity>
+        </View>
+    )
     render() {
+
+        const { loading, showNoResult, showError } = this.state
+
+        let mainDisplay = null
+
+        if (loading) {
+            mainDisplay = this.activityIndicatorContent(BASE_COLOR.blue)
+        } else if (showError) {
+            mainDisplay = this.showErrorContent()
+        } else if (showNoResult) {
+            mainDisplay = this.showNoResultContent()
+        } else {
+            mainDisplay = this.placesContent()
+        }
+
         return (
 
             <SafeAreaView style={styles.safeAreaHeader}>
@@ -48,7 +153,8 @@ class SearchScreen extends BaseScreen {
                         <Header
                             backgroundColor={NAV_COLOR.headerBackground}
                             borderBottomColor='transparent'
-                            searchTextChange={(text) => this.showAlertMessage(text)}
+                            searchTextChange={(text) => this.searchApiHandler({ text })}
+                            clearText={() => this.clearTextHandler()}
                         />
                         <View style={styles.segmentedControlContainer}>
                             <SegmentedControlTab
@@ -63,6 +169,7 @@ class SearchScreen extends BaseScreen {
                                 activeTabTextStyle={segmentedControlStyles.text}
                             />
                         </View>
+                        {mainDisplay}
 
                     </View>
                 </TouchableWithoutFeedback>
@@ -76,7 +183,7 @@ class SearchScreen extends BaseScreen {
 const styles = StyleSheet.create({
     mainContainer: {
         flex: 1,
-        backgroundColor: BASE_COLOR.blue
+        backgroundColor: BASE_COLOR.white
     },
     safeAreaHeader: {
         backgroundColor: NAV_COLOR.headerBackground,
@@ -91,6 +198,12 @@ const styles = StyleSheet.create({
         borderBottomColor: NAV_COLOR.borderBottomColor,
         borderBottomWidth: 0.7
     },
+    centarContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignContent: 'center',
+        alignItems: 'center'
+    }
 
 });
 

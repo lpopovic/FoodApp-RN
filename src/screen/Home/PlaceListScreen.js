@@ -11,6 +11,7 @@ import Header from '../../components/common/BackHeader'
 import { NAV_COLOR, BASE_COLOR } from '../../styles'
 import { ScreenName } from '../../helpers'
 import { PlaceList } from '../../components/Place/PlaceList'
+import { PlaceNetwork } from '../../service/api'
 class PlaceListScreen extends BaseScreen {
     static navigationOptions = {
         header: null,
@@ -19,31 +20,45 @@ class PlaceListScreen extends BaseScreen {
         super(props)
         this.state = {
             refreshing: false,
-            loading: false
+            loading: true,
+            arrayPlaces: [],
         }
     }
 
     componentDidMount() {
         super.componentDidMount()
         this.setStatusBarStyle(NAV_COLOR.headerBackground, true)
-        this.setNewStateHandler({ loading: true })
 
-        setTimeout(() => {
-            this.setNewStateHandler({ loading: false })
-        }, 1000);
+        this.apiCallHandler()
     }
     componentWillUnmount() {
         super.componentWillUnmount()
     }
+
+    apiCallHandler = () => {
+        PlaceNetwork.fetchTest().then(
+            res => {
+                this.setNewStateHandler({
+                    loading: false,
+                    refreshing: false,
+                    arrayPlaces: res,
+                })
+            },
+            err => {
+                this.showAlertMessage(err)
+                this.setNewStateHandler({
+                    loading: false,
+                    refreshing: false,
+                })
+            }
+        )
+    }
     _onRefresh = () => {
         this.setNewStateHandler({ refreshing: true });
-        clearTimeout(this.refreshTimeout)
-        this.refreshTimeout = setTimeout(() => {
-            this.setNewStateHandler({ refreshing: false });
-        }, 1000);
+        this.apiCallHandler()
     }
     mainContent = () => {
-        const { refreshing } = this.state
+        const { refreshing, arrayPlaces } = this.state
         return (
             <PlaceList
                 refreshControl={
@@ -54,12 +69,13 @@ class PlaceListScreen extends BaseScreen {
                         colors={[BASE_COLOR.blue]}
                     />
                 }
-                arrayObject={["", "asda", "lazar", "", "asda", "lazar", "", "asda", "lazar", "", "asda", "lazar", "", "asda", "lazar"]}
-                onPressItem={(item) => this.pushNewScreen({ routeName: ScreenName.PlaceDetailScreen(), key: `${Math.random() * 10000}` })} />
+                arrayObject={arrayPlaces}
+                onPressItem={(item) => this.pushNewScreen({ routeName: ScreenName.PlaceDetailScreen(), key: `${Math.random() * 10000}${item._id}` })} />
         )
     }
     render() {
-        const mainDisplay = this.mainContent()
+        const { loading } = this.state
+        const mainDisplay = loading ? this.activityIndicatorContent(BASE_COLOR.blue) : this.mainContent()
         return (
             <SafeAreaView style={styles.safeAreaHeader}>
                 <View style={styles.mainContainer}>

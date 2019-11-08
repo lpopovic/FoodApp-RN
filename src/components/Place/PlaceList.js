@@ -4,10 +4,13 @@ import {
     FlatList,
     Text,
     TouchableOpacity,
-    StyleSheet
+    StyleSheet,
+    Keyboard
 } from 'react-native';
 import { PlaceItem ,PlaceSmallItem} from './PlaceItem'
 import { BASE_COLOR } from '../../styles'
+
+
 class PlaceList extends Component {
 
     render() {
@@ -16,10 +19,11 @@ class PlaceList extends Component {
                 refreshControl={this.props.refreshControl}
                 style={styles.listContainer}
                 data={this.props.arrayObject}
+                onScroll={this._onScroll}
                 keyExtractor={(index) => `${Math.random() * Math.random()}${index.toString()}`}
                 renderItem={(info) => (
                     <PlaceItem
-                        item={info.index}
+                        item={info.item}
                         onPress={() => this.props.onPressItem(info.item)}
                     />
                 )}
@@ -27,13 +31,15 @@ class PlaceList extends Component {
             />
         )
     }
+
+    _onScroll = (event) => {
+        Keyboard.dismiss()
+    }
 }
 
 class PlaceSectionList extends Component {
     constructor(props) {
         super(props)
-      
-       
     }
     render() {
         const titleSection = this.props.titleSection ? this.props.titleSection : "NEPOZNATO"
