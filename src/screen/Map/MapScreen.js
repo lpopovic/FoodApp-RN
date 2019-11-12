@@ -1,6 +1,7 @@
 import React from 'react';
 import {
     View,
+    Image,
     TouchableWithoutFeedback,
     StyleSheet,
     Keyboard,
@@ -12,6 +13,8 @@ import BaseScreen from "../BaseScreen/BaseScreen"
 import Header from '../../components/common/SearchHeader'
 import SegmentedControlTab from "react-native-segmented-control-tab";
 import SafeAreaView from 'react-native-safe-area-view';
+import { PlaceNetwork, ParamsUrl, } from '../../service/api'
+import { TestAssets } from '../../assets'
 import MapView from 'react-native-maps';
 import { connect } from 'react-redux';
 const zoom = 10
@@ -26,10 +29,15 @@ class MapScreen extends BaseScreen {
 
     constructor(props) {
         super(props)
+        this.keyMarkerUser = "#keyMarkerUser"
         this.typeOfSortRestMap = ["Near me", "Pickup", "Delivery"]
         this.state = {
             selectedSegmentedIndex: 0,
+            resPlaces: [],
             mapPlaces: [],
+            loading: false,
+            error: false,
+            searchText: '',
             userMarker: {
                 latitude: this.props.city.coordinate.latitude,
                 longitude: this.props.city.coordinate.longitude,
@@ -43,14 +51,14 @@ class MapScreen extends BaseScreen {
                     Dimensions.get('window').height *
                     distanceDelta
             },
-            loading: false,
-            currentSlideIndex: 0,
+
         }
     }
 
     componentDidMount() {
         super.componentDidMount()
         this.setStatusBarStyle(NAV_COLOR.headerBackground, true)
+        this.initApiHandler()
 
     }
     componentWillUnmount() {
@@ -61,29 +69,187 @@ class MapScreen extends BaseScreen {
             ...this.state,
             selectedSegmentedIndex: index
         });
-        this.showAlertMessage(this.typeOfSortRestMap[index])
+
+        const { error } = this.state
+        if (error == true) {
+            this.searchApiHandler({ index })
+        } else {
+            this.searchLocalSort(index)
+        }
+
     };
+    initApiHandler = () => {
+        this.setNewStateHandler({
+            loading: true
+        })
+        PlaceNetwork.fetchPlaces().then(
+            res => {
+                this.setNewStateHandler({
+                    loading: false,
+                    resPlaces: res,
+                    mapPlaces: res,
+                    error: false,
+                })
+            },
+            err => {
+                this.showAlertMessage(err)
+                this.setNewStateHandler({
+                    loading: false,
+                    error: true,
+                    mapPlaces: [],
+                    resPlaces: []
+
+                })
+            }
+        )
+    }
+
+    searchApiHandler = ({ text, index }) => {
+        const selectedIndex = index != null ? index : this.state.selectedSegmentedIndex
+        let sort = null
+        let search = null
+        let params = []
+        switch (selectedIndex) {
+            case 1:
+                sort = ParamsUrl.pickup(true)
+                break
+            case 2:
+                sort = ParamsUrl.delivery(true)
+                break
+            default:
+
+                break
+        }
+        if (sort !== null) {
+            params.push(sort)
+        }
+        if (text) {
+            this.setNewStateHandler({
+                searchText: text,
+                loading: true,
+            })
+            search = ParamsUrl.search(text)
+        } else {
+            search = this.state.searchText !== '' ? ParamsUrl.search(this.state.searchText) : null
+        }
+        if (search !== null) {
+            params.push(search)
+            PlaceNetwork.fetchPlaces(params).then(
+                res => {
+
+                    this.setNewStateHandler({
+                        loading: false,
+                        mapPlaces: res,
+                        error: res.length > 0 ? false : true,
+                    })
+                },
+                err => {
+                    this.showAlertMessage(err)
+                    this.setNewStateHandler({
+                        loading: false,
+                        mapPlaces: [],
+                        error: true,
+
+                    })
+                }
+            )
+        }
+    }
+    searchLocalSort = (selectedIndex) => {
+        const { resPlaces } = this.state
+        let mapPlaces = []
+        switch (selectedIndex) {
+            case 1:
+                mapPlaces = resPlaces.filter(item => {
+
+                    if (item.pickup == true) {
+                        return item;
+                    }
+
+                })
+
+                break
+            case 2:
+                mapPlaces = resPlaces.filter(item => {
+
+                    if (item.delivery == true) {
+                        return item;
+                    }
+
+                })
+                break
+            default:
+                mapPlaces = resPlaces.filter(item => {
+
+                    return item;
+
+                })
+                break
+        }
+        this.setNewStateHandler({
+            mapPlaces
+        })
+    }
+    clearTextHandler = () => {
+        this.setNewStateHandler({ searchText: '' })
+    }
+    onSubmitEditingHandler = (text) => {
+
+        this.searchApiHandler({ text })
+
+    }
+    setUserMarkerContent = () => {
+        const { userMarker } = this.state
+        return (
+            <MapView.Marker
+                draggable
+                key={this.keyMarkerUser}
+                onDragEnd={(event) => this.setNewStateHandler({
+                    userMarker: event.nativeEvent.coordinate
+                })}
+                coordinate={userMarker}
+                title={"MOJA LOKACIJA"}
+                description={`${Math.round(userMarker.latitude * 100) / 100}°N, ${Math.round(userMarker.longitude * 100) / 100}°E`}
+                pinColor={BASE_COLOR.red} >
+                <View style={[styles.markerWrap, { backgroundColor: BASE_COLOR.red, padding: 5, height: 40, width: 40, borderRadius: 20, borderWidth: 4, borderColor: BASE_COLOR.blue }]}>
+
+                    <Image source={TestAssets.userMarkerIcon} style={{ height: 20, width: 20, tintColor: BASE_COLOR.white }} resizeMode="contain" />
+
+                </View>
+            </MapView.Marker>
+        )
+
+    }
     mapContent = () => {
-        const { region, userMarker } = this.state
+        const { region, mapPlaces } = this.state
         return (
             <MapView
                 ref={map => this.map = map}
+                onTouchStart={() => Keyboard.dismiss()}
                 style={styles.map}
                 initialRegion={region}>
-                <MapView.Marker
-                    draggable
-                    onDragEnd={(event) => this.setNewStateHandler({
-                        userMarker: event.nativeEvent.coordinate
-                    })}
-                    coordinate={userMarker}
-                    title={"MOJA LOKACIJA"}
-                    description={`${Math.round(userMarker.latitude * 100)/100}°N, ${Math.round(userMarker.longitude * 100)/100}°E`}
-                    pinColor={BASE_COLOR.red}
-                />
+                {mapPlaces.map((place, index) => {
+
+                    return (
+                        <MapView.Marker
+                            key={index}
+                            coordinate={place.coordinate}
+                            title={place.name}
+                            description={`${Math.round(place.coordinate.latitude * 100) / 100}°N, ${Math.round(place.coordinate.longitude * 100) / 100}°E`}
+                            pinColor={BASE_COLOR.green}
+                        />
+
+                    )
+
+                })}
+                {this.setUserMarkerContent()}
             </MapView>
         )
     }
     render() {
+        const { loading } = this.state
+        const mainDisplay = loading ? this.activityIndicatorContent(BASE_COLOR.blue) : this.mapContent()
+
         return (
 
             <SafeAreaView style={styles.safeAreaHeader}>
@@ -92,7 +258,9 @@ class MapScreen extends BaseScreen {
                         <Header
                             backgroundColor={NAV_COLOR.headerBackground}
                             borderBottomColor='transparent'
-                            searchTextChange={(text) => this.showAlertMessage(text)}
+                            searchTextChange={(text) => this.searchApiHandler({ text })}
+                            clearText={() => this.clearTextHandler()}
+                            onSubmitEditing={(text) => this.onSubmitEditingHandler(text)}
                         />
                         <View style={styles.segmentedControlContainer}>
                             <SegmentedControlTab
@@ -107,7 +275,7 @@ class MapScreen extends BaseScreen {
                                 activeTabTextStyle={segmentedControlStyles.text}
                             />
                         </View>
-                        {this.mapContent()}
+                        {mainDisplay}
                     </View>
                 </TouchableWithoutFeedback>
             </SafeAreaView >
@@ -137,6 +305,10 @@ const styles = StyleSheet.create({
     },
     map: {
         flex: 1,
+    },
+    markerWrap: {
+        alignItems: "center",
+        justifyContent: "center",
     },
 });
 const mapStateToProps = state => {

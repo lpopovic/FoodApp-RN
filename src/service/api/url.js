@@ -15,7 +15,7 @@ class RestUrl {
     static placeTest = withKey(`places`)
     static getPlaces = (params) => {
 
-        if( params !== null){
+        if( params){
             let param =''
             params.forEach(element => {
                 param = `${param}${element}&` 

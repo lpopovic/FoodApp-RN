@@ -62,7 +62,7 @@ class BackHeader extends Component {
                             <Text style={[headerStyles.btnText, { color: tintColor }]}>{this.leftBtnTitle}</Text>
                         </View>
                     </TouchableOpacity>
-                    {this.titleDisplay(tintColor)}
+                    {/* {this.titleDisplay(tintColor)} */}
                     {filterDisplay}
                 </View>
             </View>

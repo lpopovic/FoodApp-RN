@@ -31,7 +31,7 @@ class SearchHeader extends Component {
             const { searchText } = this.state
             if (searchText.trim() !== '') {
                 this.props.searchTextChange(searchText)
-            }else {
+            } else {
                 this.props.clearText()
             }
         }, 500);
@@ -39,7 +39,17 @@ class SearchHeader extends Component {
 
     }
     handleKeySearch = () => {
+        const { searchText } = this.state
+      
         Keyboard.dismiss()
+
+        clearTimeout(this.searchTimeout)
+        if (searchText.trim() !== '') {
+            this.props.onSubmitEditing(searchText)
+        } else {
+            this.props.clearText()
+        }
+
     }
     render() {
         const tintColor = this.props.tintColor ? this.props.tintColor : NAV_COLOR.darkGray
@@ -67,7 +77,7 @@ class SearchHeader extends Component {
                     />
 
                     <View style={styles.otherBtnContent}>
-                        <TouchableOpacity onPress={()=>alert("FILTER PRESS")}>
+                        <TouchableOpacity onPress={() => alert("FILTER PRESS")}>
                             <View style={[styles.imageOtherContainer, styles.imageContainer]}>
                                 <Image
                                     source={TestAssets.filterIcon}
@@ -75,7 +85,7 @@ class SearchHeader extends Component {
                                     resizeMode='contain' />
                             </View>
                         </TouchableOpacity>
-                        <TouchableOpacity onPress={()=>alert("PRESS SHOP BAG")}>
+                        <TouchableOpacity onPress={() => alert("PRESS SHOP BAG")}>
                             <View style={[styles.imageOtherContainer]}>
                                 <Image
                                     source={TestAssets.shopBagIcon}

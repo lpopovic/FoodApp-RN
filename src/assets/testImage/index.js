@@ -6,6 +6,7 @@ const TestAssets = {
     shopBagIcon: require('./shopping-bag.png'),
     locationMarkerIcon: require('./location-marker.png'),
     noResultFountImage: require('./search_no_result.png'),
-    httpErrorImage:require('./htttp_error.jpg')
+    httpErrorImage:require('./htttp_error.jpg'),
+    userMarkerIcon:require('./location-arrow.png')
 }
 export { TestAssets }

@@ -26,21 +26,6 @@ class HomeScreen extends BaseScreen {
         this.state = {
             loading: true,
             refreshing: false,
-            carosel: [
-                {
-                    image: "https://images.startups.co.uk/wp-content/uploads/2018/12/20162418/business-ideas-2019-plant-based-foods.jpg"
-                },
-                {
-                    image: "http://www.colleges-fenway.org/wp-content/uploads/2018/09/food-festival-1.jpg"
-                },
-                {
-                    image: "https://homepages.cae.wisc.edu/~ece533/images/cat.png"
-                },
-                {
-                    image: "https://images.startups.co.uk/wp-content/uploads/2018/12/20162418/business-ideas-2019-plant-based-foods.jpg"
-                },
-
-            ],
             categories: [],
             caroselPlaces: [],
             newPlaces: [],
@@ -128,6 +113,17 @@ class HomeScreen extends BaseScreen {
             />
         )
     }
+    placeListDeliveryContent = () => {
+        const { actionPlaces } = this.state
+        return (
+            <PlaceSectionList
+                titleSection={"DOSTAVA"}
+                arrayObject={actionPlaces}
+                onPressItem={(item) => this.pushNewScreen({ routeName: ScreenName.PlaceDetailScreen(), key: `${Math.random() * 10000}${item._id}` })}
+                onPressSeeMore={() => this.pushNewScreen({ routeName: ScreenName.PlaceListScreen(), key: `${Math.random() * 10000}`, params: { title: "AKCIJE" } })}
+            />
+        )
+    }
     categoryListContent = () => {
         return (
             <CategorySectionList
@@ -172,7 +168,6 @@ class HomeScreen extends BaseScreen {
                     <View style={{ marginTop: 8 }}>
                         {this.placeListRecommendedContent()}
                     </View>
-
                     <View style={{ marginTop: 8 }}>
                         {this.categoryListContent()}
                     </View>
@@ -184,6 +179,9 @@ class HomeScreen extends BaseScreen {
                     </View>
                     <View style={{ marginTop: 8 }}>
                         {this.placeListActionContent()}
+                    </View>
+                    <View style={{ marginTop: 8 }}>
+                        {this.placeListDeliveryContent()}
                     </View>
                 </View>
             </ScrollView>

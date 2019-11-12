@@ -54,7 +54,7 @@ class BaseHeader extends Component {
                     </View>
 
                     <View style={styles.rightBtn}>
-                        <TouchableOpacity onPress={() => alert("PRESS SEARCH")}>
+                        <TouchableOpacity onPress={() => {alert("PRESS SEARCH"),this.props.navigation.navigate('Search')}}>
                             <View style={[styles.imageOtherContainer, styles.imageContainer]}>
                                 <Image
                                     source={TestAssets.searchIcon}

@@ -29,6 +29,7 @@ class SearchScreen extends BaseScreen {
         this.state = {
             selectedIndex: 0,
             loading: false,
+            resPlaces: [],
             searchPlaces: [],
             searchText: '',
             showNoResult: false,
@@ -49,13 +50,17 @@ class SearchScreen extends BaseScreen {
             ...this.state,
             selectedIndex: index
         });
-
-        this.searchApiHandler({ index })
+        const { showError } = this.state
+        if (showError == true) {
+            this.searchApiHandler({ index })
+        } else {
+            this.searchLocalSort(index)
+        }
     };
 
     searchApiHandler = ({ text, index }) => {
 
-        const selectedIndex = index ? index : this.state.selectedIndex
+        const selectedIndex = index != null ? index : this.state.selectedIndex
         let sort = null
         let search = null
         let params = []
@@ -87,6 +92,7 @@ class SearchScreen extends BaseScreen {
                 res => {
                     this.setNewStateHandler({
                         loading: false,
+                        resPlaces: res,
                         searchPlaces: res,
                         showNoResult: res.length > 0 ? false : true,
                         showError: false,
@@ -96,6 +102,7 @@ class SearchScreen extends BaseScreen {
                     this.showAlertMessage(err)
                     this.setNewStateHandler({
                         loading: false,
+                        resPlaces: [],
                         searchPlaces: [],
                         showError: true,
                     })
@@ -103,8 +110,47 @@ class SearchScreen extends BaseScreen {
             )
         }
     }
+    searchLocalSort = (selectedIndex) => {
+        const { resPlaces } = this.state
+        let searchPlaces = []
+        switch (selectedIndex) {
+            case 1:
+                searchPlaces = resPlaces.filter(item => {
+
+                    if (item.pickup == true) {
+                        return item;
+                    }
+
+                })
+
+                break
+            case 2:
+                searchPlaces = resPlaces.filter(item => {
+
+                    if (item.delivery == true) {
+                        return item;
+                    }
+
+                })
+                break
+            default:
+                searchPlaces = resPlaces.filter(item => {
+
+                    return item;
+
+                })
+                break
+        }
+        this.setNewStateHandler({
+            searchPlaces
+        })
+    }
     clearTextHandler = () => {
         this.setNewStateHandler({ searchText: '' })
+    }
+    onSubmitEditingHandler = (text) => {
+        this.searchApiHandler({ text })
+
     }
     placesContent = () => {
         const { searchPlaces } = this.state
@@ -155,6 +201,7 @@ class SearchScreen extends BaseScreen {
                             borderBottomColor='transparent'
                             searchTextChange={(text) => this.searchApiHandler({ text })}
                             clearText={() => this.clearTextHandler()}
+                            onSubmitEditing={(text) => this.onSubmitEditingHandler(text)}
                         />
                         <View style={styles.segmentedControlContainer}>
                             <SegmentedControlTab
