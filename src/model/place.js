@@ -11,11 +11,31 @@ class Place {
         this.delivery = object.delivery || false;
         this.onlinePayment = object.onlinePayment;
         this.name = object.name;
-        this.location = new City(object.location || {});
+        this.setupCoordinate(object.location);
         this.image = new ImageAssets(object.image || {});
     }
 
+    setupCoordinate = (location) => {
+        if (location) {
+            if (location.coordinates.length == 2) {
+                this.coordinate = {
+                    latitude: location.coordinates[0],
+                    longitude: location.coordinates[1],
+                }
+            } else {
+                this.coordinate = {
+                    latitude: null,
+                    longitude: null,
+                }
+            }
 
+        } else {
+            this.coordinate = {
+                latitude: null,
+                longitude: null,
+            }
+        }
+    }
     static createArrayPlaces(objectArray) {
 
         const arrayTemplate = objectArray.map(item => {
