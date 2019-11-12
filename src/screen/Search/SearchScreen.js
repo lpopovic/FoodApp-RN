@@ -29,7 +29,6 @@ class SearchScreen extends BaseScreen {
         this.state = {
             selectedIndex: 0,
             loading: false,
-            resPlaces: [],
             searchPlaces: [],
             searchText: '',
             showNoResult: false,
@@ -50,12 +49,9 @@ class SearchScreen extends BaseScreen {
             ...this.state,
             selectedIndex: index
         });
-        const { showError } = this.state
-        if (showError == true) {
-            this.searchApiHandler({ index })
-        } else {
-            this.searchLocalSort(index)
-        }
+
+        this.searchApiHandler({ index })
+
     };
 
     searchApiHandler = ({ text, index }) => {
@@ -92,7 +88,6 @@ class SearchScreen extends BaseScreen {
                 res => {
                     this.setNewStateHandler({
                         loading: false,
-                        resPlaces: res,
                         searchPlaces: res,
                         showNoResult: res.length > 0 ? false : true,
                         showError: false,
@@ -102,48 +97,14 @@ class SearchScreen extends BaseScreen {
                     this.showAlertMessage(err)
                     this.setNewStateHandler({
                         loading: false,
-                        resPlaces: [],
                         searchPlaces: [],
                         showError: true,
                     })
                 }
             )
+        } else {
+            this.showAlertMessage("Insert key word for search.")
         }
-    }
-    searchLocalSort = (selectedIndex) => {
-        const { resPlaces } = this.state
-        let searchPlaces = []
-        switch (selectedIndex) {
-            case 1:
-                searchPlaces = resPlaces.filter(item => {
-
-                    if (item.pickup == true) {
-                        return item;
-                    }
-
-                })
-
-                break
-            case 2:
-                searchPlaces = resPlaces.filter(item => {
-
-                    if (item.delivery == true) {
-                        return item;
-                    }
-
-                })
-                break
-            default:
-                searchPlaces = resPlaces.filter(item => {
-
-                    return item;
-
-                })
-                break
-        }
-        this.setNewStateHandler({
-            searchPlaces
-        })
     }
     clearTextHandler = () => {
         this.setNewStateHandler({ searchText: '' })

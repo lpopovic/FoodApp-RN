@@ -33,7 +33,6 @@ class MapScreen extends BaseScreen {
         this.typeOfSortRestMap = ["Near me", "Pickup", "Delivery"]
         this.state = {
             selectedSegmentedIndex: 0,
-            resPlaces: [],
             mapPlaces: [],
             loading: false,
             error: false,
@@ -69,13 +68,7 @@ class MapScreen extends BaseScreen {
             ...this.state,
             selectedSegmentedIndex: index
         });
-
-        const { error } = this.state
-        if (error == true) {
-            this.searchApiHandler({ index })
-        } else {
-            this.searchLocalSort(index)
-        }
+        this.searchApiHandler({ index })
 
     };
     initApiHandler = () => {
@@ -86,7 +79,6 @@ class MapScreen extends BaseScreen {
             res => {
                 this.setNewStateHandler({
                     loading: false,
-                    resPlaces: res,
                     mapPlaces: res,
                     error: false,
                 })
@@ -97,7 +89,7 @@ class MapScreen extends BaseScreen {
                     loading: false,
                     error: true,
                     mapPlaces: [],
-                    resPlaces: []
+
 
                 })
             }
@@ -130,13 +122,13 @@ class MapScreen extends BaseScreen {
             })
             search = ParamsUrl.search(text)
         } else {
-            search = this.state.searchText !== '' ? ParamsUrl.search(this.state.searchText) : null
+            search = this.state.searchText !== '' ? ParamsUrl.search(this.state.searchText) : ''
         }
         if (search !== null) {
             params.push(search)
+
             PlaceNetwork.fetchPlaces(params).then(
                 res => {
-
                     this.setNewStateHandler({
                         loading: false,
                         mapPlaces: res,
@@ -153,43 +145,11 @@ class MapScreen extends BaseScreen {
                     })
                 }
             )
+        } else {
+            this.showAlertMessage("Insert key word for search.")
         }
     }
-    searchLocalSort = (selectedIndex) => {
-        const { resPlaces } = this.state
-        let mapPlaces = []
-        switch (selectedIndex) {
-            case 1:
-                mapPlaces = resPlaces.filter(item => {
-
-                    if (item.pickup == true) {
-                        return item;
-                    }
-
-                })
-
-                break
-            case 2:
-                mapPlaces = resPlaces.filter(item => {
-
-                    if (item.delivery == true) {
-                        return item;
-                    }
-
-                })
-                break
-            default:
-                mapPlaces = resPlaces.filter(item => {
-
-                    return item;
-
-                })
-                break
-        }
-        this.setNewStateHandler({
-            mapPlaces
-        })
-    }
+   
     clearTextHandler = () => {
         this.setNewStateHandler({ searchText: '' })
     }

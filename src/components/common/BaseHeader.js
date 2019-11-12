@@ -11,6 +11,7 @@ import { NAV_COLOR, headerStyles } from '../../styles'
 import { connect } from 'react-redux';
 import { withNavigation } from 'react-navigation'
 import { ScreenName } from '../../helpers'
+
 class BaseHeader extends Component {
 
     constructor(props) {
@@ -54,7 +55,7 @@ class BaseHeader extends Component {
                     </View>
 
                     <View style={styles.rightBtn}>
-                        <TouchableOpacity onPress={() => {alert("PRESS SEARCH"),this.props.navigation.navigate('Search')}}>
+                        <TouchableOpacity onPress={() => this.props.navigation.navigate(ScreenName.SearchTab())}>
                             <View style={[styles.imageOtherContainer, styles.imageContainer]}>
                                 <Image
                                     source={TestAssets.searchIcon}
@@ -62,7 +63,7 @@ class BaseHeader extends Component {
                                     resizeMode='contain' />
                             </View>
                         </TouchableOpacity>
-                        <TouchableOpacity onPress={() => alert("PRESS FILTER")}>
+                        <TouchableOpacity onPress={() => this.props.navigation.navigate(ScreenName.FilterScreen())}>
                             <View style={[styles.imageOtherContainer, styles.imageContainer]}>
                                 <Image
                                     source={TestAssets.filterIcon}
@@ -70,7 +71,7 @@ class BaseHeader extends Component {
                                     resizeMode='contain' />
                             </View>
                         </TouchableOpacity>
-                        <TouchableOpacity onPress={() => alert("PRESS SHOP BAG")}>
+                        <TouchableOpacity onPress={() =>  this.props.navigation.navigate(ScreenName.ShopScreen())}>
                             <View style={[styles.imageOtherContainer]}>
                                 <Image
                                     source={TestAssets.shopBagIcon}

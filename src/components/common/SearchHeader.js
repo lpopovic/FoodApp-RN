@@ -12,6 +12,7 @@ import { TestAssets, IconAssets } from '../../assets'
 import { NAV_COLOR, headerStyles, BASE_COLOR } from '../../styles'
 import { ScreenName } from '../../helpers'
 import DefaultInput from './DefaultInput'
+import { withNavigation } from 'react-navigation'
 class SearchHeader extends Component {
 
     constructor(props) {
@@ -40,7 +41,7 @@ class SearchHeader extends Component {
     }
     handleKeySearch = () => {
         const { searchText } = this.state
-      
+
         Keyboard.dismiss()
 
         clearTimeout(this.searchTimeout)
@@ -77,7 +78,7 @@ class SearchHeader extends Component {
                     />
 
                     <View style={styles.otherBtnContent}>
-                        <TouchableOpacity onPress={() => alert("FILTER PRESS")}>
+                        <TouchableOpacity onPress={() => this.props.navigation.navigate(ScreenName.FilterScreen())}>
                             <View style={[styles.imageOtherContainer, styles.imageContainer]}>
                                 <Image
                                     source={TestAssets.filterIcon}
@@ -85,7 +86,7 @@ class SearchHeader extends Component {
                                     resizeMode='contain' />
                             </View>
                         </TouchableOpacity>
-                        <TouchableOpacity onPress={() => alert("PRESS SHOP BAG")}>
+                        <TouchableOpacity onPress={() => this.props.navigation.navigate(ScreenName.ShopScreen())}>
                             <View style={[styles.imageOtherContainer]}>
                                 <Image
                                     source={TestAssets.shopBagIcon}
@@ -141,4 +142,4 @@ const styles = StyleSheet.create({
 });
 
 
-export default SearchHeader;
+export default withNavigation(SearchHeader);

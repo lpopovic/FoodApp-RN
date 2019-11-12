@@ -21,6 +21,10 @@ class ScreenName {
     static SplashScreen = () => { return this.withKey(`Splash`) }
     static PlaceListScreen = () => { return this.withKey(`PlaceList`) }
     static SearchScreen = () => { return this.withKey(`Search`) }
+    static FilterScreen = () => { return this.withKey(`Filter`) }
+    static ShopScreen = () => { return this.withKey(`Shop`) }
+
+    static SearchTab = () => { return 'Search' }
 
 }
 export { ScreenName };
