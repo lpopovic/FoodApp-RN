@@ -1,17 +1,18 @@
 import React, { Component } from 'react';
 import {
     View,
+    SafeAreaView,
+    ScrollView,
     Text,
     TouchableOpacity,
     StyleSheet,
-    SafeAreaView
 } from 'react-native';
 import BaseScreen from '../BaseScreen/BaseScreen';
 import Header from '../../components/common/BtnHeader'
 import StarRating from 'react-native-star-rating';
 import { NAV_COLOR, BASE_COLOR, STAR_COLOR } from '../../styles'
 import { IconAssets } from '../../assets';
-import { ScrollView } from 'react-native-gesture-handler';
+
 
 class FilterScreen extends BaseScreen {
 
