@@ -51,11 +51,12 @@ class SearchScreen extends BaseScreen {
         });
 
         this.searchApiHandler({ index })
+
     };
 
     searchApiHandler = ({ text, index }) => {
 
-        const selectedIndex = index ? index : this.state.selectedIndex
+        const selectedIndex = index != null ? index : this.state.selectedIndex
         let sort = null
         let search = null
         let params = []
@@ -101,10 +102,20 @@ class SearchScreen extends BaseScreen {
                     })
                 }
             )
+        } else {
+            this.showAlertMessage("Insert key word for search.")
         }
     }
     clearTextHandler = () => {
         this.setNewStateHandler({ searchText: '' })
+    }
+    onSubmitEditingHandler = (text) => {
+        const { loading } = this.state
+        if (loading == true) {
+            this.searchApiHandler({ text })
+        }
+
+
     }
     placesContent = () => {
         const { searchPlaces } = this.state
@@ -155,6 +166,7 @@ class SearchScreen extends BaseScreen {
                             borderBottomColor='transparent'
                             searchTextChange={(text) => this.searchApiHandler({ text })}
                             clearText={() => this.clearTextHandler()}
+                            onSubmitEditing={(text) => this.onSubmitEditingHandler(text)}
                         />
                         <View style={styles.segmentedControlContainer}>
                             <SegmentedControlTab

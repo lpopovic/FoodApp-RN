@@ -9,6 +9,7 @@ import {
 import { withNavigation } from 'react-navigation'
 import { IconAssets, TestAssets } from '../../assets'
 import { BASE_COLOR, headerStyles, NAV_COLOR } from '../../styles'
+import {ScreenName} from '../../helpers'
 class BackHeader extends Component {
 
     constructor(props) {
@@ -19,7 +20,7 @@ class BackHeader extends Component {
         this.props.navigation.goBack()
     }
     filterPressHandler = () => {
-        alert("Press Filter")
+        this.props.navigation.navigate(ScreenName.FilterScreen())
     }
     filterContent = (tintColor) => (
         <TouchableOpacity onPress={() => this.filterPressHandler()}>
@@ -62,7 +63,7 @@ class BackHeader extends Component {
                             <Text style={[headerStyles.btnText, { color: tintColor }]}>{this.leftBtnTitle}</Text>
                         </View>
                     </TouchableOpacity>
-                    {this.titleDisplay(tintColor)}
+                    {/* {this.titleDisplay(tintColor)} */}
                     {filterDisplay}
                 </View>
             </View>
