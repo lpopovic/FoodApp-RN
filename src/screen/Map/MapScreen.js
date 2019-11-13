@@ -149,14 +149,15 @@ class MapScreen extends BaseScreen {
             this.showAlertMessage("Insert key word for search.")
         }
     }
-   
+
     clearTextHandler = () => {
         this.setNewStateHandler({ searchText: '' })
     }
     onSubmitEditingHandler = (text) => {
-
-        this.searchApiHandler({ text })
-
+        const { loading } = this.state
+        if (loading == true) {
+            this.searchApiHandler({ text })
+        }
     }
     setUserMarkerContent = () => {
         const { userMarker } = this.state

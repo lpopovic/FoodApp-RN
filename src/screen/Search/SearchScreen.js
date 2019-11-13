@@ -110,7 +110,11 @@ class SearchScreen extends BaseScreen {
         this.setNewStateHandler({ searchText: '' })
     }
     onSubmitEditingHandler = (text) => {
-        this.searchApiHandler({ text })
+        const { loading } = this.state
+        if (loading == true) {
+            this.searchApiHandler({ text })
+        }
+
 
     }
     placesContent = () => {
