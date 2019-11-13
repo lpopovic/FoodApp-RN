@@ -5,6 +5,10 @@ const IconAssets = {
     starIcon: require('./Star.png'),
     heartIcon: require('./Union.png'),
     backIcon: require('./back.png'),
+    cashIcon: require('./cash_icon.png'),
+    cardIcon: require('./card_icon.png'),
+    minimumPriceIcon: require('./minimum_price.png'),
+    deliveryTimeIcon: require('./delivery_time_icon.png'),
 
     homeTabIcon: require('./home_tab_icon.png'),
     mapTabIcon: require('./map_tab_icon.png'),
