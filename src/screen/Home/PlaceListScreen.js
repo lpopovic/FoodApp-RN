@@ -82,12 +82,18 @@ class PlaceListScreen extends BaseScreen {
                     <Header
                         backgroundColor={NAV_COLOR.headerBackground}
                         tintColor={BASE_COLOR.darkGray}
-                        showFilter
+                        showFilter={this._filterData}
                     />
                     {mainDisplay}
                 </View>
             </SafeAreaView>
         )
+    }
+
+    _filterData = () => {
+        setTimeout(() => {
+            alert("FILTER DATA FUNC CALL")
+        }, 100);
     }
 }
 

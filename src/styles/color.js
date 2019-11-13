@@ -23,9 +23,10 @@ const TAB_COLOR = {
 
 const NAV_COLOR = {
     headerBackground: 'rgb(250, 250, 250)',
-    tintColor:BASE_COLOR.darkGray,
-    locationContent:BASE_COLOR.lightGray,
-    borderBottomColor:TAB_COLOR.borderTopColor,
+    tintColor: BASE_COLOR.darkGray,
+    locationContent: BASE_COLOR.lightGray,
+    borderBottomColor: TAB_COLOR.borderTopColor,
 }
+const STAR_COLOR = BASE_COLOR.orange//'#FFD700'
 
-export { BASE_COLOR, TAB_COLOR, NAV_COLOR };
+export { BASE_COLOR, TAB_COLOR, NAV_COLOR, STAR_COLOR };

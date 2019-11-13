@@ -167,6 +167,7 @@ class SearchScreen extends BaseScreen {
                             searchTextChange={(text) => this.searchApiHandler({ text })}
                             clearText={() => this.clearTextHandler()}
                             onSubmitEditing={(text) => this.onSubmitEditingHandler(text)}
+                            showFilter={this._filterData}
                         />
                         <View style={styles.segmentedControlContainer}>
                             <SegmentedControlTab
@@ -189,6 +190,12 @@ class SearchScreen extends BaseScreen {
 
 
         )
+    }
+
+    _filterData = () => {
+        setTimeout(() => {
+            alert("FILTER DATA FUNC CALL")
+        }, 100);
     }
 }
 

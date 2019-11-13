@@ -193,11 +193,20 @@ class HomeScreen extends BaseScreen {
         return (
             <SafeAreaView style={styles.safeAreaHeader}>
                 <View style={styles.mainContainer}>
-                    <Header backgroundColor={NAV_COLOR.headerBackground} />
+                    <Header 
+                    backgroundColor={NAV_COLOR.headerBackground} 
+                    showFilter={this._filterData}
+                    />
                     {mainDisplay}
                 </View>
             </SafeAreaView>
         )
+    }
+
+    _filterData = () => {
+        setTimeout(() => {
+            alert("FILTER DATA FUNC CALL")
+        }, 100);
     }
 }
 

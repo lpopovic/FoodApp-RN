@@ -9,28 +9,23 @@ import {
 import { withNavigation } from 'react-navigation'
 import { IconAssets, TestAssets } from '../../assets'
 import { BASE_COLOR, headerStyles, NAV_COLOR } from '../../styles'
-import { ScreenName } from '../../helpers'
-class BackHeader extends Component {
+
+class BtnHeader extends Component {
 
     constructor(props) {
         super(props)
-        this.leftBtnTitle = 'Back'
+        this.leftBtnTitle = this.props.title
     }
     backPressHandler = () => {
         this.props.navigation.goBack()
     }
-    filterPressHandler = () => {
-        this.props.navigation.navigate(ScreenName.FilterScreen(), { filter: this.props.showFilter })
+    btnPressHandler = () => {
+        this.props.btnPress()
     }
-    filterContent = (tintColor) => (
-        <TouchableOpacity onPress={() => this.filterPressHandler()}>
+    btnContent = (title) => (
+        <TouchableOpacity onPress={() => this.btnPressHandler()}>
             <View style={styles.rightBtn}>
-                <View style={[styles.imageOtherContainer, styles.imageContainer]}>
-                    <Image
-                        source={TestAssets.filterIcon}
-                        style={[styles.baseImage, { tintColor: tintColor }]}
-                        resizeMode='contain' />
-                </View>
+                <Text style={[headerStyles.btnText, { color: BASE_COLOR.blue,}]}>{title}</Text>
             </View>
         </TouchableOpacity>
     )
@@ -48,7 +43,7 @@ class BackHeader extends Component {
     render() {
         const tintColor = this.props.tintColor ? this.props.tintColor : BASE_COLOR.white
         const backgroundColor = this.props.backgroundColor ? this.props.backgroundColor : BASE_COLOR.backgroundBlue
-        const filterDisplay = this.props.showFilter ? this.filterContent() : null
+        const btnDisplay = this.props.btnTitle ? this.btnContent(this.props.btnTitle) : null
         return (
             <View style={[headerStyles.mainContainer, { backgroundColor, borderBottomColor: NAV_COLOR.borderBottomColor, borderBottomWidth: tintColor == BASE_COLOR.white ? 0 : 0.7 }]}>
                 <View style={{ flex: 1, justifyContent: 'space-between', flexDirection: 'row', alignItems: 'center' }}>
@@ -63,8 +58,7 @@ class BackHeader extends Component {
                             <Text style={[headerStyles.btnText, { color: tintColor }]}>{this.leftBtnTitle}</Text>
                         </View>
                     </TouchableOpacity>
-                    {/* {this.titleDisplay(tintColor)} */}
-                    {filterDisplay}
+                    {btnDisplay}
                 </View>
             </View>
         )
@@ -89,9 +83,6 @@ const styles = StyleSheet.create({
         fontSize: 17,
         fontWeight: '500',
     },
-    imageContainer: {
-        marginRight: 4
-    },
     imageOtherContainer: {
         padding: 4,
     },
@@ -102,4 +93,4 @@ const styles = StyleSheet.create({
 });
 
 
-export default withNavigation(BackHeader);
+export default withNavigation(BtnHeader);

@@ -20,6 +20,9 @@ class BaseHeader extends Component {
     onPressChangeLocation = () => {
         this.props.navigation.navigate(ScreenName.MainLocationScreen(), { backToMainScreen: true })
     }
+    onPressFilterHandler = () => {
+        this.props.navigation.navigate(ScreenName.FilterScreen(), { filter: this.props.showFilter })
+    }
     render() {
         const tintColor = NAV_COLOR.darkGray
         const backgroundColor = this.props.backgroundColor ? this.props.backgroundColor : NAV_COLOR.headerBackground
@@ -63,7 +66,7 @@ class BaseHeader extends Component {
                                     resizeMode='contain' />
                             </View>
                         </TouchableOpacity>
-                        <TouchableOpacity onPress={() => this.props.navigation.navigate(ScreenName.FilterScreen())}>
+                        <TouchableOpacity onPress={() => this.onPressFilterHandler()}>
                             <View style={[styles.imageOtherContainer, styles.imageContainer]}>
                                 <Image
                                     source={TestAssets.filterIcon}

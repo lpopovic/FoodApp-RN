@@ -52,6 +52,10 @@ class SearchHeader extends Component {
         }
 
     }
+
+    onPressFilterHandler = () => {
+        this.props.navigation.navigate(ScreenName.FilterScreen(), { filter: this.props.showFilter })
+    }
     render() {
         const tintColor = this.props.tintColor ? this.props.tintColor : NAV_COLOR.darkGray
         const backgroundColor = this.props.backgroundColor ? this.props.backgroundColor : NAV_COLOR.headerBackground
@@ -78,7 +82,7 @@ class SearchHeader extends Component {
                     />
 
                     <View style={styles.otherBtnContent}>
-                        <TouchableOpacity onPress={() => this.props.navigation.navigate(ScreenName.FilterScreen())}>
+                        <TouchableOpacity onPress={() => this.onPressFilterHandler()}>
                             <View style={[styles.imageOtherContainer, styles.imageContainer]}>
                                 <Image
                                     source={TestAssets.filterIcon}
