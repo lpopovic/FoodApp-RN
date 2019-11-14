@@ -3,13 +3,16 @@ import {
     View,
     SafeAreaView,
     ScrollView,
+    Image,
     Text,
     TouchableOpacity,
     StyleSheet,
+    Dimensions
 } from 'react-native';
 import BaseScreen from '../BaseScreen/BaseScreen';
 import Header from '../../components/common/BtnHeader'
 import StarRating from 'react-native-star-rating';
+import MultiSlider from '@ptomasroos/react-native-multi-slider'
 import { NAV_COLOR, BASE_COLOR, STAR_COLOR } from '../../styles'
 import { IconAssets } from '../../assets';
 
@@ -27,6 +30,8 @@ class FilterScreen extends BaseScreen {
             loading: false,
             ratingCount: 0.5,
             priceTag: 0,
+            rangeValue: 10,
+            // scrollEnabled: true,
         }
     }
 
@@ -39,14 +44,7 @@ class FilterScreen extends BaseScreen {
             this.setNewStateHandler({ loading: false })
         }, 1000);
 
-        // const filterData = this.props.navigation.getParam('filter', null)
-        // setTimeout(() => {
-        //     if (filterData) {
-        //         this.closeScreen()
-        //         filterData()
-        //     }
 
-        // }, 15000);
 
     }
     componentWillUnmount() {
@@ -65,9 +63,22 @@ class FilterScreen extends BaseScreen {
     onResetBtnPress = () => {
         this.setNewStateHandler({
             priceTag: 0,
-            ratingCount:0,
+            ratingCount: 0,
+            rangeValue: 10,
         });
     }
+
+    onSaveChangesBtnPress = () => {
+        const filterData = this.props.navigation.getParam('filter', null)
+
+        if (filterData != null) {
+            this.closeScreen()
+            filterData()
+        }
+
+
+    }
+
     ratingContent = () => {
         const text = 'RATING'
         return (
@@ -140,27 +151,76 @@ class FilterScreen extends BaseScreen {
             </View>
         )
     }
+    rangeContent = () => {
+        const text = 'RANGE'
+        const { rangeValue } = this.state
+        return (
+            <View style={[styles.baseContainer, { flexDirection: 'column' }]}>
+                <View style={{
+                    flexDirection: 'row',
+                }}>
+                    <View style={{ width: '50%', }}>
+                        <Text style={[styles.baseText, { color: BASE_COLOR.black, textAlign: 'left' }]}>{text}</Text>
+                    </View>
+                    <View style={{ width: '50%' }}>
+                        <Text style={[styles.baseText, { color: BASE_COLOR.black, textAlign: 'right' }]}>{rangeValue} km</Text>
+                    </View>
+                </View>
+                <MultiSlider
+                    marker={{ backgroundColor: BASE_COLOR.red }}
+                    selectedStyle={{
+                        backgroundColor: BASE_COLOR.blue
+                    }}
+                    unselectedStyle={{
+                        backgroundColor: BASE_COLOR.gray,
+                    }}
+                    values={[rangeValue]}
+                    onValuesChangeFinish={(values) => this.setNewStateHandler({ rangeValue: values[0] })}
+                    min={0}
+                    max={30}
+                    step={1}
+                    sliderLength={Dimensions.get('screen').width - 50}
+                    trackStyle={{
+                        height: 4,
+                    }}
+                    customMarker={CustomMarker}
+
+                />
+            </View>
+        )
+    }
+    scrollViewContent = () => {
+        return (
+            <View style={styles.scrollViewContainer}>
+
+                <>
+                    {this.ratingContent()}
+                </>
+                <>
+                    {this.openNowContent()}
+                </>
+                <>
+                    {this.priceContent()}
+                </>
+                <>
+                    {this.rangeContent()}
+                </>
+
+            </View>
+        )
+    }
     mainContent = () => {
+        const { scrollEnabled } = this.state
         return (
             <View style={styles.mainContainer}>
                 <View style={styles.filterContainer}>
-                    <ScrollView bounces={false}>
-                        <View style={styles.scrollViewContainer}>
-                            <>
-                                {this.ratingContent()}
-                            </>
-                            <>
-                                {this.openNowContent()}
-                            </>
-                            <>
-                                {this.priceContent()}
-                            </>
-                        </View>
+                    <ScrollView bounces={false} scrollEnabled={scrollEnabled}>
+                        {this.scrollViewContent()}
                     </ScrollView>
 
                 </View>
                 <View style={styles.bottomMainContainer}>
-                    <TouchableOpacity onPress={() => alert("Press save")}>
+                    <TouchableOpacity onPress={() => this.onSaveChangesBtnPress()}>
                         <View style={styles.bottomButtonContainer}>
                             <Text style={[styles.baseText, styles.btnTitleSave]}>{this.bottomBtnTitle}</Text>
                         </View>
@@ -188,6 +248,18 @@ class FilterScreen extends BaseScreen {
     }
 }
 
+class CustomMarker extends Component {
+    render() {
+        const { markerImage } = styles
+        return (
+            <Image
+                style={markerImage}
+                source={IconAssets.sliderMarkerIcon}
+                resizeMode="contain"
+            />
+        );
+    }
+}
 const styles = StyleSheet.create({
     safeAreaHeader: {
         backgroundColor: NAV_COLOR.headerBackground,
@@ -253,6 +325,13 @@ const styles = StyleSheet.create({
         color: BASE_COLOR.white,
         fontSize: 11
     },
+    markerImage: {
+        width: 30,
+        height: 30,
+        tintColor: BASE_COLOR.blue,
+        backgroundColor: BASE_COLOR.white,
+        borderRadius: 15
+    }
 });
 
 

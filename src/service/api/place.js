@@ -2,8 +2,8 @@ import axios from '../axios'
 import { RestUrl } from './url'
 import { Place } from '../../model'
 
-
 class PlaceNetwork {
+
     static fetchTest = () =>
         new Promise(async (resolve, reject) => {
             const url = RestUrl.placeTest

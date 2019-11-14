@@ -7,7 +7,11 @@ import {
     Keyboard,
     Dimensions,
 } from 'react-native';
-import { ScreenName, isAndroid } from '../../helpers'
+import {
+    ScreenName,
+    isAndroid,
+    MESSAGE_NO_PLACE
+} from '../../helpers'
 import { NAV_COLOR, BASE_COLOR, segmentedControlStyles } from '../../styles'
 import BaseScreen from "../BaseScreen/BaseScreen"
 import Header from '../../components/common/SearchHeader'
@@ -35,7 +39,6 @@ class MapScreen extends BaseScreen {
             selectedSegmentedIndex: 0,
             mapPlaces: [],
             loading: false,
-            error: false,
             searchText: '',
             userMarker: {
                 latitude: this.props.city.coordinate.latitude,
@@ -77,17 +80,18 @@ class MapScreen extends BaseScreen {
         })
         PlaceNetwork.fetchPlaces().then(
             res => {
+                if (res.length == 0) {
+                    this.showAlertMessage(MESSAGE_NO_PLACE)
+                }
                 this.setNewStateHandler({
                     loading: false,
                     mapPlaces: res,
-                    error: false,
                 })
             },
             err => {
                 this.showAlertMessage(err)
                 this.setNewStateHandler({
                     loading: false,
-                    error: true,
                     mapPlaces: [],
 
 
@@ -129,10 +133,13 @@ class MapScreen extends BaseScreen {
 
             PlaceNetwork.fetchPlaces(params).then(
                 res => {
+                    if (res.length == 0) {
+                        this.showAlertMessage(MESSAGE_NO_PLACE)
+                    }
+
                     this.setNewStateHandler({
                         loading: false,
                         mapPlaces: res,
-                        error: res.length > 0 ? false : true,
                     })
                 },
                 err => {
@@ -140,8 +147,6 @@ class MapScreen extends BaseScreen {
                     this.setNewStateHandler({
                         loading: false,
                         mapPlaces: [],
-                        error: true,
-
                     })
                 }
             )
@@ -155,7 +160,7 @@ class MapScreen extends BaseScreen {
     }
     onSubmitEditingHandler = (text) => {
         const { loading } = this.state
-        if (loading == true) {
+        if (loading == false) {
             this.searchApiHandler({ text })
         }
     }
@@ -222,7 +227,7 @@ class MapScreen extends BaseScreen {
                             searchTextChange={(text) => this.searchApiHandler({ text })}
                             clearText={() => this.clearTextHandler()}
                             onSubmitEditing={(text) => this.onSubmitEditingHandler(text)}
-                            showFilter = {this._filterData}
+                            showFilter={this._filterData}
                         />
                         <View style={styles.segmentedControlContainer}>
                             <SegmentedControlTab

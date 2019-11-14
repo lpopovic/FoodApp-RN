@@ -44,7 +44,7 @@ class SearchHeader extends Component {
 
         Keyboard.dismiss()
 
-        clearTimeout(this.searchTimeout)
+        // clearTimeout(this.searchTimeout)
         if (searchText.trim() !== '') {
             this.props.onSubmitEditing(searchText)
         } else {

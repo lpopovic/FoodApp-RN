@@ -2,6 +2,7 @@ import React from 'react';
 import {
     View,
     TouchableWithoutFeedback,
+    TouchableOpacity,
     Image,
     Text,
     StyleSheet,
@@ -16,7 +17,7 @@ import SafeAreaView from 'react-native-safe-area-view';
 import { PlaceList } from '../../components/Place/PlaceList'
 import { PlaceNetwork, ParamsUrl } from '../../service/api'
 import { TestAssets } from '../../assets'
-import { TouchableOpacity } from 'react-native-gesture-handler';
+
 class SearchScreen extends BaseScreen {
 
     static navigationOptions = {
@@ -39,7 +40,6 @@ class SearchScreen extends BaseScreen {
     componentDidMount() {
         super.componentDidMount()
         this.setStatusBarStyle(NAV_COLOR.headerBackground, true)
-        // this.searchApiHandler({ index: this.state.electedIndex })
     }
     componentWillUnmount() {
         super.componentWillUnmount()
@@ -84,24 +84,27 @@ class SearchScreen extends BaseScreen {
         }
         if (search !== null) {
             params.push(search)
-            PlaceNetwork.fetchPlaces(params).then(
-                res => {
-                    this.setNewStateHandler({
-                        loading: false,
-                        searchPlaces: res,
-                        showNoResult: res.length > 0 ? false : true,
-                        showError: false,
-                    })
-                },
-                err => {
-                    this.showAlertMessage(err)
-                    this.setNewStateHandler({
-                        loading: false,
-                        searchPlaces: [],
-                        showError: true,
-                    })
-                }
-            )
+
+            PlaceNetwork.fetchPlaces(params)
+                .then(
+                    res => {
+                        this.setNewStateHandler({
+                            loading: false,
+                            searchPlaces: res,
+                            showNoResult: res.length > 0 ? false : true,
+                            showError: false,
+                        })
+                    },
+                    err => {
+                        this.showAlertMessage(err)
+                        this.setNewStateHandler({
+                            loading: false,
+                            searchPlaces: [],
+                            showError: true,
+                        })
+                    }
+                )
+
         } else {
             this.showAlertMessage("Insert key word for search.")
         }
@@ -111,7 +114,7 @@ class SearchScreen extends BaseScreen {
     }
     onSubmitEditingHandler = (text) => {
         const { loading } = this.state
-        if (loading == true) {
+        if (loading == false) {
             this.searchApiHandler({ text })
         }
 
