@@ -156,13 +156,13 @@ class CateringScreen extends BaseScreen {
 
         const PlaceData = [
             {
-                _id: "5da591366862d77054712886",
+                _id: "5da86ac391408d5e60025780",
                 description: "Ovde treba da bude opis. Ovde treba da bude opis. Ovde treba da bude opis. Ovde treba da bude opis. Ovde treba da bude opis. Ovde treba da bude opis. Ovde treba da bude opis.",
                 name: "Kod Saloa",
                 link: "https://api.ketering.rtech.rs/uploads/9ff15098-0366-0617-0540-b77c4fa3aa0e-11.png?caption=Kod%20Saloa"
             },
             {
-                _id: "5da5c6b36862d77054712889",
+                _id: "5da99a884157831bf8c616c6",
                 description: "Ovde treba da bude opis. Ovde treba da bude opis. Ovde treba da bude opis. Ovde treba da bude opis. Ovde treba da bude opis. Ovde treba da bude opis. Ovde treba da bude opis.",
                 name: "Kod Dzamboa",
                 link: "https://api.ketering.rtech.rs/uploads/c54153e5-b287-7307-aa52-b0c49f205a4a-11.png?caption=Kod%20Dzamboa"
@@ -174,16 +174,20 @@ class CateringScreen extends BaseScreen {
             return (
                 <DishCard name={DishData[0].name} image={DishData[0].link} description={DishData[0].description} />
             )
-        } else {
+        } else if (Moment(this.state.selectedDate).isAfter(Moment())){
             return (
-                <PlaceList data={PlaceData} clickOnPlace={() => this.placeSelectHandler()} />
+                <PlaceList data={PlaceData} clickOnPlace={(placeId) => this.placeSelectHandler(placeId)} />
                 //    <PlaceCard />
+            )
+        } else if (Moment(this.state.selectedDate).isBefore(Moment())){
+            return (
+                <Text style={{ marginTop: 100, alignSelf: 'center', fontWeight: 'bold', fontSize: 22 }}>Niste izabrali obrok za ovaj dan!</Text>
             )
         }
     }
 
-    placeSelectHandler() {
-        this.pushNewScreen({ routeName: ScreenName.PlaceDetailScreen(), key: `${Math.random() * 10000}` })
+    placeSelectHandler(placeId) {
+        this.pushNewScreen({ routeName: ScreenName.PlaceDetailScreen(), key: `${Math.random() * 10000}`, params: { _id: placeId } })
     }
 
 

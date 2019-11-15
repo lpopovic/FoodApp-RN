@@ -40,7 +40,7 @@ class HomeCaroselComponent extends Component {
     _renderItem = ({ item, index }) => {
         return (
             <View key={index} style={{ alignItems: 'center', alignContent: 'center', justifyContent: 'center' }}>
-                <TouchableOpacity activeOpacity={1} onPress={() => this.props.onPressItem(this.props.data.length > 3 ? index - 3 : index)}>
+                <TouchableOpacity activeOpacity={1} onPress={() => this.props.onPressItem(this.props.data.length >= 3 ? index - 3 : index)}>
                     <ImageBackground style={{ height: Dimensions.get('window').width * 9 / 16, width: Dimensions.get('window').width, resizeMode: 'cover', backgroundColor: BASE_COLOR.blue }} source={{ uri: item.image.image169t }} >
                         <View style={styles.imageContainer}>
                             {this.deliveryIcon(item.delivery)}

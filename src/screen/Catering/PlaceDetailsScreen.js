@@ -11,7 +11,8 @@ import {
     TestAssets,
 } from '../../assets';
 import { BASE_COLOR } from '../../styles';
-import { ImageAssets } from '../../model';
+import { PlaceNetwork } from '../../service/api'
+// import { Place } from '../../model';
 
 class PlaceDetailsScreen extends BaseScreen {
 
@@ -24,66 +25,65 @@ class PlaceDetailsScreen extends BaseScreen {
         super(props)
         this.state = {
             statusBarHeight: 0,
-            expanded: false
+            expanded: false,
+            loading: false,
+            menuItems: [],
+            // place: Place(),
         }
-
         if (Platform.OS === 'android') {
             UIManager.setLayoutAnimationEnabledExperimental(true);
         }
     }
 
+    componentDidMount() {
+        super.componentDidMount()
+        // this.setStatusBarStyle(NAV_COLOR.headerBackground, true)
+        this.apiCallHandler(this.props.navigation.state.params._id)
+    }
+    componentWillUnmount() {
+        super.componentWillUnmount()
+    }
+    apiCallHandler = (placeId) => {
+        // PlaceNetwork.fetchPlaceById(placeId).then(
+        //     res => {
+        //         this.setNewStateHandler({
+        //             loading: false,
+        //             place: res
+        //         })
+        //         // console.log(res)
+        //     },
+        //     err => {
+        //         this.showAlertMessage(err)
+        //         this.setNewStateHandler({
+        //             loading: false,
+        //         })
+        //     }
+        // )
+        PlaceNetwork.fetchMenuItems(placeId).then(
+            res => {
+                this.setNewStateHandler({
+                    loading: false,
+                    menuItems: res
+                })
+                // console.log(this.props.navigation.state.params._id)
+                // console.log(res)
+            },
+            err => {
+                this.showAlertMessage(err)
+                this.setNewStateHandler({
+                    loading: false,
+                })
+            }
+        )
+    }
+
     changeLayout = () => {
         LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut)
-        // this.setState(prevState => ({ expanded: !prevState.expanded }))
         this.setState({ expanded: !this.state.expanded })
     }
 
     render() {
-        const data = [
-            {
-                _id: "5da869da91408d5e6002577f",
-                description: "Bruskete (bruschette) su italijansko predjelo, idealni za lagani obrok ili užinu, a na žurkama će biti omiljeni sendiviči. Ovi ukusni zalogajčići su hranjivi i ne previše kalorični, a nekoliko brusketa će zasititi u potpunosti i okorele gurmane i „mesojede“.",
-                name: "Brusketi",
-                link: "https://api.ketering.rtech.rs/uploads/bf7966d5-c162-e61b-d79c-3d35ac11339c-169.png?caption=Brusketi",
-            },
-            {
-                _id: "5da9a5d74157831bf8c616ef",
-                description: "Salata, pomfrit, hleb, juneće meso",
-                name: "Ćevapi",
-                link: "https://api.ketering.rtech.rs/uploads/6bfe163b-8e8f-ed77-bcdf-f8a5106e9d20-169.png?caption=Cevapi",
-            },
-            {
-                _id: "5da9a6024157831bf8c616f0",
-                description: "Juneće meso, salata, hleb, pomfrit",
-                name: "Pljeskavica",
-                link: "https://api.ketering.rtech.rs/uploads/b462bad1-d85d-e381-c624-811a833bd12c-169.png?caption=Pljeskavica",
-            },
-            {
-                _id: "5da869da91408d5e6002577f",
-                description: "Bruskete (bruschette) su italijansko predjelo, idealni za lagani obrok ili užinu, a na žurkama će biti omiljeni sendiviči. Ovi ukusni zalogajčići su hranjivi i ne previše kalorični, a nekoliko brusketa će zasititi u potpunosti i okorele gurmane i „mesojede“.",
-                name: "Brusketi",
-                link: "https://api.ketering.rtech.rs/uploads/bf7966d5-c162-e61b-d79c-3d35ac11339c-169.png?caption=Brusketi",
-            },
-            {
-                _id: "5da869da91408d5e6002577f",
-                description: "Bruskete (bruschette) su italijansko predjelo, idealni za lagani obrok ili užinu, a na žurkama će biti omiljeni sendiviči. Ovi ukusni zalogajčići su hranjivi i ne previše kalorični, a nekoliko brusketa će zasititi u potpunosti i okorele gurmane i „mesojede“.",
-                name: "Brusketi",
-                link: "https://api.ketering.rtech.rs/uploads/bf7966d5-c162-e61b-d79c-3d35ac11339c-169.png?caption=Brusketi",
-            },
-            {
-                _id: "5da9a5d74157831bf8c616ef",
-                description: "Salata, pomfrit, hleb, juneće meso",
-                name: "Ćevapi",
-                link: "https://api.ketering.rtech.rs/uploads/6bfe163b-8e8f-ed77-bcdf-f8a5106e9d20-169.png?caption=Cevapi",
-            },
-            {
-                _id: "5da9a6024157831bf8c616f0",
-                description: "Juneće meso, salata, hleb, pomfrit",
-                name: "Pljeskavica",
-                link: "https://api.ketering.rtech.rs/uploads/b462bad1-d85d-e381-c624-811a833bd12c-169.png?caption=Pljeskavica",
-            },
-        ];
-
+        const { menuItems } = this.state
         return (
             <View style={styles.mainContainer}>
                 <TouchableOpacity
@@ -134,7 +134,7 @@ class PlaceDetailsScreen extends BaseScreen {
                     >
                         <View style={{ flexDirection: 'row', height: 40 }}>
                             <Text numberOfLines={2} ellipsizeMode='tail' style={{ flex: 7, fontWeight: 'bold', fontSize: 20, alignSelf: 'center' }}>KFC</Text>
-                            <View style={{ flex: 3, flexDirection: 'row' }}>
+                            <View style={{ flex: 4.5, flexDirection: 'row' }}>
                                 <View style={{ flex: 1.5, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
                                     <Image
                                         style={{
@@ -157,6 +157,18 @@ class PlaceDetailsScreen extends BaseScreen {
                                         />
                                     </TouchableOpacity>
                                 </View>
+                                <View style={{ flex: 1.5, justifyContent: 'center', alignItems: 'center' }}>
+                                    <TouchableOpacity>
+                                        <Image
+                                            style={{
+                                                width: 23,
+                                                height: 20,
+                                                tintColor: '#646464'
+                                            }}
+                                            source={IconAssets.mapTabIcon}
+                                        />
+                                    </TouchableOpacity>
+                                </View>
                             </View>
                         </View>
 
@@ -167,7 +179,7 @@ class PlaceDetailsScreen extends BaseScreen {
                             <View style={{ flex: 3 }}></View>
                         </View>
                         <View style={{ height: this.state.expanded ? 240 : 0 }}>
-                            <View style={{ flex: 2.5, overflow: 'hidden'}}>
+                            <View style={{ flex: 2.5, overflow: 'hidden' }}>
                                 <View style={{ justifyContent: 'center', alignItems: 'flex-start', flex: 0.5 }}>
                                     <Text style={{ fontSize: 15, color: BASE_COLOR.darkGray }}>$$$</Text>
                                 </View>
@@ -190,7 +202,7 @@ class PlaceDetailsScreen extends BaseScreen {
                                 </View>
                             </View>
                             <View style={{ backgroundColor: BASE_COLOR.gray, height: 1, marginTop: 10, marginBottom: 10 }}></View>
-                            <Text numberOfLines={4} ellipsizeMode='tail'style={{marginBottom: 10}}>
+                            <Text numberOfLines={4} ellipsizeMode='tail' style={{ marginBottom: 10 }}>
                                 Lorem Ipsum is simply dummy text of the printing and typesetting industry.
                                 Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,
                                 when an unknown printer took a galley of type and scrambled it to make a type specimen book.
@@ -201,7 +213,7 @@ class PlaceDetailsScreen extends BaseScreen {
 
                     </TriggeringView>
                     <View style={{ backgroundColor: '#E5E5E5', height: 3 }}></View>
-                    <DishList data={data} />
+                    <DishList data={menuItems} />
 
                     {/* </View> */}
                 </HeaderImageScrollView>

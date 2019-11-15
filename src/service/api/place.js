@@ -1,6 +1,6 @@
 import axios from '../axios'
 import { RestUrl } from './url'
-import { Place } from '../../model'
+import { Place, MenuItem } from '../../model'
 
 
 class PlaceNetwork {
@@ -40,6 +40,47 @@ class PlaceNetwork {
                 }
             }
         });
+
+    static fetchPlaceById = (placeId) =>
+        new Promise(async (resolve, reject) => {
+            const url = RestUrl.getPlaceById(placeId)
+            try {
+                const { data } = await axios.get(url)
+                const place = Place(data)
+
+                resolve(place)
+            } catch (error) {
+                try {
+                    const { message } = error.response.data.error
+                    reject(message)
+                } catch  {
+                    reject(error.message)
+
+                }
+            }
+        });
+
+    static fetchMenuItems = (placeId) =>
+        new Promise(async (resolve, reject) => {
+            const url = RestUrl.getMenuItemsTest(placeId)
+            try {
+
+                const { data } = await axios.get(url)
+                const menuItems = MenuItem.createArrayMenuItems(data)
+
+                resolve(menuItems)
+            } catch (error) {
+                try {
+                    const { message } = error.response.data.error
+                    reject(message)
+                } catch  {
+                    reject(error.message)
+
+                }
+            }
+        });
+
+
 }
 
 export { PlaceNetwork }

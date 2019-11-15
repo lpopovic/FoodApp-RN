@@ -15,24 +15,42 @@ class RestUrl {
     static placeTest = withKey(`places`)
     static getPlaces = (params) => {
 
-        if( params){
-            let param =''
+        if (params) {
+            let param = ''
             params.forEach(element => {
-                param = `${param}${element}&` 
+                param = `${param}${element}&`
             });
             param = param.slice(0, -1);
             return withKey(`places?${param}`)
-        }else {
+        } else {
             return withKey(`places`)
         }
-       
     }
+
+    static getPlaceById = (placeId) => {
+        return withKey(`places/${placeId}`)
+    }
+    static getMenuItemsTest = (placeId) => {
+        return withKey(`menuitems?place=${placeId}`)
+    }
+    // static getMenuItems = (params) => {
+    //     if(params){
+    //         let param = ''
+    //         params.forEach(element => {
+    //             param = `${param}${element}&`
+    //         });
+    //         param = param.slice(0, -1)
+    //         return withKey(`menuitems?${param}`)
+    //     }else {
+    //         return withKey(`menuitems`)
+    //     }
+    // }
 }
 
 class ParamsUrl {
     static search = (value) => { return `search=${value}` }
-    static pickup = (value) => {return `pickup=${value}`}
-    static delivery = (value) => {return `delivery=${value}`}
+    static pickup = (value) => { return `pickup=${value}` }
+    static delivery = (value) => { return `delivery=${value}` }
 }
 
 export { RestUrl, ParamsUrl, ROOT_URL_IMAGE };

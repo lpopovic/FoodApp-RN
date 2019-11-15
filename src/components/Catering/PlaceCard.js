@@ -21,12 +21,12 @@ class PlaceCard extends Component {
                             width: 100,
                             aspectRatio: 1 / 1,
                         }}
-                        source={{ url: this.props.image }}
+                        source={{ url: this.props.data.link }}
                     />
                     <View style={{ flex: 10, flexDirection: 'column', height: '100%', paddingLeft: 10, paddingRight: 10 }}>
                         <View style={{ height: 50, flexDirection: 'row' }}>
                             <View style={{ flex: 8, justifyContent: 'center' }}>
-                                <Text numberOfLines={2} ellipsizeMode='tail' style={{ fontSize: 18, fontWeight: 'bold', }}>{this.props.name}</Text>
+                                <Text numberOfLines={2} ellipsizeMode='tail' style={{ fontSize: 18, fontWeight: 'bold', }}>{this.props.data.name}</Text>
                             </View>
                             <View style={{ flex: 2, justifyContent: 'center', alignItems: 'flex-end' }}>
                                 <TouchableOpacity>

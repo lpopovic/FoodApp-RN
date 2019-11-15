@@ -10,8 +10,8 @@ class DishList extends Component {
             <View style={styles.mainContainer}>
                 <FlatList
                     data={this.props.data}
-                    keyExtractor={item => item.id}
-                    renderItem={({ item }) => <DishCard name={item.name} description={item.description} image={item.link}/>}
+                    keyExtractor={item => item._id}
+                    renderItem={({ item }) => <DishCard name={item.name} description={item.description} image={item.image.image169t}/>}
                 />
             </View>
         )
