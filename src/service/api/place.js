@@ -46,7 +46,7 @@ class PlaceNetwork {
             const url = RestUrl.getPlaceById(placeId)
             try {
                 const { data } = await axios.get(url)
-                const place = Place(data)
+                const place = new Place(data)
 
                 resolve(place)
             } catch (error) {
@@ -69,6 +69,26 @@ class PlaceNetwork {
                 const menuItems = MenuItem.createArrayMenuItems(data)
 
                 resolve(menuItems)
+            } catch (error) {
+                try {
+                    const { message } = error.response.data.error
+                    reject(message)
+                } catch  {
+                    reject(error.message)
+
+                }
+            }
+        });
+
+        static fetchMenuItemById = (itemId) =>
+        new Promise(async (resolve, reject) => {
+            const url = RestUrl.getMenuItemsTest(itemId)
+            try {
+
+                const { data } = await axios.get(url)
+                const menuItem = new MenuItem(data)
+
+                resolve(menuItem)
             } catch (error) {
                 try {
                     const { message } = error.response.data.error

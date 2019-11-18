@@ -12,7 +12,8 @@ import {
 } from '../../assets';
 import { BASE_COLOR } from '../../styles';
 import { PlaceNetwork } from '../../service/api'
-// import { Place } from '../../model';
+import { Place } from '../../model';
+import { avgPriceTag, openDays } from '../../helpers/numberHelper';
 
 class PlaceDetailsScreen extends BaseScreen {
 
@@ -28,7 +29,7 @@ class PlaceDetailsScreen extends BaseScreen {
             expanded: false,
             loading: false,
             menuItems: [],
-            // place: Place(),
+            place: new Place({})
         }
         if (Platform.OS === 'android') {
             UIManager.setLayoutAnimationEnabledExperimental(true);
@@ -44,21 +45,25 @@ class PlaceDetailsScreen extends BaseScreen {
         super.componentWillUnmount()
     }
     apiCallHandler = (placeId) => {
-        // PlaceNetwork.fetchPlaceById(placeId).then(
-        //     res => {
-        //         this.setNewStateHandler({
-        //             loading: false,
-        //             place: res
-        //         })
-        //         // console.log(res)
-        //     },
-        //     err => {
-        //         this.showAlertMessage(err)
-        //         this.setNewStateHandler({
-        //             loading: false,
-        //         })
-        //     }
-        // )
+        PlaceNetwork.fetchPlaceById(placeId).then(
+            res => {
+                this.setNewStateHandler({
+                    loading: false,
+                    place: res
+                })
+                // if(this.state.place.openDays.some(item => item.day === Moment().day())){
+                //     alert("PONEDELJAK")
+                // }
+                // console.log(res)
+                // console.log(this.state.place.image.image169)
+            },
+            err => {
+                this.showAlertMessage(err)
+                this.setNewStateHandler({
+                    loading: false,
+                })
+            }
+        )
         PlaceNetwork.fetchMenuItems(placeId).then(
             res => {
                 this.setNewStateHandler({
@@ -83,7 +88,7 @@ class PlaceDetailsScreen extends BaseScreen {
     }
 
     render() {
-        const { menuItems } = this.state
+        const { place, menuItems } = this.state
         return (
             <View style={styles.mainContainer}>
                 <TouchableOpacity
@@ -106,7 +111,7 @@ class PlaceDetailsScreen extends BaseScreen {
                     // headerContainerStyle={{color: 'red'}}
                     // headerContainerStyle={{ width: '100%', height: Dimensions.get('screen').width * 16/9}}
                     // headerImage={require("./images/star-full.png")}
-                    renderHeader={() => <Image source={TestAssets.KFC_logo} style={{ height: Dimensions.get('screen').width * 9 / 16, width: Dimensions.get('window').width }} />}
+                    renderHeader={() => <Image source={{ url: place.image.image169 }} style={{ height: Dimensions.get('screen').width * 9 / 16, width: Dimensions.get('window').width }} />}
 
                     // renderForeground={() => (
                     //     <View style={{ height: 150, justifyContent: "center", alignItems: "center" }} >
@@ -122,7 +127,7 @@ class PlaceDetailsScreen extends BaseScreen {
                                 this.navTitleView = navTitleView;
                             }}
                         >
-                            <Text style={styles.navTitle}>KFC</Text>
+                            <Text style={styles.navTitle}>{place.name}</Text>
                         </Animatable.View>
                     )}
                 >
@@ -133,7 +138,7 @@ class PlaceDetailsScreen extends BaseScreen {
                         onDisplay={() => this.navTitleView.fadeOut((40 + getStatusBarHeight()))}
                     >
                         <View style={{ flexDirection: 'row', height: 40 }}>
-                            <Text numberOfLines={2} ellipsizeMode='tail' style={{ flex: 7, fontWeight: 'bold', fontSize: 20, alignSelf: 'center' }}>KFC</Text>
+                            <Text numberOfLines={2} ellipsizeMode='tail' style={{ flex: 7, fontWeight: 'bold', fontSize: 20, alignSelf: 'center' }}>{place.name}</Text>
                             <View style={{ flex: 4.5, flexDirection: 'row' }}>
                                 <View style={{ flex: 1.5, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
                                     <Image
@@ -143,7 +148,7 @@ class PlaceDetailsScreen extends BaseScreen {
                                         }}
                                         source={IconAssets.starIcon}
                                     />
-                                    <Text style={{ color: '#646464', fontWeight: '400', fontSize: 11, marginLeft: 2 }}>8.9</Text>
+                                    <Text style={{ color: '#646464', fontWeight: '400', fontSize: 11, marginLeft: 2 }}>{place.avgRating}</Text>
                                 </View>
                                 <View style={{ flex: 1.5, justifyContent: 'center', alignItems: 'center' }}>
                                     <TouchableOpacity>
@@ -181,7 +186,7 @@ class PlaceDetailsScreen extends BaseScreen {
                         <View style={{ height: this.state.expanded ? 240 : 0 }}>
                             <View style={{ flex: 2.5, overflow: 'hidden' }}>
                                 <View style={{ justifyContent: 'center', alignItems: 'flex-start', flex: 0.5 }}>
-                                    <Text style={{ fontSize: 15, color: BASE_COLOR.darkGray }}>$$$</Text>
+                                    <Text style={{ fontSize: 15, color: BASE_COLOR.darkGray }}>{avgPriceTag(place.avgPriceTag)}</Text>
                                 </View>
                                 <View style={{ flexDirection: 'row', alignItems: 'center', flex: 0.5 }}>
                                     <Image style={{ width: 24 }} resizeMode='contain' source={IconAssets.deliveryTimeIcon}></Image>
@@ -194,26 +199,21 @@ class PlaceDetailsScreen extends BaseScreen {
                                 </View>
                                 <View style={{ flexDirection: 'row', alignItems: 'center', flex: 0.5 }}>
                                     <Image style={{ width: 30 }} resizeMode='contain' source={IconAssets.cashIcon}></Image>
-                                    <Image style={{ width: 28, marginLeft: 8 }} resizeMode='contain' source={IconAssets.cardIcon}></Image>
+                                    {place.onlinePayment ? <Image style={{ width: 28, marginLeft: 8 }} resizeMode='contain' source={IconAssets.cardIcon}></Image> : null}
                                 </View>
                                 <View style={{ flexDirection: 'row', alignItems: 'center', flex: 0.5 }}>
                                     <Text style={{ fontSize: 15, color: BASE_COLOR.darkGray }}>Open today: </Text>
-                                    <Text style={{ fontSize: 15, fontWeight: '600' }}>08:00-24.00</Text>
+                                    <Text style={{ fontSize: 15, fontWeight: '600' }}>{place.openDays? openDays(place.openDays): "-"}</Text>
                                 </View>
                             </View>
                             <View style={{ backgroundColor: BASE_COLOR.gray, height: 1, marginTop: 10, marginBottom: 10 }}></View>
-                            <Text numberOfLines={4} ellipsizeMode='tail' style={{ marginBottom: 10 }}>
-                                Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-                                Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,
-                                when an unknown printer took a galley of type and scrambled it to make a type specimen book.
-                                It has survived not only five centuries, but also the leap into electronic typesetting,
-                                remaining essentially unchanged.
-                            </Text>
+                            <Text numberOfLines={4} ellipsizeMode='tail' style={{ marginBottom: 10 }}>{place.description}</Text>
                         </View>
 
                     </TriggeringView>
                     <View style={{ backgroundColor: '#E5E5E5', height: 3 }}></View>
                     <DishList data={menuItems} />
+                    <Image source={{ uri: place.image169 }} />
 
                     {/* </View> */}
                 </HeaderImageScrollView>

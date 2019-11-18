@@ -11,7 +11,7 @@ class DishList extends Component {
                 <FlatList
                     data={this.props.data}
                     keyExtractor={item => item._id}
-                    renderItem={({ item }) => <DishCard name={item.name} description={item.description} image={item.image.image169t}/>}
+                    renderItem={({ item }) => <DishCard dish={item} />}
                 />
             </View>
         )

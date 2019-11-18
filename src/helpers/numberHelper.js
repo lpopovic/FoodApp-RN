@@ -1,3 +1,5 @@
+import Moment from "moment";
+
 function abbrNum(number, decPlaces) {
     // 2 decimal places => 100, 3 => 1000, etc
     decPlaces = Math.pow(10, decPlaces);
@@ -34,4 +36,30 @@ function abbrNum(number, decPlaces) {
     return number;
 }
 
-export { abbrNum };
+
+function avgPriceTag(avgPriceTag) {
+    switch (Number(avgPriceTag).toFixed(0)) {
+        case '2':
+            return "$$"
+        case '3':
+            return "$$$"
+        case '4':
+            return "$$$$"
+        case '5':
+            return "$$$$$"
+        default:
+            return "-"
+    }
+}
+
+function openDays(openDays) {
+    
+    let currentDay;
+    currentDay = openDays.find(item => { return item.day === Moment().day()})
+    let from = Moment(currentDay.from).local().format('HH:mm')
+    let to = Moment(currentDay.to).local().format('HH:mm')
+
+    return `${from}-${to}`
+}
+
+export { abbrNum, avgPriceTag, openDays };

@@ -138,20 +138,20 @@ class CateringScreen extends BaseScreen {
                 _id: "5da869da91408d5e6002577f",
                 description: "Bruskete (bruschette) su italijansko predjelo, idealni za lagani obrok ili užinu, a na žurkama će biti omiljeni sendiviči. Ovi ukusni zalogajčići su hranjivi i ne previše kalorični, a nekoliko brusketa će zasititi u potpunosti i okorele gurmane i „mesojede“.",
                 name: "Brusketi",
-                link: "https://api.ketering.rtech.rs/uploads/bf7966d5-c162-e61b-d79c-3d35ac11339c-169.png?caption=Brusketi",
-            },
-            {
-                _id: "5da9a5d74157831bf8c616ef",
-                description: "Salata, pomfrit, hleb, juneće meso",
-                name: "Ćevapi",
-                link: "https://api.ketering.rtech.rs/uploads/6bfe163b-8e8f-ed77-bcdf-f8a5106e9d20-169.png?caption=Cevapi",
-            },
-            {
-                _id: "5da9a6024157831bf8c616f0",
-                description: "Juneće meso, salata, hleb, pomfrit",
-                name: "Pljeskavica",
-                link: "https://api.ketering.rtech.rs/uploads/b462bad1-d85d-e381-c624-811a833bd12c-169.png?caption=Pljeskavica",
-            },
+                image: {
+                    _id: "5da86b1e91408d5e60025782",
+
+                    image11: "https://api.ketering.rtech.rs/uploads/bf7966d5-c162-e61b-d79c-3d35ac11339c-11.png?caption=Brusketi",
+                
+                    image11t: "https://api.ketering.rtech.rs/uploads/bf7966d5-c162-e61b-d79c-3d35ac11339c-11t.png?caption=Brusketi",
+                
+                    image169: "https://api.ketering.rtech.rs/uploads/bf7966d5-c162-e61b-d79c-3d35ac11339c-169.png?caption=Brusketi",
+                
+                    image169t: "https://api.ketering.rtech.rs/uploads/bf7966d5-c162-e61b-d79c-3d35ac11339c-169t.png?caption=Brusketi",
+                
+                    link: "/uploads/bf7966d5-c162-e61b-d79c-3d35ac11339c-???.png?caption=Brusketi"
+                    }
+                },
         ];
 
         const PlaceData = [
@@ -172,7 +172,8 @@ class CateringScreen extends BaseScreen {
         const { markedDates } = this.state
         if (markedDates.some(item => item.date === this.state.selectedDate)) {
             return (
-                <DishCard name={DishData[0].name} image={DishData[0].link} description={DishData[0].description} />
+                // <DishCard name={DishData[0].name} image={DishData[0].link} description={DishData[0].description} />
+                <DishCard dish={DishData[0]} />
             )
         } else if (Moment(this.state.selectedDate).isAfter(Moment())){
             return (
