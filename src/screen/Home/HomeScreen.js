@@ -14,7 +14,7 @@ import { NAV_COLOR, BASE_COLOR } from '../../styles';
 import { CategorySectionList } from '../../components/Category/CategoryList'
 import { PlaceSectionList } from '../../components/Place/PlaceList'
 import HomeCaroselComponent from '../../components/Home/HomeCaroselComponent';
-import { PlaceNetwork, CategoryNetwork } from '../../service/api'
+import { PlaceNetwork, CategoryNetwork, ParamsUrl } from '../../service/api'
 
 class HomeScreen extends BaseScreen {
     static navigationOptions = {
@@ -142,7 +142,11 @@ class HomeScreen extends BaseScreen {
         return (
             <CategorySectionList
                 arrayObject={categories}
-                onPressItem={(item) => this.pushNewScreen({ routeName: ScreenName.PlaceListScreen(), key: `${Math.random() * 10000}`, params: { title: "KATEGORIJA REST." } })}
+                onPressItem={(item) => this.pushNewScreen({
+                    routeName: ScreenName.PlaceListScreen(),
+                    key: `${Math.random() * 10000}`,
+                    params: { title: item.name.toUpperCase(), apiParams: ParamsUrl.category(item._id) }
+                })}
                 onPressSeeMore={() => this.pushNewScreen(ScreenName.CategoryScreen())}
             />
         )

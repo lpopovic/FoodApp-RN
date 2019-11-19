@@ -5,6 +5,7 @@ export const STORAGE_KEY = {
     JWT_APP_USER: 'JWT_APP_USER',
     USER_APP_DATA: 'USER_APP_DATA',
     USER_LAST_LOCATION: 'USER_LAST_LOCATION',
+    SEARCH_FILTER:'SEARCH_FILTER',
 }
 
 export const saveStorageData = async (object, key) => {

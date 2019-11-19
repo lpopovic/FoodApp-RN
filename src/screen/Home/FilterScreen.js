@@ -16,7 +16,8 @@ import MultiSlider from '@ptomasroos/react-native-multi-slider'
 import { NAV_COLOR, BASE_COLOR, STAR_COLOR } from '../../styles'
 import { IconAssets } from '../../assets';
 
-
+import { connect } from 'react-redux';
+import { updateSearchFilter } from '../../store/actions'
 class FilterScreen extends BaseScreen {
 
     static navigationOptions = {
@@ -27,45 +28,46 @@ class FilterScreen extends BaseScreen {
         super(props)
         this.bottomBtnTitle = "Sačuvaj izmene"
         this.state = {
-            loading: false,
-            ratingCount: 0.5,
-            priceTag: 0,
+            avgRating: 0.5,
+            avgPriceTag: 0,
             rangeValue: 10,
-            // scrollEnabled: true,
+            delivery: true,
+            pickup: true,
         }
     }
 
     componentDidMount() {
         super.componentDidMount()
         this.setStatusBarStyle(NAV_COLOR.headerBackground, true)
-        this.setNewStateHandler({ loading: true })
-
-        setTimeout(() => {
-            this.setNewStateHandler({ loading: false })
-        }, 1000);
-
-
+        this.getFilterValueFromReducer()
 
     }
     componentWillUnmount() {
         super.componentWillUnmount()
     }
+
+    getFilterValueFromReducer = () => {
+        const { filter } = this.props
+        this.setNewStateHandler({
+            avgRating: filter.avgRating,
+            avgPriceTag: filter.avgPriceTag,
+            rangeValue: filter.rangeValue,
+            delivery: filter.delivery,
+            pickup: filter.pickup,
+        })
+    }
     onStarRatingPress(rating) {
         this.setNewStateHandler({
-            ratingCount: rating
+            avgRating: rating
         });
     }
     onPriceTagPress(tag) {
         this.setNewStateHandler({
-            priceTag: tag
+            avgPriceTag: tag
         });
     }
     onResetBtnPress = () => {
-        this.setNewStateHandler({
-            priceTag: 0,
-            ratingCount: 0,
-            rangeValue: 10,
-        });
+        this.getFilterValueFromReducer()
     }
 
     onSaveChangesBtnPress = () => {
@@ -74,6 +76,7 @@ class FilterScreen extends BaseScreen {
         if (filterData != null) {
             this.closeScreen()
             filterData()
+            this.props.updateSearchFilterHandler(this.state)
         }
 
 
@@ -90,7 +93,7 @@ class FilterScreen extends BaseScreen {
                     <StarRating
                         disabled={false}
                         maxStars={5}
-                        rating={this.state.ratingCount ? this.state.ratingCount : 0}
+                        rating={this.state.avgRating ? this.state.avgRating : 0}
                         starSize={40}
                         halfStarEnabled={true}
                         emptyStarColor={BASE_COLOR.lightGray}
@@ -101,25 +104,47 @@ class FilterScreen extends BaseScreen {
             </View>
         )
     }
-    openNowContent = () => {
-        const text = 'OPEN NOW'
+    pickupContent = () => {
+        const text = 'PICKUP'
+        const { pickup } = this.state
         return (
             <View style={styles.baseContainer}>
                 <View>
                     <Text style={[styles.baseText, { color: BASE_COLOR.black }]}>{text}</Text>
                 </View>
+                 <TouchableOpacity onPress={()=>this.setNewStateHandler({ pickup: !pickup })}> 
+                    <View style={{ width: 32, aspectRatio: 1, borderRadius: 16, alignSelf: 'center', justifyContent: 'center', alignItems: 'center', backgroundColor: BASE_COLOR.white, borderColor: BASE_COLOR.gray, borderWidth: 2 }}>
+
+                        <View style={{ width: 20, aspectRatio: 1, borderRadius: 10, alignSelf: 'center', justifyContent: 'center', alignItems: 'center', backgroundColor: pickup == true ? BASE_COLOR.blue : BASE_COLOR.gray, borderColor: BASE_COLOR.gray, borderWidth: 2 }}>
+                        </View>
+
+                    </View>
+                 </TouchableOpacity> 
+            </View>
+        )
+    }
+    deliveryContent = () => {
+        const text = 'DELIVERY'
+        const { delivery } = this.state
+        return (
+            <View style={styles.baseContainer}>
+                <View>
+                    <Text style={[styles.baseText, { color: BASE_COLOR.black }]}>{text}</Text>
+                </View>
+                <TouchableOpacity onPress={()=>this.setNewStateHandler({ delivery: !delivery })}> 
                 <View style={{ width: 32, aspectRatio: 1, borderRadius: 16, alignSelf: 'center', justifyContent: 'center', alignItems: 'center', backgroundColor: BASE_COLOR.white, borderColor: BASE_COLOR.gray, borderWidth: 2 }}>
 
-                    <View style={{ width: 20, aspectRatio: 1, borderRadius: 10, alignSelf: 'center', justifyContent: 'center', alignItems: 'center', backgroundColor: BASE_COLOR.blue, borderColor: BASE_COLOR.gray, borderWidth: 2 }}>
+                    <View style={{ width: 20, aspectRatio: 1, borderRadius: 10, alignSelf: 'center', justifyContent: 'center', alignItems: 'center', backgroundColor: delivery == true ? BASE_COLOR.blue : BASE_COLOR.gray, borderColor: BASE_COLOR.gray, borderWidth: 2 }}>
                     </View>
 
                 </View>
+                </TouchableOpacity>
             </View>
         )
     }
     priceContent = () => {
         const text = 'PRICE'
-        const { priceTag } = this.state
+        const { avgPriceTag } = this.state
         return (
             <View style={styles.baseContainer}>
                 <View>
@@ -127,23 +152,23 @@ class FilterScreen extends BaseScreen {
                 </View>
                 <View style={{ alignSelf: 'center', justifyContent: 'center', alignItems: 'center', flexDirection: 'row' }}>
 
-                    <TouchableOpacity onPress={() => this.onPriceTagPress(0)}>
-                        <View style={[styles.priceTagContainer, { backgroundColor: priceTag >= 0 ? BASE_COLOR.blue : BASE_COLOR.gray }]}>
+                    <TouchableOpacity onPress={() => this.onPriceTagPress(1)}>
+                        <View style={[styles.priceTagContainer, { backgroundColor: avgPriceTag >= 1 ? BASE_COLOR.blue : BASE_COLOR.gray }]}>
                             <Text style={styles.priceTagText}>$$</Text>
                         </View>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => this.onPriceTagPress(1)}>
-                        <View style={[styles.priceTagContainer, { backgroundColor: priceTag >= 1 ? BASE_COLOR.blue : BASE_COLOR.gray }]}>
+                    <TouchableOpacity onPress={() => this.onPriceTagPress(2)}>
+                        <View style={[styles.priceTagContainer, { backgroundColor: avgPriceTag >= 2 ? BASE_COLOR.blue : BASE_COLOR.gray }]}>
                             <Text style={styles.priceTagText}>$$$</Text>
                         </View>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => this.onPriceTagPress(2)}>
-                        <View style={[styles.priceTagContainer, { backgroundColor: priceTag >= 2 ? BASE_COLOR.blue : BASE_COLOR.gray }]}>
+                    <TouchableOpacity onPress={() => this.onPriceTagPress(3)}>
+                        <View style={[styles.priceTagContainer, { backgroundColor: avgPriceTag >= 3 ? BASE_COLOR.blue : BASE_COLOR.gray }]}>
                             <Text style={styles.priceTagText}>$$$$</Text>
                         </View>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => this.onPriceTagPress(3)}>
-                        <View style={[styles.priceTagContainer, { backgroundColor: priceTag >= 3 ? BASE_COLOR.blue : BASE_COLOR.gray }]}>
+                    <TouchableOpacity onPress={() => this.onPriceTagPress(4)}>
+                        <View style={[styles.priceTagContainer, { backgroundColor: avgPriceTag >= 4 ? BASE_COLOR.blue : BASE_COLOR.gray }]}>
                             <Text style={styles.priceTagText}>$$$$$</Text>
                         </View>
                     </TouchableOpacity>
@@ -197,7 +222,10 @@ class FilterScreen extends BaseScreen {
                     {this.ratingContent()}
                 </>
                 <>
-                    {this.openNowContent()}
+                    {this.pickupContent()}
+                </>
+                <>
+                    {this.deliveryContent()}
                 </>
                 <>
                     {this.priceContent()}
@@ -230,8 +258,7 @@ class FilterScreen extends BaseScreen {
         )
     }
     render() {
-        const { loading } = this.state
-        const mainDisplay = loading ? this.activityIndicatorContent(BASE_COLOR.blue) : this.mainContent()
+        const mainDisplay = this.mainContent()
         return (
             <SafeAreaView style={styles.safeAreaHeader}>
                 <View style={styles.mainContainer}>
@@ -335,4 +362,16 @@ const styles = StyleSheet.create({
 });
 
 
-export default FilterScreen;
+const mapStateToProps = state => {
+    return {
+        filter: state.filter.filter,
+    };
+};
+
+const mapDispatchToProps = dispatch => {
+    return {
+        updateSearchFilterHandler: (filter) => dispatch(updateSearchFilter(filter)),
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(FilterScreen);

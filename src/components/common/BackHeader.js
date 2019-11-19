@@ -38,7 +38,7 @@ class BackHeader extends Component {
         const title = this.props.navigation.getParam('title', null)
         if (title) {
             return (
-                <View style={styles.titleContainer}>
+                <View style={[styles.titleContainer,]}>
                     <Text style={[headerStyles.btnText, { color: tintColor }]}>{title}</Text>
                 </View>
             )
@@ -63,8 +63,9 @@ class BackHeader extends Component {
                             <Text style={[headerStyles.btnText, { color: tintColor }]}>{this.leftBtnTitle}</Text>
                         </View>
                     </TouchableOpacity>
-                    {/* {this.titleDisplay(tintColor)} */}
+                    {this.titleDisplay(tintColor)}
                     {filterDisplay}
+
                 </View>
             </View>
         )

@@ -27,6 +27,7 @@ class PlaceNetwork {
             const url = RestUrl.getPlaces(params)
             try {
                 const { data } = await axios.get(url)
+
                 const places = Place.createArrayPlaces(data)
 
                 resolve(places)
