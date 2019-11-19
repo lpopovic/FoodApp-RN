@@ -27,6 +27,10 @@ class RestUrl {
         }
        
     }
+
+    static getAllcategories = withKey(`categories`)
+
+
 }
 
 class ParamsUrl {

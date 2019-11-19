@@ -14,7 +14,7 @@ import { NAV_COLOR, BASE_COLOR } from '../../styles';
 import { CategorySectionList } from '../../components/Category/CategoryList'
 import { PlaceSectionList } from '../../components/Place/PlaceList'
 import HomeCaroselComponent from '../../components/Home/HomeCaroselComponent';
-import { PlaceNetwork } from '../../service/api'
+import { PlaceNetwork, CategoryNetwork } from '../../service/api'
 
 class HomeScreen extends BaseScreen {
     static navigationOptions = {
@@ -64,6 +64,19 @@ class HomeScreen extends BaseScreen {
                 this.setNewStateHandler({
                     loading: false,
                     refreshing: false,
+                })
+            }
+        )
+
+        CategoryNetwork.fetchCategories().then(
+            res => {
+                this.setNewStateHandler({
+                    categories: res,
+                })
+            },
+            err => {
+                this.setNewStateHandler({
+                    categories: []
                 })
             }
         )
@@ -125,9 +138,10 @@ class HomeScreen extends BaseScreen {
         )
     }
     categoryListContent = () => {
+        const { categories } = this.state
         return (
             <CategorySectionList
-                arrayObject={["", "asda", "lazar", "", "asda", "lazar", "", "asda", "lazar", "", "asda", "lazar", "", "asda", "lazar"]}
+                arrayObject={categories}
                 onPressItem={(item) => this.pushNewScreen({ routeName: ScreenName.PlaceListScreen(), key: `${Math.random() * 10000}`, params: { title: "KATEGORIJA REST." } })}
                 onPressSeeMore={() => this.pushNewScreen(ScreenName.CategoryScreen())}
             />
@@ -193,9 +207,9 @@ class HomeScreen extends BaseScreen {
         return (
             <SafeAreaView style={styles.safeAreaHeader}>
                 <View style={styles.mainContainer}>
-                    <Header 
-                    backgroundColor={NAV_COLOR.headerBackground} 
-                    showFilter={this._filterData}
+                    <Header
+                        backgroundColor={NAV_COLOR.headerBackground}
+                        showFilter={this._filterData}
                     />
                     {mainDisplay}
                 </View>
