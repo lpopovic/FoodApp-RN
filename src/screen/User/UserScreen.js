@@ -13,11 +13,12 @@ import {
 import { ScreenName } from '../../helpers'
 import Header from '../../components/common/UserHeader'
 import BaseScreen from "../BaseScreen/BaseScreen"
+import { HistoryOrderList } from '../../components/HistoryOrder'
 import { NAV_COLOR, BASE_COLOR } from '../../styles';
 import { connect } from 'react-redux';
 import { updateUserProfile } from '../../store/actions'
 import { UserNetwork } from '../../service/api'
-import { TestAssets, IconAssets } from '../../assets'
+import { TestAssets, } from '../../assets'
 
 
 class UserScreen extends BaseScreen {
@@ -70,10 +71,10 @@ class UserScreen extends BaseScreen {
     infoContent = (type, text) => {
         return (
             <View style={styles.baseContainer}>
-                <View style={{ flex: 3 }}>
+                <View style={{ flex: 4 }}>
                     <Text style={[styles.baseText, { color: BASE_COLOR.black }]}>{type}:</Text>
                 </View>
-                <View style={{ marginRight: 8, flex: 7 }}>
+                <View style={{flex: 6 }}>
                     <Text
                         ellipsizeMode='tail'
                         numberOfLines={6}
@@ -86,12 +87,12 @@ class UserScreen extends BaseScreen {
         const type = "RECENT ORDERS"
         return (
             <View style={[styles.baseContainer, { flexDirection: 'column' }]}>
-                <View style={{ alignSelf: 'flex-start' }}>
+                <View style={{ alignSelf: 'flex-start', marginBottom: 8 }}>
                     <Text style={[styles.baseText, { color: BASE_COLOR.black }]}>{type}:</Text>
                 </View>
-                <View style={{ alignSelf: 'flex-start' }}>
-                    <Text style={[styles.baseText, { color: BASE_COLOR.black, fontWeight: 'normal' }]}>ORDER FLAT LIST</Text>
-                </View>
+                <HistoryOrderList
+                    arrayObject={["lazar","lazar","lazar","lazar","lazar","lazar","lazar","lazar"]}
+                />
             </View>
         )
     }

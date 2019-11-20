@@ -1,22 +1,52 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-
+import {
+    View,
+    FlatList,
+    Keyboard,
+    StyleSheet
+} from 'react-native';
+import { HistoryOrder } from './HistoryOrder'
 class HistoryOrderList extends Component {
+    _onScroll = (event) => {
+        Keyboard.dismiss()
+    }
+
+    FlatListItemSeparator = () => {
+        return (
+          <View
+            style={{
+              height: 4,
+              width: "100%",
+            }}
+          />
+        );
+      }
 
     render() {
         return (
-            <View style={styles.mainContainer}>
+            <FlatList
+                refreshControl={this.props.refreshControl}
+                style={styles.listContainer}
+                data={this.props.arrayObject}
+                onScroll={this._onScroll}
+                keyExtractor={(index) => `${Math.random() * Math.random()}${index.toString()}`}
+                renderItem={(info) => (
+                    <HistoryOrder
+                        item={info.item}
+                    />
+                )}
+                ItemSeparatorComponent = {this.FlatListItemSeparator}
 
-            </View>
+            />
         )
     }
 }
 
 const styles = StyleSheet.create({
-    mainContainer: {
-        flex: 1
-    }
+    listContainer: {
+        width: "100%",
+    },
 });
 
 
-export default HistoryOrderList;
+export { HistoryOrderList }
