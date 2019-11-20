@@ -5,7 +5,15 @@ import {
 
 const initialState = {
     JWT: null,
-    userInfo: null,
+    userInfo: {
+        _id :'Unknown id',
+        username :'Unknown username',
+        image: null,
+        email: 'Unknown email',
+        company: null,
+        catheringOptions: null,
+        catheringIsAvailable: null,
+    },
 };
 
 const reducer = (state = initialState, action) => {
