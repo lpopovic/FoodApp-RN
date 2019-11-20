@@ -2,9 +2,12 @@ import React, { Component } from 'react';
 import {
     SafeAreaView,
     View,
+    Image,
     ScrollView,
+    SectionList,
     RefreshControl,
     Text,
+    TouchableOpacity,
     StyleSheet
 } from 'react-native';
 import { ScreenName } from '../../helpers'
@@ -14,6 +17,9 @@ import { NAV_COLOR, BASE_COLOR } from '../../styles';
 import { connect } from 'react-redux';
 import { updateUserProfile } from '../../store/actions'
 import { UserNetwork } from '../../service/api'
+import { TestAssets, IconAssets } from '../../assets'
+
+
 class UserScreen extends BaseScreen {
     static navigationOptions = {
         header: null,
@@ -28,7 +34,7 @@ class UserScreen extends BaseScreen {
     componentDidMount() {
         super.componentDidMount()
         this.setStatusBarStyle(NAV_COLOR.headerBackground, true)
-        
+
     }
     componentWillUnmount() {
         super.componentWillUnmount()
@@ -52,6 +58,43 @@ class UserScreen extends BaseScreen {
         this.setNewStateHandler({ refreshing: true });
         this.apiCallHandler()
     }
+    userImageContent = () => {
+        return (
+            <View style={{ justifyContent: 'center', alignContent: 'center', alignItems: 'center' }}>
+                <View style={styles.userImage}>
+                    <Image source={TestAssets.KFC_logo} style={{ width: '100%', height: '100%' }} resizeMode='contain' />
+                </View>
+            </View>
+        )
+    }
+    infoContent = (type, text) => {
+        return (
+            <View style={styles.baseContainer}>
+                <View style={{ flex: 3 }}>
+                    <Text style={[styles.baseText, { color: BASE_COLOR.black }]}>{type}:</Text>
+                </View>
+                <View style={{ marginRight: 8, flex: 7 }}>
+                    <Text
+                        ellipsizeMode='tail'
+                        numberOfLines={6}
+                        style={[styles.baseText, { color: BASE_COLOR.black, fontWeight: 'normal' }]}>{text}</Text>
+                </View>
+            </View>
+        )
+    }
+    recentOrdersContent = () => {
+        const type = "RECENT ORDERS"
+        return (
+            <View style={[styles.baseContainer, { flexDirection: 'column' }]}>
+                <View style={{ alignSelf: 'flex-start' }}>
+                    <Text style={[styles.baseText, { color: BASE_COLOR.black }]}>{type}:</Text>
+                </View>
+                <View style={{ alignSelf: 'flex-start' }}>
+                    <Text style={[styles.baseText, { color: BASE_COLOR.black, fontWeight: 'normal' }]}>ORDER FLAT LIST</Text>
+                </View>
+            </View>
+        )
+    }
     mainContent = () => {
         const { refreshing } = this.state
         const {
@@ -69,10 +112,13 @@ class UserScreen extends BaseScreen {
                     />
                 }
                 style={{ flex: 1 }}>
-                <View style={{ flex: 1 }}>
-                    <Text>{email}</Text>
-                    <Text>{username}</Text>
-                    <Text>{_id}</Text>
+                <View style={styles.scrollViewContainer}>
+                    {this.userImageContent()}
+                    {this.infoContent("USERNAME", username)}
+                    {this.infoContent("EMAIL", email)}
+                    {this.infoContent("USER ID", _id)}
+                    {this.infoContent("ADRESS", "Petra Lekovica 30v, Kraljevo")}
+                    {this.recentOrdersContent()}
                 </View>
             </ScrollView>
         )
@@ -109,7 +155,39 @@ const styles = StyleSheet.create({
     mainContainer: {
         flex: 1,
         backgroundColor: BASE_COLOR.white
-    }
+    },
+    scrollViewContainer: {
+        flex: 1,
+        padding: 16,
+        paddingTop: 8,
+    },
+    baseContainer: {
+        flex: 10,
+        marginTop: 8,
+        flexDirection: 'row',
+        alignItems: 'center',
+        borderBottomColor: BASE_COLOR.gray,
+        borderBottomWidth: 1,
+        paddingBottom: 8,
+        minHeight: 35,
+    },
+    baseText: {
+        width: '100%',
+        color: BASE_COLOR.white,
+        fontSize: 14,
+        fontWeight: 'bold',
+        textAlignVertical: 'center',
+    },
+    userImage: {
+        height: 150,
+        aspectRatio: 1,
+        borderColor: BASE_COLOR.blue,
+        borderRadius: 75,
+        borderWidth: 2,
+        backgroundColor: BASE_COLOR.blue,
+        overflow: 'hidden'
+    },
+
 });
 const mapStateToProps = state => {
     return {

@@ -25,8 +25,11 @@ class UserHeader extends Component {
         alert("onPressUserSettings")
     }
     onPressShop = () => {
-     this.props.navigation.navigate(ScreenName.ShopScreen())
-        
+        this.props.navigation.navigate(ScreenName.ShopScreen())
+
+    }
+    onPressUserHistory = () => {
+        alert("onPressUserHistory")
     }
     render() {
         const tintColor = NAV_COLOR.darkGray
@@ -63,6 +66,11 @@ class UserHeader extends Component {
                     </View>
 
                     <View style={styles.rightBtn}>
+                        <TouchableOpacity onPress={() => this.onPressUserHistory()}>
+                            <View style={[styles.imageOtherContainer, styles.imageContainer]}>
+                                <Icon name="history" size={25} color={tintColor} />
+                            </View>
+                        </TouchableOpacity>
                         <TouchableOpacity onPress={() => this.onPressUserSettings()}>
                             <View style={[styles.imageOtherContainer, styles.imageContainer]}>
                                 <Icon name="cog" size={25} color={tintColor} />
