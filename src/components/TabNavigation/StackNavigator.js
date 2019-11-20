@@ -59,8 +59,8 @@ const CateringStack = createStackNavigator({
 const UserStack = createStackNavigator({
     cateringapp_User: UserScreen,
     cateringapp_Detail: DetailScreen,
-
-
+    cateringapp_Filter: FilterScreen,
+    cateringapp_Shop: ShopScreen,
 })
 
 

@@ -8,7 +8,7 @@ import {
     StyleSheet
 } from 'react-native';
 import { ScreenName } from '../../helpers'
-import Header from '../../components/common/BaseHeader'
+import Header from '../../components/common/UserHeader'
 import BaseScreen from "../BaseScreen/BaseScreen"
 import { NAV_COLOR, BASE_COLOR } from '../../styles';
 import { connect } from 'react-redux';

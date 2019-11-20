@@ -7,6 +7,7 @@ import {
     StyleSheet
 } from 'react-native';
 import { withNavigation } from 'react-navigation'
+import Icon from 'react-native-vector-icons/dist/FontAwesome';
 import { IconAssets, TestAssets } from '../../assets'
 import { BASE_COLOR, headerStyles, NAV_COLOR } from '../../styles'
 import { ScreenName } from '../../helpers'
@@ -26,10 +27,7 @@ class BackHeader extends Component {
         <TouchableOpacity onPress={() => this.filterPressHandler()}>
             <View style={styles.rightBtn}>
                 <View style={[styles.imageOtherContainer, styles.imageContainer]}>
-                    <Image
-                        source={TestAssets.filterIcon}
-                        style={[styles.baseImage, { tintColor: tintColor }]}
-                        resizeMode='contain' />
+                    <Icon name="sliders" size={25} color={tintColor} />
                 </View>
             </View>
         </TouchableOpacity>

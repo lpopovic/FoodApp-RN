@@ -12,7 +12,8 @@ import { connect } from 'react-redux';
 import { withNavigation } from 'react-navigation'
 import { ScreenName } from '../../helpers'
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
-class BaseHeader extends Component {
+
+class UserHeader extends Component {
 
     constructor(props) {
         super(props)
@@ -20,8 +21,12 @@ class BaseHeader extends Component {
     onPressChangeLocation = () => {
         this.props.navigation.navigate(ScreenName.MainLocationScreen(), { backToMainScreen: true })
     }
-    onPressFilterHandler = () => {
-        this.props.navigation.navigate(ScreenName.FilterScreen(), { filter: this.props.showFilter })
+    onPressUserSettings = () => {
+        alert("onPressUserSettings")
+    }
+    onPressShop = () => {
+     this.props.navigation.navigate(ScreenName.ShopScreen())
+        
     }
     render() {
         const tintColor = NAV_COLOR.darkGray
@@ -58,21 +63,12 @@ class BaseHeader extends Component {
                     </View>
 
                     <View style={styles.rightBtn}>
-                        <TouchableOpacity onPress={() => this.props.navigation.navigate(ScreenName.SearchTab())}>
+                        <TouchableOpacity onPress={() => this.onPressUserSettings()}>
                             <View style={[styles.imageOtherContainer, styles.imageContainer]}>
-                                <Image
-                                    source={TestAssets.searchIcon}
-                                    style={[styles.baseImage, { tintColor: tintColor }]}
-                                    resizeMode='contain' />
+                                <Icon name="cog" size={25} color={tintColor} />
                             </View>
                         </TouchableOpacity>
-                        <TouchableOpacity onPress={() => this.onPressFilterHandler()}>
-                            <View style={[styles.imageOtherContainer, styles.imageContainer]}>
-
-                                <Icon name="sliders" size={25} color={tintColor} />
-                            </View>
-                        </TouchableOpacity>
-                        <TouchableOpacity onPress={() => this.props.navigation.navigate(ScreenName.ShopScreen())}>
+                        <TouchableOpacity onPress={() => this.onPressShop()}>
                             <View style={[styles.imageOtherContainer]}>
                                 <Image
                                     source={TestAssets.shopBagIcon}
@@ -143,4 +139,4 @@ const mapStateToProps = state => {
     };
 };
 
-export default connect(mapStateToProps, null)(withNavigation(BaseHeader));
+export default connect(mapStateToProps, null)(withNavigation(UserHeader));
