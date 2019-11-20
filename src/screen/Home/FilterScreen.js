@@ -202,7 +202,7 @@ class FilterScreen extends BaseScreen {
                     values={[rangeValue]}
                     onValuesChangeFinish={(values) => this.setNewStateHandler({ rangeValue: values[0] })}
                     min={0}
-                    max={30}
+                    max={31}
                     step={1}
                     sliderLength={Dimensions.get('screen').width - 50}
                     trackStyle={{
