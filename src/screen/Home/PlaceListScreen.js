@@ -48,10 +48,10 @@ class PlaceListScreen extends BaseScreen {
         if (apiParams !== null) {
             params.push(apiParams)
         }
-        if (pickup == true) {
+        if(pickup == true) {
             params.push(ParamsUrl.pickup(pickup))
         }
-        if (delivery == true) {
+        if(delivery == true) {
             params.push(ParamsUrl.delivery(delivery))
         }
         params.push(ParamsUrl.avgPriceTag(avgPriceTag))
@@ -95,7 +95,7 @@ class PlaceListScreen extends BaseScreen {
                     />
                 }
                 arrayObject={arrayPlaces}
-                onPressItem={(item) => this.pushNewScreen({ routeName: ScreenName.PlaceDetailScreen(), key: `${Math.random() * 10000}${item._id}` })} />
+                onPressItem={(item) => this.pushNewScreen({ routeName: ScreenName.PlaceDetailScreen(), key: `${Math.random() * 10000}${item._id}`, params:{ _id: item._id} })} />
         )
     }
     render() {

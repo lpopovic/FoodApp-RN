@@ -15,7 +15,6 @@ import configurateStore from './src/store/configureStore'
 const store = configurateStore();
 export default class App extends Component {
 
-
   render() {
     return (
       <Provider store={store}>

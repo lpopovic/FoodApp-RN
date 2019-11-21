@@ -25,8 +25,31 @@ class RestUrl {
         } else {
             return withKey(`places`)
         }
-
     }
+
+    static getPlaceById = (placeId) => {
+        return withKey(`places/${placeId}`)
+    }
+    static getMenuItems = (placeId) => {
+        return withKey(`menuitems?place=${placeId}`)
+    }
+    static getMenuItemById = (menuItemId) => {
+        return withKey(`menuitems/${menuItemId}`)
+    }
+
+
+    // static getMenuItems = (params) => {
+    //     if(params){
+    //         let param = ''
+    //         params.forEach(element => {
+    //             param = `${param}${element}&`
+    //         });
+    //         param = param.slice(0, -1)
+    //         return withKey(`menuitems?${param}`)
+    //     }else {
+    //         return withKey(`menuitems`)
+    //     }
+    // }
 
     static getAllcategories = withKey(`categories`)
 

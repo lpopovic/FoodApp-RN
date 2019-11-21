@@ -138,31 +138,31 @@ class CateringScreen extends BaseScreen {
                 _id: "5da869da91408d5e6002577f",
                 description: "Bruskete (bruschette) su italijansko predjelo, idealni za lagani obrok ili užinu, a na žurkama će biti omiljeni sendiviči. Ovi ukusni zalogajčići su hranjivi i ne previše kalorični, a nekoliko brusketa će zasititi u potpunosti i okorele gurmane i „mesojede“.",
                 name: "Brusketi",
-                link: "https://api.ketering.rtech.rs/uploads/bf7966d5-c162-e61b-d79c-3d35ac11339c-169.png?caption=Brusketi",
-            },
-            {
-                _id: "5da9a5d74157831bf8c616ef",
-                description: "Salata, pomfrit, hleb, juneće meso",
-                name: "Ćevapi",
-                link: "https://api.ketering.rtech.rs/uploads/6bfe163b-8e8f-ed77-bcdf-f8a5106e9d20-169.png?caption=Cevapi",
-            },
-            {
-                _id: "5da9a6024157831bf8c616f0",
-                description: "Juneće meso, salata, hleb, pomfrit",
-                name: "Pljeskavica",
-                link: "https://api.ketering.rtech.rs/uploads/b462bad1-d85d-e381-c624-811a833bd12c-169.png?caption=Pljeskavica",
-            },
+                image: {
+                    _id: "5da86b1e91408d5e60025782",
+
+                    image11: "https://api.ketering.rtech.rs/uploads/bf7966d5-c162-e61b-d79c-3d35ac11339c-11.png?caption=Brusketi",
+                
+                    image11t: "https://api.ketering.rtech.rs/uploads/bf7966d5-c162-e61b-d79c-3d35ac11339c-11t.png?caption=Brusketi",
+                
+                    image169: "https://api.ketering.rtech.rs/uploads/bf7966d5-c162-e61b-d79c-3d35ac11339c-169.png?caption=Brusketi",
+                
+                    image169t: "https://api.ketering.rtech.rs/uploads/bf7966d5-c162-e61b-d79c-3d35ac11339c-169t.png?caption=Brusketi",
+                
+                    link: "/uploads/bf7966d5-c162-e61b-d79c-3d35ac11339c-???.png?caption=Brusketi"
+                    }
+                },
         ];
 
         const PlaceData = [
             {
-                _id: "5da591366862d77054712886",
+                _id: "5da86ac391408d5e60025780",
                 description: "Ovde treba da bude opis. Ovde treba da bude opis. Ovde treba da bude opis. Ovde treba da bude opis. Ovde treba da bude opis. Ovde treba da bude opis. Ovde treba da bude opis.",
                 name: "Kod Saloa",
                 link: "https://api.ketering.rtech.rs/uploads/9ff15098-0366-0617-0540-b77c4fa3aa0e-11.png?caption=Kod%20Saloa"
             },
             {
-                _id: "5da5c6b36862d77054712889",
+                _id: "5da99a884157831bf8c616c6",
                 description: "Ovde treba da bude opis. Ovde treba da bude opis. Ovde treba da bude opis. Ovde treba da bude opis. Ovde treba da bude opis. Ovde treba da bude opis. Ovde treba da bude opis.",
                 name: "Kod Dzamboa",
                 link: "https://api.ketering.rtech.rs/uploads/c54153e5-b287-7307-aa52-b0c49f205a4a-11.png?caption=Kod%20Dzamboa"
@@ -172,18 +172,23 @@ class CateringScreen extends BaseScreen {
         const { markedDates } = this.state
         if (markedDates.some(item => item.date === this.state.selectedDate)) {
             return (
-                <DishCard name={DishData[0].name} image={DishData[0].link} description={DishData[0].description} />
+                // <DishCard name={DishData[0].name} image={DishData[0].link} description={DishData[0].description} />
+                <DishCard dish={DishData[0]} />
             )
-        } else {
+        } else if (Moment(this.state.selectedDate).isAfter(Moment())){
             return (
-                <PlaceList data={PlaceData} clickOnPlace={() => this.placeSelectHandler()} />
+                <PlaceList data={PlaceData} clickOnPlace={(placeId) => this.placeSelectHandler(placeId)} />
                 //    <PlaceCard />
+            )
+        } else if (Moment(this.state.selectedDate).isBefore(Moment())){
+            return (
+                <Text style={{ marginTop: 100, alignSelf: 'center', fontWeight: 'bold', fontSize: 22 }}>Niste izabrali obrok za ovaj dan!</Text>
             )
         }
     }
 
-    placeSelectHandler() {
-        this.pushNewScreen({ routeName: ScreenName.PlaceDetailScreen(), key: `${Math.random() * 10000}` })
+    placeSelectHandler(placeId) {
+        this.pushNewScreen({ routeName: ScreenName.PlaceDetailScreen(), key: `${Math.random() * 10000}`, params: { _id: placeId } })
     }
 
 

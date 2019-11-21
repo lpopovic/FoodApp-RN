@@ -88,7 +88,7 @@ class HomeScreen extends BaseScreen {
             <PlaceSectionList
                 titleSection="NOVO"
                 arrayObject={newPlaces}
-                onPressItem={(item) => this.pushNewScreen({ routeName: ScreenName.PlaceDetailScreen(), key: `${Math.random() * 10000}${item._id}` })}
+                onPressItem={(item) => this.pushNewScreen({ routeName: ScreenName.PlaceDetailScreen(), key: `${Math.random() * 10000}${item._id}`, params: { _id: item._id } })}
                 onPressSeeMore={() => this.pushNewScreen({ routeName: ScreenName.PlaceListScreen(), key: `${Math.random() * 10000}`, params: { title: "NOVO" } })}
             />
         )
@@ -99,7 +99,7 @@ class HomeScreen extends BaseScreen {
             <PlaceSectionList
                 titleSection="NAJBOLJE OCENE"
                 arrayObject={mostRatingPlaces}
-                onPressItem={(item) => this.pushNewScreen({ routeName: ScreenName.PlaceDetailScreen(), key: `${Math.random() * 10000}${item._id}` })}
+                onPressItem={(item) => this.pushNewScreen({ routeName: ScreenName.PlaceDetailScreen(), key: `${Math.random() * 10000}${item._id}`, params: { _id: item._id } })}
                 onPressSeeMore={() => this.pushNewScreen({ routeName: ScreenName.PlaceListScreen(), key: `${Math.random() * 10000}`, params: { title: "NAJBOLJE OCENE" } })}
             />
         )
@@ -110,7 +110,7 @@ class HomeScreen extends BaseScreen {
             <PlaceSectionList
                 titleSection="PREPORUČENO"
                 arrayObject={recommendedPlaces}
-                onPressItem={(item) => this.pushNewScreen({ routeName: ScreenName.PlaceDetailScreen(), key: `${Math.random() * 10000}${item._id}` })}
+                onPressItem={(item) => this.pushNewScreen({ routeName: ScreenName.PlaceDetailScreen(), key: `${Math.random() * 10000}${item._id}`, params: { _id: item._id } })}
                 onPressSeeMore={() => this.pushNewScreen({ routeName: ScreenName.PlaceListScreen(), key: `${Math.random() * 10000}`, params: { title: "PREPORUČENO" } })}
             />
         )
@@ -121,7 +121,7 @@ class HomeScreen extends BaseScreen {
             <PlaceSectionList
                 titleSection={"AKCIJE"}
                 arrayObject={actionPlaces}
-                onPressItem={(item) => this.pushNewScreen({ routeName: ScreenName.PlaceDetailScreen(), key: `${Math.random() * 10000}${item._id}` })}
+                onPressItem={(item) => this.pushNewScreen({ routeName: ScreenName.PlaceDetailScreen(), key: `${Math.random() * 10000}${item._id}`, params: { _id: item._id } })}
                 onPressSeeMore={() => this.pushNewScreen({ routeName: ScreenName.PlaceListScreen(), key: `${Math.random() * 10000}`, params: { title: "AKCIJE" } })}
             />
         )
@@ -132,7 +132,7 @@ class HomeScreen extends BaseScreen {
             <PlaceSectionList
                 titleSection={"DOSTAVA"}
                 arrayObject={actionPlaces}
-                onPressItem={(item) => this.pushNewScreen({ routeName: ScreenName.PlaceDetailScreen(), key: `${Math.random() * 10000}${item._id}` })}
+                onPressItem={(item) => this.pushNewScreen({ routeName: ScreenName.PlaceDetailScreen(), key: `${Math.random() * 10000}${item._id}`, params: { _id: item._id } })}
                 onPressSeeMore={() => this.pushNewScreen({ routeName: ScreenName.PlaceListScreen(), key: `${Math.random() * 10000}`, params: { title: "AKCIJE" } })}
             />
         )
@@ -157,7 +157,7 @@ class HomeScreen extends BaseScreen {
         return (
             <HomeCaroselComponent
                 data={caroselPlaces}
-                onPressItem={(index) => this.pushNewScreen({ routeName: ScreenName.PlaceDetailScreen(), key: `${Math.random() * 10000}${caroselPlaces[index]._id}` })}
+                onPressItem={(index) => this.pushNewScreen({ routeName: ScreenName.PlaceDetailScreen(), key: `${Math.random() * 10000}${caroselPlaces[index]._id}`, params: { _id: caroselPlaces[index]._id } })}
 
             />
         )

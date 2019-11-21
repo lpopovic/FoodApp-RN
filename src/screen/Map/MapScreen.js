@@ -185,7 +185,7 @@ class MapScreen extends BaseScreen {
     }
     placeSelectHandler = (place) => {
 
-        this.pushNewScreen({ routeName: ScreenName.PlaceDetailScreen(), key: `${Math.random() * 10000}${place._id}` })
+        this.pushNewScreen({ routeName: ScreenName.PlaceDetailScreen(), key: `${Math.random() * 10000}${place._id}`, params:{ _id: place._id} })
     }
     setNewRegion = (index) => {
 
