@@ -13,6 +13,7 @@ class Place {
         this.name = object.name;
         this.setupCoordinate(object.location);
         this.image = new ImageAssets(object.image || {});
+        this.description = object.description || 'Opis trenutno nije dostupan.'
     }
 
     setupCoordinate = (location) => {
