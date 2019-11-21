@@ -81,7 +81,6 @@ class MapScreen extends BaseScreen {
     }
     handleOnTabPress = index => {
         this.setNewStateHandler({
-            ...this.state,
             selectedSegmentedIndex: index
         });
         this.searchApiHandler({ index })
@@ -146,7 +145,7 @@ class MapScreen extends BaseScreen {
         } else {
             search = this.state.searchText !== '' ? ParamsUrl.search(this.state.searchText) : ''
         }
-        if (search !== null) {
+        if (search !== '') {
             params.push(search)
 
             PlaceNetwork.fetchPlaces(params).then(
