@@ -226,23 +226,31 @@ class MapScreen extends BaseScreen {
                 <View style={this.cardStyle(index)}>
                     <Image
                         source={{ uri: image }}
-                        style={styles.cardImage}
+                        style={stylesCard.cardImage}
                         resizeMode='contain'
                     />
-                    <View style={styles.textContent}>
-                        <View style={{ flex: 1 }}>
+                    <View style={stylesCard.textContent}>
+                        <View style={stylesCard.titleContainer}>
                             <Text
                                 numberOfLines={2}
                                 ellipsizeMode='tail'
-                                style={styles.cardtitle}>{title}</Text>
+                                style={stylesCard.cardtitle}>
+                                {title}
+                            </Text>
                         </View>
                         <View style={stylesCard.otherContainer}>
                             <View style={stylesCard.itemOtherContainer}>
-                                <Text style={[stylesCard.baseText]}>{priceTag}</Text>
+                                <Text
+                                    style={[stylesCard.baseText]}>
+                                    {priceTag}
+                                </Text>
                             </View>
                             <View style={stylesCard.spaceView} />
                             <View style={stylesCard.itemOtherContainer}>
-                                <Text style={[stylesCard.baseText]}>{timeDelivery}</Text>
+                                <Text
+                                    style={[stylesCard.baseText]}>
+                                    {timeDelivery}
+                                </Text>
                             </View>
                             <View style={stylesCard.spaceView} />
                             <View style={stylesCard.itemOtherContainer}>
@@ -250,12 +258,19 @@ class MapScreen extends BaseScreen {
                                     style={[stylesCard.otherImage]}
                                     source={IconAssets.starIcon}
                                     resizeMode='contain' />
-                                <Text style={[stylesCard.baseText]}>{rating}</Text>
+                                <Text
+                                    style={[stylesCard.baseText]}>
+                                    {rating}
+                                </Text>
                             </View>
                         </View>
-
-                        <View style={{ flex: 1.5, justifyContent: 'flex-end', }}>
-                            <Text numberOfLines={3} ellipsizeMode='tail' style={stylesCard.cardDescription}>{item.description}</Text>
+                        <View style={stylesCard.descriptionContainer}>
+                            <Text
+                                numberOfLines={3}
+                                ellipsizeMode='tail'
+                                style={stylesCard.cardDescription}>
+                                {item.description}
+                            </Text>
                         </View>
 
 
@@ -286,7 +301,7 @@ class MapScreen extends BaseScreen {
     scrollViewContent = () => {
 
         return (
-            <View style={{ backgroundColor: 'transparent', position: 'absolute', bottom: 30 }}>
+            <View style={styles.carouselContainer}>
                 <Carousel
                     ref={(c) => { this._carousel = c; }}
                     data={this.state.mapPlaces}
@@ -473,6 +488,16 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.4,
         elevation: 5,
     },
+    carouselContainer:{ 
+        backgroundColor: 'transparent', 
+        position: 'absolute', 
+        bottom: 30 
+    },
+
+
+});
+
+const stylesCard = StyleSheet.create({
     cardImage: {
         flex: 1,
         aspectRatio: 1,
@@ -494,10 +519,6 @@ const styles = StyleSheet.create({
         fontSize: 14,
         fontWeight: "bold",
     },
-
-});
-
-const stylesCard = StyleSheet.create({
     otherImage: {
         height: 12,
         width: 12,
@@ -533,7 +554,14 @@ const stylesCard = StyleSheet.create({
         alignContent: 'center',
         justifyContent: 'center',
         alignItems: 'center'
-    }
+    },
+    descriptionContainer: {
+        flex: 1.5,
+        justifyContent: 'flex-end',
+    },
+    titleContainer:{ 
+        flex: 1 
+    },
 });
 
 const mapStateToProps = state => {
