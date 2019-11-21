@@ -24,7 +24,7 @@ class CategoryItem extends Component {
                     <View style={styles.listItem}>
                         <View style={styles.imageContainer}>
                             <Image
-                                source={{ uri: image ? image : "https://api.ketering.rtech.rs/uploads/c54153e5-b287-7307-aa52-b0c49f205a4a-11.png?caption=Kod%20Dzamboa" }}
+                                source={{ uri: image ? image.image11t : "https://api.ketering.rtech.rs/uploads/c54153e5-b287-7307-aa52-b0c49f205a4a-11.png?caption=Kod%20Dzamboa" }}
                                 style={styles.image}
                                 resizeMode="contain" />
                         </View>

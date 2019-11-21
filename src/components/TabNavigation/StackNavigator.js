@@ -44,6 +44,7 @@ const MapStack = createStackNavigator({
     cateringapp_Detail: DetailScreen,
     cateringapp_Filter: FilterScreen,
     cateringapp_Shop: ShopScreen,
+    cateringapp_PlaceDetail: PlaceDetailScreen,
 
 })
 const SearchStack = createStackNavigator({
@@ -61,8 +62,8 @@ const CateringStack = createStackNavigator({
 const UserStack = createStackNavigator({
     cateringapp_User: UserScreen,
     cateringapp_Detail: DetailScreen,
-
-
+    cateringapp_Filter: FilterScreen,
+    cateringapp_Shop: ShopScreen,
 })
 
 

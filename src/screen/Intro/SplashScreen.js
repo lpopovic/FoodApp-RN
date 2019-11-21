@@ -12,6 +12,7 @@ import {
     updateUserProfile,
     fetchUserProfile,
     setLocationCity,
+    updateSearchFilter,
 } from '../../store/actions'
 import { connect } from 'react-redux';
 import BaseScreen from '../BaseScreen/BaseScreen';
@@ -21,7 +22,7 @@ import {
     ScreenName,
     STORAGE_KEY,
     getStorageData,
-    saveStorageData
+    saveStorageData,
 } from '../../helpers';
 import { User } from '../../model';
 
@@ -63,6 +64,10 @@ class SplashScreen extends BaseScreen {
                 this.props.fetchUserProfileHandler()
 
                 const city = await getStorageData(STORAGE_KEY.USER_LAST_LOCATION)
+                const filter = await getStorageData(STORAGE_KEY.SEARCH_FILTER)
+                if (filter !== null) {
+                    this.props.updateSearchFilterHandler(filter)
+                }
                 if (city !== null) {
                     this.props.locationUpdateCityHandler(city)
                     this.resetNavigationStack(ScreenName.TabNavigatorScreen())
@@ -73,7 +78,6 @@ class SplashScreen extends BaseScreen {
             } else {
                 this.resetNavigationStack(ScreenName.LoginScreen())
             }
-            // this.resetNavigationStack(ScreenName.LoginScreen())
         }
 
     }
@@ -145,6 +149,7 @@ const mapDispatchToProps = dispatch => {
         updateUserProfileHandler: (user) => dispatch(updateUserProfile(user)),
         fetchUserProfileHandler: () => dispatch(fetchUserProfile()),
         locationUpdateCityHandler: (city) => dispatch(setLocationCity(city)),
+        updateSearchFilterHandler: (filter) => dispatch(updateSearchFilter(filter)),
     };
 };
 

@@ -2,8 +2,8 @@ import axios from '../axios'
 import { RestUrl } from './url'
 import { Place, MenuItem } from '../../model'
 
-
 class PlaceNetwork {
+
     static fetchTest = () =>
         new Promise(async (resolve, reject) => {
             const url = RestUrl.placeTest
@@ -27,6 +27,7 @@ class PlaceNetwork {
             const url = RestUrl.getPlaces(params)
             try {
                 const { data } = await axios.get(url)
+
                 const places = Place.createArrayPlaces(data)
 
                 resolve(places)

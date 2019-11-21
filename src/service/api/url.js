@@ -50,12 +50,19 @@ class RestUrl {
     //         return withKey(`menuitems`)
     //     }
     // }
+
+    static getAllcategories = withKey(`categories`)
+
+
 }
 
 class ParamsUrl {
     static search = (value) => { return `search=${value}` }
     static pickup = (value) => { return `pickup=${value}` }
     static delivery = (value) => { return `delivery=${value}` }
+    static category = (value) => { return `category=${value}` }
+    static avgRating = (value) => { return `avgRating=${value}` }
+    static avgPriceTag = (value) => { return `avgPriceTag=${value}` }
 }
 
 export { RestUrl, ParamsUrl, ROOT_URL_IMAGE };

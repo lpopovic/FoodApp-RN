@@ -13,6 +13,7 @@ import { NAV_COLOR, headerStyles, BASE_COLOR } from '../../styles'
 import { ScreenName } from '../../helpers'
 import DefaultInput from './DefaultInput'
 import { withNavigation } from 'react-navigation'
+import Icon from 'react-native-vector-icons/dist/FontAwesome';
 class SearchHeader extends Component {
 
     constructor(props) {
@@ -44,13 +45,17 @@ class SearchHeader extends Component {
 
         Keyboard.dismiss()
 
-        clearTimeout(this.searchTimeout)
+        // clearTimeout(this.searchTimeout)
         if (searchText.trim() !== '') {
             this.props.onSubmitEditing(searchText)
         } else {
             this.props.clearText()
         }
 
+    }
+
+    onPressFilterHandler = () => {
+        this.props.navigation.navigate(ScreenName.FilterScreen(), { filter: this.props.showFilter })
     }
     render() {
         const tintColor = this.props.tintColor ? this.props.tintColor : NAV_COLOR.darkGray
@@ -78,12 +83,9 @@ class SearchHeader extends Component {
                     />
 
                     <View style={styles.otherBtnContent}>
-                        <TouchableOpacity onPress={() => this.props.navigation.navigate(ScreenName.FilterScreen())}>
+                        <TouchableOpacity onPress={() => this.onPressFilterHandler()}>
                             <View style={[styles.imageOtherContainer, styles.imageContainer]}>
-                                <Image
-                                    source={TestAssets.filterIcon}
-                                    style={[styles.baseImage, { tintColor: tintColor }]}
-                                    resizeMode='contain' />
+                                <Icon name="sliders" size={25} color={tintColor} />
                             </View>
                         </TouchableOpacity>
                         <TouchableOpacity onPress={() => this.props.navigation.navigate(ScreenName.ShopScreen())}>

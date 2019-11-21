@@ -4,11 +4,13 @@ import thunk from 'redux-thunk';
 import uiReducer from './reducers/ui';
 import locationReducer from './reducers/location'
 import userReducer from './reducers/user'
+import filterReducer from './reducers/filter'
 
 const rootReducer = combineReducers({
     ui: uiReducer,
     location:locationReducer,
-    user: userReducer
+    user: userReducer,
+    filter:filterReducer,
 });
 
 // debug redux

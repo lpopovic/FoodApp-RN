@@ -9,9 +9,10 @@ import SafeAreaView from 'react-native-safe-area-view';
 import BaseScreen from '../BaseScreen/BaseScreen';
 import Header from '../../components/common/BackHeader'
 import { NAV_COLOR, BASE_COLOR } from '../../styles'
-import { ScreenName } from '../../helpers'
+import { ScreenName, MESSAGE_EMPTY_ARRAY } from '../../helpers'
 import { PlaceList } from '../../components/Place/PlaceList'
-import { PlaceNetwork } from '../../service/api'
+import { PlaceNetwork, ParamsUrl } from '../../service/api'
+import { connect } from 'react-redux';
 class PlaceListScreen extends BaseScreen {
     static navigationOptions = {
         header: null,
@@ -36,8 +37,28 @@ class PlaceListScreen extends BaseScreen {
     }
 
     apiCallHandler = () => {
-        PlaceNetwork.fetchTest().then(
+        const apiParams = this.props.navigation.getParam('apiParams', null)
+        const {
+            pickup,
+            delivery,
+            avgRating,
+            avgPriceTag } = this.props.filter
+
+        let params = []
+        if (apiParams !== null) {
+            params.push(apiParams)
+        }
+        params.push(ParamsUrl.pickup(pickup))
+        params.push(ParamsUrl.delivery(delivery))
+        params.push(ParamsUrl.avgPriceTag(avgPriceTag))
+        params.push(ParamsUrl.avgRating(avgRating))
+
+
+        PlaceNetwork.fetchPlaces(params).then(
             res => {
+                if (res.length == 0) {
+                    this.showAlertMessage(MESSAGE_EMPTY_ARRAY)
+                }
                 this.setNewStateHandler({
                     loading: false,
                     refreshing: false,
@@ -82,12 +103,19 @@ class PlaceListScreen extends BaseScreen {
                     <Header
                         backgroundColor={NAV_COLOR.headerBackground}
                         tintColor={BASE_COLOR.darkGray}
-                        showFilter
+                        showFilter={this._filterData}
                     />
                     {mainDisplay}
                 </View>
             </SafeAreaView>
         )
+    }
+
+    _filterData = () => {
+        this.setNewStateHandler({ loading: true })
+        setTimeout(() => {
+            this.apiCallHandler()
+        }, 100);
     }
 }
 
@@ -102,5 +130,10 @@ const styles = StyleSheet.create({
     }
 });
 
+const mapStateToProps = state => {
+    return {
+        filter: state.filter.filter,
+    };
+};
 
-export default PlaceListScreen;
+export default connect(mapStateToProps, null)(PlaceListScreen);

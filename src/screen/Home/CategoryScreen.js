@@ -10,6 +10,7 @@ import BaseScreen from '../BaseScreen/BaseScreen';
 import Header from '../../components/common/BackHeader'
 import { NAV_COLOR, BASE_COLOR } from '../../styles'
 import { ScreenName } from '../../helpers'
+import { CategoryNetwork, ParamsUrl } from '../../service/api'
 class CategoryScreen extends BaseScreen {
     static navigationOptions = {
         header: null,
@@ -18,31 +19,45 @@ class CategoryScreen extends BaseScreen {
         super(props)
         this.state = {
             refreshing: false,
-            loading: false
+            loading: true,
+            categories: [],
         }
     }
 
     componentDidMount() {
         super.componentDidMount()
         this.setStatusBarStyle(NAV_COLOR.headerBackground, true)
-        this.setNewStateHandler({ loading: true })
-
-        setTimeout(() => {
-            this.setNewStateHandler({ loading: false })
-        }, 1000);
+        this.apiCallHandler()
     }
     componentWillUnmount() {
         super.componentWillUnmount()
     }
+
+    apiCallHandler = () => {
+        CategoryNetwork.fetchCategories().then(
+            res => {
+                this.setNewStateHandler({
+                    loading: false,
+                    refreshing: false,
+                    categories: res,
+                })
+            },
+            err => {
+                this.showAlertMessage(err)
+                this.setNewStateHandler({
+                    loading: false,
+                    refreshing: false,
+                })
+            }
+        )
+    }
+
     _onRefresh = () => {
         this.setNewStateHandler({ refreshing: true });
-        clearTimeout(this.refreshTimeout)
-        this.refreshTimeout = setTimeout(() => {
-            this.setNewStateHandler({ refreshing: false });
-        }, 1000);
+        this.apiCallHandler()
     }
     mainContent = () => {
-        const { refreshing, } = this.state
+        const { refreshing, categories } = this.state
         return (
             <CategoryList
                 refreshControl={
@@ -53,8 +68,12 @@ class CategoryScreen extends BaseScreen {
                         colors={[BASE_COLOR.blue]}
                     />
                 }
-                arrayObject={["", "asda", "lazar", "", "asda", "lazar", "", "asda", "lazar", "", "asda", "lazar", "", "asda", "lazar"]}
-                onPressItem={(item) => this.pushNewScreen({ routeName: ScreenName.PlaceListScreen(), key: `${Math.random() * 10000}`, params: { title: "KATEGORIJA" } })} />
+                arrayObject={categories}
+                onPressItem={(item) => this.pushNewScreen({
+                    routeName: ScreenName.PlaceListScreen(),
+                    key: `${Math.random() * 10000}`,
+                    params: { title: item.name.toUpperCase(), apiParams: ParamsUrl.category(item._id) }
+                })} />
         )
     }
     render() {
