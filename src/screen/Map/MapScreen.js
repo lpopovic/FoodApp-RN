@@ -87,13 +87,17 @@ class MapScreen extends BaseScreen {
         })
         PlaceNetwork.fetchPlaces().then(
             res => {
-                if (res.length == 0) {
-                    this.showAlertMessage(MESSAGE_NO_PLACE)
-                }
+
+
                 this.setNewStateHandler({
                     loading: false,
                     mapPlaces: res,
                 })
+                if (res.length == 0) {
+                    this.showAlertMessage(MESSAGE_NO_PLACE)
+                } else {
+                    this.setNewRegion(0)
+                }
             },
             err => {
                 this.showAlertMessage(err)
@@ -141,14 +145,18 @@ class MapScreen extends BaseScreen {
 
             PlaceNetwork.fetchPlaces(params).then(
                 res => {
-                    if (res.length == 0) {
-                        this.showAlertMessage(MESSAGE_NO_PLACE)
-                    }
+
 
                     this.setNewStateHandler({
                         loading: false,
                         mapPlaces: res,
                     })
+
+                    if (res.length == 0) {
+                        this.showAlertMessage(MESSAGE_NO_PLACE)
+                    } else {
+                        this.setNewRegion(0)
+                    }
                 },
                 err => {
                     this.showAlertMessage(err)
@@ -176,6 +184,31 @@ class MapScreen extends BaseScreen {
 
         this.pushNewScreen({ routeName: ScreenName.PlaceDetailScreen(), key: `${Math.random() * 10000}${place._id}` })
     }
+    setNewRegion = (index) => {
+
+        clearTimeout(this.regionTimeout);
+        this.regionTimeout = setTimeout(() => {
+
+            const { mapPlaces, region } = this.state
+            const { latitudeDelta, longitudeDelta } = region
+            if (mapPlaces.length > 0) {
+                const coordinate = mapPlaces[index].coordinate;
+
+                this.map.animateToRegion(
+                    {
+                        ...coordinate,
+                        latitudeDelta,
+                        longitudeDelta,
+                    },
+                    350
+                );
+
+            }
+
+
+
+        }, 0);
+    }
     _renderItem = ({ item, index }) => {
         const image = item.image.image11t
         const title = item.name
@@ -191,7 +224,7 @@ class MapScreen extends BaseScreen {
                         resizeMode='contain'
                     />
                     <View style={styles.textContent}>
-                        <View style={{  flex: 1 }}>
+                        <View style={{ flex: 1 }}>
                             <Text
                                 numberOfLines={2}
                                 ellipsizeMode='tail'
@@ -263,6 +296,7 @@ class MapScreen extends BaseScreen {
 
                     onSnapToItem={(index) => {
                         this.setNewStateHandler({ currentSlideIndex: index })
+                        this.setNewRegion(index)
                     }}
 
                     animationOptions={{
