@@ -48,8 +48,12 @@ class PlaceListScreen extends BaseScreen {
         if (apiParams !== null) {
             params.push(apiParams)
         }
-        params.push(ParamsUrl.pickup(pickup))
-        params.push(ParamsUrl.delivery(delivery))
+        if (pickup == true) {
+            params.push(ParamsUrl.pickup(pickup))
+        }
+        if (delivery == true) {
+            params.push(ParamsUrl.delivery(delivery))
+        }
         params.push(ParamsUrl.avgPriceTag(avgPriceTag))
         params.push(ParamsUrl.avgRating(avgRating))
 

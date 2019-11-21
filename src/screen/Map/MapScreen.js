@@ -150,8 +150,6 @@ class MapScreen extends BaseScreen {
 
             PlaceNetwork.fetchPlaces(params).then(
                 res => {
-
-
                     this.setNewStateHandler({
                         loading: false,
                         mapPlaces: res,
