@@ -10,7 +10,7 @@ import BaseScreen from '../BaseScreen/BaseScreen';
 import Header from '../../components/common/BackHeader'
 import { NAV_COLOR, BASE_COLOR } from '../../styles'
 import { ScreenName } from '../../helpers'
-import { CategoryNetwork } from '../../service/api'
+import { CategoryNetwork, ParamsUrl } from '../../service/api'
 class CategoryScreen extends BaseScreen {
     static navigationOptions = {
         header: null,
@@ -69,7 +69,11 @@ class CategoryScreen extends BaseScreen {
                     />
                 }
                 arrayObject={categories}
-                onPressItem={(item) => this.pushNewScreen({ routeName: ScreenName.PlaceListScreen(), key: `${Math.random() * 10000}`, params: { title: "KATEGORIJA" } })} />
+                onPressItem={(item) => this.pushNewScreen({
+                    routeName: ScreenName.PlaceListScreen(),
+                    key: `${Math.random() * 10000}`,
+                    params: { title: item.name.toUpperCase(), apiParams: ParamsUrl.category(item._id) }
+                })} />
         )
     }
     render() {

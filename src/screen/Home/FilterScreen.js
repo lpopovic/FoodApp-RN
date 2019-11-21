@@ -264,7 +264,8 @@ class FilterScreen extends BaseScreen {
                 <View style={styles.mainContainer}>
                     <Header
                         tintColor={BASE_COLOR.darkGray}
-                        title={'Filter'}
+                        // title={'Filter'}
+                        title={'Back'}
                         btnTitle={'Reset'}
                         btnPress={() => this.onResetBtnPress()}
                         backgroundColor={NAV_COLOR.headerBackground} />
