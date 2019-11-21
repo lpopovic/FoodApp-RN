@@ -24,13 +24,19 @@ import { PlaceNetwork, ParamsUrl, } from '../../service/api'
 import { TestAssets, IconAssets } from '../../assets'
 import MapView from 'react-native-maps';
 import { connect } from 'react-redux';
+
+// default params for mapView
 const zoom = 10
 const zoomMarker = 13
 const distanceDelta = Math.exp(Math.log(360) - (zoom * Math.LN2));
-const distanceDeltaMarker = Math.exp(Math.log(360) - (zoomMarker * Math.LN2));
+const latitudeDeltaMarker = Math.exp(Math.log(360) - (zoomMarker * Math.LN2));
+const longitudeDeltaMarker = Dimensions.get('window').width / Dimensions.get('window').height * latitudeDeltaMarker
+// end mapView
+// default params for carosel card
 const width = Dimensions.get("window").width;
 const CARD_WIDTH = width - 50;
 const CARD_HEIGHT = CARD_WIDTH / 3;
+// end carosel
 class MapScreen extends BaseScreen {
 
     static navigationOptions = {
@@ -197,8 +203,8 @@ class MapScreen extends BaseScreen {
                 this.map.animateToRegion(
                     {
                         ...coordinate,
-                        latitudeDelta,
-                        longitudeDelta,
+                        latitudeDelta: latitudeDeltaMarker,
+                        longitudeDelta: longitudeDeltaMarker,
                     },
                     350
                 );
