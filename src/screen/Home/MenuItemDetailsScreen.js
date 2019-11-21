@@ -216,7 +216,7 @@ class MenuItemDetailsScreen extends BaseScreen {
                     </View>
                     {this._renderMenuItemOptions(menuItemOptions)}
 
-                    <View style={{ alignItems: 'center', justifyContent: 'center', margin: 20 }}>
+                    <View style={{ alignItems: 'center', justifyContent: 'center', margin: 20, marginBottom: 30 }}>
                         <TouchableOpacity onPress={() => this.putInBagHandler()}>
                             <View style={{ backgroundColor: BASE_COLOR.blue, width: 280, height: 45, justifyContent: 'center', alignItems: 'center', borderRadius: 4 }}>
                                 <Text style={{ color: BASE_COLOR.white, fontWeight: '600', fontSize: 16 }}>Dodaj u korpu</Text>

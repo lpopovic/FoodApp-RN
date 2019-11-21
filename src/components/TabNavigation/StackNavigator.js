@@ -45,12 +45,15 @@ const MapStack = createStackNavigator({
     cateringapp_Filter: FilterScreen,
     cateringapp_Shop: ShopScreen,
     cateringapp_PlaceDetail: PlaceDetailScreen,
+    cateringapp_MenuItemDetails: MenuItemDetailsScreen
 
 })
 const SearchStack = createStackNavigator({
     cateringapp_Search: SearchScreen,
     cateringapp_Filter: FilterScreen,
     cateringapp_Shop: ShopScreen,
+    cateringapp_PlaceDetail: PlaceDetailScreen,
+    cateringapp_MenuItemDetails: MenuItemDetailsScreen
 
 })
 const CateringStack = createStackNavigator({
@@ -74,6 +77,7 @@ HomeStack.navigationOptions = ({ navigation }) => {
 
     switch (routes[routes.length - 1].routeName) {
         case ScreenName.FilterScreen():
+        case ScreenName.MenuItemDetailsScreen():
         case ScreenName.ShopScreen():
             tabBarVisible = false;
             break
@@ -93,6 +97,7 @@ MapStack.navigationOptions = ({ navigation }) => {
 
     switch (routes[routes.length - 1].routeName) {
         case ScreenName.FilterScreen():
+        case ScreenName.MenuItemDetailsScreen():
         case ScreenName.ShopScreen():
             tabBarVisible = false;
             break
@@ -130,6 +135,7 @@ SearchStack.navigationOptions = ({ navigation }) => {
 
     switch (routes[routes.length - 1].routeName) {
         case ScreenName.FilterScreen():
+        case ScreenName.MenuItemDetailsScreen():
         case ScreenName.ShopScreen():
             tabBarVisible = false;
             break

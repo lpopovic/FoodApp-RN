@@ -125,7 +125,7 @@ class SearchScreen extends BaseScreen {
         return (
             <PlaceList
                 arrayObject={searchPlaces}
-                onPressItem={(item) => this.pushNewScreen({ routeName: ScreenName.PlaceDetailScreen(), key: `${Math.random() * 10000}${item._id}` })} />
+                onPressItem={(item) => this.pushNewScreen({ routeName: ScreenName.PlaceDetailScreen(), key: `${Math.random() * 10000}${item._id}`, params: { _id: item._id} })} />
         )
     }
     showNoResultContent = () => (
