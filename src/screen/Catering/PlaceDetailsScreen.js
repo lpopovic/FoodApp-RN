@@ -4,6 +4,7 @@ import HeaderImageScrollView, { TriggeringView } from 'react-native-image-header
 import { getStatusBarHeight } from 'react-native-status-bar-height';
 import * as Animatable from 'react-native-animatable';
 import BaseScreen from '../BaseScreen/BaseScreen';
+import { ScreenName } from '../../helpers'
 import DishCard from '../../components/Catering/DishCard';
 import DishList from '../../components/Catering/DishList';
 import {
@@ -212,13 +213,17 @@ class PlaceDetailsScreen extends BaseScreen {
 
                     </TriggeringView>
                     <View style={{ backgroundColor: '#E5E5E5', height: 3 }}></View>
-                    <DishList data={menuItems} />
+                    <DishList data={menuItems} clickOnDish={(menuItemId)=> this.dishSelectHandler(menuItemId)}/>
                     <Image source={{ uri: place.image169 }} />
 
                     {/* </View> */}
                 </HeaderImageScrollView>
             </View>
         )
+    }
+
+    dishSelectHandler(menuItemId) {
+        this.pushNewScreen({ routeName: ScreenName.MenuItemDetailsScreen(), key: `${Math.random() * 10000}`, params: { _id: menuItemId } })
     }
 }
 

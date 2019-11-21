@@ -7,6 +7,7 @@ import CategoryScreen from '../../screen/Home/CategoryScreen'
 import PlaceListScreen from '../../screen/Home/PlaceListScreen'
 import FilterScreen from '../../screen/Home/FilterScreen'
 import ShopScreen from '../../screen/Home/ShopScreen'
+import MenuItemDetailsScreen from '../../screen/Home/MenuItemDetailsScreen'
 // MAP TAB
 import MapScreen from '../../screen/Map/MapScreen'
 
@@ -33,6 +34,7 @@ const HomeStack = createStackNavigator({
     cateringapp_PlaceDetail: PlaceDetailScreen,
     cateringapp_Filter: FilterScreen,
     cateringapp_Shop: ShopScreen,
+    cateringapp_MenuItemDetails: MenuItemDetailsScreen,
 
     cateringapp_Detail: DetailScreen,
 })

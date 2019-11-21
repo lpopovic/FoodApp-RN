@@ -11,7 +11,7 @@ class DishList extends Component {
                 <FlatList
                     data={this.props.data}
                     keyExtractor={item => item._id}
-                    renderItem={({ item }) => <DishCard dish={item} />}
+                    renderItem={({ item }) => <DishCard dish={item} onClick={()=> this.props.clickOnDish(item._id)}/>}
                 />
             </View>
         )

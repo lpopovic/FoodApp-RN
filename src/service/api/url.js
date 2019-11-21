@@ -30,9 +30,14 @@ class RestUrl {
     static getPlaceById = (placeId) => {
         return withKey(`places/${placeId}`)
     }
-    static getMenuItemsTest = (placeId) => {
+    static getMenuItems = (placeId) => {
         return withKey(`menuitems?place=${placeId}`)
     }
+    static getMenuItemById = (menuItemId) => {
+        return withKey(`menuitems/${menuItemId}`)
+    }
+
+
     // static getMenuItems = (params) => {
     //     if(params){
     //         let param = ''

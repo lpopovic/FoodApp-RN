@@ -11,7 +11,6 @@ class PlaceList extends Component {
                     data={this.props.data}
                     keyExtractor={item => item._id}
                     renderItem={({ item }) => <PlaceCard data={item} onClick={() => this.props.clickOnPlace(item._id)}/>}
-                    // renderItem={({ item }) => <PlaceCard name={item.name} image={item.link} onClick={this.props.clickOnPlace(item._id)}/>}
                 />
             </View>
         )

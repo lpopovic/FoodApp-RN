@@ -1,4 +1,4 @@
-import { ImageAssets } from './index'
+import { ImageAssets, Place } from './index'
 
 class MenuItem {
 
@@ -7,6 +7,9 @@ class MenuItem {
         this.description = object.description;
         this.image = new ImageAssets(object.image || {});
         this.name = object.name;
+        this.nominalPrice = object.nominalPrice;
+        this.menuItemOptions = object.menuItemOptions || [];
+        this.place = object.place || {};
     }
 
     static createArrayMenuItems(objectArray) {
@@ -19,6 +22,8 @@ class MenuItem {
         return arrayTemplate;
 
     }
+
+
 }
 
 export { MenuItem };

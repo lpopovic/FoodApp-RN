@@ -62,7 +62,7 @@ class PlaceNetwork {
 
     static fetchMenuItems = (placeId) =>
         new Promise(async (resolve, reject) => {
-            const url = RestUrl.getMenuItemsTest(placeId)
+            const url = RestUrl.getMenuItems(placeId)
             try {
 
                 const { data } = await axios.get(url)
@@ -82,7 +82,7 @@ class PlaceNetwork {
 
         static fetchMenuItemById = (itemId) =>
         new Promise(async (resolve, reject) => {
-            const url = RestUrl.getMenuItemsTest(itemId)
+            const url = RestUrl.getMenuItemById(itemId)
             try {
 
                 const { data } = await axios.get(url)
