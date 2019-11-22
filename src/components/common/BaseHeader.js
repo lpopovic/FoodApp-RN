@@ -7,11 +7,12 @@ import {
     StyleSheet,
 } from 'react-native';
 import { TestAssets, IconAssets } from '../../assets'
-import { NAV_COLOR, headerStyles } from '../../styles'
+import { NAV_COLOR, headerStyles, BASE_COLOR } from '../../styles'
 import { connect } from 'react-redux';
 import { withNavigation } from 'react-navigation'
 import { ScreenName } from '../../helpers'
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
+import { Badge } from 'react-native-elements'
 class BaseHeader extends Component {
 
     constructor(props) {
@@ -78,6 +79,13 @@ class BaseHeader extends Component {
                                     source={TestAssets.shopBagIcon}
                                     style={[styles.baseImage, { tintColor: tintColor }]}
                                     resizeMode='contain' />
+                                <Badge
+                                    // status="primary"
+                                    value={10}
+                                    textStyle={{ color: BASE_COLOR.white, fontSize: 12 }}
+                                    badgeStyle={{ backgroundColor: BASE_COLOR.red, }}
+                                    containerStyle={{ position: 'absolute', bottom: 0, right: 0 }}
+                                />
                             </View>
                         </TouchableOpacity>
                     </View>

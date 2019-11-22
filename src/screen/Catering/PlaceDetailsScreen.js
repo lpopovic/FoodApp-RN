@@ -1,21 +1,21 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image, Dimensions, Platform, LayoutAnimation, UIManager } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image, Dimensions, Platform, LayoutAnimation, UIManager, RefreshControl } from 'react-native';
 import HeaderImageScrollView, { TriggeringView } from 'react-native-image-header-scroll-view';
 import { getStatusBarHeight } from 'react-native-status-bar-height';
 import * as Animatable from 'react-native-animatable';
 import BaseScreen from '../BaseScreen/BaseScreen';
-import { ScreenName } from '../../helpers'
+import { ScreenName, isAndroid } from '../../helpers'
 import DishCard from '../../components/Catering/DishCard';
 import DishList from '../../components/Catering/DishList';
 import {
     IconAssets,
     TestAssets,
 } from '../../assets';
-import { BASE_COLOR } from '../../styles';
+import { BASE_COLOR, NAV_COLOR } from '../../styles';
 import { PlaceNetwork } from '../../service/api'
 import { Place } from '../../model';
 import { avgPriceTag, openDays } from '../../helpers/numberHelper';
-
+import UrlOpen from '../../components/common/UrlOpen'
 class PlaceDetailsScreen extends BaseScreen {
 
 
@@ -28,68 +28,74 @@ class PlaceDetailsScreen extends BaseScreen {
         this.state = {
             statusBarHeight: 0,
             expanded: false,
-            loading: false,
+            loading: true,
+            refreshing: false,
             menuItems: [],
+            sectionMeniItems: [],
             place: new Place({})
         }
-        if (Platform.OS === 'android') {
+        if (isAndroid) {
             UIManager.setLayoutAnimationEnabledExperimental(true);
         }
     }
 
     componentDidMount() {
         super.componentDidMount()
-        // this.setStatusBarStyle(NAV_COLOR.headerBackground, true)
+
         this.apiCallHandler(this.props.navigation.state.params._id)
     }
     componentWillUnmount() {
         super.componentWillUnmount()
     }
-    apiCallHandler = (placeId) => {
-        PlaceNetwork.fetchPlaceById(placeId).then(
+    apiCallHandler = async (placeId) => {
+        await PlaceNetwork.fetchPlaceById(placeId).then(
             res => {
                 this.setNewStateHandler({
-                    loading: false,
                     place: res
                 })
-                // if(this.state.place.openDays.some(item => item.day === Moment().day())){
-                //     alert("PONEDELJAK")
-                // }
-                // console.log(res)
-                // console.log(this.state.place.image.image169)
             },
             err => {
                 this.showAlertMessage(err)
-                this.setNewStateHandler({
-                    loading: false,
-                })
             }
         )
         PlaceNetwork.fetchMenuItems(placeId).then(
             res => {
                 this.setNewStateHandler({
                     loading: false,
-                    menuItems: res
+                    menuItems: res,
+                    refreshing: false,
                 })
-                // console.log(this.props.navigation.state.params._id)
-                // console.log(res)
+                this.setupSectionList()
+
             },
             err => {
                 this.showAlertMessage(err)
                 this.setNewStateHandler({
                     loading: false,
+                    refreshing: false,
                 })
+
             }
         )
+
     }
 
     changeLayout = () => {
         LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut)
         this.setState({ expanded: !this.state.expanded })
     }
-
+    onPressShowPlaceOnMap = (place) => {
+        UrlOpen.openUrlInBrowser(UrlOpen.generateUrlForGoogleMap(place.coordinate.latitude, place.coordinate.longitude))
+    }
     render() {
-        const { place, menuItems } = this.state
+        const { place, menuItems, loading, refreshing } = this.state
+        if (loading) {
+            return (
+                <View style={styles.mainContainer}>
+                    {this.activityIndicatorContent(BASE_COLOR.blue)}
+                </View>
+            )
+        }
         return (
             <View style={styles.mainContainer}>
                 <TouchableOpacity
@@ -131,6 +137,14 @@ class PlaceDetailsScreen extends BaseScreen {
                             <Text style={styles.navTitle}>{place.name}</Text>
                         </Animatable.View>
                     )}
+
+                    refreshControl={
+                        <RefreshControl
+                            refreshing={refreshing}
+                            onRefresh={this._onRefresh}
+                            tintColor={BASE_COLOR.blue}
+                            colors={[BASE_COLOR.blue]}
+                        />}
                 >
                     {/* <View style={{ height: 1000 }}> */}
                     <TriggeringView
@@ -164,7 +178,7 @@ class PlaceDetailsScreen extends BaseScreen {
                                     </TouchableOpacity>
                                 </View>
                                 <View style={{ flex: 1.5, justifyContent: 'center', alignItems: 'center' }}>
-                                    <TouchableOpacity>
+                                    <TouchableOpacity onPress={() => this.onPressShowPlaceOnMap(place)}>
                                         <Image
                                             style={{
                                                 width: 23,
@@ -204,7 +218,7 @@ class PlaceDetailsScreen extends BaseScreen {
                                 </View>
                                 <View style={{ flexDirection: 'row', alignItems: 'center', flex: 0.5 }}>
                                     <Text style={{ fontSize: 15, color: BASE_COLOR.darkGray }}>Open today: </Text>
-                                    <Text style={{ fontSize: 15, fontWeight: '600' }}>{place.openDays? openDays(place.openDays): "-"}</Text>
+                                    <Text style={{ fontSize: 15, fontWeight: '600' }}>{place.openDays ? openDays(place.openDays) : "-"}</Text>
                                 </View>
                             </View>
                             <View style={{ backgroundColor: BASE_COLOR.gray, height: 1, marginTop: 10, marginBottom: 10 }}></View>
@@ -213,17 +227,101 @@ class PlaceDetailsScreen extends BaseScreen {
 
                     </TriggeringView>
                     <View style={{ backgroundColor: '#E5E5E5', height: 3 }}></View>
-                    <DishList data={menuItems} clickOnDish={(menuItemId)=> this.dishSelectHandler(menuItemId)}/>
+                    {this.sectionListContent(menuItems)}
                     <Image source={{ uri: place.image169 }} />
-
-                    {/* </View> */}
                 </HeaderImageScrollView>
             </View>
         )
     }
+    onPressSectionListHeader = (section) => {
 
+        let { sectionMeniItems } = this.state
+
+        for (let index = 0; index < sectionMeniItems.length; index++) {
+
+            if (section == index) {
+                sectionMeniItems[index].hide = !sectionMeniItems[index].hide
+            } else {
+                sectionMeniItems[index].hide = true
+            }
+
+
+        }
+
+
+        this.setNewStateHandler({ sectionMeniItems })
+
+    }
+    setupSectionList = () => {
+        const { menuItems, place } = this.state
+        const { categories } = place
+        let sectionMeniItems = []
+        categories.forEach(category => {
+            sectionMeniItems.push({ category, menuItems: [], hide: true })
+        });
+
+        for (let i = 0; i < menuItems.length; i++) {
+
+            menuItems[i].categories.forEach(category => {
+                for (let j = 0; j < sectionMeniItems.length; j++) {
+
+                    if (j == 0) {
+                        sectionMeniItems[j].hide = false
+                    }
+
+                    if (category._id == sectionMeniItems[j].category._id) {
+                        sectionMeniItems[j].menuItems.push(menuItems[i])
+                    }
+
+                }
+            });
+        }
+        this.setNewStateHandler({ sectionMeniItems })
+    }
+    dishlistContent = (menuItems, hide) => {
+        if (hide == false) {
+            return (
+                <DishList
+                    data={menuItems}
+                    clickOnDish={(menuItemId) => this.dishSelectHandler(menuItemId)} />
+            )
+        }
+
+    }
+    sectionListContent = () => {
+
+        const { sectionMeniItems } = this.state
+        let returnSectionView = []
+        sectionMeniItems.map((section, indexInArray) => {
+            if (section.menuItems.length > 0) {
+                returnSectionView.push(
+                    <>
+                        <TouchableOpacity onPress={() => this.onPressSectionListHeader(indexInArray)}>
+                            <View
+                                style={{ marginTop: 4, marginBottom: 4, marginLeft: 8, marginRight: 8, padding: 8, backgroundColor: BASE_COLOR.blue}}>
+                                <Text
+                                    numberOfLines={1}
+                                    ellipsizeMode='tail'
+                                    style={{ fontWeight: 'bold', fontSize: 16, color: BASE_COLOR.white, }}>
+                                    {section.category.name}</Text>
+                            </View>
+                        </TouchableOpacity>
+                        {this.dishlistContent(section.menuItems, section.hide)}
+                    </>
+                )
+            }
+
+        })
+
+
+        return returnSectionView
+    }
     dishSelectHandler(menuItemId) {
         this.pushNewScreen({ routeName: ScreenName.MenuItemDetailsScreen(), key: `${Math.random() * 10000}`, params: { _id: menuItemId } })
+    }
+    _onRefresh = () => {
+        this.setNewStateHandler({ refreshing: true })
+        this.apiCallHandler(this.props.navigation.state.params._id)
     }
 }
 

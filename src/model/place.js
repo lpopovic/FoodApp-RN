@@ -1,5 +1,5 @@
 
-import { City, ImageAssets } from './index'
+import { City, ImageAssets, Category } from './index'
 
 class Place {
     constructor(object) {
@@ -15,6 +15,7 @@ class Place {
         this.image = new ImageAssets(object.image || {});
         this.description = object.description;
         this.openDays = object.openDays;
+        this.categories = Category.createArrayCategory(object.categories || [])
     }
 
     setupCoordinate = (location) => {
