@@ -82,6 +82,38 @@ class MapScreen extends BaseScreen {
     componentWillUnmount() {
         super.componentWillUnmount()
     }
+    getInitRegionForCoordinates(points) {
+        // points should be an array of { latitude: X, longitude: Y }
+        let minX, maxX, minY, maxY;
+
+        // init first point
+        ((point) => {
+            minX = point.coordinate.latitude;
+            maxX = point.coordinate.latitude;
+            minY = point.coordinate.longitude;
+            maxY = point.coordinate.longitude;
+        })(points[0]);
+
+        // calculate rect
+        points.map((point) => {
+            minX = Math.min(minX, point.coordinate.latitude);
+            maxX = Math.max(maxX, point.coordinate.latitude);
+            minY = Math.min(minY, point.coordinate.longitude);
+            maxY = Math.max(maxY, point.coordinate.longitude);
+        });
+
+        const midX = (minX + maxX) / 2;
+        const midY = (minY + maxY) / 2;
+        const deltaX = (maxX - minX) + 0.01;
+        const deltaY = (maxY - minY) + 0.01;
+
+        return {
+            latitude: midX,
+            longitude: midY,
+            latitudeDelta: deltaX,
+            longitudeDelta: deltaY
+        };
+    }
     handleOnTabPress = index => {
         this.setNewStateHandler({
             selectedSegmentedIndex: index
@@ -100,11 +132,12 @@ class MapScreen extends BaseScreen {
                 this.setNewStateHandler({
                     loading: false,
                     mapPlaces: res,
+                    region: this.getInitRegionForCoordinates(res)
                 })
                 if (res.length == 0) {
                     this.showAlertMessage(MESSAGE_NO_PLACE)
                 } else {
-                    this.setNewRegion(0)
+                    // this.setNewRegion(0)
                 }
             },
             err => {
@@ -156,12 +189,13 @@ class MapScreen extends BaseScreen {
                     this.setNewStateHandler({
                         loading: false,
                         mapPlaces: res,
+                        region: this.getInitRegionForCoordinates(res)
                     })
 
                     if (res.length == 0) {
                         this.showAlertMessage(MESSAGE_NO_PLACE)
                     } else {
-                        this.setNewRegion(0)
+                        // this.setNewRegion(0)
                     }
                 },
                 err => {
@@ -196,8 +230,8 @@ class MapScreen extends BaseScreen {
         clearTimeout(this.regionTimeout);
         this.regionTimeout = setTimeout(() => {
 
-            const { mapPlaces, region } = this.state
-            const { latitudeDelta, longitudeDelta } = region
+            const { mapPlaces } = this.state
+
             if (mapPlaces.length > 0) {
                 const coordinate = mapPlaces[index].coordinate;
                 this.map.animateToRegion(
