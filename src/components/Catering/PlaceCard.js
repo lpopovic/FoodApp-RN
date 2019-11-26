@@ -21,7 +21,7 @@ class PlaceCard extends Component {
                             width: 100,
                             aspectRatio: 1 / 1,
                         }}
-                        source={{ url: this.props.data.link }}
+                        source={{ uri: this.props.data.link }}
                     />
                     <View style={{ flex: 10, flexDirection: 'column', height: '100%', paddingLeft: 10, paddingRight: 10 }}>
                         <View style={{ height: 50, flexDirection: 'row' }}>

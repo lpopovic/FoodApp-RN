@@ -163,7 +163,7 @@ class MenuItemDetailsScreen extends BaseScreen {
                             <Text style={{ fontSize: 15, fontWeight: '400', color: BASE_COLOR.gray, marginLeft: 8 }}>{place.name}</Text>
                         </View>
                     </TouchableOpacity>
-                    <Image style={styles.imageStyle} source={{ url: image.image169 }} resizeMode='cover' />
+                    <Image style={styles.imageStyle} source={{ uri: image.image169 }} resizeMode='cover' />
                     <View style={{ flexDirection: 'row', margin: 20 }}>
                         <View style={{ flex: 7 }}>
                             <Text numberOfLines={2} ellipsizeMode='tail' style={{ fontWeight: '500', fontSize: 20 }}>{name}</Text>
@@ -212,7 +212,6 @@ class MenuItemDetailsScreen extends BaseScreen {
                                 <View
                                     style={{
                                         position: 'absolute',
-                                        rotation: '180',
                                         backgroundColor: BASE_COLOR.gray,
                                         height: 30,
                                         width: 4,

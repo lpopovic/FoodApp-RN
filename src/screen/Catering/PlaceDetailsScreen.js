@@ -16,6 +16,7 @@ import { PlaceNetwork } from '../../service/api'
 import { Place } from '../../model';
 import { avgPriceTag, openDays } from '../../helpers/numberHelper';
 import UrlOpen from '../../components/common/UrlOpen'
+import Icon from 'react-native-vector-icons/Ionicons';
 class PlaceDetailsScreen extends BaseScreen {
 
 
@@ -118,7 +119,7 @@ class PlaceDetailsScreen extends BaseScreen {
                     // headerContainerStyle={{color: 'red'}}
                     // headerContainerStyle={{ width: '100%', height: Dimensions.get('screen').width * 16/9}}
                     // headerImage={require("./images/star-full.png")}
-                    renderHeader={() => <Image source={{ url: place.image.image169 }} style={{ height: Dimensions.get('screen').width * 9 / 16, width: Dimensions.get('window').width }} />}
+                    renderHeader={() => <Image source={{ uri: place.image.image169 }} style={{ height: Dimensions.get('screen').width * 9 / 16, width: Dimensions.get('window').width }} />}
 
                     // renderForeground={() => (
                     //     <View style={{ height: 150, justifyContent: "center", alignItems: "center" }} >
@@ -205,7 +206,7 @@ class PlaceDetailsScreen extends BaseScreen {
                                 </View>
                                 <View style={{ flexDirection: 'row', alignItems: 'center', flex: 0.5 }}>
                                     <Image style={{ width: 24 }} resizeMode='contain' source={IconAssets.deliveryTimeIcon}></Image>
-                                    <Text style={{ fontSize: 15, marginLeft: 8, color: BASE_COLOR.darkGray }}>45 min</Text>
+                                    <Text style={{ fontSize: 15, marginLeft: 8, color: BASE_COLOR.darkGray }}>{place.estimatedDeliveryTime ? place.estimatedDeliveryTime : 'any'} min.</Text>
                                 </View>
                                 <View style={{ flexDirection: 'row', alignItems: 'center', flex: 0.5 }}>
                                     <Image style={{ width: 24 }} resizeMode='contain' source={IconAssets.minimumPriceIcon}></Image>
@@ -265,9 +266,9 @@ class PlaceDetailsScreen extends BaseScreen {
             menuItems[i].categories.forEach(category => {
                 for (let j = 0; j < sectionMeniItems.length; j++) {
 
-                    if (j == 0) {
-                        sectionMeniItems[j].hide = false
-                    }
+                    // if (j == 0) {
+                    //     sectionMeniItems[j].hide = false
+                    // }
 
                     if (category._id == sectionMeniItems[j].category._id) {
                         sectionMeniItems[j].menuItems.push(menuItems[i])
@@ -285,6 +286,13 @@ class PlaceDetailsScreen extends BaseScreen {
                     data={menuItems}
                     clickOnDish={(menuItemId) => this.dishSelectHandler(menuItemId)} />
             )
+        } else {
+            const singleArray = [menuItems[0]]
+            return (
+                <DishList
+                    data={singleArray}
+                    clickOnDish={(menuItemId) => this.dishSelectHandler(menuItemId)} />
+            )
         }
 
     }
@@ -294,16 +302,23 @@ class PlaceDetailsScreen extends BaseScreen {
         let returnSectionView = []
         sectionMeniItems.map((section, indexInArray) => {
             if (section.menuItems.length > 0) {
+                const tintColor = section.hide ? BASE_COLOR.black : BASE_COLOR.blue
                 returnSectionView.push(
                     <>
                         <TouchableOpacity onPress={() => this.onPressSectionListHeader(indexInArray)}>
                             <View
-                                style={{ marginTop: 4, marginBottom: 4, marginLeft: 8, marginRight: 8, padding: 8, backgroundColor: BASE_COLOR.blue}}>
+
+                                style={{ borderRadius: 8, borderColor: tintColor, borderWidth: 0.7, marginTop: 4, marginBottom: 4, marginLeft: 8, marginRight: 8, padding: 8, backgroundColor: BASE_COLOR.white, flexDirection: 'row', justifyContent: 'space-between', alignContent: 'center', alignItems: 'center' }}>
                                 <Text
                                     numberOfLines={1}
                                     ellipsizeMode='tail'
-                                    style={{ fontWeight: 'bold', fontSize: 16, color: BASE_COLOR.white, }}>
+                                    style={{ fontWeight: 'bold', fontSize: 16, color: tintColor }}>
                                     {section.category.name}</Text>
+
+                                <Icon
+                                    name={!section.hide ? "md-arrow-dropdown-circle" : "md-arrow-dropright-circle"}
+                                    size={25}
+                                    color={tintColor} />
                             </View>
                         </TouchableOpacity>
                         {this.dishlistContent(section.menuItems, section.hide)}

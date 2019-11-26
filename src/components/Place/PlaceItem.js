@@ -9,21 +9,23 @@ import {
 } from 'react-native';
 import { BASE_COLOR } from '../../styles';
 import { TestAssets, IconAssets } from '../../assets'
+import Icon from 'react-native-vector-icons/dist/Ionicons';
 
 class PlaceItem extends Component {
 
-    deliveryIcon = (delivery) => {
-        const time = '45 min.' 
+    deliveryIcon = (delivery, timeDelivery) => {
+        const time = timeDelivery
 
         if (delivery == true) {
             return (
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-
-                    <Image
-                        style={[[styles.heartImage]]}
-                        source={IconAssets.deliveryIcon}
-                        resizeMode='contain' />
-                    <Text style={[styles.baseText, { marginLeft: 4 }]}>{time}</Text>
+                    <Icon
+                        name="ios-bicycle"
+                        size={20} color={BASE_COLOR.white} />
+                    <Text
+                        style={[styles.baseText, { marginLeft: 4 }]}>
+                        {time} min.
+                    </Text>
 
                 </View>
 
@@ -39,11 +41,10 @@ class PlaceItem extends Component {
         const { item } = this.props
         const title = item.name
         const rating = item.avgRating
-        const timeDelivery = item.delivery
-        // const priceTag = item.avgPriceTag
-        // const title = 'Mali Leskovac'
-        // const rating = '4.6'
-         const distance = '4.5 km'
+        const delivery = item.delivery
+        const timeDelivery = item.estimatedDeliveryTime
+        const priceTag = item.returnAvgPriceTag()
+        const distance = '4.5 km'
         // const timeDelivery = '45 min.'
         return (
             <View style={styles.mainContainer}>
@@ -52,7 +53,7 @@ class PlaceItem extends Component {
                         <View style={styles.imageBackgroundContainer}>
                             <ImageBackground
                                 style={styles.imageBackground}
-                                source={{ uri: item.image.image169t}}
+                                source={{ uri: item.image.image169t }}
                                 resizeMode='cover'>
                                 <View style={styles.imageContainer}>
                                     <TouchableOpacity
@@ -73,13 +74,17 @@ class PlaceItem extends Component {
                                         </Text>
                                     </View>
                                     <View style={{ marginLeft: 16, marginBottom: 8, marginRight: 16, marginTop: 0, }}>
-                                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                            <Image
-                                                style={[styles.otherImage]}
-                                                source={IconAssets.starIcon}
-                                                resizeMode='contain' />
-                                            <Text style={[styles.baseText]}>{rating}</Text>
-
+                                        <View style={{ flexDirection: 'row', alignItems: 'center',justifyContent:'space-between' }}>
+                                            <View style={{flexDirection: 'row'}}>
+                                                <Image
+                                                    style={[styles.otherImage]}
+                                                    source={IconAssets.starIcon}
+                                                    resizeMode='contain' />
+                                                <Text style={[styles.baseText,]}>{rating}</Text>
+                                            </View>
+                                            <View style={{flexDirection: 'row'}}>
+                                            <Text style={[styles.baseText]}>{priceTag}</Text>
+                                            </View>
                                         </View>
                                         <View style={{ justifyContent: 'space-between', flexDirection: 'row' }}>
                                             <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 4 }}>
@@ -89,7 +94,7 @@ class PlaceItem extends Component {
                                                     resizeMode='contain' />
                                                 <Text style={[styles.baseText]}>{distance} od tebe</Text>
                                             </View>
-                                            {this.deliveryIcon(timeDelivery)}
+                                            {this.deliveryIcon(delivery, timeDelivery)}
                                         </View>
 
                                     </View>
@@ -158,8 +163,9 @@ class PlaceSmallItem extends Component {
         const { item } = this.props
         const title = item.name
         const rating = item.avgRating
-        const timeDelivery = item.delivery == true ? '45 min.' : 'No delivery'
-        const priceTag = item.avgPriceTag
+        const delivery = item.delivery // == true ? '45 min.' : 'No delivery'
+        const timeDelivery = item.estimatedDeliveryTime
+        const priceTag = item.returnAvgPriceTag()
 
 
         return (
@@ -189,10 +195,7 @@ class PlaceSmallItem extends Component {
                             <View style={stylesSmall.itemOtherContainer}>
                                 <Text style={[stylesSmall.baseText]}>{priceTag}</Text>
                             </View>
-                            <View style={stylesSmall.spaceView} />
-                            <View style={stylesSmall.itemOtherContainer}>
-                                <Text style={[stylesSmall.baseText]}>{timeDelivery}</Text>
-                            </View>
+                            {this.deliveryContent(delivery, timeDelivery)}
                             <View style={stylesSmall.spaceView} />
                             <View style={stylesSmall.itemOtherContainer}>
                                 <Image
@@ -207,6 +210,21 @@ class PlaceSmallItem extends Component {
                 </TouchableOpacity>
             </View>
         )
+    }
+
+    deliveryContent = (delivery, timeDelivery) => {
+        if (delivery) {
+            return (
+                <>
+                    <View style={stylesSmall.spaceView} />
+                    <View style={stylesSmall.itemOtherContainer}>
+                        <Icon name="ios-bicycle" size={16} color={BASE_COLOR.black} />
+                        {/* <Text style={[stylesSmall.baseText, { marginLeft: 4 }]}>{timeDelivery}</Text> */}
+
+                    </View>
+                </>
+            )
+        }
     }
 }
 const stylesSmall = StyleSheet.create({

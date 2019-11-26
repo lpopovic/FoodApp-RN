@@ -33,6 +33,7 @@ class FilterScreen extends BaseScreen {
             rangeValue: 10,
             delivery: true,
             pickup: true,
+            deliveryTime: 2,
         }
     }
 
@@ -112,14 +113,14 @@ class FilterScreen extends BaseScreen {
                 <View>
                     <Text style={[styles.baseText, { color: BASE_COLOR.black }]}>{text}</Text>
                 </View>
-                 <TouchableOpacity onPress={()=>this.setNewStateHandler({ pickup: !pickup })}> 
+                <TouchableOpacity onPress={() => this.setNewStateHandler({ pickup: !pickup })}>
                     <View style={{ width: 32, aspectRatio: 1, borderRadius: 16, alignSelf: 'center', justifyContent: 'center', alignItems: 'center', backgroundColor: BASE_COLOR.white, borderColor: BASE_COLOR.gray, borderWidth: 2 }}>
 
                         <View style={{ width: 20, aspectRatio: 1, borderRadius: 10, alignSelf: 'center', justifyContent: 'center', alignItems: 'center', backgroundColor: pickup == true ? BASE_COLOR.blue : BASE_COLOR.gray, borderColor: BASE_COLOR.gray, borderWidth: 2 }}>
                         </View>
 
                     </View>
-                 </TouchableOpacity> 
+                </TouchableOpacity>
             </View>
         )
     }
@@ -131,13 +132,13 @@ class FilterScreen extends BaseScreen {
                 <View>
                     <Text style={[styles.baseText, { color: BASE_COLOR.black }]}>{text}</Text>
                 </View>
-                <TouchableOpacity onPress={()=>this.setNewStateHandler({ delivery: !delivery })}> 
-                <View style={{ width: 32, aspectRatio: 1, borderRadius: 16, alignSelf: 'center', justifyContent: 'center', alignItems: 'center', backgroundColor: BASE_COLOR.white, borderColor: BASE_COLOR.gray, borderWidth: 2 }}>
+                <TouchableOpacity onPress={() => this.setNewStateHandler({ delivery: !delivery })}>
+                    <View style={{ width: 32, aspectRatio: 1, borderRadius: 16, alignSelf: 'center', justifyContent: 'center', alignItems: 'center', backgroundColor: BASE_COLOR.white, borderColor: BASE_COLOR.gray, borderWidth: 2 }}>
 
-                    <View style={{ width: 20, aspectRatio: 1, borderRadius: 10, alignSelf: 'center', justifyContent: 'center', alignItems: 'center', backgroundColor: delivery == true ? BASE_COLOR.blue : BASE_COLOR.gray, borderColor: BASE_COLOR.gray, borderWidth: 2 }}>
+                        <View style={{ width: 20, aspectRatio: 1, borderRadius: 10, alignSelf: 'center', justifyContent: 'center', alignItems: 'center', backgroundColor: delivery == true ? BASE_COLOR.blue : BASE_COLOR.gray, borderColor: BASE_COLOR.gray, borderWidth: 2 }}>
+                        </View>
+
                     </View>
-
-                </View>
                 </TouchableOpacity>
             </View>
         )
@@ -214,6 +215,58 @@ class FilterScreen extends BaseScreen {
             </View>
         )
     }
+    deliveryTimeContent = () => {
+        const text = 'DELIVERY TIME'
+        const { deliveryTime } = this.state
+        let deliveryTimeText = ''
+        switch (deliveryTime) {
+            case 0:
+                deliveryTimeText = '45'
+                break
+            case 1:
+                deliveryTimeText = '60'
+                break
+            case 2:
+                deliveryTimeText = 'any'
+                break
+            default:
+
+                break
+        }
+        return (
+            <View style={[styles.baseContainer, { flexDirection: 'column' }]}>
+                <View style={{
+                    flexDirection: 'row',
+                }}>
+                    <View style={{ width: '50%', }}>
+                        <Text style={[styles.baseText, { color: BASE_COLOR.black, textAlign: 'left' }]}>{text}</Text>
+                    </View>
+                    <View style={{ width: '50%' }}>
+                        <Text style={[styles.baseText, { color: BASE_COLOR.black, textAlign: 'right' }]}>{deliveryTimeText} min</Text>
+                    </View>
+                </View>
+                <MultiSlider
+                    marker={{ backgroundColor: BASE_COLOR.red }}
+                    selectedStyle={{
+                        backgroundColor: BASE_COLOR.blue
+                    }}
+                    unselectedStyle={{
+                        backgroundColor: BASE_COLOR.gray,
+                    }}
+                    values={[deliveryTime]}
+                    onValuesChangeFinish={(values) => this.setNewStateHandler({ deliveryTime: values[0] })}
+                    snapped={true}
+                    optionsArray={[0, 1, 2]}
+                    sliderLength={Dimensions.get('screen').width - 50}
+                    trackStyle={{
+                        height: 4,
+                    }}
+                    customMarker={CustomMarker}
+
+                />
+            </View>
+        )
+    }
     scrollViewContent = () => {
         return (
             <View style={styles.scrollViewContainer}>
@@ -232,6 +285,9 @@ class FilterScreen extends BaseScreen {
                 </>
                 <>
                     {this.rangeContent()}
+                </>
+                <>
+                    {this.deliveryTimeContent()}
                 </>
 
             </View>

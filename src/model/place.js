@@ -5,10 +5,11 @@ class Place {
     constructor(object) {
         this._id = object._id;
         this.avgRating = object.avgRating || '5.0';
-        this.avgPriceTag = object.avgPriceTag || '$$$';
+        this.avgPriceTag = object.avgPriceTag || '1';
         this.numberOfReviews = object.numberOfReviews || '0';
         this.pickup = object.pickup;
         this.delivery = object.delivery || false;
+        this.estimatedDeliveryTime = object.estimatedDeliveryTime || 'any'
         this.onlinePayment = object.onlinePayment;
         this.name = object.name;
         this.setupCoordinate(object.location);
@@ -18,6 +19,30 @@ class Place {
         this.categories = Category.createArrayCategory(object.categories || [])
     }
 
+    returnAvgPriceTag = () => {
+        let value = '$'
+        if (this.avgPriceTag) {
+            const roundValue = Math.round(Number(this.avgPriceTag))
+            switch (roundValue) {
+                case 1:
+                    value = '$$'
+                    break
+                case 2:
+                    value = '$$$'
+                    break
+                case 3:
+                    value = '$$$$'
+                    break
+                case 4:
+                    value = '$$$$$'
+                    break
+                default:
+                    break
+            }
+
+        }
+        return value
+    }
     setupCoordinate = (location) => {
         if (location) {
             if (location.coordinates.length == 2) {

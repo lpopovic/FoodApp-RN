@@ -185,7 +185,7 @@ class MapScreen extends BaseScreen {
     }
     placeSelectHandler = (place) => {
 
-        this.pushNewScreen({ routeName: ScreenName.PlaceDetailScreen(), key: `${Math.random() * 10000}${place._id}`, params:{ _id: place._id} })
+        this.pushNewScreen({ routeName: ScreenName.PlaceDetailScreen(), key: `${Math.random() * 10000}${place._id}`, params: { _id: place._id } })
     }
     setNewRegion = (index) => {
 
@@ -373,7 +373,7 @@ class MapScreen extends BaseScreen {
 
                     return (
                         <MapView.Marker
-                            key={index}
+                            key={isAndroid ? `${index}${Math.random()}${this.state.currentSlideIndex}` : index}
                             coordinate={place.coordinate}
                             title={place.name}
                             description={`${Math.round(place.coordinate.latitude * 100) / 100}°N, ${Math.round(place.coordinate.longitude * 100) / 100}°E`}
@@ -485,10 +485,10 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.4,
         elevation: 5,
     },
-    carouselContainer:{ 
-        backgroundColor: 'transparent', 
-        position: 'absolute', 
-        bottom: 30 
+    carouselContainer: {
+        backgroundColor: 'transparent',
+        position: 'absolute',
+        bottom: 30
     },
 
 
@@ -556,8 +556,8 @@ const stylesCard = StyleSheet.create({
         flex: 1.5,
         justifyContent: 'flex-end',
     },
-    titleContainer:{ 
-        flex: 1 
+    titleContainer: {
+        flex: 1
     },
 });
 
