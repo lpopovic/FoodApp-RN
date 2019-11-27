@@ -5,12 +5,14 @@ import uiReducer from './reducers/ui';
 import locationReducer from './reducers/location'
 import userReducer from './reducers/user'
 import filterReducer from './reducers/filter'
+import orderReducer from './reducers/order'
 
 const rootReducer = combineReducers({
     ui: uiReducer,
     location:locationReducer,
     user: userReducer,
     filter:filterReducer,
+    order:orderReducer,
 });
 
 // debug redux

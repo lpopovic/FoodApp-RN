@@ -1,14 +1,20 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, Image, Dimensions, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, Image, Dimensions, TouchableOpacity, ScrollView } from 'react-native';
 import { CheckBox } from 'react-native-elements';
 import BaseScreen from '../BaseScreen/BaseScreen';
 import { IconAssets, TestAssets } from '../../assets';
 import { PlaceNetwork } from '../../service/api'
 import { MenuItem } from '../../model';
+import { connect } from 'react-redux';
+import { ScreenName } from '../../helpers'
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { BASE_COLOR } from '../../styles';
-import { ScrollView } from 'react-native-gesture-handler';
-
+import { addOrderMenuItem } from '../../store/actions'
+var noneRadioOption = {
+    "amount": 0,
+    "_id": "Bez osnovnih dodataka",
+    "text": "Bez osnovnih dodataka",
+}
 class MenuItemDetailsScreen extends BaseScreen {
 
     constructor(props) {
@@ -17,8 +23,8 @@ class MenuItemDetailsScreen extends BaseScreen {
             loading: false,
             quantity: 1,
             menuItem: new MenuItem({}),
-            selectedRadioButton: {},
-            selectedCheckbox: [{}],
+            selectedRadioButton: noneRadioOption,
+            selectedCheckbox: [],
         }
     }
 
@@ -65,59 +71,90 @@ class MenuItemDetailsScreen extends BaseScreen {
         if (menuItemOptions.length == 0 || menuItemOptions === undefined) {
             return <Text style={{ marginTop: 40, marginLeft: 20 }}>Nema dodataka!</Text>
         } else {
-            const checkMenuItems = menuItemOptions.filter(option => { return option.buttonOptionsType === "check" })
-            const radioMenuItems = menuItemOptions.filter(option => { return option.buttonOptionsType === "radio" })
+            // const checkMenuItems = menuItemOptions.filter(option => { return option.buttonOptionsType === "check" })
+            // const radioMenuItems = menuItemOptions.filter(option => { return option.buttonOptionsType === "radio" })
+          
+            menuItemOptions.map((item) => {
+                if (item.buttonOptionsType === "check"){
+                    {
 
-            {
-                checkMenuItems[0].options.map((option, indexInArray) => {
-                    allOptions.push(
-                        <View key={`${Math.random() * 10000} ${option._id}`} >
-                            {this._renderTitle(indexInArray, checkMenuItems[0].text)}
-                            <View style={{ flexDirection: 'row', alignItems: 'center', marginLeft: 10, marginRight: 25 }}>
-                                <CheckBox
-                                    key={`${Math.random() * 10000} ${option._id}`}
-                                    textStyle={{ fontWeight: '400', fontSize: 18, color: BASE_COLOR.darkGray, backgroundColor: 'transparent' }}
-                                    containerStyle={{ flex: 7, backgroundColor: 'transparent', borderColor: 'transparent' }}
-                                    title={option.text}
-                                    checkedColor={BASE_COLOR.blue}
-                                    checked={this.state.selectedCheckbox.some((selected) => option._id === selected._id)}
-                                    onPress={(_id, index) => this.selectCheckboxHandler(option, checkMenuItems[0].maximumSelection)}
-                                />
-                                <View style={{ alignItems: 'flex-end', flex: 3 }}>
-                                    <Text style={{ fontWeight: '400', fontSize: 16, color: BASE_COLOR.darkGray, }}>+{option.amount}.00</Text>
-                                </View>
-                            </View>
-                            <View style={{ backgroundColor: BASE_COLOR.gray, height: 1 }}></View>
-                        </View>
-                    )
-                })
-            }
+                        item.options.map((option, indexInArray) => {
 
-            {
-                radioMenuItems[0].options.map((option, indexInArray) => {
-                    allOptions.push(
-                        <View key={`${Math.random() * 10000} ${option._id}`} >
-                            {this._renderTitle(indexInArray, radioMenuItems[0].text)}
-                            <View style={{ flexDirection: 'row', alignItems: 'center', marginLeft: 10, marginRight: 25 }}>
-                                <CheckBox
-                                    key={`${Math.random() * 10000} ${option._id}`}
-                                    checked={option._id === this.state.selectedRadioButton._id}
-                                    onPress={(_id, index) => this.selectedRadioButtonHandler(option)}
-                                    checkedIcon='dot-circle-o'
-                                    uncheckedIcon='circle-o'
-                                    title={option.text}
-                                    textStyle={{ fontWeight: '400', fontSize: 18, color: BASE_COLOR.darkGray, backgroundColor: 'transparent' }}
-                                    containerStyle={{ flex: 7, backgroundColor: 'transparent', borderColor: 'transparent' }}
-                                />
-                                <View style={{ alignItems: 'flex-end', flex: 3 }}>
-                                    <Text style={{ fontWeight: '400', fontSize: 16, color: BASE_COLOR.darkGray, }}>+{option.amount}.00</Text>
+                            allOptions.push(
+                                <View key={`${Math.random() * 10000} ${option._id}`} >
+                                    {this._renderTitle(indexInArray, item.text)}
+                                    <View style={{ flexDirection: 'row', alignItems: 'center', marginLeft: 10, marginRight: 25 }}>
+                                        <CheckBox
+                                            key={`${Math.random() * 10000} ${option._id}`}
+                                            textStyle={{ fontWeight: '400', fontSize: 18, color: BASE_COLOR.darkGray, backgroundColor: 'transparent' }}
+                                            containerStyle={{ flex: 7, backgroundColor: 'transparent', borderColor: 'transparent' }}
+                                            title={option.text}
+                                            checkedColor={BASE_COLOR.blue}
+                                            checked={this.state.selectedCheckbox.some((selected) => option._id === selected._id)}
+                                            onPress={(_id, index) => this.selectCheckboxHandler(option, item.maximumSelection)}
+                                        />
+                                        <View style={{ alignItems: 'flex-end', flex: 3 }}>
+                                            <Text style={{ fontWeight: '400', fontSize: 16, color: BASE_COLOR.darkGray, }}>+{option.amount}.00</Text>
+                                        </View>
+                                    </View>
+                                    <View style={{ backgroundColor: BASE_COLOR.gray, height: 1 }}></View>
                                 </View>
-                            </View>
-                            <View style={{ backgroundColor: BASE_COLOR.gray, height: 1 }}></View>
-                        </View>
-                    )
-                })
-            }
+                            )
+                        })
+                    }
+                } else if (item.buttonOptionsType === "radio"){
+                    {
+                        item.options.map((option, indexInArray) => {
+        
+                            // if (indexInArray == 0) {
+                            //     allOptions.push(
+                            //         <View key={`${Math.random() * 10000} ${noneRadioOption._id}`} >
+                            //             {this._renderTitle(indexInArray, item.text)}
+                            //             <View style={{ flexDirection: 'row', alignItems: 'center', marginLeft: 10, marginRight: 25 }}>
+                            //                 <CheckBox
+                            //                     key={`${Math.random() * 10000} ${noneRadioOption._id}`}
+                            //                     checked={noneRadioOption._id === this.state.selectedRadioButton._id}
+                            //                     onPress={(_id, index) => this.selectedRadioButtonHandler(noneRadioOption)}
+                            //                     checkedIcon='dot-circle-o'
+                            //                     uncheckedIcon='circle-o'
+                            //                     title={noneRadioOption.text}
+                            //                     textStyle={{ fontWeight: '400', fontSize: 18, color: BASE_COLOR.darkGray, backgroundColor: 'transparent' }}
+                            //                     containerStyle={{ flex: 7, backgroundColor: 'transparent', borderColor: 'transparent' }}
+                            //                 />
+                            //                 <View style={{ alignItems: 'flex-end', flex: 3 }}>
+                            //                     <Text style={{ fontWeight: '400', fontSize: 16, color: BASE_COLOR.darkGray, }}>{noneRadioOption.amount != 0 ? `+${noneRadioOption.amount}.00` : null}</Text>
+                            //                 </View>
+                            //             </View>
+                            //             <View style={{ backgroundColor: BASE_COLOR.gray, height: 1 }}></View>
+                            //         </View>
+                            //     )
+                            // }
+        
+                            allOptions.push(
+                                <View key={`${Math.random() * 10000} ${option._id}`} >
+                                    {this._renderTitle(indexInArray, item.text)}
+                                    <View style={{ flexDirection: 'row', alignItems: 'center', marginLeft: 10, marginRight: 25 }}>
+                                        <CheckBox
+                                            key={`${Math.random() * 10000} ${option._id}`}
+                                            checked={option._id === this.state.selectedRadioButton._id}
+                                            onPress={(_id, index) => this.selectedRadioButtonHandler(option)}
+                                            checkedIcon='dot-circle-o'
+                                            uncheckedIcon='circle-o'
+                                            title={option.text}
+                                            textStyle={{ fontWeight: '400', fontSize: 18, color: BASE_COLOR.darkGray, backgroundColor: 'transparent' }}
+                                            containerStyle={{ flex: 7, backgroundColor: 'transparent', borderColor: 'transparent' }}
+                                        />
+                                        <View style={{ alignItems: 'flex-end', flex: 3 }}>
+                                            <Text style={{ fontWeight: '400', fontSize: 16, color: BASE_COLOR.darkGray, }}>{option.amount != 0 ? `+${option.amount}.00` : null}</Text>
+                                        </View>
+                                    </View>
+                                    <View style={{ backgroundColor: BASE_COLOR.gray, height: 1 }}></View>
+                                </View>
+                            )
+                        })
+                    }
+                }
+            })
 
             return allOptions
         }
@@ -129,7 +166,7 @@ class MenuItemDetailsScreen extends BaseScreen {
                 selectedCheckbox: this.state.selectedCheckbox.filter(item => item._id != selectedCheckbox._id)
             })
         } else {
-            if (this.state.selectedCheckbox.length <= maximumSelection) {
+            if (selected.length <= maximumSelection) {
                 this.setState({ selectedCheckbox: selected })
             } else {
                 alert(`Ne mozete uzeti više od ${maximumSelection} dodatka`)
@@ -139,6 +176,10 @@ class MenuItemDetailsScreen extends BaseScreen {
     }
 
     selectedRadioButtonHandler = selectedRadioButton => {
+        // var menuItem = { ...this.state.menuItem }
+        // menuItem.nominalPrice = this.state.menuItem.nominalPrice + selectedRadioButton.amount
+        // this.setState({ menuItem })
+
         this.setState({ selectedRadioButton })
         // alert(selectedRadioButton._id)
     }
@@ -152,7 +193,7 @@ class MenuItemDetailsScreen extends BaseScreen {
                         <Icon name="map-marker" size={26} color={BASE_COLOR.gray} />
                         <Text style={{ fontSize: 15, fontWeight: '400', color: BASE_COLOR.gray, marginLeft: 8 }}>{place.name}</Text>
                     </View>
-                    <Image style={styles.imageStyle} source={{ url: image.image169 }} resizeMode='cover' />
+                    <Image style={styles.imageStyle} source={{ uri: image.image169 }} resizeMode='cover' />
                     <View style={{ flexDirection: 'row', margin: 20 }}>
                         <View style={{ flex: 7 }}>
                             <Text numberOfLines={2} ellipsizeMode='tail' style={{ fontWeight: '500', fontSize: 20 }}>{name}</Text>
@@ -201,7 +242,6 @@ class MenuItemDetailsScreen extends BaseScreen {
                                 <View
                                     style={{
                                         position: 'absolute',
-                                        rotation: '180',
                                         backgroundColor: BASE_COLOR.gray,
                                         height: 30,
                                         width: 4,
@@ -228,14 +268,41 @@ class MenuItemDetailsScreen extends BaseScreen {
         )
     }
 
+    subTotalPrice = (menuItem, selectedRadioButton, selectedCheckbox, quantity) => {
+        var totalPrice = 0
+        totalPrice += menuItem.nominalPrice * quantity
+        selectedRadioButton.amount != undefined ? totalPrice += selectedRadioButton.amount : totalPrice
+        selectedCheckbox.map(
+            option => {
+                totalPrice += option.amount
+                return totalPrice
+            }
+        )
+        return totalPrice
+    }
+
     putInBagHandler() {
         const { menuItem, selectedRadioButton, selectedCheckbox, quantity } = this.state
-        const order = {
+        console.log(selectedRadioButton)
+        let tempSelectedRadio = selectedRadioButton
+        if (selectedRadioButton._id === noneRadioOption._id) {
+            tempSelectedRadio = {}
+        }
+
+        const orderdMenuItem = {
+            _id: `${this.props.order.length}${Math.random()}${menuItem._id}`,
             quantity: quantity,
             menuItem: menuItem,
-            selectedRadioButton: selectedRadioButton,
+            menuItemTotalPrice: this.subTotalPrice(menuItem, selectedRadioButton, selectedCheckbox, quantity),
+            selectedRadioButton: tempSelectedRadio,
             selectedCheckbox: selectedCheckbox,
         }
+        this.props.addOrderMenuItemHandler(orderdMenuItem)
+
+        // setTimeout(() => {
+        //     alert(this.props.order.length)
+        // },2000);
+        this.pushNewScreen({ routeName: ScreenName.ShopScreen(), key: `${Math.random() * 10000}`, params: { order: orderdMenuItem } })
 
     }
 
@@ -264,5 +331,16 @@ const styles = StyleSheet.create({
     }
 });
 
+const mapStateToProps = state => {
+    return {
+        order: state.order.order
+    };
+};
 
-export default MenuItemDetailsScreen;
+const mapDispatchToProps = dispatch => {
+    return {
+        addOrderMenuItemHandler: (orderdMenuItem) => dispatch(addOrderMenuItem(orderdMenuItem)),
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(MenuItemDetailsScreen);

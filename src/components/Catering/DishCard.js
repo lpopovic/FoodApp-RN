@@ -21,7 +21,7 @@ class DishCard extends Component {
                             margin: 10,
                             borderRadius: 5
                         }}
-                        source={{ url: image.image169t }}
+                        source={{ uri: image.image169t }}
                     />
                     <View style={{ flex: 10, flexDirection: 'column', height: '100%', paddingRight: 10 }}>
                         <View style={{ height: 50, flexDirection: 'row', paddingTop: 16 }}>

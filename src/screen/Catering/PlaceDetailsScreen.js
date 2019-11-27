@@ -112,7 +112,7 @@ class PlaceDetailsScreen extends BaseScreen {
                     // headerContainerStyle={{color: 'red'}}
                     // headerContainerStyle={{ width: '100%', height: Dimensions.get('screen').width * 16/9}}
                     // headerImage={require("./images/star-full.png")}
-                    renderHeader={() => <Image source={{ url: place.image.image169 }} style={{ height: Dimensions.get('screen').width * 9 / 16, width: Dimensions.get('window').width }} />}
+                    renderHeader={() => <Image source={{ uri: place.image.image169 }} style={{ height: Dimensions.get('screen').width * 9 / 16, width: Dimensions.get('window').width }} />}
 
                     // renderForeground={() => (
                     //     <View style={{ height: 150, justifyContent: "center", alignItems: "center" }} >
