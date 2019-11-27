@@ -48,14 +48,14 @@ class PlaceListScreen extends BaseScreen {
         if (apiParams !== null) {
             params.push(apiParams)
         }
-        if(pickup == true) {
-            params.push(ParamsUrl.pickup(pickup))
-        }
-        if(delivery == true) {
-            params.push(ParamsUrl.delivery(delivery))
-        }
-        params.push(ParamsUrl.avgPriceTag(avgPriceTag))
-        params.push(ParamsUrl.avgRating(avgRating))
+        // if(pickup == true) {
+        //     params.push(ParamsUrl.pickup(pickup))
+        // }
+        // if(delivery == true) {
+        //     params.push(ParamsUrl.delivery(delivery))
+        // }
+        // params.push(ParamsUrl.avgPriceTag(avgPriceTag))
+        // params.push(ParamsUrl.avgRating(avgRating))
 
 
         PlaceNetwork.fetchPlaces(params).then(

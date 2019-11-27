@@ -22,6 +22,7 @@ import SegmentedControlTab from "react-native-segmented-control-tab";
 import Carousel from 'react-native-snap-carousel';
 import { PlaceNetwork, ParamsUrl, } from '../../service/api'
 import { TestAssets, IconAssets } from '../../assets'
+import Icon from 'react-native-vector-icons/dist/Ionicons';
 import MapView from 'react-native-maps';
 import { connect } from 'react-redux';
 
@@ -29,6 +30,8 @@ import { connect } from 'react-redux';
 const zoom = 10
 const zoomMarker = 13
 const distanceDelta = Math.exp(Math.log(360) - (zoom * Math.LN2));
+
+
 const latitudeDeltaMarker = Math.exp(Math.log(360) - (zoomMarker * Math.LN2));
 const longitudeDeltaMarker = Dimensions.get('window').width / Dimensions.get('window').height * latitudeDeltaMarker
 // end mapView
@@ -79,6 +82,38 @@ class MapScreen extends BaseScreen {
     componentWillUnmount() {
         super.componentWillUnmount()
     }
+    getInitRegionForCoordinates(points) {
+        // points should be an array of { latitude: X, longitude: Y }
+        let minX, maxX, minY, maxY;
+
+        // init first point
+        ((point) => {
+            minX = point.coordinate.latitude;
+            maxX = point.coordinate.latitude;
+            minY = point.coordinate.longitude;
+            maxY = point.coordinate.longitude;
+        })(points[0]);
+
+        // calculate rect
+        points.map((point) => {
+            minX = Math.min(minX, point.coordinate.latitude);
+            maxX = Math.max(maxX, point.coordinate.latitude);
+            minY = Math.min(minY, point.coordinate.longitude);
+            maxY = Math.max(maxY, point.coordinate.longitude);
+        });
+
+        const midX = (minX + maxX) / 2;
+        const midY = (minY + maxY) / 2;
+        const deltaX = (maxX - minX) + 0.01;
+        const deltaY = (maxY - minY) + 0.01;
+
+        return {
+            latitude: midX,
+            longitude: midY,
+            latitudeDelta: deltaX,
+            longitudeDelta: deltaY
+        };
+    }
     handleOnTabPress = index => {
         this.setNewStateHandler({
             selectedSegmentedIndex: index
@@ -97,11 +132,12 @@ class MapScreen extends BaseScreen {
                 this.setNewStateHandler({
                     loading: false,
                     mapPlaces: res,
+                    region: this.getInitRegionForCoordinates(res)
                 })
                 if (res.length == 0) {
                     this.showAlertMessage(MESSAGE_NO_PLACE)
                 } else {
-                    this.setNewRegion(0)
+                    // this.setNewRegion(0)
                 }
             },
             err => {
@@ -150,17 +186,16 @@ class MapScreen extends BaseScreen {
 
             PlaceNetwork.fetchPlaces(params).then(
                 res => {
-
-
                     this.setNewStateHandler({
                         loading: false,
                         mapPlaces: res,
+                        region: this.getInitRegionForCoordinates(res)
                     })
 
                     if (res.length == 0) {
                         this.showAlertMessage(MESSAGE_NO_PLACE)
                     } else {
-                        this.setNewRegion(0)
+                        // this.setNewRegion(0)
                     }
                 },
                 err => {
@@ -187,18 +222,18 @@ class MapScreen extends BaseScreen {
     }
     placeSelectHandler = (place) => {
 
-        this.pushNewScreen({ routeName: ScreenName.PlaceDetailScreen(), key: `${Math.random() * 10000}${place._id}`, params:{ _id: place._id} })
+        this.pushNewScreen({ routeName: ScreenName.PlaceDetailScreen(), key: `${Math.random() * 10000}${place._id}`, params: { _id: place._id } })
     }
+
     setNewRegion = (index) => {
 
         clearTimeout(this.regionTimeout);
         this.regionTimeout = setTimeout(() => {
 
-            const { mapPlaces, region } = this.state
-            const { latitudeDelta, longitudeDelta } = region
+            const { mapPlaces } = this.state
+
             if (mapPlaces.length > 0) {
                 const coordinate = mapPlaces[index].coordinate;
-
                 this.map.animateToRegion(
                     {
                         ...coordinate,
@@ -218,8 +253,28 @@ class MapScreen extends BaseScreen {
         const image = item.image.image11t
         const title = item.name
         const rating = item.avgRating
-        const timeDelivery = item.delivery == true ? '45 min.' : 'No delivery'
-        const priceTag = item.avgPriceTag
+        const delivery = item.delivery
+        const timeDelivery = item.estimatedDeliveryTime
+        const priceTag = item.returnAvgPriceTag()
+
+        deliveryContent = (delivery, timeDelivery) => {
+            if (delivery) {
+                return (
+                    <>
+                        <View style={stylesCard.spaceView} />
+                        <View style={stylesCard.itemOtherContainer}>
+                            <Icon name="ios-bicycle" size={16} color={BASE_COLOR.black} />
+                            <Text
+                                style={[stylesCard.baseText, { marginLeft: 4 }]}>
+                                {timeDelivery} min.
+                            </Text>
+                        </View>
+                    </>
+                )
+            }
+        }
+
+
         return (
             <TouchableOpacity key={index} activeOpacity={0.8} onPress={() => this.placeSelectHandler(item)}>
                 <View style={this.cardStyle(index)}>
@@ -244,13 +299,7 @@ class MapScreen extends BaseScreen {
                                     {priceTag}
                                 </Text>
                             </View>
-                            <View style={stylesCard.spaceView} />
-                            <View style={stylesCard.itemOtherContainer}>
-                                <Text
-                                    style={[stylesCard.baseText]}>
-                                    {timeDelivery}
-                                </Text>
-                            </View>
+                            {deliveryContent(delivery, timeDelivery)}
                             <View style={stylesCard.spaceView} />
                             <View style={stylesCard.itemOtherContainer}>
                                 <Image
@@ -375,7 +424,7 @@ class MapScreen extends BaseScreen {
 
                     return (
                         <MapView.Marker
-                            key={index}
+                            key={isAndroid ? `${index}${Math.random()}${this.state.currentSlideIndex}` : index}
                             coordinate={place.coordinate}
                             title={place.name}
                             description={`${Math.round(place.coordinate.latitude * 100) / 100}°N, ${Math.round(place.coordinate.longitude * 100) / 100}°E`}
@@ -487,10 +536,10 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.4,
         elevation: 5,
     },
-    carouselContainer:{ 
-        backgroundColor: 'transparent', 
-        position: 'absolute', 
-        bottom: 30 
+    carouselContainer: {
+        backgroundColor: 'transparent',
+        position: 'absolute',
+        bottom: 30
     },
 
 
@@ -558,8 +607,8 @@ const stylesCard = StyleSheet.create({
         flex: 1.5,
         justifyContent: 'flex-end',
     },
-    titleContainer:{ 
-        flex: 1 
+    titleContainer: {
+        flex: 1
     },
 });
 

@@ -4,8 +4,8 @@ import {
 
 const initialState = {
     filter: {
-        pickup: true,
-        delivery: true,
+        pickup: false,
+        delivery: false,
         avgRating: 5,
         avgPriceTag: 4,
         rangeValue: 10,

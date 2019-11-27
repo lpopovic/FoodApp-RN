@@ -10,11 +10,13 @@ import { ScreenName } from '../../helpers'
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { BASE_COLOR } from '../../styles';
 import { addOrderMenuItem } from '../../store/actions'
+import UrlOpen from '../../components/common/UrlOpen'
 var noneRadioOption = {
     "amount": 0,
     "_id": "Bez osnovnih dodataka",
     "text": "Bez osnovnih dodataka",
 }
+
 class MenuItemDetailsScreen extends BaseScreen {
 
     constructor(props) {
@@ -38,6 +40,7 @@ class MenuItemDetailsScreen extends BaseScreen {
     apiCallHandler = (menuItemId) => {
         PlaceNetwork.fetchMenuItemById(menuItemId).then(
             res => {
+
                 this.setNewStateHandler({
                     loading: false,
                     menuItem: res
@@ -183,16 +186,20 @@ class MenuItemDetailsScreen extends BaseScreen {
         this.setState({ selectedRadioButton })
         // alert(selectedRadioButton._id)
     }
-
+    onPressShowPlaceOnMap = (place) => {
+        UrlOpen.openUrlInBrowser(UrlOpen.generateUrlForGoogleMap(place.coordinate.latitude, place.coordinate.longitude))
+    }
     render() {
         const { name, description, image, nominalPrice, menuItemOptions, place } = this.state.menuItem
         return (
             <View style={styles.mainContainer}>
                 <ScrollView>
-                    <View style={{ flexDirection: 'row', margin: 20, marginBottom: 0, alignItems: 'center' }}>
-                        <Icon name="map-marker" size={26} color={BASE_COLOR.gray} />
-                        <Text style={{ fontSize: 15, fontWeight: '400', color: BASE_COLOR.gray, marginLeft: 8 }}>{place.name}</Text>
-                    </View>
+                    <TouchableOpacity onPress={() => this.onPressShowPlaceOnMap(place)}>
+                        <View style={{ flexDirection: 'row', margin: 20, marginBottom: 0, alignItems: 'center' }}>
+                            <Icon name="map-marker" size={26} color={BASE_COLOR.gray} />
+                            <Text style={{ fontSize: 15, fontWeight: '400', color: BASE_COLOR.gray, marginLeft: 8 }}>{place.name}</Text>
+                        </View>
+                    </TouchableOpacity>
                     <Image style={styles.imageStyle} source={{ uri: image.image169 }} resizeMode='cover' />
                     <View style={{ flexDirection: 'row', margin: 20 }}>
                         <View style={{ flex: 7 }}>
