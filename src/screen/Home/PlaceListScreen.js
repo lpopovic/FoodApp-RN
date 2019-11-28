@@ -54,8 +54,8 @@ class PlaceListScreen extends BaseScreen {
         // if(delivery == true) {
         //     params.push(ParamsUrl.delivery(delivery))
         // }
-        // params.push(ParamsUrl.avgPriceTag(avgPriceTag))
-        // params.push(ParamsUrl.avgRating(avgRating))
+        params.push(ParamsUrl.avgPriceTag(avgPriceTag))
+        params.push(ParamsUrl.avgRating(avgRating))
 
 
         PlaceNetwork.fetchPlaces(params).then(
@@ -95,7 +95,7 @@ class PlaceListScreen extends BaseScreen {
                     />
                 }
                 arrayObject={arrayPlaces}
-                onPressItem={(item) => this.pushNewScreen({ routeName: ScreenName.PlaceDetailScreen(), key: `${Math.random() * 10000}${item._id}`, params:{ _id: item._id} })} />
+                onPressItem={(item) => this.pushNewScreen({ routeName: ScreenName.PlaceDetailScreen(), key: `${Math.random() * 10000}${item._id}`, params: { _id: item._id } })} />
         )
     }
     render() {

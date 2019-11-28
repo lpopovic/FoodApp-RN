@@ -17,6 +17,7 @@ import SafeAreaView from 'react-native-safe-area-view';
 import { PlaceList } from '../../components/Place/PlaceList'
 import { PlaceNetwork, ParamsUrl } from '../../service/api'
 import { TestAssets } from '../../assets'
+import { connect } from 'react-redux';
 
 class SearchScreen extends BaseScreen {
 
@@ -55,11 +56,16 @@ class SearchScreen extends BaseScreen {
     };
 
     searchApiHandler = ({ text, index }) => {
-
+        const {
+            pickup,
+            delivery,
+            avgRating,
+            avgPriceTag } = this.props.filter
         const selectedIndex = index != null ? index : this.state.selectedIndex
         let sort = null
         let search = null
         let params = []
+        
         switch (selectedIndex) {
             case 1:
                 sort = ParamsUrl.pickup(true)
@@ -70,6 +76,8 @@ class SearchScreen extends BaseScreen {
             default:
                 break
         }
+        params.push(ParamsUrl.avgPriceTag(avgPriceTag))
+        params.push(ParamsUrl.avgRating(avgRating))
         if (sort !== null) {
             params.push(sort)
         }
@@ -125,7 +133,7 @@ class SearchScreen extends BaseScreen {
         return (
             <PlaceList
                 arrayObject={searchPlaces}
-                onPressItem={(item) => this.pushNewScreen({ routeName: ScreenName.PlaceDetailScreen(), key: `${Math.random() * 10000}${item._id}`, params: { _id: item._id} })} />
+                onPressItem={(item) => this.pushNewScreen({ routeName: ScreenName.PlaceDetailScreen(), key: `${Math.random() * 10000}${item._id}`, params: { _id: item._id } })} />
         )
     }
     showNoResultContent = () => (
@@ -197,7 +205,7 @@ class SearchScreen extends BaseScreen {
 
     _filterData = () => {
         setTimeout(() => {
-            alert("FILTER DATA FUNC CALL")
+           this.searchApiHandler({})
         }, 100);
     }
 }
@@ -230,4 +238,11 @@ const styles = StyleSheet.create({
 });
 
 
-export default SearchScreen;
+const mapStateToProps = state => {
+    return {
+        city: state.location.city,
+        filter: state.filter.filter,
+    };
+};
+
+export default connect(mapStateToProps, null)(SearchScreen);

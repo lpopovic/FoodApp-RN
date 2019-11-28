@@ -274,12 +274,12 @@ class FilterScreen extends BaseScreen {
                 <>
                     {this.ratingContent()}
                 </>
-                <>
+                {/* <>
                     {this.pickupContent()}
                 </>
                 <>
                     {this.deliveryContent()}
-                </>
+                </> */}
                 <>
                     {this.priceContent()}
                 </>

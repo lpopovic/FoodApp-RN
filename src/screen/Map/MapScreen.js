@@ -125,14 +125,25 @@ class MapScreen extends BaseScreen {
         this.setNewStateHandler({
             loading: true
         })
-        PlaceNetwork.fetchPlaces().then(
-            res => {
 
+        const {
+            pickup,
+            delivery,
+            avgRating,
+            avgPriceTag } = this.props.filter
+
+        let params = []
+
+        params.push(ParamsUrl.avgPriceTag(avgPriceTag))
+        params.push(ParamsUrl.avgRating(avgRating))
+
+        PlaceNetwork.fetchPlaces(params).then(
+            res => {
 
                 this.setNewStateHandler({
                     loading: false,
                     mapPlaces: res,
-                    region: this.getInitRegionForCoordinates(res)
+                    region: res.length > 0 ? this.getInitRegionForCoordinates(res) : this.state.region
                 })
                 if (res.length == 0) {
                     this.showAlertMessage(MESSAGE_NO_PLACE)
@@ -153,6 +164,13 @@ class MapScreen extends BaseScreen {
     }
 
     searchApiHandler = ({ text, index }) => {
+
+        const {
+            pickup,
+            delivery,
+            avgRating,
+            avgPriceTag } = this.props.filter
+
         const selectedIndex = index != null ? index : this.state.selectedSegmentedIndex
         let sort = null
         let search = null
@@ -168,6 +186,10 @@ class MapScreen extends BaseScreen {
 
                 break
         }
+
+        params.push(ParamsUrl.avgPriceTag(avgPriceTag))
+        params.push(ParamsUrl.avgRating(avgRating))
+
         if (sort !== null) {
             params.push(sort)
         }
@@ -189,7 +211,7 @@ class MapScreen extends BaseScreen {
                     this.setNewStateHandler({
                         loading: false,
                         mapPlaces: res,
-                        region: this.getInitRegionForCoordinates(res)
+                        region: res.length > 0 ? this.getInitRegionForCoordinates(res) : this.state.region
                     })
 
                     if (res.length == 0) {
@@ -249,30 +271,33 @@ class MapScreen extends BaseScreen {
 
         }, 0);
     }
+    deliveryContent = (delivery, timeDelivery) => {
+        if (delivery) {
+            return (
+                <>
+                    <View style={stylesCard.spaceView} />
+                    <View style={stylesCard.itemOtherContainer}>
+                        <Icon name="ios-bicycle" size={16} color={BASE_COLOR.black} />
+                        <Text
+                            style={[stylesCard.baseText, { marginLeft: 4 }]}>
+                            {timeDelivery} min.
+                        </Text>
+                    </View>
+                </>
+            )
+        } else {
+            return null
+        }
+    }
     _renderItem = ({ item, index }) => {
         const image = item.image.image11t
         const title = item.name
         const rating = item.avgRating
-        const delivery = item.delivery
+        const delivery = item.delivery || false
         const timeDelivery = item.estimatedDeliveryTime
         const priceTag = item.returnAvgPriceTag()
 
-        deliveryContent = (delivery, timeDelivery) => {
-            if (delivery) {
-                return (
-                    <>
-                        <View style={stylesCard.spaceView} />
-                        <View style={stylesCard.itemOtherContainer}>
-                            <Icon name="ios-bicycle" size={16} color={BASE_COLOR.black} />
-                            <Text
-                                style={[stylesCard.baseText, { marginLeft: 4 }]}>
-                                {timeDelivery} min.
-                            </Text>
-                        </View>
-                    </>
-                )
-            }
-        }
+
 
 
         return (
@@ -299,7 +324,7 @@ class MapScreen extends BaseScreen {
                                     {priceTag}
                                 </Text>
                             </View>
-                            {deliveryContent(delivery, timeDelivery)}
+                            {this.deliveryContent(delivery, timeDelivery)}
                             <View style={stylesCard.spaceView} />
                             <View style={stylesCard.itemOtherContainer}>
                                 <Image
@@ -481,7 +506,7 @@ class MapScreen extends BaseScreen {
 
     _filterData = () => {
         setTimeout(() => {
-            alert("FILTER DATA FUNC CALL")
+            this.searchApiHandler({})
         }, 100);
     }
 }
@@ -615,6 +640,7 @@ const stylesCard = StyleSheet.create({
 const mapStateToProps = state => {
     return {
         city: state.location.city,
+        filter: state.filter.filter,
     };
 };
 
