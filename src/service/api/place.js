@@ -42,6 +42,26 @@ class PlaceNetwork {
             }
         });
 
+    static fetchPlacesBySort = (params) =>
+        new Promise(async (resolve, reject) => {
+            const url = RestUrl.getPlaces(params)
+            try {
+                const { data } = await axios.get(url)
+
+                const places = Place.createArrayPlaces(data)
+
+                resolve(places)
+            } catch (error) {
+                try {
+                    const { message } = error.response.data.error
+                    reject(message)
+                } catch  {
+                    reject(error.message)
+
+                }
+            }
+        });
+
     static fetchPlaceById = (placeId) =>
         new Promise(async (resolve, reject) => {
             const url = RestUrl.getPlaceById(placeId)
@@ -81,7 +101,7 @@ class PlaceNetwork {
             }
         });
 
-        static fetchMenuItemById = (itemId) =>
+    static fetchMenuItemById = (itemId) =>
         new Promise(async (resolve, reject) => {
             const url = RestUrl.getMenuItemById(itemId)
             try {

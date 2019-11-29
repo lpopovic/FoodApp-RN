@@ -32,6 +32,8 @@ class HomeScreen extends BaseScreen {
             actionPlaces: [],
             mostRatingPlaces: [],
             recommendedPlaces: [],
+            pickupPlaces: [],
+            deliveryPlaces: [],
 
 
         }
@@ -52,7 +54,7 @@ class HomeScreen extends BaseScreen {
                 this.setNewStateHandler({
                     loading: false,
                     refreshing: false,
-                    caroselPlaces: res,
+                    caroselPlaces: res.slice(0, 3),
                     newPlaces: res,
                     actionPlaces: res,
                     mostRatingPlaces: res,
@@ -64,6 +66,37 @@ class HomeScreen extends BaseScreen {
                 this.setNewStateHandler({
                     loading: false,
                     refreshing: false,
+                })
+            }
+        )
+
+        // Delivery section
+        PlaceNetwork.fetchPlacesBySort([ParamsUrl.delivery(true)]).then(
+            res => {
+                this.setNewStateHandler({
+                    deliveryPlaces: res,
+                })
+            },
+            err => {
+
+                this.setNewStateHandler({
+                    deliveryPlaces: []
+                })
+            }
+        )
+
+
+        // Pickup section
+        PlaceNetwork.fetchPlacesBySort([ParamsUrl.pickup(true)]).then(
+            res => {
+                this.setNewStateHandler({
+                    pickupPlaces: res,
+                })
+            },
+            err => {
+
+                this.setNewStateHandler({
+                    pickupPlaces: []
                 })
             }
         )
@@ -84,59 +117,106 @@ class HomeScreen extends BaseScreen {
 
     placeListNewContent = () => {
         const { newPlaces } = this.state
-        return (
-            <PlaceSectionList
-                titleSection="NOVO"
-                arrayObject={newPlaces}
-                onPressItem={(item) => this.pushNewScreen({ routeName: ScreenName.PlaceDetailScreen(), key: `${Math.random() * 10000}${item._id}`, params: { _id: item._id } })}
-                onPressSeeMore={() => this.pushNewScreen({ routeName: ScreenName.PlaceListScreen(), key: `${Math.random() * 10000}`, params: { title: "NOVO" } })}
-            />
-        )
+        if (newPlaces.length > 0) {
+            return (
+                <PlaceSectionList
+                    titleSection="NOVO"
+                    arrayObject={newPlaces}
+                    onPressItem={(item) => this.pushNewScreen({ routeName: ScreenName.PlaceDetailScreen(), key: `${Math.random() * 10000}${item._id}`, params: { _id: item._id } })}
+                    onPressSeeMore={() => this.pushNewScreen({ routeName: ScreenName.PlaceListScreen(), key: `${Math.random() * 10000}`, params: { title: "NOVO" } })}
+                />
+            )
+        }
+
     }
     placeListMostRatingContent = () => {
         const { mostRatingPlaces } = this.state
-        return (
-            <PlaceSectionList
-                titleSection="NAJBOLJE OCENE"
-                arrayObject={mostRatingPlaces}
-                onPressItem={(item) => this.pushNewScreen({ routeName: ScreenName.PlaceDetailScreen(), key: `${Math.random() * 10000}${item._id}`, params: { _id: item._id } })}
-                onPressSeeMore={() => this.pushNewScreen({ routeName: ScreenName.PlaceListScreen(), key: `${Math.random() * 10000}`, params: { title: "NAJBOLJE OCENE" } })}
-            />
-        )
+        if (mostRatingPlaces.length > 0) {
+            return (
+                <PlaceSectionList
+                    titleSection="NAJBOLJE OCENE"
+                    arrayObject={mostRatingPlaces}
+                    onPressItem={(item) => this.pushNewScreen({ routeName: ScreenName.PlaceDetailScreen(), key: `${Math.random() * 10000}${item._id}`, params: { _id: item._id } })}
+                    onPressSeeMore={() => this.pushNewScreen({ routeName: ScreenName.PlaceListScreen(), key: `${Math.random() * 10000}`, params: { title: "NAJBOLJE OCENE" } })}
+                />
+            )
+        }
     }
     placeListRecommendedContent = () => {
         const { recommendedPlaces } = this.state
-        return (
-            <PlaceSectionList
-                titleSection="PREPORUČENO"
-                arrayObject={recommendedPlaces}
-                onPressItem={(item) => this.pushNewScreen({ routeName: ScreenName.PlaceDetailScreen(), key: `${Math.random() * 10000}${item._id}`, params: { _id: item._id } })}
-                onPressSeeMore={() => this.pushNewScreen({ routeName: ScreenName.PlaceListScreen(), key: `${Math.random() * 10000}`, params: { title: "PREPORUČENO" } })}
-            />
-        )
+
+        if (recommendedPlaces.length > 0) {
+            return (
+                <PlaceSectionList
+                    titleSection="PREPORUČENO"
+                    arrayObject={recommendedPlaces}
+                    onPressItem={(item) => this.pushNewScreen({ routeName: ScreenName.PlaceDetailScreen(), key: `${Math.random() * 10000}${item._id}`, params: { _id: item._id } })}
+                    onPressSeeMore={() => this.pushNewScreen({ routeName: ScreenName.PlaceListScreen(), key: `${Math.random() * 10000}`, params: { title: "PREPORUČENO" } })}
+                />
+            )
+        }
     }
     placeListActionContent = () => {
         const { actionPlaces } = this.state
-        return (
-            <PlaceSectionList
-                titleSection={"AKCIJE"}
-                arrayObject={actionPlaces}
-                onPressItem={(item) => this.pushNewScreen({ routeName: ScreenName.PlaceDetailScreen(), key: `${Math.random() * 10000}${item._id}`, params: { _id: item._id } })}
-                onPressSeeMore={() => this.pushNewScreen({ routeName: ScreenName.PlaceListScreen(), key: `${Math.random() * 10000}`, params: { title: "AKCIJE" } })}
-            />
-        )
+
+        if (actionPlaces.length > 0) {
+            return (
+                <PlaceSectionList
+                    titleSection={"AKCIJE"}
+                    arrayObject={actionPlaces}
+                    onPressItem={(item) => this.pushNewScreen({ routeName: ScreenName.PlaceDetailScreen(), key: `${Math.random() * 10000}${item._id}`, params: { _id: item._id } })}
+                    onPressSeeMore={() => this.pushNewScreen({ routeName: ScreenName.PlaceListScreen(), key: `${Math.random() * 10000}`, params: { title: "AKCIJE" } })}
+                />
+            )
+        }
+
     }
     placeListDeliveryContent = () => {
-        const { actionPlaces } = this.state
-        return (
-            <PlaceSectionList
-                titleSection={"DOSTAVA"}
-                arrayObject={actionPlaces}
-                onPressItem={(item) => this.pushNewScreen({ routeName: ScreenName.PlaceDetailScreen(), key: `${Math.random() * 10000}${item._id}`, params: { _id: item._id } })}
-                onPressSeeMore={() => this.pushNewScreen({ routeName: ScreenName.PlaceListScreen(), key: `${Math.random() * 10000}`, params: { title: "AKCIJE" } })}
-            />
-        )
+        const { deliveryPlaces } = this.state
+
+        if (deliveryPlaces.length > 0) {
+            return (
+                <PlaceSectionList
+                    titleSection={"DOSTAVA"}
+                    arrayObject={deliveryPlaces}
+                    onPressItem={(item) => this.pushNewScreen({ routeName: ScreenName.PlaceDetailScreen(), key: `${Math.random() * 10000}${item._id}`, params: { _id: item._id } })}
+                    onPressSeeMore={() => this.pushNewScreen({
+                        routeName: ScreenName.PlaceListScreen(),
+                        key: `${Math.random() * 10000}`,
+                        params: {
+                            title: "DOSTAVA",
+                            apiParams: ParamsUrl.delivery(true)
+                        }
+                    })}
+                />
+            )
+        }
+
     }
+
+    placeListPickupContent = () => {
+        const { pickupPlaces } = this.state
+
+        if (pickupPlaces.length > 0) {
+            return (
+                <PlaceSectionList
+                    titleSection={"PREUZMITE"}
+                    arrayObject={pickupPlaces}
+                    onPressItem={(item) => this.pushNewScreen({ routeName: ScreenName.PlaceDetailScreen(), key: `${Math.random() * 10000}${item._id}`, params: { _id: item._id } })}
+                    onPressSeeMore={() => this.pushNewScreen({
+                        routeName: ScreenName.PlaceListScreen(),
+                        key: `${Math.random() * 10000}`,
+                        params: {
+                            title: "PREUZMITE",
+                            apiParams: ParamsUrl.pickup(true)
+                        }
+                    })}
+                />
+            )
+        }
+
+    }
+
     categoryListContent = () => {
         const { categories } = this.state
         return (
@@ -200,6 +280,9 @@ class HomeScreen extends BaseScreen {
                     </View>
                     <View style={{ marginTop: 8 }}>
                         {this.placeListDeliveryContent()}
+                    </View>
+                    <View style={{ marginTop: 8 }}>
+                        {this.placeListPickupContent()}
                     </View>
                 </View>
             </ScrollView>
