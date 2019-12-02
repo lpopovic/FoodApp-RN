@@ -67,12 +67,12 @@ class BaseHeader extends Component {
                                     resizeMode='contain' />
                             </View>
                         </TouchableOpacity>
-                        {/* <TouchableOpacity onPress={() => this.onPressFilterHandler()}>
+                        <TouchableOpacity onPress={() => this.onPressFilterHandler()}>
                             <View style={[styles.imageOtherContainer, styles.imageContainer]}>
 
                                 <Icon name="sliders" size={25} color={tintColor} />
                             </View>
-                        </TouchableOpacity> */}
+                        </TouchableOpacity>
                         <TouchableOpacity onPress={() => this.props.navigation.navigate(ScreenName.ShopScreen())}>
                             <View style={[styles.imageOtherContainer]}>
                                 <Image

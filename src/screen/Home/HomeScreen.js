@@ -49,7 +49,18 @@ class HomeScreen extends BaseScreen {
     }
 
     apiCallHandler = () => {
-        PlaceNetwork.fetchTest().then(
+
+        const {
+            pickup,
+            delivery,
+            avgRating,
+            avgPriceTag } = this.props.filter
+
+        let params = []
+        params.push(ParamsUrl.avgPriceTag(avgPriceTag))
+        params.push(ParamsUrl.avgRating(avgRating))
+
+        PlaceNetwork.fetchPlaces(params).then(
             res => {
                 this.setNewStateHandler({
                     loading: false,
@@ -70,8 +81,10 @@ class HomeScreen extends BaseScreen {
             }
         )
 
+        let deliveryParams = params
+        deliveryParams.push(ParamsUrl.delivery(true))
         // Delivery section
-        PlaceNetwork.fetchPlacesBySort([ParamsUrl.delivery(true)]).then(
+        PlaceNetwork.fetchPlacesBySort(deliveryParams).then(
             res => {
                 this.setNewStateHandler({
                     deliveryPlaces: res,
@@ -84,10 +97,10 @@ class HomeScreen extends BaseScreen {
                 })
             }
         )
-
-
+        let pickupParams = params
+        pickupParams.push(ParamsUrl.pickup(true))
         // Pickup section
-        PlaceNetwork.fetchPlacesBySort([ParamsUrl.pickup(true)]).then(
+        PlaceNetwork.fetchPlacesBySort(pickupParams).then(
             res => {
                 this.setNewStateHandler({
                     pickupPlaces: res,
@@ -306,7 +319,10 @@ class HomeScreen extends BaseScreen {
 
     _filterData = () => {
         setTimeout(() => {
-            alert("FILTER DATA FUNC CALL")
+            this.setNewStateHandler({
+                loading: true
+            })
+            this.apiCallHandler()
         }, 100);
     }
 }
@@ -322,4 +338,10 @@ const styles = StyleSheet.create({
     }
 });
 
-export default connect(null, null)(HomeScreen);
+const mapStateToProps = state => {
+    return {
+        filter: state.filter.filter,
+    };
+};
+
+export default connect(mapStateToProps, null)(HomeScreen);
