@@ -10,7 +10,7 @@ class ScreenName {
     static UserScreen = () => { return this.withKey(`User`) }
     static DetailScreen = () => { return this.withKey(`Detail`) }
     static PlaceDetailScreen = () => { return this.withKey('PlaceDetail') }
-    static MenuItemDetailsScreen = () => { return this.withKey('MenuItemDetails')}
+    static MenuItemDetailsScreen = () => { return this.withKey('MenuItemDetails') }
 
     static TabNavigatorScreen = () => { return this.withKey(`TabNavigator`) }
     static OnboardingScreen = () => { return this.withKey(`Onboarding`) }
@@ -26,6 +26,8 @@ class ScreenName {
     static ShopScreen = () => { return this.withKey(`Shop`) }
 
     static SearchTab = () => { return 'Search' }
+
+    static ReviewScreen = () => { return this.withKey('Review') }
 
 }
 export { ScreenName };

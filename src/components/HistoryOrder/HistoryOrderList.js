@@ -13,14 +13,14 @@ class HistoryOrderList extends Component {
 
     FlatListItemSeparator = () => {
         return (
-          <View
-            style={{
-              height: 4,
-              width: "100%",
-            }}
-          />
+            <View
+                style={{
+                    height: 4,
+                    width: "100%",
+                }}
+            />
         );
-      }
+    }
 
     render() {
         return (
@@ -33,9 +33,12 @@ class HistoryOrderList extends Component {
                 renderItem={(info) => (
                     <HistoryOrder
                         item={info.item}
+                        onPressDetailOrder={() => this.props.PressDetailOrder(info.item)}
+                        onPressOrderAgain={() => this.props.PressOrderAgain(info.item)}
+                        onPressReview={() => this.props.PressReview(info.item)}
                     />
                 )}
-                ItemSeparatorComponent = {this.FlatListItemSeparator}
+                ItemSeparatorComponent={this.FlatListItemSeparator}
 
             />
         )

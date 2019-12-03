@@ -24,6 +24,20 @@ class BaseHeader extends Component {
     onPressFilterHandler = () => {
         this.props.navigation.navigate(ScreenName.FilterScreen(), { filter: this.props.showFilter })
     }
+    badgeContent = () => {
+        const { order } = this.props
+         if (order.length > 0) {
+            return <Badge
+                // status="primary"
+                value={order.length}
+                textStyle={{ color: BASE_COLOR.white, fontSize: 12 }}
+                badgeStyle={{ backgroundColor: BASE_COLOR.red, }}
+                containerStyle={{ position: 'absolute', bottom: 0, right: 0 }}
+            />
+        } else {
+            return <View/>
+        }
+    }
     render() {
         const tintColor = NAV_COLOR.darkGray
         const backgroundColor = this.props.backgroundColor ? this.props.backgroundColor : NAV_COLOR.headerBackground
@@ -79,13 +93,7 @@ class BaseHeader extends Component {
                                     source={TestAssets.shopBagIcon}
                                     style={[styles.baseImage, { tintColor: tintColor }]}
                                     resizeMode='contain' />
-                                <Badge
-                                    // status="primary"
-                                    value={10}
-                                    textStyle={{ color: BASE_COLOR.white, fontSize: 12 }}
-                                    badgeStyle={{ backgroundColor: BASE_COLOR.red, }}
-                                    containerStyle={{ position: 'absolute', bottom: 0, right: 0 }}
-                                />
+                                {this.badgeContent()}
                             </View>
                         </TouchableOpacity>
                     </View>
@@ -148,6 +156,7 @@ const styles = StyleSheet.create({
 const mapStateToProps = state => {
     return {
         city: state.location.city,
+        order: state.order.order
     };
 };
 

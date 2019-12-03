@@ -21,6 +21,7 @@ import PlaceDetailScreen from '../../screen/Catering/PlaceDetailsScreen'
 
 // USER TAB
 import UserScreen from '../../screen/User/UserScreen'
+import ReviewScreen from '../../screen/User/ReviewScreen'
 
 //TEST
 
@@ -64,6 +65,7 @@ const CateringStack = createStackNavigator({
 })
 const UserStack = createStackNavigator({
     cateringapp_User: UserScreen,
+    cateringapp_Review: ReviewScreen,
     cateringapp_Detail: DetailScreen,
     cateringapp_Filter: FilterScreen,
     cateringapp_Shop: ShopScreen,
@@ -156,6 +158,7 @@ UserStack.navigationOptions = ({ navigation }) => {
     switch (routes[routes.length - 1].routeName) {
         case ScreenName.FilterScreen():
         case ScreenName.ShopScreen():
+        case ScreenName.ReviewScreen():
             tabBarVisible = false;
             break
         default:

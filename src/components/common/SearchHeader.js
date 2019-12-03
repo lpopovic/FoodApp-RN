@@ -12,8 +12,10 @@ import { TestAssets, IconAssets } from '../../assets'
 import { NAV_COLOR, headerStyles, BASE_COLOR } from '../../styles'
 import { ScreenName } from '../../helpers'
 import DefaultInput from './DefaultInput'
+import { connect } from 'react-redux';
 import { withNavigation } from 'react-navigation'
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
+import { Badge } from 'react-native-elements'
 class SearchHeader extends Component {
 
     constructor(props) {
@@ -57,6 +59,20 @@ class SearchHeader extends Component {
     onPressFilterHandler = () => {
         this.props.navigation.navigate(ScreenName.FilterScreen(), { filter: this.props.showFilter })
     }
+    badgeContent = () => {
+        const { order } = this.props
+         if (order.length > 0) {
+            return <Badge
+                // status="primary"
+                value={order.length}
+                textStyle={{ color: BASE_COLOR.white, fontSize: 12 }}
+                badgeStyle={{ backgroundColor: BASE_COLOR.red, }}
+                containerStyle={{ position: 'absolute', bottom: 0, right: 0 }}
+            />
+        } else {
+            return <View/>
+        }
+    }
     render() {
         const tintColor = this.props.tintColor ? this.props.tintColor : NAV_COLOR.darkGray
         const backgroundColor = this.props.backgroundColor ? this.props.backgroundColor : NAV_COLOR.headerBackground
@@ -94,6 +110,7 @@ class SearchHeader extends Component {
                                     source={TestAssets.shopBagIcon}
                                     style={[styles.baseImage, { tintColor: tintColor }]}
                                     resizeMode='contain' />
+                                    {this.badgeContent()}
                             </View>
                         </TouchableOpacity>
                     </View>
@@ -143,5 +160,10 @@ const styles = StyleSheet.create({
     },
 });
 
+const mapStateToProps = state => {
+    return {
+        order: state.order.order
+    };
+};
 
-export default withNavigation(SearchHeader);
+export default connect(mapStateToProps, null)(withNavigation(SearchHeader));

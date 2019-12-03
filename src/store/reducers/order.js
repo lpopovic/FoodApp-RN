@@ -10,18 +10,16 @@ const initialState = {
 const reducer = (state = initialState, action) => {
     switch (action.type) {
         case ADD_ORDERED_MENU_ITEM:
-            let { order } = state
-            order.push(action.payload)
+            const newOrder = [...state.order]
+            newOrder.push(action.payload)
             return {
                 ...state,
-                order: order
+                order: newOrder
             }
 
         case REMOVE_ORDERED_MENU_ITEM:
-            const oldOrder = state.order
-            alert(oldOrder.length)
+            const oldOrder = [...state.order]
             const orderNew = oldOrder.filter(item => item._id != action.payload._id)
-            alert(orderNew.length)
             return {
                 ...state,
                 order: orderNew

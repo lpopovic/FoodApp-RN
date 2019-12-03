@@ -7,11 +7,12 @@ import {
     StyleSheet,
 } from 'react-native';
 import { TestAssets, IconAssets } from '../../assets'
-import { NAV_COLOR, headerStyles } from '../../styles'
+import { NAV_COLOR, headerStyles, BASE_COLOR } from '../../styles'
 import { connect } from 'react-redux';
 import { withNavigation } from 'react-navigation'
 import { ScreenName } from '../../helpers'
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
+import { Badge } from 'react-native-elements'
 
 class UserHeader extends Component {
 
@@ -30,6 +31,20 @@ class UserHeader extends Component {
     }
     onPressUserHistory = () => {
         alert("onPressUserHistory")
+    }
+    badgeContent = () => {
+        const { order } = this.props
+        if (order.length > 0) {
+            return <Badge
+                // status="primary"
+                value={order.length}
+                textStyle={{ color: BASE_COLOR.white, fontSize: 12 }}
+                badgeStyle={{ backgroundColor: BASE_COLOR.red, }}
+                containerStyle={{ position: 'absolute', bottom: 0, right: 0 }}
+            />
+        } else {
+            return <View />
+        }
     }
     render() {
         const tintColor = NAV_COLOR.darkGray
@@ -82,6 +97,7 @@ class UserHeader extends Component {
                                     source={TestAssets.shopBagIcon}
                                     style={[styles.baseImage, { tintColor: tintColor }]}
                                     resizeMode='contain' />
+                                {this.badgeContent()}
                             </View>
                         </TouchableOpacity>
                     </View>
@@ -144,6 +160,7 @@ const styles = StyleSheet.create({
 const mapStateToProps = state => {
     return {
         city: state.location.city,
+        order: state.order.order
     };
 };
 

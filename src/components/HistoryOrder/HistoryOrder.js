@@ -19,36 +19,46 @@ class HistoryOrder extends Component {
         </TouchableOpacity>
 
     )
-    onPressDetaljnije = () => {
-        alert("onPressDetaljnije")
+    onPressDetailOrder = () => {
+        this.props.onPressDetailOrder()
     }
-    onPressPoruci = () => {
-        alert("onPressPoruci")
+    onPressOrderAgain = () => {
+        this.props.onPressOrderAgain()
     }
     onPressReview = () => {
-        alert("onPressReview")
+        this.props.onPressReview()
     }
     render() {
+
+        const priceText = '750.00'
+        const titleText = 'Piletina sa povrcem'
+        const dateText = '20.12.2019'
+        const statusOrder = 'Delivered'
         return (
             <View style={styles.mainContainer}>
                 <View style={{ margin: 8, flex: 10 }}>
                     <View style={styles.date}>
-                        <Text style={[styles.baseText, { color: BASE_COLOR.black, textAlign: 'left', fontWeight: 'normal' }]}>20.12.2019</Text>
+                        <Text style={[styles.baseText, { color: BASE_COLOR.black, textAlign: 'left', fontWeight: 'normal' }]}>
+                            {dateText}
+                        </Text>
                     </View>
                     <View style={styles.titleContainer}>
                         <Text
                             numberOfLines={2}
                             ellipsizeMode='tail'
                             style={[styles.baseText, { color: BASE_COLOR.black, textAlign: 'left', fontSize: 16 }]}>
-                            Piletina sa povrcem
-                            </Text>
+                            {titleText}
+                        </Text>
                         <Text style={[styles.baseText, { color: BASE_COLOR.blue, textAlign: 'left', fontSize: 16 }]}>
-                            750.00
-                            </Text>
+                            {priceText}
+                        </Text>
+                        <Text style={[styles.baseText, { color: BASE_COLOR.red, textAlign: 'left', fontSize: 16 }]}>
+                            {statusOrder}
+                        </Text>
                     </View>
                     <View style={styles.footerContainer}>
-                        {this.btnContent("Detalji", this.onPressDetaljnije)}
-                        {this.btnContent("Poruči", this.onPressPoruci)}
+                        {this.btnContent("Detalji", this.onPressDetailOrder)}
+                        {this.btnContent("Poruči", this.onPressOrderAgain)}
                         {this.btnContent("Review", this.onPressReview)}
                     </View>
                 </View>
@@ -65,20 +75,20 @@ const styles = StyleSheet.create({
     },
     titleContainer: {
         flex: 7,
-        marginLeft:8,
+        marginLeft: 8,
     },
     footerContainer: {
         flex: 3,
         justifyContent: 'center',
         flexDirection: 'row',
-        alignContent:'center',
-        alignItems:'center',
+        alignContent: 'center',
+        alignItems: 'center',
     },
     date: {
-        marginLeft:8,
-        height:18,
-        alignContent:'center',
-        alignItems:'center',
+        marginLeft: 8,
+        height: 18,
+        alignContent: 'center',
+        alignItems: 'center',
     },
     baseText: {
         width: '100%',

@@ -59,6 +59,10 @@ class UserScreen extends BaseScreen {
         this.setNewStateHandler({ refreshing: true });
         this.apiCallHandler()
     }
+    pressReviewOrderHandler = (order) => {
+        this.pushNewScreen(ScreenName.ReviewScreen())
+    }
+
     userImageContent = () => {
         return (
             <View style={{ justifyContent: 'center', alignContent: 'center', alignItems: 'center' }}>
@@ -74,7 +78,7 @@ class UserScreen extends BaseScreen {
                 <View style={{ flex: 4 }}>
                     <Text style={[styles.baseText, { color: BASE_COLOR.black }]}>{type}:</Text>
                 </View>
-                <View style={{flex: 6 }}>
+                <View style={{ flex: 6 }}>
                     <Text
                         ellipsizeMode='tail'
                         numberOfLines={6}
@@ -91,7 +95,10 @@ class UserScreen extends BaseScreen {
                     <Text style={[styles.baseText, { color: BASE_COLOR.black }]}>{type}:</Text>
                 </View>
                 <HistoryOrderList
-                    arrayObject={["lazar","lazar","lazar","lazar","lazar","lazar","lazar","lazar"]}
+                    arrayObject={["lazar", "lazar", "lazar", "lazar", "lazar", "lazar", "lazar", "lazar"]}
+                    PressDetailOrder={(order) => alert(order)}
+                    PressOrderAgain={(order) => alert(order)}
+                    PressReview={(order) => this.pressReviewOrderHandler(order)}
                 />
             </View>
         )

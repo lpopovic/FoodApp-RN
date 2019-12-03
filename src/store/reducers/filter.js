@@ -6,7 +6,7 @@ const initialState = {
     filter: {
         pickup: false,
         delivery: false,
-        avgRating: 5,
+        avgRating: 1,
         avgPriceTag: 4,
         rangeValue: 10,
     }

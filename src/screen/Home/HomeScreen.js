@@ -68,7 +68,6 @@ class HomeScreen extends BaseScreen {
                     caroselPlaces: res.slice(0, 3),
                     newPlaces: res,
                     actionPlaces: res,
-                    mostRatingPlaces: res,
                     recommendedPlaces: res,
                 })
             },
@@ -80,7 +79,22 @@ class HomeScreen extends BaseScreen {
                 })
             }
         )
+        let ratingParams = params
+        ratingParams.push('sort=-avgRating')
+        // Rating section
+        PlaceNetwork.fetchPlacesBySort(ratingParams).then(
+            res => {
+                this.setNewStateHandler({
+                    mostRatingPlaces: res,
+                })
+            },
+            err => {
 
+                this.setNewStateHandler({
+                    mostRatingPlaces: []
+                })
+            }
+        )
         let deliveryParams = params
         deliveryParams.push(ParamsUrl.delivery(true))
         // Delivery section
@@ -150,7 +164,14 @@ class HomeScreen extends BaseScreen {
                     titleSection="NAJBOLJE OCENE"
                     arrayObject={mostRatingPlaces}
                     onPressItem={(item) => this.pushNewScreen({ routeName: ScreenName.PlaceDetailScreen(), key: `${Math.random() * 10000}${item._id}`, params: { _id: item._id } })}
-                    onPressSeeMore={() => this.pushNewScreen({ routeName: ScreenName.PlaceListScreen(), key: `${Math.random() * 10000}`, params: { title: "NAJBOLJE OCENE" } })}
+                    onPressSeeMore={() => this.pushNewScreen({
+                        routeName: ScreenName.PlaceListScreen(),
+                        key: `${Math.random() * 10000}`,
+                        params: {
+                            title: "NAJBOLJE OCENE",
+                            apiParams: 'sort=-avgRating'
+                        }
+                    })}
                 />
             )
         }

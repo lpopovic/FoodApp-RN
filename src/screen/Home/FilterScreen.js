@@ -57,6 +57,15 @@ class FilterScreen extends BaseScreen {
             pickup: filter.pickup,
         })
     }
+    resetFilterValue =()=>{
+        this.setNewStateHandler({
+            pickup: false,
+            delivery: false,
+            avgRating: 1,
+            avgPriceTag: 4,
+            rangeValue: 10,
+        })
+    }
     onStarRatingPress(rating) {
         this.setNewStateHandler({
             avgRating: rating
@@ -68,7 +77,7 @@ class FilterScreen extends BaseScreen {
         });
     }
     onResetBtnPress = () => {
-        this.getFilterValueFromReducer()
+        this.resetFilterValue()
     }
 
     onSaveChangesBtnPress = () => {
@@ -294,11 +303,11 @@ class FilterScreen extends BaseScreen {
         )
     }
     mainContent = () => {
-        const { scrollEnabled } = this.state
+        
         return (
             <View style={styles.mainContainer}>
                 <View style={styles.filterContainer}>
-                    <ScrollView bounces={false} scrollEnabled={scrollEnabled}>
+                    <ScrollView bounces={false}>
                         {this.scrollViewContent()}
                     </ScrollView>
 
