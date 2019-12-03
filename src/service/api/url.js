@@ -37,6 +37,8 @@ class RestUrl {
         return withKey(`menuitems/${menuItemId}`)
     }
 
+    static order = withKey(`orders`)
+
 
     // static getMenuItems = (params) => {
     //     if(params){
