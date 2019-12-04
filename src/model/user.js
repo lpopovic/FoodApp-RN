@@ -9,7 +9,6 @@ class User {
         this.catheringIsAvailable = object.catheringIsAvailable
     }
 
-
     static createArrayTemplate(objectArray) {
 
         const arrayTemplate = objectArray.map(item => {

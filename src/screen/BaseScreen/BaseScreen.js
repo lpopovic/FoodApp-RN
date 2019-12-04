@@ -71,6 +71,9 @@ class BaseScreen extends Component {
     showAlertMessage = (message) => {
         CustomAlert.showAlert(String(message))
     }
+    showDialogMessage = (message,onPressOk) => {
+        CustomAlert.showDialogAlert(String(message),onPressOk)
+    }
     activityIndicatorContent = (color) => (
 
         <CustomActivityIndicator size="large" color={color} />

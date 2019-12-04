@@ -1,20 +1,20 @@
 import {
     ADD_ORDERED_MENU_ITEM,
-    REMOVE_ORDERED_MENU_ITEM
+    REMOVE_ORDERED_MENU_ITEM,
+    EMPTY_CURRENT_ORDER,
 } from '../actions/actionTypes';
 
 const initialState = {
-    order: []
+    order: [],
 };
 
 const reducer = (state = initialState, action) => {
     switch (action.type) {
         case ADD_ORDERED_MENU_ITEM:
-            const newOrder = [...state.order]
-            newOrder.push(action.payload)
+
             return {
                 ...state,
-                order: newOrder
+                order: JSON.parse(JSON.stringify(action.payload))
             }
 
         case REMOVE_ORDERED_MENU_ITEM:
@@ -23,6 +23,11 @@ const reducer = (state = initialState, action) => {
             return {
                 ...state,
                 order: orderNew
+            }
+        case EMPTY_CURRENT_ORDER:
+            return {
+                ...state,
+                order: []
             }
         default:
             return state;

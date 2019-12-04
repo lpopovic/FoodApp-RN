@@ -14,9 +14,11 @@ import {
 import { BASE_COLOR, NAV_COLOR } from '../../styles';
 import { PlaceNetwork } from '../../service/api'
 import { Place } from '../../model';
+import { connect } from 'react-redux';
 import { avgPriceTag, openDays } from '../../helpers/numberHelper';
 import UrlOpen from '../../components/common/UrlOpen'
 import Icon from 'react-native-vector-icons/Ionicons';
+import { Badge } from 'react-native-elements'
 class PlaceDetailsScreen extends BaseScreen {
 
 
@@ -88,6 +90,20 @@ class PlaceDetailsScreen extends BaseScreen {
     onPressShowPlaceOnMap = (place) => {
         UrlOpen.openUrlInBrowser(UrlOpen.generateUrlForGoogleMap(place.coordinate.latitude, place.coordinate.longitude))
     }
+    badgeContent = () => {
+        const { order } = this.props
+        if (order.length > 0) {
+            return <Badge
+                // status="primary"
+                value={order.length}
+                textStyle={{ color: BASE_COLOR.white, fontSize: 12 }}
+                badgeStyle={{ backgroundColor: BASE_COLOR.red, }}
+                containerStyle={{ position: 'absolute', bottom: 0, right: 0 }}
+            />
+        } else {
+            return <View />
+        }
+    }
     render() {
         const { place, menuItems, loading, refreshing } = this.state
         if (loading) {
@@ -99,16 +115,36 @@ class PlaceDetailsScreen extends BaseScreen {
         }
         return (
             <View style={styles.mainContainer}>
-                <TouchableOpacity
-                    onPress={() => this.closeScreen()}
-                    style={{ position: 'absolute', zIndex: 100, top: Platform.OS == "ios" ? getStatusBarHeight() + 5 : 25, left: 10 }}>
-                    <View>
-                        <Image
-                            style={{}}
-                            source={IconAssets.backIcon}>
-                        </Image>
-                    </View>
-                </TouchableOpacity>
+                <View style={{ width: '100%', paddingLeft: 16, paddingRight: 16, justifyContent: 'space-between', position: 'absolute', zIndex: 100, flexDirection: 'row', top: Platform.OS == "ios" ? getStatusBarHeight() + 5 : 25, }}>
+                    <TouchableOpacity
+                        onPress={() => this.closeScreen()}
+                        style={{}}>
+                        <View>
+                            <Image
+                                style={{
+                                    height: 25,
+                                    aspectRatio: 1
+                                }}
+                                resizeMode='contain'
+                                source={IconAssets.backIcon} />
+
+                        </View>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        onPress={() => this.pushNewScreen(ScreenName.ShopScreen())}
+                        style={{}}>
+                        <View style={{ padding: 4 }}>
+                            <Image
+                                style={{
+                                    height: 25,
+                                    aspectRatio: 1
+                                }}
+                                resizeMode='contain'
+                                source={TestAssets.shopBagIcon} />
+                            {this.badgeContent()}
+                        </View>
+                    </TouchableOpacity>
+                </View>
                 <HeaderImageScrollView
                     maxHeight={180}
                     minHeight={(40 + getStatusBarHeight())}
@@ -368,6 +404,10 @@ const styles = StyleSheet.create({
         backgroundColor: 'transparent',
     },
 });
+const mapStateToProps = state => {
+    return {
+        order: state.order.order
+    };
+};
 
-
-export default PlaceDetailsScreen;
+export default connect(mapStateToProps, null)(PlaceDetailsScreen);

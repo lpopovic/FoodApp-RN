@@ -7,7 +7,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 class ShopCard extends Component {
 
     renderMenuOptions = (selectedOptions) => {
-        console.log(selectedOptions)
+       
         let menuOptions = ""
         let menuOptionsTemp = ""
         let optionsTemp = ""
@@ -32,13 +32,11 @@ class ShopCard extends Component {
             }
             menuOptions += menuOptionsTemp + "\n"
         })
-        console.log(menuOptions)
+       
 
         return menuOptions
+
     }
-
-
-
 
     render() {
         const { menuItem, quantity, selectedOptions, menuItemTotalPrice } = this.props.data

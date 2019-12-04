@@ -1,5 +1,14 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Dimensions, ScrollView, TextInput } from 'react-native';
+import {
+    View,
+    Text,
+    StyleSheet,
+    TouchableOpacity,
+    Dimensions,
+    ScrollView,
+    TextInput,
+    KeyboardAvoidingView
+} from 'react-native';
 import BaseScreen from '../BaseScreen/BaseScreen';
 import SafeAreaView from 'react-native-safe-area-view';
 import Header from '../../components/common/BackHeader'
@@ -8,7 +17,8 @@ import { NAV_COLOR, BASE_COLOR } from '../../styles'
 import { FlatList } from 'react-native-gesture-handler';
 import ShopCard from '../../components/Home/ShopCard';
 import { OrderNetwork } from '../../service/api';
-import { removeOrderMenuItem } from '../../store/actions'
+import { removeOrderMenuItem, emptyOrder } from '../../store/actions'
+import Icon from 'react-native-vector-icons/Ionicons';
 const PAY_BUTTON_KEY = {
     cacheSelected: "cache",
     onlineSelected: "on-line",
@@ -36,19 +46,17 @@ class ShoopScreen extends BaseScreen {
     componentWillUnmount() {
         super.componentWillUnmount()
     }
-
     textInputNoteContent = () => (
         <TextInput
+            // onLayout={(event) => { this.textInput = event.nativeEvent.layout; }}
+            ref={(input) => (this.textInput = input)}
             style={styles.textInputNoteStyle}
             value={this.state.textReview}
             multiline={true}
             placeholder={'Napomena'}
             onChangeText={(text) => this.updateTextReview(text)}
             returnKeyType='done'
-            // onSubmitEditing={(event) => [this._setStateForBottomBtnContent(true), Keyboard.dismiss(), this.setNewStateHandler({ enabledKeyboradAvoiding: false })]}
             scrollEnabled={true}
-        // onFocus={() => { this._setStateForBottomBtnContent(false), this.setNewStateHandler({ enabledKeyboradAvoiding: true }) }}
-        // onBlur={() => { this._setStateForBottomBtnContent(true), Keyboard.dismiss(), this.setNewStateHandler({ enabledKeyboradAvoiding: false }) }}
         />
     )
     updateTextReview(text) {
@@ -58,21 +66,6 @@ class ShoopScreen extends BaseScreen {
     }
 
     subAllOrder = (order) => {
-        // var totalPrice = 0
-
-        // const selectedCheckbox = order.map(
-        //     orderItem => {
-        //         totalPrice += orderItem.menuItem.nominalPrice * orderItem.quantity
-        //         totalPrice += orderItem.selectedRadioButton.amount
-        //         return orderItem.selectedCheckbox
-        //     }
-        // )
-        // selectedCheckbox[0].map(
-        //     option => totalPrice += option.amount
-        // )
-
-        // return totalPrice
-
         var orderTotalPrice = 0
 
         order.map(
@@ -83,9 +76,20 @@ class ShoopScreen extends BaseScreen {
         return orderTotalPrice
 
     }
-
+    emptyContent = () => {
+        return (
+            <View style={styles.mainContainer}>
+                <View style={{ alignContent: 'center', alignItems: 'center', justifyContent: 'center' }}>
+                    <Icon size={200} name="logo-dropbox" color={BASE_COLOR.blue} />
+                    <Text
+                        style={{ alignItems: 'center', textAlign: 'center', fontWeight: 'bold', fontSize: 24, }}>
+                        Korpa je prazna.
+                    </Text>
+                </View>
+            </View>
+        )
+    }
     mainContent = () => {
-        
         return (
             <View style={styles.mainContainer}>
                 <ScrollView>
@@ -94,8 +98,13 @@ class ShoopScreen extends BaseScreen {
                         style={{ marginBottom: 30 }}
                         scrollEnabled={false}
                         data={this.props.order}
-                        keyExtractor={(item, index) => index}
-                        renderItem={({ item }) => <ShopCard data={item} onPressRemove={()=> this.onPressRemoveHandler(item)}/>}
+                        keyExtractor={(index) => `${Math.random() * Math.random()}${index.toString()}`}
+                        renderItem={(info) => (
+                            <ShopCard
+                                data={info.item}
+                                onPressRemove={() => this.onPressRemoveHandler(info.item)}
+                            />
+                        )}
                     />
                     <View style={{ height: 1, backgroundColor: BASE_COLOR.lightGray, margin: 10, marginTop: 0 }}></View>
                     <View style={{ flexDirection: 'column' }}>
@@ -172,20 +181,19 @@ class ShoopScreen extends BaseScreen {
     }
 
     onPressOrderHandler(order) {
-        
+
         OrderNetwork.fetchOrder(order)
-        .then(
-            res => {
-                alert("uspeo")
-                this.showAlertMessage(String(res))
-                this.setNewStateHandler({ loading: false })
-                this.closeScreen()
-            },
-            err => {
-                // alert("error")
-                this.setNewStateHandler({ loading: false })
-                this.showAlertMessage(String(err))
-            })
+            .then(
+                res => {
+                    this.showAlertMessage("USPESNO NARUCENO")
+                    this.setNewStateHandler({ loading: false })
+                    this.closeScreen()
+                    this.props.emptyOrderHandler()
+                },
+                err => {
+                    this.setNewStateHandler({ loading: false })
+                    this.showAlertMessage(String(err))
+                })
     }
 
     buttonStyle = (type) => {
@@ -222,7 +230,7 @@ class ShoopScreen extends BaseScreen {
 
     render() {
         const { loading } = this.state
-        const mainDisplay = loading ? this.activityIndicatorContent(BASE_COLOR.blue) : this.mainContent()
+        let mainDisplay = loading ? this.activityIndicatorContent(BASE_COLOR.blue) : this.props.order.length > 0 ? this.mainContent() : this.emptyContent()
         return (
             <SafeAreaView style={styles.safeAreaHeader}>
                 <View style={styles.mainContainer}>
@@ -291,6 +299,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return {
         removeOrderMenuItemHandler: (orderdMenuItem) => dispatch(removeOrderMenuItem(orderdMenuItem)),
+        emptyOrderHandler: () => dispatch(emptyOrder())
     };
 };
 
