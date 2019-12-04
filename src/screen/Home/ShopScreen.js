@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 import { NAV_COLOR, BASE_COLOR } from '../../styles'
 import { FlatList } from 'react-native-gesture-handler';
 import ShopCard from '../../components/Home/ShopCard';
+import { OrderNetwork } from '../../service/api';
 import { removeOrderMenuItem } from '../../store/actions'
 const PAY_BUTTON_KEY = {
     cacheSelected: "cache",
@@ -93,7 +94,7 @@ class ShoopScreen extends BaseScreen {
                         style={{ marginBottom: 30 }}
                         scrollEnabled={false}
                         data={this.props.order}
-                        keyExtractor={item => item._id}
+                        keyExtractor={(item, index) => index}
                         renderItem={({ item }) => <ShopCard data={item} onPressRemove={()=> this.onPressRemoveHandler(item)}/>}
                     />
                     <View style={{ height: 1, backgroundColor: BASE_COLOR.lightGray, margin: 10, marginTop: 0 }}></View>
@@ -155,7 +156,7 @@ class ShoopScreen extends BaseScreen {
 
 
                     <View style={{ alignItems: 'center', justifyContent: 'center', margin: 20 }}>
-                        <TouchableOpacity onPress={() => alert("Naruči")}>
+                        <TouchableOpacity onPress={() => this.onPressOrderHandler(this.props.order)}>
                             <View style={{ backgroundColor: BASE_COLOR.blue, width: 280, height: 65, justifyContent: 'center', alignItems: 'center', borderRadius: 4 }}>
                                 <Text style={{ color: BASE_COLOR.white, fontWeight: 'bold', fontSize: 22 }}>Naruči</Text>
                             </View>
@@ -168,6 +169,23 @@ class ShoopScreen extends BaseScreen {
 
     onPressRemoveHandler(orderdMenuItem) {
         this.props.removeOrderMenuItemHandler(orderdMenuItem)
+    }
+
+    onPressOrderHandler(order) {
+        
+        OrderNetwork.fetchOrder(order)
+        .then(
+            res => {
+                alert("uspeo")
+                this.showAlertMessage(String(res))
+                this.setNewStateHandler({ loading: false })
+                this.closeScreen()
+            },
+            err => {
+                // alert("error")
+                this.setNewStateHandler({ loading: false })
+                this.showAlertMessage(String(err))
+            })
     }
 
     buttonStyle = (type) => {

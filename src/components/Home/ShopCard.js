@@ -6,49 +6,85 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 
 class ShopCard extends Component {
 
-    renderMenuOptions = (selectedRadioButton, selectedCheckbox) => {
+    renderMenuOptions = (selectedOptions) => {
+        console.log(selectedOptions)
         let menuOptions = ""
-        if (selectedRadioButton.text != undefined) {
-            menuOptions = selectedRadioButton.text
-        }
-        selectedCheckbox.map(option => menuOptions += menuOptions == "" ? `${option.text}` : `, ${option.text}`)
-        return menuOptions.toLowerCase()
+        let menuOptionsTemp = ""
+        let optionsTemp = ""
+        let itemTemp = ""
+
+        selectedOptions.map(item => {
+            itemTemp = ""
+            optionsTemp = ""
+            itemTemp = `${item.text}:`
+
+            if (item.options.length != 0) {
+                item.options.map(option => {
+                    if (option.text != undefined) {
+                        let amount = option.amount == 0 ? "" : ` (+${option.amount}.00)`
+                        optionsTemp += optionsTemp == "" ? ` ${option.text}${amount}` : `, ${option.text} ${amount}`
+                    }
+                    menuOptionsTemp = itemTemp + optionsTemp
+                })
+            } else {
+                optionsTemp = " - "
+                menuOptionsTemp = itemTemp + optionsTemp
+            }
+            menuOptions += menuOptionsTemp + "\n"
+        })
+        console.log(menuOptions)
+
+        return menuOptions
     }
 
+
+
+
     render() {
-        const { menuItem, quantity, selectedRadioButton, selectedCheckbox, menuItemTotalPrice } = this.props.data
+        const { menuItem, quantity, selectedOptions, menuItemTotalPrice } = this.props.data
         return (
             <View style={styles.mainContainer}>
-                <View style={{ flex: 3, justifyContent: 'center' }}>
-                    <Image
-                        style={{ aspectRatio: 1 / 1, height: 86, marginLeft: 12, borderTopLeftRadius: 5, borderBottomLeftRadius: 5 }}
-                        source={{ uri: menuItem.image.image169 }}
-                    />
-                </View>
-                <View style={{ flex: 6, marginLeft: 15, justifyContent: 'center' }}>
-                    <Text
-                        style={{ fontWeight: '600', fontSize: 19, marginBottom: 8 }}
-                        numberOfLines={1}
-                        ellipsizeMode={'tail'}
-                    >{menuItem.name}
-                    </Text>
-                    <Text
-                        numberOfLines={2}
-                        ellipsizeMode={'tail'}
-                    >{this.renderMenuOptions(selectedRadioButton, selectedCheckbox) == "" ? " - " : this.renderMenuOptions(selectedRadioButton, selectedCheckbox)}</Text>
-                    <Text style={{ color: BASE_COLOR.blue, fontWeight: '600', fontSize: 18, marginTop: 8 }}>{menuItemTotalPrice}.00</Text>
-
-                </View>
-
-                <View style={{ flex: 1.8, flexDirection: 'column', justifyContent: 'space-between' }}>
-                    <TouchableOpacity style={{ marginTop: 10, marginRight: 10, alignItems: 'flex-end' }} onPress={() => this.props.onPressRemove()}>
-                        <View style={{ height: 25, width: 25, alignItems: 'center', justifyContent: 'center' }}>
-                            <Icon name="times" size={24} color={BASE_COLOR.darkGray} />
-                        </View>
-                    </TouchableOpacity>
-                    <View style={{ marginBottom: 10, alignItems: 'center' }}>
-                        <Text style={{ color: BASE_COLOR.darkGray }}>Qty: {quantity}</Text>
+                <View style={{ flex: 1, flexDirection: 'row' }}>
+                    <View style={{ flex: 3, justifyContent: 'center', marginTop: 12 }}>
+                        <Image
+                            style={{ aspectRatio: 1 / 1, height: 86, marginLeft: 12, borderTopLeftRadius: 5, borderBottomLeftRadius: 5 }}
+                            source={{ uri: menuItem.image.image169 }}
+                        />
                     </View>
+                    <View style={{ flex: 7.8, flexDirection: 'column' }}>
+                        <View style={{ flex: 7.8, flexDirection: 'row' }}>
+                            <View style={{ flex: 6, marginLeft: 15, justifyContent: 'center' }}>
+                                <Text
+                                    style={{ fontWeight: '600', fontSize: 19, marginBottom: 8 }}
+                                    numberOfLines={2}
+                                    ellipsizeMode={'tail'}
+                                >{menuItem.name}
+                                </Text>
+                            </View>
+                            <View style={{ margin: 10 }}>
+                                <TouchableOpacity style={{ alignSelf: 'center' }} onPress={() => this.props.onPressRemove()}>
+                                    <View style={{ height: 25, width: 25, alignItems: 'center', justifyContent: 'center' }}>
+                                        <Icon name="times" size={24} color={BASE_COLOR.darkGray} />
+                                    </View>
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+                        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+                            <View style={{ alignItems: 'center', justifyContent: 'center', marginLeft: 15 }}>
+                                <Text style={{ color: BASE_COLOR.darkGray }}>Qty: {quantity}</Text>
+                            </View>
+                            <View style={{ marginRight: 15 }}>
+                                <Text style={{ color: BASE_COLOR.blue, fontWeight: '600', fontSize: 18, textAlignVertical: 'center' }}>{menuItemTotalPrice}.00</Text>
+                            </View>
+                        </View>
+                    </View>
+                </View>
+                <View style={{ flex: 1, justifyContent: 'flex-start', margin: 12, marginBottom: 0, height: this.renderMenuOptions(selectedOptions) == "" ? 0 : 'auto' }}>
+                    <Text
+                        numberOfLines={6}
+                        ellipsizeMode={'tail'}
+                    >{this.renderMenuOptions(selectedOptions) == "" ? "" : this.renderMenuOptions(selectedOptions)}</Text>
+                    {/* {this.renderMenuOptions(selectedOptions)} */}
                 </View>
             </View>
         )
@@ -60,10 +96,8 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: BASE_COLOR.lightGray,
         margin: 10,
-        height: 110,
-        flexDirection: 'row',
-        // alignItems: 'center',
-
+        minHeight: 110,
+        flexDirection: 'column',
     }
 });
 
