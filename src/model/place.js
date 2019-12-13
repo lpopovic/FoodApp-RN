@@ -17,6 +17,7 @@ class Place {
         this.description = object.description;
         this.openDays = object.openDays;
         this.categories = Category.createArrayCategory(object.categories || [])
+        this.deliveryPrice = object.deliveryPrice || 0
     }
 
     returnAvgPriceTag = () => {

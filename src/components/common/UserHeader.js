@@ -12,7 +12,9 @@ import { connect } from 'react-redux';
 import { withNavigation } from 'react-navigation'
 import { ScreenName } from '../../helpers'
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
+import IconIonicons from 'react-native-vector-icons/dist/Feather';
 import { Badge } from 'react-native-elements'
+import { userLogOut } from '../../store/actions';
 
 class UserHeader extends Component {
 
@@ -27,11 +29,51 @@ class UserHeader extends Component {
     }
     onPressShop = () => {
         this.props.navigation.navigate(ScreenName.ShopScreen())
+    }
+    onPressUserLogOut = () => {
+        this.props.userLogOutHandler()
+    }
+    logOutBtnContent = (tintColor) => {
+        const { isLogin } = this.props
+        if (isLogin) {
+            return (
+                <TouchableOpacity onPress={() => this.onPressUserLogOut()}>
+                    <View style={[styles.imageOtherContainer, styles.imageContainer]}>
+                        <IconIonicons name="log-out" size={25} color={tintColor} />
+                    </View>
+                </TouchableOpacity>
+            )
+        } else {
+            return null
+        }
 
     }
-    onPressUserHistory = () => {
-        alert("onPressUserHistory")
+
+    rightBtnsContent = (tintColor) => {
+        const { isLogin } = this.props
+        if (isLogin) {
+            return (
+                <View style={styles.rightBtn}>
+                    {this.logOutBtnContent(tintColor)}
+                    <TouchableOpacity onPress={() => this.onPressUserSettings()}>
+                        <View style={[styles.imageOtherContainer, styles.imageContainer]}>
+                            <Icon name="cog" size={25} color={tintColor} />
+                        </View>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => this.onPressShop()}>
+                        <View style={[styles.imageOtherContainer]}>
+                            <Image
+                                source={TestAssets.shopBagIcon}
+                                style={[styles.baseImage, { tintColor: tintColor }]}
+                                resizeMode='contain' />
+                            {this.badgeContent()}
+                        </View>
+                    </TouchableOpacity>
+                </View>
+            )
+        }
     }
+
     badgeContent = () => {
         const { order } = this.props
         if (order.length > 0) {
@@ -80,27 +122,7 @@ class UserHeader extends Component {
                         </TouchableOpacity>
                     </View>
 
-                    <View style={styles.rightBtn}>
-                        <TouchableOpacity onPress={() => this.onPressUserHistory()}>
-                            <View style={[styles.imageOtherContainer, styles.imageContainer]}>
-                                <Icon name="history" size={25} color={tintColor} />
-                            </View>
-                        </TouchableOpacity>
-                        <TouchableOpacity onPress={() => this.onPressUserSettings()}>
-                            <View style={[styles.imageOtherContainer, styles.imageContainer]}>
-                                <Icon name="cog" size={25} color={tintColor} />
-                            </View>
-                        </TouchableOpacity>
-                        <TouchableOpacity onPress={() => this.onPressShop()}>
-                            <View style={[styles.imageOtherContainer]}>
-                                <Image
-                                    source={TestAssets.shopBagIcon}
-                                    style={[styles.baseImage, { tintColor: tintColor }]}
-                                    resizeMode='contain' />
-                                {this.badgeContent()}
-                            </View>
-                        </TouchableOpacity>
-                    </View>
+                    {this.rightBtnsContent(tintColor)}
                 </View>
             </View>
         )
@@ -160,8 +182,14 @@ const styles = StyleSheet.create({
 const mapStateToProps = state => {
     return {
         city: state.location.city,
-        order: state.order.order
+        order: state.order.order,
+        isLogin: state.user.isLogin,
     };
 };
+const mapDispatchToProps = dispatch => {
+    return {
+        userLogOutHandler: () => dispatch(userLogOut()),
 
-export default connect(mapStateToProps, null)(withNavigation(UserHeader));
+    };
+};
+export default connect(mapStateToProps, mapDispatchToProps)(withNavigation(UserHeader));

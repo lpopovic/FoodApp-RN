@@ -22,6 +22,12 @@ import Icon from 'react-native-vector-icons/Ionicons';
 const PAY_BUTTON_KEY = {
     cacheSelected: "cache",
     onlineSelected: "on-line",
+
+}
+const DELIVERY_BUTTON_KEY = {
+    pickup: 'pickup',
+    delivery: 'delivery'
+
 }
 class ShoopScreen extends BaseScreen {
 
@@ -35,7 +41,13 @@ class ShoopScreen extends BaseScreen {
             loading: false,
             cacheSelected: true,
             onlineSelected: false,
-            textReview: null,
+            wayOfDelivery: DELIVERY_BUTTON_KEY.pickup,
+            specialInstructions: '',
+            userInfo: {
+                name: '',
+                adress: '',
+                numberMob: '',
+            }
         }
     }
 
@@ -48,10 +60,9 @@ class ShoopScreen extends BaseScreen {
     }
     textInputNoteContent = () => (
         <TextInput
-            // onLayout={(event) => { this.textInput = event.nativeEvent.layout; }}
             ref={(input) => (this.textInput = input)}
             style={styles.textInputNoteStyle}
-            value={this.state.textReview}
+            value={this.state.specialInstructions}
             multiline={true}
             placeholder={'Napomena'}
             onChangeText={(text) => this.updateTextReview(text)}
@@ -61,7 +72,7 @@ class ShoopScreen extends BaseScreen {
     )
     updateTextReview(text) {
         this.setNewStateHandler({
-            textReview: text
+            specialInstructions: text
         });
     }
 
@@ -90,6 +101,9 @@ class ShoopScreen extends BaseScreen {
         )
     }
     mainContent = () => {
+
+        const { userInfo } = this.state
+
         return (
             <View style={styles.mainContainer}>
                 <ScrollView>
@@ -106,7 +120,25 @@ class ShoopScreen extends BaseScreen {
                             />
                         )}
                     />
+
                     <View style={{ height: 1, backgroundColor: BASE_COLOR.lightGray, margin: 10, marginTop: 0 }}></View>
+                    <View style={{ margin: 30 }}>
+                        <Text style={{ fontWeight: '400', fontSize: 18 }}>Način preuzimanja</Text>
+                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 20 }}>
+                            <TouchableOpacity onPress={() => this.wayOfDeliveryHandler(DELIVERY_BUTTON_KEY.pickup)}>
+                                <View style={this.buttonStyle(DELIVERY_BUTTON_KEY.pickup)}>
+                                    <Text style={{ color: this.state.wayOfDelivery == DELIVERY_BUTTON_KEY.pickup ? BASE_COLOR.blue : BASE_COLOR.darkGray, fontWeight: this.state.wayOfDelivery == DELIVERY_BUTTON_KEY.pickup ? 'bold' : '400' }}>POKUPI</Text>
+                                </View>
+                            </TouchableOpacity>
+                            <TouchableOpacity onPress={() => this.wayOfDeliveryHandler(DELIVERY_BUTTON_KEY.delivery)}>
+                                <View style={this.buttonStyle(DELIVERY_BUTTON_KEY.delivery)}>
+                                    <Text style={{ color: this.state.wayOfDelivery == DELIVERY_BUTTON_KEY.delivery ? BASE_COLOR.blue : BASE_COLOR.darkGray, fontWeight: this.state.wayOfDelivery == DELIVERY_BUTTON_KEY.delivery ? 'bold' : '400' }}>DOSTAVA</Text>
+                                </View>
+                            </TouchableOpacity>
+
+                        </View>
+                    </View>
+                    <View style={{ height: 1, backgroundColor: BASE_COLOR.lightGray, margin: 10 }}></View>
                     <View style={{ flexDirection: 'column' }}>
                         <View style={styles.containerSubAllStyle}>
                             <Text style={styles.textSubAllStyle}>Ukupno</Text>
@@ -114,12 +146,12 @@ class ShoopScreen extends BaseScreen {
                         </View>
                         <View style={styles.containerSubAllStyle}>
                             <Text style={styles.textSubAllStyle}>Dostava</Text>
-                            <Text style={styles.textSubAllStyle}>+80.00</Text>
+                            <Text style={styles.textSubAllStyle}>+{Number(this.props.orderForPlace.deliveryPrice).toFixed(2)}</Text>
                         </View>
                         <View style={{ height: 3, backgroundColor: BASE_COLOR.blue, margin: 10, marginTop: 10 }}></View>
                         <View style={[styles.containerSubAllStyle, { marginTop: 5 }]}>
                             <Text style={{ fontWeight: 'bold', fontSize: 18, marginLeft: 20, color: BASE_COLOR.blue }}>Sve ukupno</Text>
-                            <Text style={{ fontWeight: 'bold', fontSize: 18, marginRight: 20, color: BASE_COLOR.blue }}>{this.subAllOrder(this.props.order) + 80}.00</Text>
+                            <Text style={{ fontWeight: 'bold', fontSize: 18, marginRight: 20, color: BASE_COLOR.blue }}>{this.subAllOrder(this.props.order) + this.props.orderForPlace.deliveryPrice}.00</Text>
                         </View>
 
                     </View>
@@ -145,17 +177,59 @@ class ShoopScreen extends BaseScreen {
                     <View style={{ height: 1, backgroundColor: BASE_COLOR.lightGray, margin: 10 }}></View>
                     <View style={{ margin: 40 }}>
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                            <Text style={{ alignItems: 'flex-start', flex: 8, fontWeight: '400', fontSize: 18 }}>Lični podaci</Text>
-                            <TouchableOpacity style={{ flex: 2, alignItems: 'flex-end' }}>
+                            <Text style={{ alignItems: 'flex-start', flex: 8, fontWeight: '400', fontSize: 18 }}>Lični podaci:</Text>
+                            {/* <TouchableOpacity style={{ flex: 2, alignItems: 'flex-end' }}>
                                 <View style={{ borderBottomWidth: 0.9, borderBottomColor: BASE_COLOR.blue, marginBottom: 3, alignSelf: 'center' }}>
                                     <Text style={{ textAlign: 'center', color: BASE_COLOR.blue, fontSize: 14 }}>Izmeni</Text>
                                 </View>
-                            </TouchableOpacity>
+                            </TouchableOpacity> */}
                         </View>
                         <View style={{ marginTop: 20 }}>
-                            <Text style={styles.textStyle}>Ime Prezime</Text>
-                            <Text style={styles.textStyle}>Adresa br.</Text>
-                            <Text style={styles.textStyle}>telefon 123456789</Text>
+                            <View style={{ marginTop: 0, marginBottom: 8 }}>
+                                <View style={{ padding: 8, borderRadius: 8, borderWidth: 1, borderColor: BASE_COLOR.blue }}>
+                                    <TextInput
+                                        value={userInfo.name}
+                                        onChangeText={(text) => this.setNewStateHandler({
+                                            ...this.state,
+                                            userInfo: {
+                                                ...this.state.userInfo,
+                                                name: text,
+                                            }
+                                        })}
+                                        placeholder={'Ime i Prezime'}
+                                        style={[styles.textStyle,]} />
+                                </View>
+                            </View>
+                            <View style={{ marginTop: 8, marginBottom: 8 }}>
+                                <View style={{ padding: 8, borderRadius: 8, borderWidth: 1, borderColor: BASE_COLOR.blue }}>
+                                    <TextInput
+                                        value={userInfo.adress}
+                                        onChangeText={(text) => this.setNewStateHandler({
+                                            ...this.state,
+                                            userInfo: {
+                                                ...this.state.userInfo,
+                                                adress: text,
+                                            }
+                                        })}
+                                        placeholder={'Adresa'}
+                                        style={[styles.textStyle]} />
+                                </View>
+                            </View>
+                            <View style={{ marginTop: 8, marginBottom: 8 }}>
+                                <View style={{ padding: 8, borderRadius: 8, borderWidth: 1, borderColor: BASE_COLOR.blue }}>
+                                    <TextInput
+                                        value={userInfo.numberMob}
+                                        onChangeText={(text) => this.setNewStateHandler({
+                                            ...this.state,
+                                            userInfo: {
+                                                ...this.state.userInfo,
+                                                numberMob: text,
+                                            }
+                                        })}
+                                        placeholder={'Broj telefona'}
+                                        style={[styles.textStyle]} />
+                                </View>
+                            </View>
                         </View>
                     </View>
 
@@ -182,18 +256,32 @@ class ShoopScreen extends BaseScreen {
 
     onPressOrderHandler(order) {
 
-        OrderNetwork.fetchOrder(order)
-            .then(
-                res => {
-                    this.showAlertMessage("USPESNO NARUCENO")
-                    this.setNewStateHandler({ loading: false })
-                    this.closeScreen()
-                    this.props.emptyOrderHandler()
-                },
-                err => {
-                    this.setNewStateHandler({ loading: false })
-                    this.showAlertMessage(String(err))
-                })
+        const { cacheSelected, wayOfDelivery, specialInstructions, userInfo } = this.state
+        const { orderForPlace } = this.props
+        const placeId = orderForPlace._id
+        const orderType = wayOfDelivery
+        const methodOfPayment = cacheSelected ? 'cash' : 'online'
+
+        const { name, adress, numberMob } = userInfo
+        if (name.trim() != '' && adress.trim() != '' && numberMob.trim() != '') {
+            OrderNetwork.fetchOrder(order, placeId, orderType, methodOfPayment, specialInstructions)
+                .then(
+                    res => {
+                        this.showAlertMessage("USPESNO NARUCENO")
+                        this.setNewStateHandler({ loading: false })
+                        this.closeScreen()
+                        this.props.emptyOrderHandler()
+                    },
+                    err => {
+                        this.setNewStateHandler({ loading: false })
+                        this.showAlertMessage(String(err))
+                    })
+        } else {
+            this.showAlertMessage("Molimo vas popunite polje sa vasim podacima. \nHvala.")
+        }
+
+
+
     }
 
     buttonStyle = (type) => {
@@ -217,6 +305,34 @@ class ShoopScreen extends BaseScreen {
                 justifyContent: 'center',
                 borderRadius: 4,
             }
+        } else if (type == DELIVERY_BUTTON_KEY.pickup) {
+            return {
+                borderWidth: type == this.state.wayOfDelivery ? 5 : 1,
+                borderColor: type == this.state.wayOfDelivery ? BASE_COLOR.blue : BASE_COLOR.gray,
+                width: (Dimensions.get('screen').width - 100) / 2,
+                height: 55,
+                alignItems: 'center',
+                justifyContent: 'center',
+                borderRadius: 4,
+            }
+        } else if (type == DELIVERY_BUTTON_KEY.delivery) {
+            return {
+                borderWidth: type == this.state.wayOfDelivery ? 5 : 1,
+                borderColor: type == this.state.wayOfDelivery ? BASE_COLOR.blue : BASE_COLOR.gray,
+                width: (Dimensions.get('screen').width - 100) / 2,
+                height: 55,
+                alignItems: 'center',
+                justifyContent: 'center',
+                borderRadius: 4,
+            }
+        }
+    }
+    wayOfDeliveryHandler(type) {
+        if (type != this.state.wayOfDelivery) {
+            this.setNewStateHandler({
+                wayOfDelivery: type
+            })
+
         }
     }
     payButttonHandler(type) {
@@ -257,7 +373,7 @@ const styles = StyleSheet.create({
         fontWeight: '400',
         fontSize: 18,
         color: BASE_COLOR.darkGray,
-        paddingTop: 5
+        // paddingTop: 5
     },
     buttonTextStyle: {
         color: BASE_COLOR.gray,
@@ -292,7 +408,9 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = state => {
     return {
-        order: state.order.order
+        order: state.order.order,
+        orderForPlace: state.order.orderForPlace,
+        userInfo: state.user.userInfo,
     };
 };
 

@@ -29,7 +29,7 @@ class HistoryOrderList extends Component {
                 style={styles.listContainer}
                 data={this.props.arrayObject}
                 onScroll={this._onScroll}
-                keyExtractor={(index) => `${Math.random() * Math.random()}${index.toString()}`}
+                keyExtractor={(index) => `${index.toString()}`}
                 renderItem={(info) => (
                     <HistoryOrder
                         item={info.item}

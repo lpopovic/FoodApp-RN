@@ -10,7 +10,7 @@ import { connect } from 'react-redux';
 import { ScreenName } from '../../helpers'
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { BASE_COLOR, NAV_COLOR } from '../../styles';
-import { addOrderMenuItem } from '../../store/actions'
+import { addOrderMenuItem, emptyOrder } from '../../store/actions'
 import UrlOpen from '../../components/common/UrlOpen'
 
 var noneRadioOption = {
@@ -335,7 +335,7 @@ class MenuItemDetailsScreen extends BaseScreen {
                 {this._renderMenuItemOptions(menuItemOptions)}
 
                 <View style={{ alignItems: 'center', justifyContent: 'center', margin: 20, marginBottom: 30 }}>
-                    <TouchableOpacity onPress={() => this.putInBagHandler()}>
+                    <TouchableOpacity onPress={() => this.onPressAddToBag()}>
                         <View style={{ backgroundColor: BASE_COLOR.blue, width: 280, height: 45, justifyContent: 'center', alignItems: 'center', borderRadius: 4 }}>
                             <Text style={{ color: BASE_COLOR.white, fontWeight: '600', fontSize: 16 }}>Dodaj u korpu</Text>
                         </View>
@@ -370,8 +370,21 @@ class MenuItemDetailsScreen extends BaseScreen {
                 return totalPrice
             })
         })
-        // selectedRadioButton.amount != undefined ? totalPrice += selectedRadioButton.amount : totalPrice
         return totalPrice * quantity
+    }
+
+    onPressAddToBag = () => {
+        const { orderForPlace } = this.props
+        const { menuItem } = this.state
+
+        if (orderForPlace == null) {
+            this.putInBagHandler()
+        } else if (orderForPlace._id === menuItem.place._id) {
+            this.putInBagHandler()
+        } else if (orderForPlace._id !== menuItem.place._id) {
+            this.showDialogMessage("U korpi trenutno imate jela iz drugog restorana. Ako nastavite sa kupovinom, korpa sa vec unetim jelima ce se isprazniti.", this.putInBagHandler)
+        }
+
     }
 
     putInBagHandler() {
@@ -388,8 +401,7 @@ class MenuItemDetailsScreen extends BaseScreen {
         }
 
         this.props.addOrderMenuItemHandler([orderdMenuItem, ...this.props.order])
-        // this.menuItemOptions(menuItem)
-        this.pushNewScreen({ routeName: ScreenName.ShopScreen(), key: `${Math.random() * 10000}` })
+        this.closeScreen()
     }
 
     onMinusClickedHandler() {
@@ -424,13 +436,15 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = state => {
     return {
-        order: state.order.order
+        order: state.order.order,
+        orderForPlace: state.order.orderForPlace
     };
 };
 
 const mapDispatchToProps = dispatch => {
     return {
         addOrderMenuItemHandler: (orderdMenuItem) => dispatch(addOrderMenuItem(orderdMenuItem)),
+        emptyCurentOrderHandler: () => dispatch(emptyOrder()),
     };
 };
 

@@ -17,7 +17,7 @@ import { HistoryOrderList } from '../../components/HistoryOrder'
 import { NAV_COLOR, BASE_COLOR } from '../../styles';
 import { connect } from 'react-redux';
 import { updateUserProfile } from '../../store/actions'
-import { UserNetwork } from '../../service/api'
+import { UserNetwork, OrderNetwork } from '../../service/api'
 import { TestAssets, } from '../../assets'
 
 
@@ -29,6 +29,8 @@ class UserScreen extends BaseScreen {
     constructor(props) {
         super(props)
         this.state = {
+            allOrders: [],
+            refreshing: false,
         }
     }
 
@@ -36,10 +38,30 @@ class UserScreen extends BaseScreen {
         super.componentDidMount()
         this.setStatusBarStyle(NAV_COLOR.headerBackground, true)
 
+        if (this.props.isLogin) {
+            this.getAllOrders()
+        }
+
+
     }
     componentWillUnmount() {
         super.componentWillUnmount()
     }
+
+    getAllOrders = () => {
+        OrderNetwork.fetchGetAllOrders()
+            .then(
+                res => {
+                    this.setNewStateHandler({
+                        allOrders: res.reverse()
+                    })
+                },
+                err => {
+                    this.showAlertMessage(err)
+                }
+            )
+    }
+
     apiCallHandler = () => {
 
         UserNetwork.fetchUserInfo()
@@ -53,6 +75,8 @@ class UserScreen extends BaseScreen {
                     this.setNewStateHandler({ refreshing: false });
                 }
             )
+
+        this.getAllOrders()
     }
 
     _onRefresh = () => {
@@ -89,13 +113,14 @@ class UserScreen extends BaseScreen {
     }
     recentOrdersContent = () => {
         const type = "RECENT ORDERS"
+        const { allOrders } = this.state
         return (
             <View style={[styles.baseContainer, { flexDirection: 'column' }]}>
                 <View style={{ alignSelf: 'flex-start', marginBottom: 8 }}>
                     <Text style={[styles.baseText, { color: BASE_COLOR.black }]}>{type}:</Text>
                 </View>
                 <HistoryOrderList
-                    arrayObject={["lazar", "lazar", "lazar", "lazar", "lazar", "lazar", "lazar", "lazar"]}
+                    arrayObject={allOrders}
                     PressDetailOrder={(order) => alert(order)}
                     PressOrderAgain={(order) => alert(order)}
                     PressReview={(order) => this.pressReviewOrderHandler(order)}
@@ -131,10 +156,59 @@ class UserScreen extends BaseScreen {
             </ScrollView>
         )
     }
-
+    onPressLogInHandler = ()=>{
+        this.pushNewScreen(ScreenName.LoginScreen())
+    }
+    loginContent = () => {
+        return (
+            <View style={{ flex: 1, alignItems: 'center' }}>
+                <View style={{ flex: 0.6, alignItems: 'center', justifyContent: 'center' }}>
+                    <Text style={{
+                        width: '80%',
+                        color: BASE_COLOR.black,
+                        fontSize: 30,
+                        fontWeight: 'bold',
+                        textAlignVertical: 'center',
+                        textAlign: 'center',
+                        margin: 0,
+                    }}>KLOPAJ</Text>
+                    <Text style={{
+                        width: 300,
+                        color: BASE_COLOR.black,
+                        fontSize: 14,
+                        fontWeight: 'bold',
+                        textAlignVertical: 'center',
+                        textAlign: 'center',
+                        margin: 16,
+                    }}>Da bi ste koristili korisnikicki tab, molimo vas da se prijavite.</Text>
+                </View>
+                <View style={{ flex: 0.4, alignItems: 'center', justifyContent: 'center' }}>
+                    <TouchableOpacity onPress={() => this.onPressLogInHandler()}>
+                        <View style={{
+                            alignContent: 'center',
+                            justifyContent: 'center',
+                            height: 40,
+                            width: 200,
+                            borderRadius: 8,
+                            backgroundColor: BASE_COLOR.blue,
+                        }}>
+                            <Text style={{
+                                width: '100%',
+                                color: BASE_COLOR.white,
+                                fontSize: 17,
+                                fontWeight: 'bold',
+                                textAlignVertical: 'center',
+                                textAlign: 'center',
+                            }}>PRIJAVITE SE</Text>
+                        </View>
+                    </TouchableOpacity>
+                </View>
+            </View >
+        )
+    }
     render() {
-        const { loading } = this.props
-        const mainDisplay = loading ? this.activityIndicatorContent(BASE_COLOR.blue) : this.mainContent()
+        const { loading, isLogin } = this.props
+        const mainDisplay = isLogin ? loading ? this.activityIndicatorContent(BASE_COLOR.blue) : this.mainContent() : this.loginContent()
         return (
             <SafeAreaView style={styles.safeAreaHeader}>
                 <View style={styles.mainContainer}>
@@ -200,7 +274,8 @@ const styles = StyleSheet.create({
 const mapStateToProps = state => {
     return {
         userInfo: state.user.userInfo,
-        loading: state.ui.isLoading
+        loading: state.ui.isLoading,
+        isLogin: state.user.isLogin,
     };
 };
 

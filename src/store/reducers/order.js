@@ -6,6 +6,7 @@ import {
 
 const initialState = {
     order: [],
+    orderForPlace: null
 };
 
 const reducer = (state = initialState, action) => {
@@ -14,20 +15,26 @@ const reducer = (state = initialState, action) => {
 
             return {
                 ...state,
-                order: JSON.parse(JSON.stringify(action.payload))
+                order: JSON.parse(JSON.stringify(action.payload)),
+                orderForPlace: action.payload[0].menuItem.place,
             }
 
         case REMOVE_ORDERED_MENU_ITEM:
+
             const oldOrder = [...state.order]
             const orderNew = oldOrder.filter(item => item._id != action.payload._id)
+
             return {
                 ...state,
-                order: orderNew
+                order: orderNew,
+                orderForPlace: orderNew.length == 0 ? null : state.orderForPlace,
             }
         case EMPTY_CURRENT_ORDER:
+
             return {
                 ...state,
-                order: []
+                order: [],
+                orderForPlace: null
             }
         default:
             return state;

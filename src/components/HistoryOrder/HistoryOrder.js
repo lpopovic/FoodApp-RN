@@ -7,7 +7,7 @@ import {
     Dimensions,
 } from 'react-native';
 import { BASE_COLOR } from '../../styles';
-
+import Moment from 'moment'
 const widhtBtn = Dimensions.get('screen').width / 3.8
 class HistoryOrder extends Component {
 
@@ -29,11 +29,15 @@ class HistoryOrder extends Component {
         this.props.onPressReview()
     }
     render() {
+        const { item } = this.props
+        const { totalAmount, additionalPrice, orderedTime, status, place } = item
+        const priceText = Number(totalAmount + additionalPrice).toFixed(2)//'750.00'
+        const titleText = item.generateTitleOfOrder()//'Piletina sa povrcem'
+        const placeName = place.name
+        var date = new Date(orderedTime);
 
-        const priceText = '750.00'
-        const titleText = 'Piletina sa povrcem'
-        const dateText = '20.12.2019'
-        const statusOrder = 'Delivered'
+        const dateText = Moment(date).format("DD/MM/YYYY") //orderedTime//'20.12.2019'
+        const statusOrder = status//'Delivered'
         return (
             <View style={styles.mainContainer}>
                 <View style={{ margin: 8, flex: 10 }}>
@@ -44,16 +48,22 @@ class HistoryOrder extends Component {
                     </View>
                     <View style={styles.titleContainer}>
                         <Text
-                            numberOfLines={2}
+                            numberOfLines={200}
                             ellipsizeMode='tail'
-                            style={[styles.baseText, { color: BASE_COLOR.black, textAlign: 'left', fontSize: 16 }]}>
+                            style={[styles.baseText, { color: BASE_COLOR.blue, textAlign: 'left', fontSize: 16, marginBottom: 8 }]}>
+                            {placeName}
+                        </Text>
+                        <Text
+                            numberOfLines={200}
+                            ellipsizeMode='tail'
+                            style={[styles.baseText, { color: BASE_COLOR.black, textAlign: 'left', fontSize: 16, marginBottom: 8, fontWeight: '400' }]}>
                             {titleText}
                         </Text>
                         <Text style={[styles.baseText, { color: BASE_COLOR.blue, textAlign: 'left', fontSize: 16 }]}>
-                            {priceText}
+                            Iznos: {priceText}
                         </Text>
-                        <Text style={[styles.baseText, { color: BASE_COLOR.red, textAlign: 'left', fontSize: 16 }]}>
-                            {statusOrder}
+                        <Text style={[styles.baseText, { color: BASE_COLOR.blue, textAlign: 'left', fontSize: 16 }]}>
+                            Status narudzbine: {statusOrder}
                         </Text>
                     </View>
                     <View style={styles.footerContainer}>
@@ -70,12 +80,13 @@ class HistoryOrder extends Component {
 const styles = StyleSheet.create({
     mainContainer: {
         backgroundColor: BASE_COLOR.lightGray,
-        height: 150
+        minHeight: 150
 
     },
     titleContainer: {
         flex: 7,
         marginLeft: 8,
+        marginBottom: 8,
     },
     footerContainer: {
         flex: 3,
