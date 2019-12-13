@@ -156,8 +156,12 @@ class UserScreen extends BaseScreen {
             </ScrollView>
         )
     }
-    onPressLogInHandler = ()=>{
-        this.pushNewScreen(ScreenName.LoginScreen())
+    onPressLogInHandler = () => {
+        this.pushNewScreen({
+            routeName: ScreenName.LoginScreen(),
+            key: `${Math.random() * 10000}`,
+            params: { showBackButton: true }
+        })
     }
     loginContent = () => {
         return (

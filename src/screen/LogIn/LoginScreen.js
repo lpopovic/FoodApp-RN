@@ -24,11 +24,13 @@ import {
     fetchUserProfile,
 } from '../../store/actions'
 import { connect } from 'react-redux';
+import Header from '../../components/common/BackHeader'
 class LoginScreen extends BaseScreen {
     constructor(props) {
         super(props)
-        this.title = "ULOGUJ SE";
+        this.title = "PRIJAVI SE";
         this.state = {
+            showBackButton: false,
             loading: false,
             controls: {
                 email: {
@@ -61,6 +63,9 @@ class LoginScreen extends BaseScreen {
     componentDidMount() {
         super.componentDidMount()
         this.setStatusBarStyle(BASE_COLOR.backgroundBlue)
+
+        const showBackButton = this.props.navigation.getParam('showBackButton', false)
+        this.setNewStateHandler({ showBackButton })
     }
     componentWillUnmount() {
         super.componentWillUnmount()
@@ -72,7 +77,12 @@ class LoginScreen extends BaseScreen {
                 this.setNewStateHandler({ loading: false })
                 this.props.updateUserJWTHandler(res)
                 this.props.fetchUserProfileHandler()
-                this.resetNavigationStack(ScreenName.MainLocationScreen())
+
+                if (this.state.showBackButton == true) {
+                    this.closeScreen()
+                } else {
+                    this.resetNavigationStack(ScreenName.MainLocationScreen())
+                }
             },
             err => {
                 this.setNewStateHandler({ loading: false })
@@ -102,6 +112,9 @@ class LoginScreen extends BaseScreen {
     }
     onPressRegisterHandler = () => {
         this.pushNewScreen({ routeName: ScreenName.RegisterScreen(), key: `${Math.random() * 10000}` })
+    }
+    onPressSkipHandler = () => {
+        this.resetNavigationStack(ScreenName.MainLocationScreen())
     }
     mainContent = () => (
         <KeyboardAwareScrollView
@@ -175,13 +188,34 @@ class LoginScreen extends BaseScreen {
         </KeyboardAwareScrollView>
 
     )
-
+    showHeaderContent = (showBackButton) => {
+        if (showBackButton) {
+            return (
+                <Header
+                    backgroundColor={BASE_COLOR.backgroundBlue} />
+            )
+        } else {
+            return (
+                <View style={styles.buttonsContainer}>
+                    <View style={{ width: 130, margin: 8, alignSelf: 'flex-end' }}>
+                        <TouchableOpacity
+                            onPress={() => this.onPressSkipHandler()}>
+                            <View style={[styles.buttonSignIn, { backgroundColor: BASE_COLOR.red }]}>
+                                <Text style={styles.textButtonStyle}>Preskoči</Text>
+                            </View>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            )
+        }
+    }
     render() {
-        const { loading } = this.state
+        const { loading, showBackButton } = this.state
         const mainDisplay = loading ? this.activityIndicatorContent(BASE_COLOR.white) : this.mainContent();
 
         return (
             <SafeAreaView style={styles.mainContainer}>
+                {this.showHeaderContent(showBackButton)}
                 {mainDisplay}
             </SafeAreaView>
         )
