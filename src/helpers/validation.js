@@ -49,8 +49,9 @@ const notEmptyValidator = val => {
 const isNumber = val => {
     // var phoneno = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;          bez plusa 10 karaktera
     // var phoneno = /^\+?([0-9]{2})\)?[-. ]?([0-9]{4})[-. ]?([0-9]{4})$/;          sa plusom 10 karaktera
-    var phoneno = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
-    if (val.match(phoneno)) {
+    var phoneno10 = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
+    var phoneno9 = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{3})$/;          // sa 9 karaktera
+    if (val.match(phoneno10) || val.match(phoneno9) ) {
         return true;
     }
     else {

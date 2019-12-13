@@ -18,7 +18,7 @@ class UserNetwork {
 
                 const { data } = await axios.post(url, formData)
                 resolve(data.token)
-                
+
             } catch (error) {
                 try {
                     const { message } = error.response.data.error
@@ -30,13 +30,14 @@ class UserNetwork {
             }
         });
 
-    static fetchUserRegister = (username, email, password) =>
+    static fetchUserRegister = (username, email, password, phoneNumber) =>
         new Promise(async (resolve, reject) => {
             const url = RestUrl.userRegister
             let formData = {
                 username,
                 email,
                 password,
+                phoneNumber
             }
 
             try {
@@ -60,7 +61,7 @@ class UserNetwork {
             try {
                 const { data } = await axios.get(url)
                 const user = new User(data)
-                saveStorageData(data,STORAGE_KEY.USER_APP_DATA)
+                saveStorageData(data, STORAGE_KEY.USER_APP_DATA)
                 resolve(user)
 
             } catch (error) {

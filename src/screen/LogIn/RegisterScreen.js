@@ -56,7 +56,15 @@ class RegisterScreen extends BaseScreen {
                         equalTo: 'password'
                     },
                     touched: false
-                }
+                },
+                phoneNumber: {
+                    value: "",
+                    valid: false,
+                    validationRules: {
+                        isPhone: true
+                    },
+                    touched: false
+                },
             }
         }
     }
@@ -69,9 +77,9 @@ class RegisterScreen extends BaseScreen {
     componentWillUnmount() {
         super.componentWillUnmount()
     }
-    apiCallSignUpHandler = (email, password, username) => {
+    apiCallSignUpHandler = (email, password, username, phoneNumber) => {
         this.setNewStateHandler({ loading: true })
-        UserNetwork.fetchUserRegister(username, email, password)
+        UserNetwork.fetchUserRegister(username, email, password, phoneNumber)
             .then(
                 res => {
                     this.showAlertMessage(String(res))
@@ -85,13 +93,18 @@ class RegisterScreen extends BaseScreen {
     }
 
     onPressRegisterHandler = () => {
-        disabled = !this.state.controls.email.valid || !this.state.controls.password.valid || !this.state.controls.confirmPassword.valid || !this.state.controls.username.valid
+        disabled = !this.state.controls.email.valid ||
+            !this.state.controls.password.valid ||
+            !this.state.controls.confirmPassword.valid ||
+            !this.state.controls.username.valid ||
+            !this.state.controls.phoneNumber.valid
+
         const { controls } = this.state
         if (!disabled) {
 
-            this.apiCallSignUpHandler(controls.email.value, controls.password.value, controls.username.value)
+            this.apiCallSignUpHandler(controls.email.value, controls.password.value, controls.username.value, controls.phoneNumber.value)
         } else {
-            if (controls.email.value !== '' && controls.password.value !== '' && controls.confirmPassword.value !== '' && controls.username.value !== '') {
+            if (controls.email.value !== '' && controls.password.value !== '' && controls.confirmPassword.value !== '' && controls.username.value !== '' && controls.phoneNumber.value !== '') {
                 if (!this.state.controls.email.valid) {
 
                     this.showAlertMessage("Not valide email addrese.")
@@ -102,6 +115,8 @@ class RegisterScreen extends BaseScreen {
                     this.showAlertMessage('Re-Password are not the same.')
                 } else if (!this.state.controls.username.valid) {
                     this.showAlertMessage('Username not valide, minumum 6 characters.')
+                } else if (!this.state.controls.phoneNumber.valid) {
+                    this.showAlertMessage('Phone number not valide')
                 }
             } else {
                 alert(MESSAGE_NO_VALIDE_INPUT_FORM)
@@ -121,9 +136,6 @@ class RegisterScreen extends BaseScreen {
             <View style={{ flex: 0.8 }}>
 
                 <View style={styles.headerContainer}>
-                    {/* <View style={styles.logoContainer} >
-                        <Image source={IconAssets.appIcon256} style={styles.logoImage} resizeMode='contain' />
-                    </View> */}
                     <View style={styles.titleContainer}>
                         <Text style={styles.textHeaderStyle}>{this.title}</Text>
                     </View>
@@ -181,6 +193,18 @@ class RegisterScreen extends BaseScreen {
                         secureTextEntry={true}
                         textContentType='none'
                         ref={(input) => this.confirmPass = input}
+                    />
+                    <DefaultInput
+                        style={{ marginTop: 16 }}
+                        placeholder='Phone: 06X-XXX-XXX'
+                        value={this.state.controls.phoneNumber.value}
+                        onChangeText={(val) => this.updateInputState('phoneNumber', val)}
+                        valid={this.state.controls.phoneNumber.valid}
+                        touched={this.state.controls.phoneNumber.touched}
+                        autoCapitalize="none"
+                        autoCorrect={false}
+                        returnKeyType={"next"}
+                        keyboardType='number-pad'
                     />
 
                 </View>
