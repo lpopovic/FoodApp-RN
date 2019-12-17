@@ -54,7 +54,12 @@ class BaseScreen extends Component {
 
     }
     pushNewScreen = (newScreenAtributeValue) => {
-        this.props.navigation.navigate(newScreenAtributeValue)
+
+        clearTimeout(this.timeoutNavigationPushScreen)
+        this.timeoutNavigationPushScreen = setTimeout(() => {
+            this.props.navigation.navigate(newScreenAtributeValue)
+        }, 300);
+
     }
     closeScreen = () => {
         this.props.navigation.goBack()
@@ -71,8 +76,8 @@ class BaseScreen extends Component {
     showAlertMessage = (message) => {
         CustomAlert.showAlert(String(message))
     }
-    showDialogMessage = (message,onPressOk) => {
-        CustomAlert.showDialogAlert(String(message),onPressOk)
+    showDialogMessage = (message, onPressOk) => {
+        CustomAlert.showDialogAlert(String(message), onPressOk)
     }
     activityIndicatorContent = (color) => (
 

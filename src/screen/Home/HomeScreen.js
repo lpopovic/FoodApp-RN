@@ -271,7 +271,13 @@ class HomeScreen extends BaseScreen {
         return (
             <HomeCaroselComponent
                 data={caroselPlaces}
-                onPressItem={(index) => this.pushNewScreen({ routeName: ScreenName.PlaceDetailScreen(), key: `${Math.random() * 10000}${caroselPlaces[index]._id}`, params: { _id: caroselPlaces[index]._id } })}
+                onPressItem={(place) => this.pushNewScreen({
+                    routeName: ScreenName.PlaceDetailScreen(),
+                    key: `${Math.random() * 10000}${place._id}`,
+                    params: {
+                        _id: place._id
+                    }
+                })}
 
             />
         )
