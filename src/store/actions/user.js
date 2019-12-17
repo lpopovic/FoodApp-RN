@@ -2,10 +2,12 @@ import {
     UPDATE_USER_PROFILE_DATA,
     UPDATE_USER_JWT_DATA,
     USER_LOG_OUT,
+
 } from "./actionTypes";
 import {
     uiStartLoading,
-    uiStopLoading
+    uiStopLoading,
+    updateListUserOrders,
 } from './index'
 
 import {
@@ -14,7 +16,7 @@ import {
     STORAGE_KEY,
 } from '../../helpers'
 
-import { UserNetwork } from '../../service/api'
+import { UserNetwork, OrderNetwork } from '../../service/api'
 
 export const updateUserProfile = (userProfile) => {
     saveStorageData(userProfile, STORAGE_KEY.USER_APP_DATA)
@@ -25,7 +27,7 @@ export const updateUserProfile = (userProfile) => {
 };
 
 export const userLogOut = () => {
-    
+
     const data = null
     updateHeaderJWTForAxios(data)
     saveStorageData(data, STORAGE_KEY.USER_APP_DATA)
@@ -42,6 +44,22 @@ export const updateUserJWT = (token) => {
     };
 };
 
+
+export const fetchUserListOrders = () => {
+    return dispatch => {
+
+
+        OrderNetwork.fetchGetAllOrders().then(
+            result => {
+                result = result.reverse()
+                dispatch(updateListUserOrders(result))
+            },
+            error => {
+
+            }
+        )
+    }
+}
 export const fetchUserProfile = () => {
 
     return dispatch => {
@@ -59,6 +77,7 @@ export const fetchUserProfile = () => {
                         alert(err)
                     }
                 )
+            dispatch(fetchUserListOrders())
         }, 200);
 
 
