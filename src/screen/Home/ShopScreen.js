@@ -208,6 +208,8 @@ class ShoopScreen extends BaseScreen {
                                                         }
                                                     })}
                                                     placeholder={'Ime i Prezime'}
+                                                    returnKeyType='next'
+                                                    onSubmitEditing={() => this.address.focus()}
                                                     style={[styles.textStyle,]} />
                                             </View>
                                         </View>
@@ -223,6 +225,9 @@ class ShoopScreen extends BaseScreen {
                                                         }
                                                     })}
                                                     placeholder={'Adresa'}
+                                                    returnKeyType='next'
+                                                    ref={(input) => this.address = input}
+                                                    onSubmitEditing={() => this.phone.focus()}
                                                     style={[styles.textStyle]} />
                                             </View>
                                         </View>
@@ -238,6 +243,9 @@ class ShoopScreen extends BaseScreen {
                                                         }
                                                     })}
                                                     placeholder={'Broj telefona'}
+                                                    returnKeyType='next'
+                                                    ref={(input) => this.phone = input}
+                                                    onSubmitEditing={() => this.textReview.focus()}
                                                     style={[styles.textStyle]} />
                                             </View>
                                         </View>
