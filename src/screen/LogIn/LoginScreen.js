@@ -180,7 +180,7 @@ class LoginScreen extends BaseScreen {
                     onPress={() => this.onPressRegisterHandler()}>
                     <View style={styles.buttonRegister}>
                         <Text style={styles.titleBtnRegister}>Nemaš nalog?</Text>
-                        <Text style={[styles.titleBtnRegister, { fontWeight: 'bold' }]}>PRIJAVI SE</Text>
+                        <Text style={[styles.titleBtnRegister, { fontWeight: 'bold' }]}>REGISTRUJ SE</Text>
                     </View>
                 </TouchableOpacity>
             </View>
