@@ -340,7 +340,7 @@ class PlaceDetailsScreen extends BaseScreen {
             if (section.menuItems.length > 0) {
                 const tintColor = section.hide ? BASE_COLOR.black : BASE_COLOR.blue
                 returnSectionView.push(
-                    <>
+                    <View key={indexInArray}>
                         <TouchableOpacity onPress={() => this.onPressSectionListHeader(indexInArray)}>
                             <View
 
@@ -358,7 +358,7 @@ class PlaceDetailsScreen extends BaseScreen {
                             </View>
                         </TouchableOpacity>
                         {this.dishlistContent(section.menuItems, section.hide)}
-                    </>
+                    </View>
                 )
             }
 
