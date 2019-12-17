@@ -20,6 +20,7 @@ import ShopCard from '../../components/Home/ShopCard';
 import { OrderNetwork } from '../../service/api';
 import { removeOrderMenuItem, emptyOrder } from '../../store/actions'
 import Icon from 'react-native-vector-icons/Ionicons';
+import { ScreenName } from '../../helpers'
 const PAY_BUTTON_KEY = {
     cacheSelected: "cache",
     onlineSelected: "on-line",
@@ -68,7 +69,6 @@ class ShoopScreen extends BaseScreen {
             onChangeText={(text) => this.updateTextReview(text)}
             returnKeyType='done'
             ref={(input) => this.textReview = input}
-            onSubmitEditing={() => this.question.focus()}
             scrollEnabled={true}
         />
     )
@@ -153,14 +153,19 @@ class ShoopScreen extends BaseScreen {
                                 <Text style={styles.textSubAllStyle}>Ukupno</Text>
                                 <Text style={styles.textSubAllStyle}>{this.props.order.length > 0 ? `${this.subAllOrder(this.props.order)}.00` : ""}</Text>
                             </View>
-                            <View style={styles.containerSubAllStyle}>
-                                <Text style={styles.textSubAllStyle}>Dostava</Text>
-                                <Text style={styles.textSubAllStyle}>+{Number(this.props.orderForPlace.deliveryPrice).toFixed(2)}</Text>
-                            </View>
+                            {
+                                this.state.wayOfDelivery == DELIVERY_BUTTON_KEY.delivery ?
+                                    <View style={styles.containerSubAllStyle}>
+                                        <Text style={styles.textSubAllStyle}>Dostava</Text>
+                                        <Text style={styles.textSubAllStyle}>+{Number(this.props.orderForPlace.deliveryPrice).toFixed(2)}</Text>
+                                    </View>
+                                    :
+                                    <View />
+                            }
                             <View style={{ height: 3, backgroundColor: BASE_COLOR.blue, margin: 10, marginTop: 10 }}></View>
                             <View style={[styles.containerSubAllStyle, { marginTop: 5 }]}>
                                 <Text style={{ fontWeight: 'bold', fontSize: 18, marginLeft: 20, color: BASE_COLOR.blue }}>Sve ukupno</Text>
-                                <Text style={{ fontWeight: 'bold', fontSize: 18, marginRight: 20, color: BASE_COLOR.blue }}>{this.subAllOrder(this.props.order) + this.props.orderForPlace.deliveryPrice}.00</Text>
+                                <Text style={{ fontWeight: 'bold', fontSize: 18, marginRight: 20, color: BASE_COLOR.blue }}>{this.subAllOrder(this.props.order) + this.state.wayOfDelivery == DELIVERY_BUTTON_KEY.delivery ? this.props.orderForPlace.deliveryPrice : 0}.00</Text>
                             </View>
 
                         </View>
@@ -184,90 +189,98 @@ class ShoopScreen extends BaseScreen {
                             </View>
                         </View>
                         <View style={{ height: 1, backgroundColor: BASE_COLOR.lightGray, margin: 10 }}></View>
-                        <View style={{ margin: 40 }}>
-                            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                <Text style={{ alignItems: 'flex-start', flex: 8, fontWeight: '400', fontSize: 18 }}>Lični podaci:</Text>
-                                {/* <TouchableOpacity style={{ flex: 2, alignItems: 'flex-end' }}>
-                                <View style={{ borderBottomWidth: 0.9, borderBottomColor: BASE_COLOR.blue, marginBottom: 3, alignSelf: 'center' }}>
-                                    <Text style={{ textAlign: 'center', color: BASE_COLOR.blue, fontSize: 14 }}>Izmeni</Text>
+                        {this.props.isLogin ?
+                            <>
+                                <View style={{ margin: 40 }}>
+                                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                        <Text style={{ alignItems: 'flex-start', flex: 8, fontWeight: '400', fontSize: 18 }}>Lični podaci:</Text>
+                                    </View>
+                                    <View style={{ marginTop: 20 }}>
+                                        <View style={{ marginTop: 0, marginBottom: 8 }}>
+                                            <View style={{ padding: 8, borderRadius: 8, borderWidth: 1, borderColor: BASE_COLOR.blue }}>
+                                                <TextInput
+                                                    value={userInfo.name}
+                                                    onChangeText={(text) => this.setNewStateHandler({
+                                                        ...this.state,
+                                                        userInfo: {
+                                                            ...this.state.userInfo,
+                                                            name: text,
+                                                        }
+                                                    })}
+                                                    placeholder={'Ime i Prezime'}
+                                                    style={[styles.textStyle,]} />
+                                            </View>
+                                        </View>
+                                        <View style={{ marginTop: 8, marginBottom: 8 }}>
+                                            <View style={{ padding: 8, borderRadius: 8, borderWidth: 1, borderColor: BASE_COLOR.blue, }}>
+                                                <TextInput
+                                                    value={userInfo.adress}
+                                                    onChangeText={(text) => this.setNewStateHandler({
+                                                        ...this.state,
+                                                        userInfo: {
+                                                            ...this.state.userInfo,
+                                                            adress: text,
+                                                        }
+                                                    })}
+                                                    placeholder={'Adresa'}
+                                                    style={[styles.textStyle]} />
+                                            </View>
+                                        </View>
+                                        <View style={{ marginTop: 8, marginBottom: 8 }}>
+                                            <View style={{ padding: 8, borderRadius: 8, borderWidth: 1, borderColor: BASE_COLOR.blue }}>
+                                                <TextInput
+                                                    value={userInfo.numberMob}
+                                                    onChangeText={(text) => this.setNewStateHandler({
+                                                        ...this.state,
+                                                        userInfo: {
+                                                            ...this.state.userInfo,
+                                                            numberMob: text,
+                                                        }
+                                                    })}
+                                                    placeholder={'Broj telefona'}
+                                                    style={[styles.textStyle]} />
+                                            </View>
+                                        </View>
+                                    </View>
                                 </View>
-                            </TouchableOpacity> */}
+
+                                <View style={styles.textInputNoteContainer}>
+                                    {this.textInputNoteContent()}
+                                </View>
+                            </>
+                            :
+                            <View />
+                        }
+                        {this.props.isLogin ?
+                            < View style={{ alignItems: 'center', justifyContent: 'center', margin: 20 }}>
+                                <TouchableOpacity onPress={() => this.onPressOrderHandler(this.props.order)}>
+                                    <View style={{ backgroundColor: BASE_COLOR.blue, width: 280, height: 65, justifyContent: 'center', alignItems: 'center', borderRadius: 4 }}>
+                                        <Text style={{ color: BASE_COLOR.white, fontWeight: 'bold', fontSize: 22 }}>Naruči</Text>
+                                    </View>
+                                </TouchableOpacity>
                             </View>
-                            <View style={{ marginTop: 20 }}>
-                                <View style={{ marginTop: 0, marginBottom: 8 }}>
-                                    <View style={{ padding: 8, borderRadius: 8, borderWidth: 1, borderColor: BASE_COLOR.blue }}>
-                                        <TextInput
-                                            value={userInfo.name}
-                                            onChangeText={(text) => this.setNewStateHandler({
-                                                ...this.state,
-                                                userInfo: {
-                                                    ...this.state.userInfo,
-                                                    name: text,
-                                                }
-                                            })}
-                                            placeholder={'Ime i Prezime'}
-                                            returnKeyType='next'
-                                            onSubmitEditing={() => this.address.focus()}
-                                            style={[styles.textStyle,]} />
+                            :
+                            < View style={{ alignItems: 'center', justifyContent: 'center', margin: 20 }}>
+                                <TouchableOpacity onPress={() => this.onPressLogInHandler()}>
+                                    <View style={{ backgroundColor: BASE_COLOR.blue, width: 280, height: 65, justifyContent: 'center', alignItems: 'center', borderRadius: 4 }}>
+                                        <Text style={{ color: BASE_COLOR.white, fontWeight: 'bold', fontSize: 22 }}>Prijavi se</Text>
                                     </View>
-                                </View>
-                                <View style={{ marginTop: 8, marginBottom: 8 }}>
-                                    <View style={{ padding: 8, borderRadius: 8, borderWidth: 1, borderColor: BASE_COLOR.blue }}>
-                                        <TextInput
-                                            value={userInfo.adress}
-                                            onChangeText={(text) => this.setNewStateHandler({
-                                                ...this.state,
-                                                userInfo: {
-                                                    ...this.state.userInfo,
-                                                    adress: text,
-                                                }
-                                            })}
-                                            placeholder={'Adresa'}
-                                            returnKeyType='next'
-                                            ref={(input) => this.address = input}
-                                            onSubmitEditing={() => this.phone.focus()}
-                                            style={[styles.textStyle]} />
-                                    </View>
-                                </View>
-                                <View style={{ marginTop: 8, marginBottom: 8 }}>
-                                    <View style={{ padding: 8, borderRadius: 8, borderWidth: 1, borderColor: BASE_COLOR.blue }}>
-                                        <TextInput
-                                            value={userInfo.numberMob}
-                                            onChangeText={(text) => this.setNewStateHandler({
-                                                ...this.state,
-                                                userInfo: {
-                                                    ...this.state.userInfo,
-                                                    numberMob: text,
-                                                }
-                                            })}
-                                            placeholder={'Broj telefona'}
-                                            returnKeyType='next'
-                                            ref={(input) => this.phone = input}
-                                            onSubmitEditing={() => this.textReview.focus()}
-                                            style={[styles.textStyle]} />
-                                    </View>
-                                </View>
+                                </TouchableOpacity>
                             </View>
-                        </View>
-
-                        <View style={styles.textInputNoteContainer}>
-                            {this.textInputNoteContent()}
-                        </View>
-
-
-                        <View style={{ alignItems: 'center', justifyContent: 'center', margin: 20 }}>
-                            <TouchableOpacity onPress={() => this.onPressOrderHandler(this.props.order)}>
-                                <View style={{ backgroundColor: BASE_COLOR.blue, width: 280, height: 65, justifyContent: 'center', alignItems: 'center', borderRadius: 4 }}>
-                                    <Text style={{ color: BASE_COLOR.white, fontWeight: 'bold', fontSize: 22 }}>Naruči</Text>
-                                </View>
-                            </TouchableOpacity>
-                        </View>
+                        }
+                        <View style={{ height: 40 }} />
                     </ScrollView>
                 </KeyboardAwareScrollView>
-            </View>
+            </View >
         )
     }
-
+    onPressLogInHandler = () => {
+        this.pushNewScreen({
+            routeName: ScreenName.LoginScreen(),
+            key: `${Math.random() * 10000}`,
+            params: { showBackButton: true }
+        })
+    }
     onPressRemoveHandler(orderdMenuItem) {
         this.props.removeOrderMenuItemHandler(orderdMenuItem)
     }
@@ -429,6 +442,7 @@ const mapStateToProps = state => {
         order: state.order.order,
         orderForPlace: state.order.orderForPlace,
         userInfo: state.user.userInfo,
+        isLogin: state.user.isLogin,
     };
 };
 
