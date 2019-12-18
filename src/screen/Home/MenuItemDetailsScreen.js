@@ -446,15 +446,15 @@ class MenuItemDetailsScreen extends BaseScreen {
     }
 
     onPressOkPutInBagNHandler = ()=>{
-        const { menuItem, selectedOptions, quantity } = this.state
-
+        const { menuItem, selectedOptions, quantity, menuItemType } = this.state
+        let item = menuItem.hasSubtypes ? menuItemType : menuItem
 
         const orderdMenuItem = {
 
             _id: `${Math.random()}${Math.random()}${Math.random()}`,
             quantity: quantity,
-            menuItem: menuItem,
-            menuItemTotalPrice: this.subTotalPrice(menuItem, selectedOptions, quantity),
+            menuItem: item,
+            menuItemTotalPrice: this.subTotalPrice(item, selectedOptions, quantity),
             selectedOptions: selectedOptions,
         }
         this.props.addOrderMenuItemHandler([orderdMenuItem])
