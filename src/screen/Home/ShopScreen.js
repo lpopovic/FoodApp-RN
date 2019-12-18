@@ -7,7 +7,9 @@ import {
     Dimensions,
     ScrollView,
     TextInput,
-    KeyboardAvoidingView, UIManager, LayoutAnimation
+    KeyboardAvoidingView,
+    UIManager,
+    LayoutAnimation
 } from 'react-native';
 import BaseScreen from '../BaseScreen/BaseScreen';
 import SafeAreaView from 'react-native-safe-area-view';
@@ -18,7 +20,7 @@ import { NAV_COLOR, BASE_COLOR } from '../../styles'
 import { FlatList } from 'react-native-gesture-handler';
 import ShopCard from '../../components/Home/ShopCard';
 import { OrderNetwork, UserNetwork } from '../../service/api';
-import { removeOrderMenuItem, emptyOrder } from '../../store/actions'
+import { removeOrderMenuItem, emptyOrder, updateUserProfile } from '../../store/actions'
 import Icon from 'react-native-vector-icons/Ionicons';
 import { ScreenName } from '../../helpers'
 
@@ -48,7 +50,7 @@ class ShoopScreen extends BaseScreen {
             specialInstructions: '',
             userInfo: {
                 name: '',
-                adress: '',
+                address: '',
                 numberMob: '',
             },
             showAddressInfo: false
@@ -102,8 +104,8 @@ class ShoopScreen extends BaseScreen {
 
         let filteredAddresses = this.props.userInfo.address.filter(
             (data) => {
-                if (this.state.userInfo.adress) {
-                    return data.toLowerCase().indexOf(this.state.userInfo.adress.toLowerCase()) !== -1
+                if (this.state.userInfo.address) {
+                    return data.toLowerCase().indexOf(this.state.userInfo.address.toLowerCase()) !== -1
                 } else {
                     return this.props.userInfo.address
                 }
@@ -115,7 +117,7 @@ class ShoopScreen extends BaseScreen {
                     ...this.state,
                     userInfo: {
                         ...this.state.userInfo,
-                        adress: text,
+                        address: text,
                     },
                     showAddressInfo: false
                 })
@@ -251,12 +253,12 @@ class ShoopScreen extends BaseScreen {
                                         <View style={{ marginTop: 8, marginBottom: 8 }}>
                                             <View style={{ padding: 8, borderRadius: 8, borderWidth: 1, borderColor: BASE_COLOR.blue }}>
                                                 <TextInput
-                                                    value={userInfo.adress}
+                                                    value={userInfo.address}
                                                     onChangeText={(text) => this.setNewStateHandler({
                                                         ...this.state,
                                                         userInfo: {
                                                             ...this.state.userInfo,
-                                                            adress: text,
+                                                            address: text,
                                                         },
                                                         showAddressInfo: true
                                                     })}
@@ -343,18 +345,21 @@ class ShoopScreen extends BaseScreen {
         const orderType = wayOfDelivery
         const methodOfPayment = cacheSelected ? 'cash' : 'online'
 
-        const { name, adress, numberMob } = userInfo
-        if (name.trim() != '' && adress.trim() != '' && numberMob.trim() != '') {
-            OrderNetwork.fetchOrder(order, placeId, orderType, methodOfPayment, specialInstructions, adress, numberMob)
+        const { name, address, numberMob } = userInfo
+        if (name.trim() != '' && address.trim() != '' && numberMob.trim() != '') {
+            OrderNetwork.fetchOrder(order, placeId, orderType, methodOfPayment, specialInstructions, address, numberMob)
                 .then(
                     res => {
                         this.showAlertMessage("USPESNO NARUCENO")
                         this.setNewStateHandler({ loading: false })
                         this.closeScreen()
                         this.props.emptyOrderHandler()
-                        const addressExist = this.props.userInfo.address.includes(this.state.userInfo.adress);
-                        if (!addressExist) {
-                            UserNetwork.fetchUserPutNewAddress(this.state.userInfo.adress)
+
+                        if (!this.props.userInfo.address.includes(address)) {
+                            UserNetwork.fetchUserPutNewAddress(address)
+                            let user = this.props.userInfo
+                            user.address.push(address)
+                            this.props.updateUserProfileHandler(user)
                         }
                     },
                     err => {
@@ -504,7 +509,8 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return {
         removeOrderMenuItemHandler: (orderdMenuItem) => dispatch(removeOrderMenuItem(orderdMenuItem)),
-        emptyOrderHandler: () => dispatch(emptyOrder())
+        emptyOrderHandler: () => dispatch(emptyOrder()),
+        updateUserProfileHandler: (user) => dispatch(updateUserProfile(user))
     };
 };
 
