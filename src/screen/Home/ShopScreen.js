@@ -7,7 +7,7 @@ import {
     Dimensions,
     ScrollView,
     TextInput,
-    KeyboardAvoidingView
+    KeyboardAvoidingView, UIManager, LayoutAnimation
 } from 'react-native';
 import BaseScreen from '../BaseScreen/BaseScreen';
 import SafeAreaView from 'react-native-safe-area-view';
@@ -49,7 +49,8 @@ class ShoopScreen extends BaseScreen {
                 name: '',
                 adress: '',
                 numberMob: '',
-            }
+            },
+            showAddressInfo: false
         }
     }
 
@@ -89,6 +90,13 @@ class ShoopScreen extends BaseScreen {
         return orderTotalPrice
 
     }
+
+    showAddresses = (bool) => {
+        this.setState({ showAddressInfo: bool })
+        UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
+        LayoutAnimation.easeInEaseOut();
+    }
+
     emptyContent = () => {
         return (
             <View style={styles.mainContainer}>
@@ -115,7 +123,7 @@ class ShoopScreen extends BaseScreen {
                     bounces={false}
                     keyboardShouldPersistTaps='handled'
                     enableOnAndroid={true} >
-                    <ScrollView>
+                    <ScrollView keyboardShouldPersistTaps='never'>
                         <Text style={{ alignItems: 'center', textAlign: 'center', fontWeight: 'bold', fontSize: 24, marginTop: 20, marginBottom: 20 }}>Korpa</Text>
                         <FlatList
                             style={{ marginBottom: 30 }}
@@ -214,7 +222,7 @@ class ShoopScreen extends BaseScreen {
                                             </View>
                                         </View>
                                         <View style={{ marginTop: 8, marginBottom: 8 }}>
-                                            <View style={{ padding: 8, borderRadius: 8, borderWidth: 1, borderColor: BASE_COLOR.blue, }}>
+                                            <View style={{ padding: 8, borderRadius: 8, borderWidth: 1, borderColor: BASE_COLOR.blue }}>
                                                 <TextInput
                                                     value={userInfo.adress}
                                                     onChangeText={(text) => this.setNewStateHandler({
@@ -226,10 +234,17 @@ class ShoopScreen extends BaseScreen {
                                                     })}
                                                     placeholder={'Adresa'}
                                                     returnKeyType='next'
+                                                    onFocus={() => this.showAddresses(true)}
+                                                    onBlur={() => this.showAddresses(false)}
                                                     ref={(input) => this.address = input}
                                                     onSubmitEditing={() => this.phone.focus()}
                                                     style={[styles.textStyle]} />
                                             </View>
+                                            {this.state.showAddressInfo &&
+                                                <View style={{ height: 150, width: '100%', backgroundColor: 'red' }}>
+                                                    
+                                                </View>
+                                            }
                                         </View>
                                         <View style={{ marginTop: 8, marginBottom: 8 }}>
                                             <View style={{ padding: 8, borderRadius: 8, borderWidth: 1, borderColor: BASE_COLOR.blue }}>
@@ -268,7 +283,7 @@ class ShoopScreen extends BaseScreen {
                                 </TouchableOpacity>
                             </View>
                             :
-                            < View style={{ alignItems: 'center', justifyContent: 'center', margin: 20 }}>
+                            <View style={{ alignItems: 'center', justifyContent: 'center', margin: 20 }}>
                                 <TouchableOpacity onPress={() => this.onPressLogInHandler()}>
                                     <View style={{ backgroundColor: BASE_COLOR.blue, width: 280, height: 65, justifyContent: 'center', alignItems: 'center', borderRadius: 4 }}>
                                         <Text style={{ color: BASE_COLOR.white, fontWeight: 'bold', fontSize: 22 }}>Prijavi se</Text>
