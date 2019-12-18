@@ -66,7 +66,12 @@ class UserScreen extends BaseScreen {
         this.apiCallHandler()
     }
     pressReviewOrderHandler = (order) => {
-        this.pushNewScreen(ScreenName.ReviewScreen())
+
+        this.pushNewScreen({ routeName: ScreenName.ReviewScreen(), key: `${Math.random() * 10000}`, params: { order } })
+    }
+    pressOrderDetailHandler = (order) => {
+       
+        this.pushNewScreen({ routeName: ScreenName.OrderDetailScreen(), key: `${Math.random() * 10000}`, params: { order } })
     }
 
     userImageContent = () => {
@@ -103,7 +108,7 @@ class UserScreen extends BaseScreen {
                 </View>
                 <HistoryOrderList
                     arrayObject={userOrders}
-                    PressDetailOrder={(order) => alert(order)}
+                    PressDetailOrder={(order) => this.pressOrderDetailHandler(order)}
                     PressOrderAgain={(order) => alert(order)}
                     PressReview={(order) => this.pressReviewOrderHandler(order)}
                 />

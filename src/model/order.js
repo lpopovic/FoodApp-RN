@@ -58,6 +58,17 @@ class Order {
         return arrayTemplate;
 
     }
+
+    static createArrayOrderFoodMenuItems(objectArray) {
+
+        const arrayTemplate = objectArray.map(item => {
+
+            return new MenuItem(item.food);
+
+        })
+        return arrayTemplate;
+
+    }
 }
 
 export { Order };

@@ -133,6 +133,7 @@ class ReviewScreen extends BaseScreen {
                             borderRadius: 1,
                             borderWidth: 2,
                             borderColor: BASE_COLOR.lightGray,
+                            textAlignVertical: "top"
                         }}
                         autoCapitalize="none"
                         autoCorrect={false}

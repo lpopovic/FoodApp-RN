@@ -121,7 +121,7 @@ class ShoopScreen extends BaseScreen {
                             style={{ marginBottom: 30 }}
                             scrollEnabled={false}
                             data={this.props.order}
-                            keyExtractor={(index) => `${Math.random() * Math.random()}${index.toString()}`}
+                            keyExtractor={(index) => `${index.toString()}`}
                             renderItem={(info) => (
                                 <ShopCard
                                     data={info.item}
@@ -303,7 +303,7 @@ class ShoopScreen extends BaseScreen {
 
         const { name, adress, numberMob } = userInfo
         if (name.trim() != '' && adress.trim() != '' && numberMob.trim() != '') {
-            OrderNetwork.fetchOrder(order, placeId, orderType, methodOfPayment, specialInstructions)
+            OrderNetwork.fetchOrder(order, placeId, orderType, methodOfPayment, specialInstructions, adress, numberMob)
                 .then(
                     res => {
                         this.showAlertMessage("USPESNO NARUCENO")
@@ -421,7 +421,8 @@ const styles = StyleSheet.create({
         fontSize: 15,
         padding: 4,
         margin: 16,
-        marginTop: 8
+        marginTop: 8,
+        textAlignVertical: "top"
     },
     textInputNoteContainer: {
         margin: 20,
