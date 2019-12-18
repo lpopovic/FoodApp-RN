@@ -7,6 +7,7 @@ class User {
         this.company = object.company;
         this.catheringOptions = object.catheringOptions;
         this.catheringIsAvailable = object.catheringIsAvailable
+        this.address = object.adress || []
     }
 
     static createArrayTemplate(objectArray) {
