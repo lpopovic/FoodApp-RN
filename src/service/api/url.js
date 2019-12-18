@@ -31,7 +31,7 @@ class RestUrl {
         return withKey(`places/${placeId}`)
     }
     static getMenuItems = (placeId) => {
-        return withKey(`menuitems?place=${placeId}`)
+        return withKey(`menuitems?isParent=true&place=${placeId}`)
     }
     static getMenuItemById = (menuItemId) => {
         return withKey(`menuitems/${menuItemId}`)

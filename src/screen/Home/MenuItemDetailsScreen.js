@@ -31,6 +31,7 @@ class MenuItemDetailsScreen extends BaseScreen {
             loading: true,
             quantity: 1,
             menuItem: new MenuItem({}),
+            menuItemType: new MenuItem({}),
             selectedOptions: [{ groupId: "", text: "", type: "", options: [] }]
         }
     }
@@ -64,7 +65,12 @@ class MenuItemDetailsScreen extends BaseScreen {
 
     menuItemOptions(menuItem) {
         let selectedOption = []
-        menuItem.menuItemOptions.map(item => {
+        let menuItemType = menuItem.subtypes[0]
+        let Item = menuItem.hasSubtypes ? menuItem.subtypes[0] : menuItem
+        Item.image = menuItem.image
+        Item.place = menuItem.place
+
+        Item.menuItemOptions.map(item => {
             if (item.buttonOptionsType === "radio") {
                 var optionItem = {
                     groupId: item._id,
@@ -85,8 +91,9 @@ class MenuItemDetailsScreen extends BaseScreen {
             }
         })
         this.setState({
-            quantity: 1,
-            selectedOptions: selectedOption
+            // quantity: 1,
+            selectedOptions: selectedOption,
+            menuItemType: menuItemType
         })
     }
 
@@ -109,7 +116,7 @@ class MenuItemDetailsScreen extends BaseScreen {
             return <Text style={{ marginTop: 40, marginLeft: 20 }}>Nema dodataka!</Text>
         } else {
             // const checkMenuItems = menuItemOptions.filter(option => { return option.buttonOptionsType === "check" })
-            // const radioMenuItems = menuItemOptions.filter(option => { return option.buttonOptionsType === "radio" })
+            // const radioMenuItems = menuItemOptions.filter(option => { return option.buttonOptionsType === "radio" })   
 
             menuItemOptions.map((item) => {
                 if (item.buttonOptionsType === "check") {
@@ -128,7 +135,7 @@ class MenuItemDetailsScreen extends BaseScreen {
                                             title={option.text}
                                             checkedColor={BASE_COLOR.blue}
                                             checked={this.selectedOptionsFromGroup(item._id, option._id)}
-                                            onPress={(_id, index) => this.selectCheckboxHandler(item._id, option, item.maximumSelection)}
+                                            onPress={(_id, index) => this.selectCheckboxHandler(item._id, option, item.maximumSelection === null ? item.options.length : item.maximumSelection)}
                                         />
                                         <View style={{ alignItems: 'flex-end', flex: 3 }}>
                                             <Text style={{ fontWeight: '400', fontSize: 16, color: BASE_COLOR.darkGray, }}>{option.amount != 0 ? `+${option.amount}.00` : null}</Text>
@@ -197,6 +204,51 @@ class MenuItemDetailsScreen extends BaseScreen {
         }
     }
 
+    _renderMenuItemTypeWithOptions = (subtypes) => {
+        var allTypes = []
+        subtypes.map((item, index) => {
+            allTypes.push(
+                <View key={`${Math.random() * 10000} ${item._id}`} >
+                    {index === 0 ? <View style={{ backgroundColor: BASE_COLOR.gray, height: 1, marginTop: 40 }}></View> : null}
+                    <View style={{ flexDirection: 'row', alignItems: 'center', marginLeft: 10, marginRight: 25 }}>
+                        <CheckBox
+                            key={`${Math.random() * 10000} ${item._id}`}
+                            checked={this.selectedType(item._id)}
+                            onPress={(_id, index) => this.selectTypeHandler(item)}
+                            checkedIcon='dot-circle-o'
+                            uncheckedIcon='circle-o'
+                            title={item.sizeName}
+                            textStyle={{ fontWeight: '400', fontSize: 18, color: BASE_COLOR.darkGray, backgroundColor: 'transparent' }}
+                            containerStyle={{ flex: 7, backgroundColor: 'transparent', borderColor: 'transparent' }}
+                        />
+                        <View style={{ alignItems: 'flex-end', flex: 3 }}>
+                            <Text style={{ fontWeight: '400', fontSize: 16, color: BASE_COLOR.darkGray, }}>{item.nominalPrice - this.state.menuItem.nominalPrice != 0 ? `+${item.nominalPrice - this.state.menuItem.nominalPrice}.00` : null}</Text>
+                        </View>
+                    </View>
+                    <View style={{ backgroundColor: BASE_COLOR.gray, height: 1 }}></View>
+                </View>
+            )
+        })
+
+        return allTypes
+    }
+
+    selectedType(menuItemId) {
+        const selectedType = this.state.menuItemType
+        if (selectedType._id === menuItemId) {
+            return true
+        } else {
+            return false
+        }
+    }
+    selectTypeHandler(menuItemType) {
+        menuItemType.image = this.state.menuItem.image
+        menuItemType.place = this.state.menuItem.place
+        this.menuItemOptions(menuItemType)
+        this.setState({ menuItemType: menuItemType })
+    }
+
+
     selectedOptionsFromGroup(groupId, optionId) {
         const selectedOptions = this.state.selectedOptions
         let value = false
@@ -242,7 +294,6 @@ class MenuItemDetailsScreen extends BaseScreen {
         let options
         let position
 
-
         selectedOptions.map((item, index) => {
             if (groupId === item.groupId) {
                 options = item.options
@@ -262,7 +313,7 @@ class MenuItemDetailsScreen extends BaseScreen {
         UrlOpen.openUrlInBrowser(UrlOpen.generateUrlForGoogleMap(place.coordinate.latitude, place.coordinate.longitude))
     }
     mainContent = () => {
-        const { name, description, image, nominalPrice, menuItemOptions, place } = this.state.menuItem
+        const { name, description, image, nominalPrice, menuItemOptions, place, hasSubtypes, subtypes } = this.state.menuItem
         return (
             <ScrollView>
                 <TouchableOpacity onPress={() => this.onPressShowPlaceOnMap(place)}>
@@ -277,7 +328,7 @@ class MenuItemDetailsScreen extends BaseScreen {
                         <Text numberOfLines={2} ellipsizeMode='tail' style={{ fontWeight: '500', fontSize: 20 }}>{name}</Text>
                     </View>
                     <View style={{ flex: 3, alignItems: 'flex-end' }}>
-                        <Text style={{ color: BASE_COLOR.blue, fontWeight: 'bold', fontSize: 19 }}>{nominalPrice}.00</Text>
+                        <Text style={{ color: BASE_COLOR.blue, fontWeight: 'bold', fontSize: 19 }}>{hasSubtypes ? nominalPrice + '.00 +' : nominalPrice + '.00'}</Text>
                     </View>
                 </View>
                 <View style={{ margin: 20, marginTop: -10 }}>
@@ -332,7 +383,9 @@ class MenuItemDetailsScreen extends BaseScreen {
                         </View>
                     </TouchableOpacity>
                 </View>
-                {this._renderMenuItemOptions(menuItemOptions)}
+                {this._renderMenuItemTypeWithOptions(subtypes)}
+                {/* {hasSubtypes === true && subtypes != [] ? this._renderMenuItemOptions(subtypes.menuItemOptions) : null} */}
+                {this._renderMenuItemOptions(hasSubtypes ? this.state.menuItemType.menuItemOptions : menuItemOptions)}
 
                 <View style={{ alignItems: 'center', justifyContent: 'center', margin: 20, marginBottom: 30 }}>
                     <TouchableOpacity onPress={() => this.onPressAddToBag()}>
@@ -360,9 +413,13 @@ class MenuItemDetailsScreen extends BaseScreen {
         )
     }
 
-    subTotalPrice = (menuItem, selectedOptions, quantity) => {
+    subTotalPrice = (menuItem, selectedOptions, quantity, menuItemType) => {
         var totalPrice = 0
-        totalPrice += menuItem.nominalPrice //* quantity
+        if (menuItem.hasSubtypes) {
+            totalPrice += menuItemType.nominalPrice
+        } else {
+            totalPrice += menuItem.nominalPrice //* quantity
+        }
 
         selectedOptions.map(item => {
             item.options.map(option => {
@@ -375,28 +432,29 @@ class MenuItemDetailsScreen extends BaseScreen {
 
     onPressAddToBag = () => {
         const { orderForPlace } = this.props
-        const { menuItem } = this.state
+        const { menuItem, menuItemType } = this.state
+        let item = menuItem.hasSubtypes ? menuItemType : menuItem
 
         if (orderForPlace == null) {
             this.putInBagHandler()
-        } else if (orderForPlace._id === menuItem.place._id) {
+        } else if (orderForPlace._id === item.place._id) {
             this.putInBagHandler()
-        } else if (orderForPlace._id !== menuItem.place._id) {
+        } else if (orderForPlace._id !== item.place._id) {
             this.showDialogMessage("U korpi trenutno imate jela iz drugog restorana. Ako nastavite sa kupovinom, korpa sa vec unetim jelima ce se isprazniti.", this.putInBagHandler)
         }
 
     }
 
     putInBagHandler() {
-        const { menuItem, selectedOptions, quantity, order } = this.state
-
+        const { menuItem, selectedOptions, quantity, order, menuItemType } = this.state
+        let item = menuItem.hasSubtypes ? menuItemType : menuItem
 
         const orderdMenuItem = {
 
             _id: `${Math.random()}${Math.random()}${Math.random()}`,
             quantity: quantity,
-            menuItem: menuItem,
-            menuItemTotalPrice: this.subTotalPrice(menuItem, selectedOptions, quantity),
+            menuItem: item,
+            menuItemTotalPrice: this.subTotalPrice(item, selectedOptions, quantity),
             selectedOptions: selectedOptions,
         }
 
