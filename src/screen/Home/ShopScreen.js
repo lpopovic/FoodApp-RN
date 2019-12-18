@@ -17,10 +17,11 @@ import { connect } from 'react-redux';
 import { NAV_COLOR, BASE_COLOR } from '../../styles'
 import { FlatList } from 'react-native-gesture-handler';
 import ShopCard from '../../components/Home/ShopCard';
-import { OrderNetwork } from '../../service/api';
+import { OrderNetwork, UserNetwork } from '../../service/api';
 import { removeOrderMenuItem, emptyOrder } from '../../store/actions'
 import Icon from 'react-native-vector-icons/Ionicons';
 import { ScreenName } from '../../helpers'
+
 const PAY_BUTTON_KEY = {
     cacheSelected: "cache",
     onlineSelected: "on-line",
@@ -97,6 +98,33 @@ class ShoopScreen extends BaseScreen {
         LayoutAnimation.easeInEaseOut();
     }
 
+    renderAllAdresses = () => {
+
+        let filteredAddresses = this.props.userInfo.address.filter(
+            (data) => {
+                if (this.state.userInfo.adress) {
+                    return data.toLowerCase().indexOf(this.state.userInfo.adress.toLowerCase()) !== -1
+                } else {
+                    return this.props.userInfo.address
+                }
+            }
+        );
+        return filteredAddresses.map((text, i) => (
+            <TouchableOpacity onPressIn={() => {
+                this.setNewStateHandler({
+                    ...this.state,
+                    userInfo: {
+                        ...this.state.userInfo,
+                        adress: text,
+                    },
+                    showAddressInfo: false
+                })
+            }} style={{ borderWidth: 0.5, width: '100%', padding: 8, borderColor: BASE_COLOR.blue }} key={i}>
+                <Text style={{ fontSize: 14 }}>{text}</Text>
+            </TouchableOpacity>
+        ))
+    }
+
     emptyContent = () => {
         return (
             <View style={styles.mainContainer}>
@@ -113,7 +141,6 @@ class ShoopScreen extends BaseScreen {
     mainContent = () => {
 
         const { userInfo } = this.state
-
         return (
             <View style={styles.mainContainer}>
                 <KeyboardAwareScrollView
@@ -123,7 +150,7 @@ class ShoopScreen extends BaseScreen {
                     bounces={false}
                     keyboardShouldPersistTaps='handled'
                     enableOnAndroid={true} >
-                    <ScrollView keyboardShouldPersistTaps='never'>
+                    <ScrollView keyboardShouldPersistTaps='always'>
                         <Text style={{ alignItems: 'center', textAlign: 'center', fontWeight: 'bold', fontSize: 24, marginTop: 20, marginBottom: 20 }}>Korpa</Text>
                         <FlatList
                             style={{ marginBottom: 30 }}
@@ -230,7 +257,8 @@ class ShoopScreen extends BaseScreen {
                                                         userInfo: {
                                                             ...this.state.userInfo,
                                                             adress: text,
-                                                        }
+                                                        },
+                                                        showAddressInfo: true
                                                     })}
                                                     placeholder={'Adresa'}
                                                     returnKeyType='next'
@@ -241,8 +269,8 @@ class ShoopScreen extends BaseScreen {
                                                     style={[styles.textStyle]} />
                                             </View>
                                             {this.state.showAddressInfo &&
-                                                <View style={{ height: 150, width: '100%', backgroundColor: 'red' }}>
-                                                    
+                                                <View style={{ height: 'auto', width: '100%' }}>
+                                                    {this.renderAllAdresses()}
                                                 </View>
                                             }
                                         </View>
@@ -309,7 +337,6 @@ class ShoopScreen extends BaseScreen {
     }
 
     onPressOrderHandler(order) {
-
         const { cacheSelected, wayOfDelivery, specialInstructions, userInfo } = this.state
         const { orderForPlace } = this.props
         const placeId = orderForPlace._id
@@ -325,6 +352,10 @@ class ShoopScreen extends BaseScreen {
                         this.setNewStateHandler({ loading: false })
                         this.closeScreen()
                         this.props.emptyOrderHandler()
+                        const addressExist = this.props.userInfo.address.includes(this.state.userInfo.adress);
+                        if (!addressExist) {
+                            UserNetwork.fetchUserPutNewAddress(this.state.userInfo.adress)
+                        }
                     },
                     err => {
                         this.setNewStateHandler({ loading: false })
