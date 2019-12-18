@@ -24,8 +24,6 @@ class MenuItem {
         return arrayTemplate;
 
     }
-
-
 }
 
 export { MenuItem };

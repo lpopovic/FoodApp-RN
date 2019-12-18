@@ -74,6 +74,29 @@ class UserNetwork {
                 }
             }
         });
+    static fetchUserPutNewAddress = (address) =>
+        new Promise(async (resolve, reject) => {
+            const url = RestUrl.userPutNewAdress
+
+            let formData = {
+                address
+            }
+            try {
+                const { data } = await axios.put(url, formData)
+                resolve(data)
+
+            } catch (error) {
+                try {
+                    const { message } = error.response.data.error
+                    reject(message)
+                } catch  {
+                    reject(error.message)
+
+                }
+            }
+        });
+
+
 }
 
 export { UserNetwork }

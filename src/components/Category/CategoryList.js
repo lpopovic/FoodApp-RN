@@ -31,7 +31,7 @@ class CategorySectionList extends Component {
                     style={styles.listContainer}
                     data={this.props.arrayObject}
                     horizontal
-                    keyExtractor={(index) => `${Math.random() * Math.random()}${index.toString()}`}
+                    keyExtractor={(index) => `${index.toString()}`}
                     renderItem={(info) => (
                         <CategoryItem
                             item={info.item}
@@ -54,7 +54,7 @@ class CategoryList extends Component {
                 style={styles.listContainer}
                 data={this.props.arrayObject}
                 numColumns={2}
-                keyExtractor={(index) => `${Math.random() * Math.random()}${index.toString()}`}
+                keyExtractor={(index) => `${index.toString()}`}
                 renderItem={(info) => (
                     <CategoryItem
                         item={info.item}

@@ -17,6 +17,7 @@ const initialState = {
         company: null,
         catheringOptions: null,
         catheringIsAvailable: null,
+        address:[]
     },
 };
 

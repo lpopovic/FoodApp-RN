@@ -7,7 +7,9 @@ import {
     Dimensions,
     ScrollView,
     TextInput,
-    KeyboardAvoidingView
+    KeyboardAvoidingView,
+    UIManager,
+    LayoutAnimation
 } from 'react-native';
 import BaseScreen from '../BaseScreen/BaseScreen';
 import SafeAreaView from 'react-native-safe-area-view';
@@ -17,10 +19,11 @@ import { connect } from 'react-redux';
 import { NAV_COLOR, BASE_COLOR } from '../../styles'
 import { FlatList } from 'react-native-gesture-handler';
 import ShopCard from '../../components/Home/ShopCard';
-import { OrderNetwork } from '../../service/api';
-import { removeOrderMenuItem, emptyOrder } from '../../store/actions'
+import { OrderNetwork, UserNetwork } from '../../service/api';
+import { removeOrderMenuItem, emptyOrder, updateUserProfile } from '../../store/actions'
 import Icon from 'react-native-vector-icons/Ionicons';
 import { ScreenName } from '../../helpers'
+
 const PAY_BUTTON_KEY = {
     cacheSelected: "cache",
     onlineSelected: "on-line",
@@ -47,9 +50,10 @@ class ShoopScreen extends BaseScreen {
             specialInstructions: '',
             userInfo: {
                 name: '',
-                adress: '',
+                address: '',
                 numberMob: '',
-            }
+            },
+            showAddressInfo: false
         }
     }
 
@@ -89,6 +93,40 @@ class ShoopScreen extends BaseScreen {
         return orderTotalPrice
 
     }
+
+    showAddresses = (bool) => {
+        this.setState({ showAddressInfo: bool })
+        UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
+        LayoutAnimation.easeInEaseOut();
+    }
+
+    renderAllAdresses = () => {
+
+        let filteredAddresses = this.props.userInfo.address.filter(
+            (data) => {
+                if (this.state.userInfo.address) {
+                    return data.toLowerCase().indexOf(this.state.userInfo.address.toLowerCase()) !== -1
+                } else {
+                    return this.props.userInfo.address
+                }
+            }
+        );
+        return filteredAddresses.map((text, i) => (
+            <TouchableOpacity onPressIn={() => {
+                this.setNewStateHandler({
+                    ...this.state,
+                    userInfo: {
+                        ...this.state.userInfo,
+                        address: text,
+                    },
+                    showAddressInfo: false
+                })
+            }} style={{ borderWidth: 0.5, width: '100%', padding: 8, borderColor: BASE_COLOR.blue }} key={i}>
+                <Text style={{ fontSize: 14 }}>{text}</Text>
+            </TouchableOpacity>
+        ))
+    }
+
     emptyContent = () => {
         return (
             <View style={styles.mainContainer}>
@@ -105,7 +143,6 @@ class ShoopScreen extends BaseScreen {
     mainContent = () => {
 
         const { userInfo } = this.state
-
         return (
             <View style={styles.mainContainer}>
                 <KeyboardAwareScrollView
@@ -115,13 +152,13 @@ class ShoopScreen extends BaseScreen {
                     bounces={false}
                     keyboardShouldPersistTaps='handled'
                     enableOnAndroid={true} >
-                    <ScrollView>
+                    <ScrollView keyboardShouldPersistTaps='always'>
                         <Text style={{ alignItems: 'center', textAlign: 'center', fontWeight: 'bold', fontSize: 24, marginTop: 20, marginBottom: 20 }}>Korpa</Text>
                         <FlatList
                             style={{ marginBottom: 30 }}
                             scrollEnabled={false}
                             data={this.props.order}
-                            keyExtractor={(index) => `${Math.random() * Math.random()}${index.toString()}`}
+                            keyExtractor={(index) => `${index.toString()}`}
                             renderItem={(info) => (
                                 <ShopCard
                                     data={info.item}
@@ -214,22 +251,30 @@ class ShoopScreen extends BaseScreen {
                                             </View>
                                         </View>
                                         <View style={{ marginTop: 8, marginBottom: 8 }}>
-                                            <View style={{ padding: 8, borderRadius: 8, borderWidth: 1, borderColor: BASE_COLOR.blue, }}>
+                                            <View style={{ padding: 8, borderRadius: 8, borderWidth: 1, borderColor: BASE_COLOR.blue }}>
                                                 <TextInput
-                                                    value={userInfo.adress}
+                                                    value={userInfo.address}
                                                     onChangeText={(text) => this.setNewStateHandler({
                                                         ...this.state,
                                                         userInfo: {
                                                             ...this.state.userInfo,
-                                                            adress: text,
-                                                        }
+                                                            address: text,
+                                                        },
+                                                        showAddressInfo: true
                                                     })}
                                                     placeholder={'Adresa'}
                                                     returnKeyType='next'
+                                                    onFocus={() => this.showAddresses(true)}
+                                                    onBlur={() => this.showAddresses(false)}
                                                     ref={(input) => this.address = input}
                                                     onSubmitEditing={() => this.phone.focus()}
                                                     style={[styles.textStyle]} />
                                             </View>
+                                            {this.state.showAddressInfo &&
+                                                <View style={{ height: 'auto', width: '100%' }}>
+                                                    {this.renderAllAdresses()}
+                                                </View>
+                                            }
                                         </View>
                                         <View style={{ marginTop: 8, marginBottom: 8 }}>
                                             <View style={{ padding: 8, borderRadius: 8, borderWidth: 1, borderColor: BASE_COLOR.blue }}>
@@ -268,7 +313,7 @@ class ShoopScreen extends BaseScreen {
                                 </TouchableOpacity>
                             </View>
                             :
-                            < View style={{ alignItems: 'center', justifyContent: 'center', margin: 20 }}>
+                            <View style={{ alignItems: 'center', justifyContent: 'center', margin: 20 }}>
                                 <TouchableOpacity onPress={() => this.onPressLogInHandler()}>
                                     <View style={{ backgroundColor: BASE_COLOR.blue, width: 280, height: 65, justifyContent: 'center', alignItems: 'center', borderRadius: 4 }}>
                                         <Text style={{ color: BASE_COLOR.white, fontWeight: 'bold', fontSize: 22 }}>Prijavi se</Text>
@@ -294,22 +339,28 @@ class ShoopScreen extends BaseScreen {
     }
 
     onPressOrderHandler(order) {
-
         const { cacheSelected, wayOfDelivery, specialInstructions, userInfo } = this.state
         const { orderForPlace } = this.props
         const placeId = orderForPlace._id
         const orderType = wayOfDelivery
         const methodOfPayment = cacheSelected ? 'cash' : 'online'
 
-        const { name, adress, numberMob } = userInfo
-        if (name.trim() != '' && adress.trim() != '' && numberMob.trim() != '') {
-            OrderNetwork.fetchOrder(order, placeId, orderType, methodOfPayment, specialInstructions)
+        const { name, address, numberMob } = userInfo
+        if (name.trim() != '' && address.trim() != '' && numberMob.trim() != '') {
+            OrderNetwork.fetchOrder(order, placeId, orderType, methodOfPayment, specialInstructions, address, numberMob)
                 .then(
                     res => {
                         this.showAlertMessage("USPESNO NARUCENO")
                         this.setNewStateHandler({ loading: false })
                         this.closeScreen()
                         this.props.emptyOrderHandler()
+
+                        if (!this.props.userInfo.address.includes(address)) {
+                            UserNetwork.fetchUserPutNewAddress(address)
+                            let user = this.props.userInfo
+                            user.address.push(address)
+                            this.props.updateUserProfileHandler(user)
+                        }
                     },
                     err => {
                         this.setNewStateHandler({ loading: false })
@@ -421,7 +472,8 @@ const styles = StyleSheet.create({
         fontSize: 15,
         padding: 4,
         margin: 16,
-        marginTop: 8
+        marginTop: 8,
+        textAlignVertical: "top"
     },
     textInputNoteContainer: {
         margin: 20,
@@ -457,7 +509,8 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return {
         removeOrderMenuItemHandler: (orderdMenuItem) => dispatch(removeOrderMenuItem(orderdMenuItem)),
-        emptyOrderHandler: () => dispatch(emptyOrder())
+        emptyOrderHandler: () => dispatch(emptyOrder()),
+        updateUserProfileHandler: (user) => dispatch(updateUserProfile(user))
     };
 };
 
