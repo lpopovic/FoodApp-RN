@@ -15,7 +15,7 @@ import {
     BASE_COLOR,
     NAV_COLOR,
 } from '../../styles'
-import {  Order } from '../../model';
+import { Order } from '../../model';
 
 class OrderDetailScreen extends BaseScreen {
     static navigationOptions = {
@@ -26,7 +26,7 @@ class OrderDetailScreen extends BaseScreen {
         super(props)
 
         this.state = {
-            loading: true,
+            loading: false,
             order: null,
             menuItems: [],
             quantityItems: []
@@ -37,9 +37,7 @@ class OrderDetailScreen extends BaseScreen {
     componentDidMount() {
         super.componentDidMount()
         this.setStatusBarStyle(NAV_COLOR.headerBackground, true)
-        setTimeout(() => {
-            this.setNewStateHandler({ loading: false })
-        }, 1000);
+      
         const order = this.props.navigation.getParam('order', null)
         if (order !== null) {
             let menuItems = Order.createArrayOrderFoodMenuItems(order.orderedMenuItems)
@@ -163,7 +161,7 @@ class OrderDetailScreen extends BaseScreen {
 
                     )}
                 />
-                {this.infoOrderContent(order)}
+                {order !== null ? this.infoOrderContent(order) : <View />}
             </View>
         )
 
