@@ -22,7 +22,7 @@ import ShopCard from '../../components/Home/ShopCard';
 import { OrderNetwork, UserNetwork } from '../../service/api';
 import { removeOrderMenuItem, emptyOrder, updateUserProfile } from '../../store/actions'
 import Icon from 'react-native-vector-icons/Ionicons';
-import { ScreenName } from '../../helpers'
+import { ScreenName, isNumber } from '../../helpers'
 
 const PAY_BUTTON_KEY = {
     cacheSelected: "cache",
@@ -51,7 +51,10 @@ class ShoopScreen extends BaseScreen {
             userInfo: {
                 name: '',
                 address: '',
-                numberMob: '',
+                numberMobile: {
+                    value: '',
+                    valid: false
+                }
             },
             showAddressInfo: false
         }
@@ -279,15 +282,18 @@ class ShoopScreen extends BaseScreen {
                                         <View style={{ marginTop: 8, marginBottom: 8 }}>
                                             <View style={{ padding: 8, borderRadius: 8, borderWidth: 1, borderColor: BASE_COLOR.blue }}>
                                                 <TextInput
-                                                    value={userInfo.numberMob}
+                                                    value={userInfo.numberMobile.value}
                                                     onChangeText={(text) => this.setNewStateHandler({
                                                         ...this.state,
                                                         userInfo: {
                                                             ...this.state.userInfo,
-                                                            numberMob: text,
+                                                            numberMobile: {
+                                                                valid: isNumber(text),
+                                                                value: text,
+                                                            },
                                                         }
                                                     })}
-                                                    placeholder={'Broj telefona'}
+                                                    placeholder={'Broj telefona: 06X-XXX-XXX'}
                                                     returnKeyType='next'
                                                     ref={(input) => this.phone = input}
                                                     onSubmitEditing={() => this.textReview.focus()}
@@ -345,9 +351,9 @@ class ShoopScreen extends BaseScreen {
         const orderType = wayOfDelivery
         const methodOfPayment = cacheSelected ? 'cash' : 'online'
 
-        const { name, address, numberMob } = userInfo
-        if (name.trim() != '' && address.trim() != '' && numberMob.trim() != '') {
-            OrderNetwork.fetchOrder(order, placeId, orderType, methodOfPayment, specialInstructions, address, numberMob)
+        const { name, address, numberMobile } = userInfo
+        if (name.trim() != '' && address.trim() != '' && numberMobile.valid == true) {
+            OrderNetwork.fetchOrder(order, placeId, orderType, methodOfPayment, specialInstructions, address, numberMobile.value)
                 .then(
                     res => {
                         this.showAlertMessage("USPESNO NARUCENO")
