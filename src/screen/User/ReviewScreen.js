@@ -3,6 +3,7 @@ import {
     SafeAreaView,
     View,
     Text,
+    TextInput,
     TouchableOpacity,
     StyleSheet,
 } from 'react-native';
@@ -17,7 +18,7 @@ import {
     NAV_COLOR,
     STAR_COLOR
 } from '../../styles'
-import { TextInput } from 'react-native-gesture-handler';
+
 
 class ReviewScreen extends BaseScreen {
 
@@ -132,6 +133,7 @@ class ReviewScreen extends BaseScreen {
                             borderRadius: 1,
                             borderWidth: 2,
                             borderColor: BASE_COLOR.lightGray,
+                            textAlignVertical: "top"
                         }}
                         autoCapitalize="none"
                         autoCorrect={false}
@@ -260,6 +262,7 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         alignItems: 'center',
         alignSelf: 'center',
+        marginBottom: 20
     },
     bottomButtonContainer: {
         alignContent: 'center',

@@ -6,7 +6,7 @@ import { Group } from 'react-native';
 class OrderNetwork {
 
 
-    static fetchOrder = (order, placeId, orderType, methodOfPayment,specialInstructions) =>
+    static fetchOrder = (order, placeId, orderType, methodOfPayment, specialInstructions, customerAddress, customerPhoneNumber) =>
         new Promise(async (resolve, reject) => {
             const url = RestUrl.order
 
@@ -34,6 +34,8 @@ class OrderNetwork {
                 orderType: orderType,//"delivery",
                 isCatheringOrder: false,
                 methodOfPayment: methodOfPayment,//'cash',
+                customerAddress,
+                customerPhoneNumber
             }
 
             console.log("FORM DATA:" + formData)
