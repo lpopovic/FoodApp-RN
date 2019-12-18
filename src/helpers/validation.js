@@ -51,7 +51,7 @@ const isNumber = val => {
     // var phoneno = /^\+?([0-9]{2})\)?[-. ]?([0-9]{4})[-. ]?([0-9]{4})$/;          sa plusom 10 karaktera
     var phoneno10 = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
     var phoneno9 = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{3})$/;          // sa 9 karaktera
-    if (val.match(phoneno10) || val.match(phoneno9) ) {
+    if (val.match(phoneno10) || val.match(phoneno9)) {
         return true;
     }
     else {
@@ -59,4 +59,4 @@ const isNumber = val => {
     }
 };
 
-export { validate };
+export { validate, isNumber };

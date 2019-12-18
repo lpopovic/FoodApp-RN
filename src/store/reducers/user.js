@@ -2,11 +2,13 @@ import {
     UPDATE_USER_PROFILE_DATA,
     UPDATE_USER_JWT_DATA,
     USER_LOG_OUT,
+    UPDATE_LIST_USER_ORDERS,
 } from '../actions/actionTypes';
 
 const initialState = {
     JWT: null,
     isLogin: false,
+    userOrders: [],
     userInfo: {
         _id: 'Unknown id',
         username: 'Unknown username',
@@ -15,6 +17,7 @@ const initialState = {
         company: null,
         catheringOptions: null,
         catheringIsAvailable: null,
+        address:[]
     },
 };
 
@@ -36,6 +39,12 @@ const reducer = (state = initialState, action) => {
                 ...state,
                 JWT: null,
                 isLogin: false,
+                userOrders: []
+            }
+        case UPDATE_LIST_USER_ORDERS:
+            return {
+                ...state,
+                userOrders: action.payload
             }
         default:
             return state;

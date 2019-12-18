@@ -11,6 +11,7 @@ class RestUrl {
     static userLogin = withKey(`auth/login`)
     static userRegister = withKey(`auth/register`)
     static userInfo = withKey(`auth/me`)
+    static userPutNewAdress = withKey(`users/pushaddress`)
 
     static placeTest = withKey(`places`)
     static getPlaces = (params) => {

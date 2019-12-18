@@ -7,18 +7,23 @@ import {
     Dimensions,
     ScrollView,
     TextInput,
-    KeyboardAvoidingView
+    KeyboardAvoidingView,
+    UIManager,
+    LayoutAnimation
 } from 'react-native';
 import BaseScreen from '../BaseScreen/BaseScreen';
 import SafeAreaView from 'react-native-safe-area-view';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import Header from '../../components/common/BackHeader'
 import { connect } from 'react-redux';
 import { NAV_COLOR, BASE_COLOR } from '../../styles'
 import { FlatList } from 'react-native-gesture-handler';
 import ShopCard from '../../components/Home/ShopCard';
-import { OrderNetwork } from '../../service/api';
-import { removeOrderMenuItem, emptyOrder } from '../../store/actions'
+import { OrderNetwork, UserNetwork } from '../../service/api';
+import { removeOrderMenuItem, emptyOrder, updateUserProfile } from '../../store/actions'
 import Icon from 'react-native-vector-icons/Ionicons';
+import { ScreenName, isNumber } from '../../helpers'
+
 const PAY_BUTTON_KEY = {
     cacheSelected: "cache",
     onlineSelected: "on-line",
@@ -45,9 +50,13 @@ class ShoopScreen extends BaseScreen {
             specialInstructions: '',
             userInfo: {
                 name: '',
-                adress: '',
-                numberMob: '',
-            }
+                address: '',
+                numberMobile: {
+                    value: '',
+                    valid: false
+                }
+            },
+            showAddressInfo: false
         }
     }
 
@@ -60,13 +69,13 @@ class ShoopScreen extends BaseScreen {
     }
     textInputNoteContent = () => (
         <TextInput
-            ref={(input) => (this.textInput = input)}
             style={styles.textInputNoteStyle}
             value={this.state.specialInstructions}
             multiline={true}
             placeholder={'Napomena'}
             onChangeText={(text) => this.updateTextReview(text)}
             returnKeyType='done'
+            ref={(input) => this.textReview = input}
             scrollEnabled={true}
         />
     )
@@ -87,6 +96,40 @@ class ShoopScreen extends BaseScreen {
         return orderTotalPrice
 
     }
+
+    showAddresses = (bool) => {
+        this.setState({ showAddressInfo: bool })
+        UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
+        LayoutAnimation.easeInEaseOut();
+    }
+
+    renderAllAdresses = () => {
+
+        let filteredAddresses = this.props.userInfo.address.filter(
+            (data) => {
+                if (this.state.userInfo.address) {
+                    return data.toLowerCase().indexOf(this.state.userInfo.address.toLowerCase()) !== -1
+                } else {
+                    return this.props.userInfo.address
+                }
+            }
+        );
+        return filteredAddresses.map((text, i) => (
+            <TouchableOpacity onPressIn={() => {
+                this.setNewStateHandler({
+                    ...this.state,
+                    userInfo: {
+                        ...this.state.userInfo,
+                        address: text,
+                    },
+                    showAddressInfo: false
+                })
+            }} style={{ borderWidth: 0.5, width: '100%', padding: 8, borderColor: BASE_COLOR.blue }} key={i}>
+                <Text style={{ fontSize: 14 }}>{text}</Text>
+            </TouchableOpacity>
+        ))
+    }
+
     emptyContent = () => {
         return (
             <View style={styles.mainContainer}>
@@ -103,174 +146,227 @@ class ShoopScreen extends BaseScreen {
     mainContent = () => {
 
         const { userInfo } = this.state
-
         return (
             <View style={styles.mainContainer}>
-                <ScrollView>
-                    <Text style={{ alignItems: 'center', textAlign: 'center', fontWeight: 'bold', fontSize: 24, marginTop: 20, marginBottom: 20 }}>Korpa</Text>
-                    <FlatList
-                        style={{ marginBottom: 30 }}
-                        scrollEnabled={false}
-                        data={this.props.order}
-                        keyExtractor={(index) => `${Math.random() * Math.random()}${index.toString()}`}
-                        renderItem={(info) => (
-                            <ShopCard
-                                data={info.item}
-                                onPressRemove={() => this.onPressRemoveHandler(info.item)}
-                            />
-                        )}
-                    />
+                <KeyboardAwareScrollView
+                    resetScrollToCoords={{ x: 0, y: 0 }}
+                    contentContainerStyle={{ flex: 1 }}
+                    scrollEnabled={false}
+                    bounces={false}
+                    keyboardShouldPersistTaps='handled'
+                    enableOnAndroid={true} >
+                    <ScrollView keyboardShouldPersistTaps='always'>
+                        <Text style={{ alignItems: 'center', textAlign: 'center', fontWeight: 'bold', fontSize: 24, marginTop: 20, marginBottom: 20 }}>Korpa</Text>
+                        <FlatList
+                            style={{ marginBottom: 30 }}
+                            scrollEnabled={false}
+                            data={this.props.order}
+                            keyExtractor={(index) => `${index.toString()}`}
+                            renderItem={(info) => (
+                                <ShopCard
+                                    data={info.item}
+                                    onPressRemove={() => this.onPressRemoveHandler(info.item)}
+                                />
+                            )}
+                        />
 
-                    <View style={{ height: 1, backgroundColor: BASE_COLOR.lightGray, margin: 10, marginTop: 0 }}></View>
-                    <View style={{ margin: 30 }}>
-                        <Text style={{ fontWeight: '400', fontSize: 18 }}>Način preuzimanja</Text>
-                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 20 }}>
-                            <TouchableOpacity onPress={() => this.wayOfDeliveryHandler(DELIVERY_BUTTON_KEY.pickup)}>
-                                <View style={this.buttonStyle(DELIVERY_BUTTON_KEY.pickup)}>
-                                    <Text style={{ color: this.state.wayOfDelivery == DELIVERY_BUTTON_KEY.pickup ? BASE_COLOR.blue : BASE_COLOR.darkGray, fontWeight: this.state.wayOfDelivery == DELIVERY_BUTTON_KEY.pickup ? 'bold' : '400' }}>POKUPI</Text>
-                                </View>
-                            </TouchableOpacity>
-                            <TouchableOpacity onPress={() => this.wayOfDeliveryHandler(DELIVERY_BUTTON_KEY.delivery)}>
-                                <View style={this.buttonStyle(DELIVERY_BUTTON_KEY.delivery)}>
-                                    <Text style={{ color: this.state.wayOfDelivery == DELIVERY_BUTTON_KEY.delivery ? BASE_COLOR.blue : BASE_COLOR.darkGray, fontWeight: this.state.wayOfDelivery == DELIVERY_BUTTON_KEY.delivery ? 'bold' : '400' }}>DOSTAVA</Text>
-                                </View>
-                            </TouchableOpacity>
+                        <View style={{ height: 1, backgroundColor: BASE_COLOR.lightGray, margin: 10, marginTop: 0 }}></View>
+                        <View style={{ margin: 30 }}>
+                            <Text style={{ fontWeight: '400', fontSize: 18 }}>Način preuzimanja</Text>
+                            <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 20 }}>
+                                <TouchableOpacity onPress={() => this.wayOfDeliveryHandler(DELIVERY_BUTTON_KEY.pickup)}>
+                                    <View style={this.buttonStyle(DELIVERY_BUTTON_KEY.pickup)}>
+                                        <Text style={{ color: this.state.wayOfDelivery == DELIVERY_BUTTON_KEY.pickup ? BASE_COLOR.blue : BASE_COLOR.darkGray, fontWeight: this.state.wayOfDelivery == DELIVERY_BUTTON_KEY.pickup ? 'bold' : '400' }}>POKUPI</Text>
+                                    </View>
+                                </TouchableOpacity>
+                                <TouchableOpacity onPress={() => this.wayOfDeliveryHandler(DELIVERY_BUTTON_KEY.delivery)}>
+                                    <View style={this.buttonStyle(DELIVERY_BUTTON_KEY.delivery)}>
+                                        <Text style={{ color: this.state.wayOfDelivery == DELIVERY_BUTTON_KEY.delivery ? BASE_COLOR.blue : BASE_COLOR.darkGray, fontWeight: this.state.wayOfDelivery == DELIVERY_BUTTON_KEY.delivery ? 'bold' : '400' }}>DOSTAVA</Text>
+                                    </View>
+                                </TouchableOpacity>
 
+                            </View>
                         </View>
-                    </View>
-                    <View style={{ height: 1, backgroundColor: BASE_COLOR.lightGray, margin: 10 }}></View>
-                    <View style={{ flexDirection: 'column' }}>
-                        <View style={styles.containerSubAllStyle}>
-                            <Text style={styles.textSubAllStyle}>Ukupno</Text>
-                            <Text style={styles.textSubAllStyle}>{this.props.order.length > 0 ? `${this.subAllOrder(this.props.order)}.00` : ""}</Text>
-                        </View>
-                        <View style={styles.containerSubAllStyle}>
-                            <Text style={styles.textSubAllStyle}>Dostava</Text>
-                            <Text style={styles.textSubAllStyle}>+{Number(this.props.orderForPlace.deliveryPrice).toFixed(2)}</Text>
-                        </View>
-                        <View style={{ height: 3, backgroundColor: BASE_COLOR.blue, margin: 10, marginTop: 10 }}></View>
-                        <View style={[styles.containerSubAllStyle, { marginTop: 5 }]}>
-                            <Text style={{ fontWeight: 'bold', fontSize: 18, marginLeft: 20, color: BASE_COLOR.blue }}>Sve ukupno</Text>
-                            <Text style={{ fontWeight: 'bold', fontSize: 18, marginRight: 20, color: BASE_COLOR.blue }}>{this.subAllOrder(this.props.order) + this.props.orderForPlace.deliveryPrice}.00</Text>
-                        </View>
-
-                    </View>
-
-
-                    <View style={{ height: 1, backgroundColor: BASE_COLOR.lightGray, margin: 10 }}></View>
-                    <View style={{ margin: 30 }}>
-                        <Text style={{ fontWeight: '400', fontSize: 18 }}>Plaćanje</Text>
-                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 20 }}>
-                            <TouchableOpacity onPress={() => this.payButttonHandler(PAY_BUTTON_KEY.cacheSelected)}>
-                                <View style={this.buttonStyle(PAY_BUTTON_KEY.cacheSelected)}>
-                                    <Text style={{ color: this.state.cacheSelected ? BASE_COLOR.blue : BASE_COLOR.darkGray, fontWeight: this.state.cacheSelected ? 'bold' : '400' }}>KEŠ</Text>
-                                </View>
-                            </TouchableOpacity>
-                            <TouchableOpacity onPress={() => this.payButttonHandler(PAY_BUTTON_KEY.onlineSelected)}>
-                                <View style={this.buttonStyle(PAY_BUTTON_KEY.onlineSelected)}>
-                                    <Text style={{ color: this.state.onlineSelected ? BASE_COLOR.blue : BASE_COLOR.darkGray, fontWeight: this.state.onlineSelected ? 'bold' : '400' }}>ON-LINE</Text>
-                                </View>
-                            </TouchableOpacity>
+                        <View style={{ height: 1, backgroundColor: BASE_COLOR.lightGray, margin: 10 }}></View>
+                        <View style={{ flexDirection: 'column' }}>
+                            <View style={styles.containerSubAllStyle}>
+                                <Text style={styles.textSubAllStyle}>Ukupno</Text>
+                                <Text style={styles.textSubAllStyle}>{this.props.order.length > 0 ? `${this.subAllOrder(this.props.order)}.00` : ""}</Text>
+                            </View>
+                            {
+                                this.state.wayOfDelivery == DELIVERY_BUTTON_KEY.delivery ?
+                                    <View style={styles.containerSubAllStyle}>
+                                        <Text style={styles.textSubAllStyle}>Dostava</Text>
+                                        <Text style={styles.textSubAllStyle}>+{Number(this.props.orderForPlace.deliveryPrice).toFixed(2)}</Text>
+                                    </View>
+                                    :
+                                    <View />
+                            }
+                            <View style={{ height: 3, backgroundColor: BASE_COLOR.blue, margin: 10, marginTop: 10 }}></View>
+                            <View style={[styles.containerSubAllStyle, { marginTop: 5 }]}>
+                                <Text style={{ fontWeight: 'bold', fontSize: 18, marginLeft: 20, color: BASE_COLOR.blue }}>Sve ukupno</Text>
+                                <Text style={{ fontWeight: 'bold', fontSize: 18, marginRight: 20, color: BASE_COLOR.blue }}>{this.subAllOrder(this.props.order) + this.state.wayOfDelivery == DELIVERY_BUTTON_KEY.delivery ? this.props.orderForPlace.deliveryPrice : 0}.00</Text>
+                            </View>
 
                         </View>
-                    </View>
-                    <View style={{ height: 1, backgroundColor: BASE_COLOR.lightGray, margin: 10 }}></View>
-                    <View style={{ margin: 40 }}>
-                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                            <Text style={{ alignItems: 'flex-start', flex: 8, fontWeight: '400', fontSize: 18 }}>Lični podaci:</Text>
-                            {/* <TouchableOpacity style={{ flex: 2, alignItems: 'flex-end' }}>
-                                <View style={{ borderBottomWidth: 0.9, borderBottomColor: BASE_COLOR.blue, marginBottom: 3, alignSelf: 'center' }}>
-                                    <Text style={{ textAlign: 'center', color: BASE_COLOR.blue, fontSize: 14 }}>Izmeni</Text>
-                                </View>
-                            </TouchableOpacity> */}
+
+
+                        <View style={{ height: 1, backgroundColor: BASE_COLOR.lightGray, margin: 10 }}></View>
+                        <View style={{ margin: 30 }}>
+                            <Text style={{ fontWeight: '400', fontSize: 18 }}>Plaćanje</Text>
+                            <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 20 }}>
+                                <TouchableOpacity onPress={() => this.payButttonHandler(PAY_BUTTON_KEY.cacheSelected)}>
+                                    <View style={this.buttonStyle(PAY_BUTTON_KEY.cacheSelected)}>
+                                        <Text style={{ color: this.state.cacheSelected ? BASE_COLOR.blue : BASE_COLOR.darkGray, fontWeight: this.state.cacheSelected ? 'bold' : '400' }}>KEŠ</Text>
+                                    </View>
+                                </TouchableOpacity>
+                                <TouchableOpacity onPress={() => this.payButttonHandler(PAY_BUTTON_KEY.onlineSelected)}>
+                                    <View style={this.buttonStyle(PAY_BUTTON_KEY.onlineSelected)}>
+                                        <Text style={{ color: this.state.onlineSelected ? BASE_COLOR.blue : BASE_COLOR.darkGray, fontWeight: this.state.onlineSelected ? 'bold' : '400' }}>ON-LINE</Text>
+                                    </View>
+                                </TouchableOpacity>
+
+                            </View>
                         </View>
-                        <View style={{ marginTop: 20 }}>
-                            <View style={{ marginTop: 0, marginBottom: 8 }}>
-                                <View style={{ padding: 8, borderRadius: 8, borderWidth: 1, borderColor: BASE_COLOR.blue }}>
-                                    <TextInput
-                                        value={userInfo.name}
-                                        onChangeText={(text) => this.setNewStateHandler({
-                                            ...this.state,
-                                            userInfo: {
-                                                ...this.state.userInfo,
-                                                name: text,
+                        <View style={{ height: 1, backgroundColor: BASE_COLOR.lightGray, margin: 10 }}></View>
+                        {this.props.isLogin ?
+                            <>
+                                <View style={{ margin: 40 }}>
+                                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                        <Text style={{ alignItems: 'flex-start', flex: 8, fontWeight: '400', fontSize: 18 }}>Lični podaci:</Text>
+                                    </View>
+                                    <View style={{ marginTop: 20 }}>
+                                        <View style={{ marginTop: 0, marginBottom: 8 }}>
+                                            <View style={{ padding: 8, borderRadius: 8, borderWidth: 1, borderColor: BASE_COLOR.blue }}>
+                                                <TextInput
+                                                    value={userInfo.name}
+                                                    onChangeText={(text) => this.setNewStateHandler({
+                                                        ...this.state,
+                                                        userInfo: {
+                                                            ...this.state.userInfo,
+                                                            name: text,
+                                                        }
+                                                    })}
+                                                    placeholder={'Ime i Prezime'}
+                                                    returnKeyType='next'
+                                                    onSubmitEditing={() => this.address.focus()}
+                                                    style={[styles.textStyle,]} />
+                                            </View>
+                                        </View>
+                                        <View style={{ marginTop: 8, marginBottom: 8 }}>
+                                            <View style={{ padding: 8, borderRadius: 8, borderWidth: 1, borderColor: BASE_COLOR.blue }}>
+                                                <TextInput
+                                                    value={userInfo.address}
+                                                    onChangeText={(text) => this.setNewStateHandler({
+                                                        ...this.state,
+                                                        userInfo: {
+                                                            ...this.state.userInfo,
+                                                            address: text,
+                                                        },
+                                                        showAddressInfo: true
+                                                    })}
+                                                    placeholder={'Adresa'}
+                                                    returnKeyType='next'
+                                                    onFocus={() => this.showAddresses(true)}
+                                                    onBlur={() => this.showAddresses(false)}
+                                                    ref={(input) => this.address = input}
+                                                    onSubmitEditing={() => this.phone.focus()}
+                                                    style={[styles.textStyle]} />
+                                            </View>
+                                            {this.state.showAddressInfo &&
+                                                <View style={{ height: 'auto', width: '100%' }}>
+                                                    {this.renderAllAdresses()}
+                                                </View>
                                             }
-                                        })}
-                                        placeholder={'Ime i Prezime'}
-                                        style={[styles.textStyle,]} />
+                                        </View>
+                                        <View style={{ marginTop: 8, marginBottom: 8 }}>
+                                            <View style={{ padding: 8, borderRadius: 8, borderWidth: 1, borderColor: BASE_COLOR.blue }}>
+                                                <TextInput
+                                                    value={userInfo.numberMobile.value}
+                                                    onChangeText={(text) => this.setNewStateHandler({
+                                                        ...this.state,
+                                                        userInfo: {
+                                                            ...this.state.userInfo,
+                                                            numberMobile: {
+                                                                valid: isNumber(text),
+                                                                value: text,
+                                                            },
+                                                        }
+                                                    })}
+                                                    placeholder={'Broj telefona: 06X-XXX-XXX'}
+                                                    returnKeyType='next'
+                                                    ref={(input) => this.phone = input}
+                                                    onSubmitEditing={() => this.textReview.focus()}
+                                                    style={[styles.textStyle]} />
+                                            </View>
+                                        </View>
+                                    </View>
                                 </View>
-                            </View>
-                            <View style={{ marginTop: 8, marginBottom: 8 }}>
-                                <View style={{ padding: 8, borderRadius: 8, borderWidth: 1, borderColor: BASE_COLOR.blue }}>
-                                    <TextInput
-                                        value={userInfo.adress}
-                                        onChangeText={(text) => this.setNewStateHandler({
-                                            ...this.state,
-                                            userInfo: {
-                                                ...this.state.userInfo,
-                                                adress: text,
-                                            }
-                                        })}
-                                        placeholder={'Adresa'}
-                                        style={[styles.textStyle]} />
+
+                                <View style={styles.textInputNoteContainer}>
+                                    {this.textInputNoteContent()}
                                 </View>
+                            </>
+                            :
+                            <View />
+                        }
+                        {this.props.isLogin ?
+                            < View style={{ alignItems: 'center', justifyContent: 'center', margin: 20 }}>
+                                <TouchableOpacity onPress={() => this.onPressOrderHandler(this.props.order)}>
+                                    <View style={{ backgroundColor: BASE_COLOR.blue, width: 280, height: 65, justifyContent: 'center', alignItems: 'center', borderRadius: 4 }}>
+                                        <Text style={{ color: BASE_COLOR.white, fontWeight: 'bold', fontSize: 22 }}>Naruči</Text>
+                                    </View>
+                                </TouchableOpacity>
                             </View>
-                            <View style={{ marginTop: 8, marginBottom: 8 }}>
-                                <View style={{ padding: 8, borderRadius: 8, borderWidth: 1, borderColor: BASE_COLOR.blue }}>
-                                    <TextInput
-                                        value={userInfo.numberMob}
-                                        onChangeText={(text) => this.setNewStateHandler({
-                                            ...this.state,
-                                            userInfo: {
-                                                ...this.state.userInfo,
-                                                numberMob: text,
-                                            }
-                                        })}
-                                        placeholder={'Broj telefona'}
-                                        style={[styles.textStyle]} />
-                                </View>
+                            :
+                            <View style={{ alignItems: 'center', justifyContent: 'center', margin: 20 }}>
+                                <TouchableOpacity onPress={() => this.onPressLogInHandler()}>
+                                    <View style={{ backgroundColor: BASE_COLOR.blue, width: 280, height: 65, justifyContent: 'center', alignItems: 'center', borderRadius: 4 }}>
+                                        <Text style={{ color: BASE_COLOR.white, fontWeight: 'bold', fontSize: 22 }}>Prijavi se</Text>
+                                    </View>
+                                </TouchableOpacity>
                             </View>
-                        </View>
-                    </View>
-
-                    <View style={styles.textInputNoteContainer}>
-                        {this.textInputNoteContent()}
-                    </View>
-
-
-                    <View style={{ alignItems: 'center', justifyContent: 'center', margin: 20 }}>
-                        <TouchableOpacity onPress={() => this.onPressOrderHandler(this.props.order)}>
-                            <View style={{ backgroundColor: BASE_COLOR.blue, width: 280, height: 65, justifyContent: 'center', alignItems: 'center', borderRadius: 4 }}>
-                                <Text style={{ color: BASE_COLOR.white, fontWeight: 'bold', fontSize: 22 }}>Naruči</Text>
-                            </View>
-                        </TouchableOpacity>
-                    </View>
-                </ScrollView>
-            </View>
+                        }
+                        <View style={{ height: 40 }} />
+                    </ScrollView>
+                </KeyboardAwareScrollView>
+            </View >
         )
     }
-
+    onPressLogInHandler = () => {
+        this.pushNewScreen({
+            routeName: ScreenName.LoginScreen(),
+            key: `${Math.random() * 10000}`,
+            params: { showBackButton: true }
+        })
+    }
     onPressRemoveHandler(orderdMenuItem) {
         this.props.removeOrderMenuItemHandler(orderdMenuItem)
     }
 
     onPressOrderHandler(order) {
-
         const { cacheSelected, wayOfDelivery, specialInstructions, userInfo } = this.state
         const { orderForPlace } = this.props
         const placeId = orderForPlace._id
         const orderType = wayOfDelivery
         const methodOfPayment = cacheSelected ? 'cash' : 'online'
 
-        const { name, adress, numberMob } = userInfo
-        if (name.trim() != '' && adress.trim() != '' && numberMob.trim() != '') {
-            OrderNetwork.fetchOrder(order, placeId, orderType, methodOfPayment, specialInstructions)
+        const { name, address, numberMobile } = userInfo
+        if (name.trim() != '' && address.trim() != '' && numberMobile.valid == true) {
+            OrderNetwork.fetchOrder(order, placeId, orderType, methodOfPayment, specialInstructions, address, numberMobile.value)
                 .then(
                     res => {
                         this.showAlertMessage("USPESNO NARUCENO")
                         this.setNewStateHandler({ loading: false })
                         this.closeScreen()
                         this.props.emptyOrderHandler()
+
+                        if (!this.props.userInfo.address.includes(address)) {
+                            UserNetwork.fetchUserPutNewAddress(address)
+                            let user = this.props.userInfo
+                            user.address.push(address)
+                            this.props.updateUserProfileHandler(user)
+                        }
                     },
                     err => {
                         this.setNewStateHandler({ loading: false })
@@ -382,7 +478,8 @@ const styles = StyleSheet.create({
         fontSize: 15,
         padding: 4,
         margin: 16,
-        marginTop: 8
+        marginTop: 8,
+        textAlignVertical: "top"
     },
     textInputNoteContainer: {
         margin: 20,
@@ -411,13 +508,15 @@ const mapStateToProps = state => {
         order: state.order.order,
         orderForPlace: state.order.orderForPlace,
         userInfo: state.user.userInfo,
+        isLogin: state.user.isLogin,
     };
 };
 
 const mapDispatchToProps = dispatch => {
     return {
         removeOrderMenuItemHandler: (orderdMenuItem) => dispatch(removeOrderMenuItem(orderdMenuItem)),
-        emptyOrderHandler: () => dispatch(emptyOrder())
+        emptyOrderHandler: () => dispatch(emptyOrder()),
+        updateUserProfileHandler: (user) => dispatch(updateUserProfile(user))
     };
 };
 

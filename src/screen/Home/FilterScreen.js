@@ -57,7 +57,7 @@ class FilterScreen extends BaseScreen {
             pickup: filter.pickup,
         })
     }
-    resetFilterValue =()=>{
+    resetFilterValue = () => {
         this.setNewStateHandler({
             pickup: false,
             delivery: false,
@@ -303,7 +303,7 @@ class FilterScreen extends BaseScreen {
         )
     }
     mainContent = () => {
-        
+
         return (
             <View style={styles.mainContainer}>
                 <View style={styles.filterContainer}>
@@ -375,6 +375,7 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         alignItems: 'center',
         alignSelf: 'center',
+        marginBottom: 20
     },
     bottomButtonContainer: {
         alignContent: 'center',

@@ -28,6 +28,7 @@ class ScreenName {
     static SearchTab = () => { return 'Search' }
 
     static ReviewScreen = () => { return this.withKey('Review') }
-
+    
+    static OrderDetailScreen = () => { return this.withKey('OrderDetail') }
 }
 export { ScreenName };

@@ -16,7 +16,7 @@ import BaseScreen from "../BaseScreen/BaseScreen"
 import { HistoryOrderList } from '../../components/HistoryOrder'
 import { NAV_COLOR, BASE_COLOR } from '../../styles';
 import { connect } from 'react-redux';
-import { updateUserProfile } from '../../store/actions'
+import { updateUserProfile, fetchUserListOrders } from '../../store/actions'
 import { UserNetwork, OrderNetwork } from '../../service/api'
 import { TestAssets, } from '../../assets'
 
@@ -29,7 +29,6 @@ class UserScreen extends BaseScreen {
     constructor(props) {
         super(props)
         this.state = {
-            allOrders: [],
             refreshing: false,
         }
     }
@@ -37,30 +36,12 @@ class UserScreen extends BaseScreen {
     componentDidMount() {
         super.componentDidMount()
         this.setStatusBarStyle(NAV_COLOR.headerBackground, true)
-
-        if (this.props.isLogin) {
-            this.getAllOrders()
-        }
-
-
     }
     componentWillUnmount() {
         super.componentWillUnmount()
     }
 
-    getAllOrders = () => {
-        OrderNetwork.fetchGetAllOrders()
-            .then(
-                res => {
-                    this.setNewStateHandler({
-                        allOrders: res.reverse()
-                    })
-                },
-                err => {
-                    this.showAlertMessage(err)
-                }
-            )
-    }
+
 
     apiCallHandler = () => {
 
@@ -76,7 +57,8 @@ class UserScreen extends BaseScreen {
                 }
             )
 
-        this.getAllOrders()
+        this.props.fetchUserListOrdersHandler()
+
     }
 
     _onRefresh = () => {
@@ -84,7 +66,12 @@ class UserScreen extends BaseScreen {
         this.apiCallHandler()
     }
     pressReviewOrderHandler = (order) => {
-        this.pushNewScreen(ScreenName.ReviewScreen())
+
+        this.pushNewScreen({ routeName: ScreenName.ReviewScreen(), key: `${Math.random() * 10000}`, params: { order } })
+    }
+    pressOrderDetailHandler = (order) => {
+       
+        this.pushNewScreen({ routeName: ScreenName.OrderDetailScreen(), key: `${Math.random() * 10000}`, params: { order } })
     }
 
     userImageContent = () => {
@@ -113,15 +100,15 @@ class UserScreen extends BaseScreen {
     }
     recentOrdersContent = () => {
         const type = "RECENT ORDERS"
-        const { allOrders } = this.state
+        const { userOrders } = this.props
         return (
             <View style={[styles.baseContainer, { flexDirection: 'column' }]}>
                 <View style={{ alignSelf: 'flex-start', marginBottom: 8 }}>
                     <Text style={[styles.baseText, { color: BASE_COLOR.black }]}>{type}:</Text>
                 </View>
                 <HistoryOrderList
-                    arrayObject={allOrders}
-                    PressDetailOrder={(order) => alert(order)}
+                    arrayObject={userOrders}
+                    PressDetailOrder={(order) => this.pressOrderDetailHandler(order)}
                     PressOrderAgain={(order) => alert(order)}
                     PressReview={(order) => this.pressReviewOrderHandler(order)}
                 />
@@ -280,11 +267,13 @@ const mapStateToProps = state => {
         userInfo: state.user.userInfo,
         loading: state.ui.isLoading,
         isLogin: state.user.isLogin,
+        userOrders: state.user.userOrders,
     };
 };
 
 const mapDispatchToProps = dispatch => {
     return {
+        fetchUserListOrdersHandler: () => dispatch(fetchUserListOrders()),
         updateUserProfileHandler: (user) => dispatch(updateUserProfile(user)),
     };
 };

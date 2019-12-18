@@ -440,13 +440,28 @@ class MenuItemDetailsScreen extends BaseScreen {
         } else if (orderForPlace._id === item.place._id) {
             this.putInBagHandler()
         } else if (orderForPlace._id !== item.place._id) {
-            this.showDialogMessage("U korpi trenutno imate jela iz drugog restorana. Ako nastavite sa kupovinom, korpa sa vec unetim jelima ce se isprazniti.", this.putInBagHandler)
+            this.showDialogMessage("U korpi trenutno imate jela iz drugog restorana. Ako nastavite sa kupovinom, korpa sa vec unetim jelima ce se isprazniti.", this.onPressOkPutInBagNHandler)
         }
 
     }
 
+    onPressOkPutInBagNHandler = ()=>{
+        const { menuItem, selectedOptions, quantity } = this.state
+
+
+        const orderdMenuItem = {
+
+            _id: `${Math.random()}${Math.random()}${Math.random()}`,
+            quantity: quantity,
+            menuItem: menuItem,
+            menuItemTotalPrice: this.subTotalPrice(menuItem, selectedOptions, quantity),
+            selectedOptions: selectedOptions,
+        }
+        this.props.addOrderMenuItemHandler([orderdMenuItem])
+        this.closeScreen()
+    }
     putInBagHandler() {
-        const { menuItem, selectedOptions, quantity, order, menuItemType } = this.state
+        const { menuItem, selectedOptions, quantity, menuItemType } = this.state
         let item = menuItem.hasSubtypes ? menuItemType : menuItem
 
         const orderdMenuItem = {

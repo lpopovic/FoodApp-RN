@@ -1,4 +1,9 @@
-import { ADD_ORDERED_MENU_ITEM, REMOVE_ORDERED_MENU_ITEM, EMPTY_CURRENT_ORDER } from "./actionTypes";
+import {
+    ADD_ORDERED_MENU_ITEM,
+    REMOVE_ORDERED_MENU_ITEM,
+    EMPTY_CURRENT_ORDER,
+    UPDATE_LIST_USER_ORDERS
+} from "./actionTypes";
 
 export const addOrderMenuItem = (orderMenuItem) => {
     return {
@@ -14,8 +19,14 @@ export const removeOrderMenuItem = (orderMenuItem) => {
     };
 };
 
-export const emptyOrder = ()=>{
+export const emptyOrder = () => {
     return {
-        type:EMPTY_CURRENT_ORDER
+        type: EMPTY_CURRENT_ORDER
     }
 }
+export const updateListUserOrders = (orders) => {
+    return {
+        type: UPDATE_LIST_USER_ORDERS,
+        payload: orders
+    };
+};
