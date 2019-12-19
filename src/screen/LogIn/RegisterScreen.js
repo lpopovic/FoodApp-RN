@@ -21,7 +21,7 @@ class RegisterScreen extends BaseScreen {
 
     constructor(props) {
         super(props)
-        this.title = "PRIJAVI SE";
+        this.title = "REGISTRUJ SE";
         this.state = {
             loading: false,
             controls: {
