@@ -7,7 +7,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 class ShopCard extends Component {
 
     renderMenuOptions = (selectedOptions) => {
-       
+
         let menuOptions = ""
         let menuOptionsTemp = ""
         let optionsTemp = ""
@@ -32,7 +32,7 @@ class ShopCard extends Component {
             }
             menuOptions += menuOptionsTemp + "\n"
         })
-       
+
 
         return menuOptions
 
@@ -46,7 +46,7 @@ class ShopCard extends Component {
                     <View style={{ flex: 3, justifyContent: 'center', marginTop: 12 }}>
                         <Image
                             style={{ aspectRatio: 1 / 1, height: 86, marginLeft: 12, borderTopLeftRadius: 5, borderBottomLeftRadius: 5 }}
-                            source={{ uri: menuItem.image.image169 }}
+                            source={{ uri: menuItem.image.image11t }}
                         />
                     </View>
                     <View style={{ flex: 7.8, flexDirection: 'column' }}>
@@ -56,7 +56,7 @@ class ShopCard extends Component {
                                     style={{ fontWeight: '600', fontSize: 19, marginBottom: 8 }}
                                     numberOfLines={2}
                                     ellipsizeMode={'tail'}
-                                >{menuItem.name}
+                                >{menuItem.sizeName != null ? menuItem.name + ' - ' + menuItem.sizeName : menuItem.name}
                                 </Text>
                             </View>
                             <View style={{ margin: 10 }}>
