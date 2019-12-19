@@ -19,6 +19,7 @@ import { avgPriceTag, openDays } from '../../helpers/numberHelper';
 import UrlOpen from '../../components/common/UrlOpen'
 import Icon from 'react-native-vector-icons/Ionicons';
 import { Badge } from 'react-native-elements'
+import Moment from 'moment'
 class PlaceDetailsScreen extends BaseScreen {
 
 
@@ -35,8 +36,11 @@ class PlaceDetailsScreen extends BaseScreen {
             refreshing: false,
             menuItems: [],
             sectionMeniItems: [],
-            place: new Place({})
+            place: new Place({}),
         }
+
+        this.dayOfWeek = Moment().day()
+        
         if (isAndroid) {
             UIManager.setLayoutAnimationEnabledExperimental(true);
         }
@@ -45,13 +49,24 @@ class PlaceDetailsScreen extends BaseScreen {
     componentDidMount() {
         super.componentDidMount()
 
+        const setDayOfWeek = this.props.navigation.getParam('dayOfWeek', null)
+
+        if (setDayOfWeek != null) {
+            dayOfWeek = setDayOfWeek
+        }
+
+
         this.apiCallHandler(this.props.navigation.state.params._id)
+
+
+
+
     }
     componentWillUnmount() {
         super.componentWillUnmount()
     }
     apiCallHandler = async (placeId) => {
-        await PlaceNetwork.fetchPlaceById(placeId).then(
+        await PlaceNetwork.fetchPlaceById(placeId, this.dayOfWeek).then(
             res => {
                 this.setNewStateHandler({
                     place: res
@@ -61,7 +76,7 @@ class PlaceDetailsScreen extends BaseScreen {
                 this.showAlertMessage(err)
             }
         )
-        PlaceNetwork.fetchMenuItems(placeId).then(
+        PlaceNetwork.fetchMenuItems(placeId, dayOfWeek).then(
             res => {
                 this.setNewStateHandler({
                     loading: false,

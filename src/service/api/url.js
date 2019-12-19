@@ -31,28 +31,14 @@ class RestUrl {
     static getPlaceById = (placeId) => {
         return withKey(`places/${placeId}`)
     }
-    static getMenuItems = (placeId) => {
-        return withKey(`menuitems?isParent=true&place=${placeId}`)
+    static getMenuItems = (placeId, dayOfWeek) => {
+        return withKey(`menuitems?isParent=true&place=${placeId}&${ParamsUrl.daysAvailable(dayOfWeek)}`)
     }
     static getMenuItemById = (menuItemId) => {
         return withKey(`menuitems/${menuItemId}`)
     }
 
     static order = withKey(`orders`)
-
-
-    // static getMenuItems = (params) => {
-    //     if(params){
-    //         let param = ''
-    //         params.forEach(element => {
-    //             param = `${param}${element}&`
-    //         });
-    //         param = param.slice(0, -1)
-    //         return withKey(`menuitems?${param}`)
-    //     }else {
-    //         return withKey(`menuitems`)
-    //     }
-    // }
 
     static getAllcategories = withKey(`categories`)
 
@@ -66,6 +52,8 @@ class ParamsUrl {
     static category = (value) => { return `category=${value}` }
     static avgRating = (value) => { return `avgRating=${value}` }
     static avgPriceTag = (value) => { return `avgPriceTag=${value}` }
+    static daysAvailable = (value) => { return `daysAvailable=${value}` }
+
 }
 
 export { RestUrl, ParamsUrl, ROOT_URL_IMAGE };
