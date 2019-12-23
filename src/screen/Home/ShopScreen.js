@@ -63,6 +63,21 @@ class ShoopScreen extends BaseScreen {
     componentDidMount() {
         super.componentDidMount()
         this.setStatusBarStyle(NAV_COLOR.headerBackground, true)
+
+        if (this.props.isLogin == true) {
+            const { phoneNumber } = this.props.userInfo
+            this.setNewStateHandler({
+                ...this.state,
+                userInfo: {
+                    ...this.state.userInfo,
+                    numberMobile: {
+                        valid: isNumber("mobile"),
+                        value: "mobile"
+                    }
+                }
+
+            })
+        }
     }
     componentWillUnmount() {
         super.componentWillUnmount()
@@ -343,15 +358,26 @@ class ShoopScreen extends BaseScreen {
     onPressRemoveHandler(orderdMenuItem) {
         this.props.removeOrderMenuItemHandler(orderdMenuItem)
     }
+    showDialogForAddAdress = () => {
+        if (!this.props.userInfo.address.includes(address)) {
+            onPressOk = () => {
+                UserNetwork.fetchUserPutNewAddress(address)
+                let user = this.props.userInfo
+                user.address.push(address)
+                this.props.updateUserProfileHandler(user)
+            }
 
+            this.showDialogMessage("Da li želite da sačuvate novu adresu?", onPressOk)
+        }
+    }
     onPressOrderHandler(order) {
         const { cacheSelected, wayOfDelivery, specialInstructions, userInfo } = this.state
         const { orderForPlace } = this.props
         const placeId = orderForPlace._id
         const orderType = wayOfDelivery
         const methodOfPayment = cacheSelected ? 'cash' : 'online'
-
         const { name, address, numberMobile } = userInfo
+
         if (name.trim() != '' && address.trim() != '' && numberMobile.valid == true) {
             OrderNetwork.fetchOrder(order, placeId, orderType, methodOfPayment, specialInstructions, address, numberMobile.value)
                 .then(
@@ -360,18 +386,14 @@ class ShoopScreen extends BaseScreen {
                         this.setNewStateHandler({ loading: false })
                         this.closeScreen()
                         this.props.emptyOrderHandler()
-
-                        if (!this.props.userInfo.address.includes(address)) {
-                            UserNetwork.fetchUserPutNewAddress(address)
-                            let user = this.props.userInfo
-                            user.address.push(address)
-                            this.props.updateUserProfileHandler(user)
-                        }
+                        this.showDialogForAddAdress()
                     },
                     err => {
                         this.setNewStateHandler({ loading: false })
                         this.showAlertMessage(String(err))
                     })
+        } else if (!numberMobile.valid) {
+            this.showAlertMessage("Molimo vas popunite polje za kontakt telefon. \nHvala.")
         } else {
             this.showAlertMessage("Molimo vas popunite polje sa vasim podacima. \nHvala.")
         }
