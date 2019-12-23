@@ -40,7 +40,7 @@ class PlaceDetailsScreen extends BaseScreen {
         }
 
         this.dayOfWeek = Moment().day()
-        
+
         if (isAndroid) {
             UIManager.setLayoutAnimationEnabledExperimental(true);
         }
@@ -66,7 +66,7 @@ class PlaceDetailsScreen extends BaseScreen {
         super.componentWillUnmount()
     }
     apiCallHandler = async (placeId) => {
-        await PlaceNetwork.fetchPlaceById(placeId, this.dayOfWeek).then(
+        await PlaceNetwork.fetchPlaceById(placeId).then(
             res => {
                 this.setNewStateHandler({
                     place: res
@@ -76,7 +76,7 @@ class PlaceDetailsScreen extends BaseScreen {
                 this.showAlertMessage(err)
             }
         )
-        PlaceNetwork.fetchMenuItems(placeId, dayOfWeek).then(
+        PlaceNetwork.fetchMenuItems(placeId, this.dayOfWeek).then(
             res => {
                 this.setNewStateHandler({
                     loading: false,
