@@ -79,7 +79,8 @@ class LoginScreen extends BaseScreen {
                 this.props.fetchUserProfileHandler()
 
                 if (this.state.showBackButton == true) {
-                    this.closeScreen()
+                    // this.closeScreen()
+                    this.resetNavigationStack(ScreenName.TabNavigatorScreen())
                 } else {
                     this.resetNavigationStack(ScreenName.MainLocationScreen())
                 }
