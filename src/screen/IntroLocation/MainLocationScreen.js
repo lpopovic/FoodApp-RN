@@ -16,7 +16,7 @@ import { BASE_COLOR } from '../../styles'
 import { LocationNetwork } from '../../service/api'
 import CountryCityList from '../../components/Location/CountryCityList';
 import { connect } from 'react-redux';
-import { setLocationCity } from '../../store/actions'
+import { setLocationCity, emptyOrder } from '../../store/actions'
 import Header from '../../components/common/BackHeader'
 class MainLocationScreen extends BaseScreen {
 
@@ -101,6 +101,7 @@ class MainLocationScreen extends BaseScreen {
         Keyboard.dismiss()
         this.setNewStateHandler({ currentItem: item })
         this.props.locationUpdateCityHandler(item)
+        this.props.emptyOrderHandler()
 
         clearTimeout(this.pressItem)
         this.pressItem = setTimeout(() => {
@@ -234,6 +235,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return {
         locationUpdateCityHandler: (city) => dispatch(setLocationCity(city)),
+        emptyOrderHandler: () => dispatch(emptyOrder())
     };
 };
 

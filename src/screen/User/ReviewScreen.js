@@ -110,7 +110,7 @@ class ReviewScreen extends BaseScreen {
         });
     }
     priceContent = () => {
-        const text = 'PRICE'
+        const text = 'PRICE TAG'
         const { avgPriceTag } = this.state
         return (
             <View style={styles.baseContainer}>

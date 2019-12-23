@@ -15,13 +15,11 @@ import DishCard from '../../components/Catering/DishCard';
 import CalendarStrip from 'react-native-calendar-strip';
 import Moment from 'moment';
 import { BASE_COLOR, NAV_COLOR } from '../../styles';
-
+import { connect } from 'react-redux';
 class CateringScreen extends BaseScreen {
 
     static navigationOptions = {
         header: null,
-        // headerVisible: false,
-        // headerBackTitle: "Photo",
     };
 
     constructor(props) {
@@ -59,10 +57,17 @@ class CateringScreen extends BaseScreen {
         super.componentDidMount()
         this.setStatusBarStyle(NAV_COLOR.headerBackground, true)
     }
+
     componentWillUnmount() {
         super.componentWillUnmount()
     }
+    showContactFormHandler = () => {
+        const { isLogin, userInfo } = this.props
+        if (!isLogin) {
+            this.replaceScreenNavigationStack(ScreenName.ContactFormScreen())
+        }
 
+    }
     onDateSelected(value) {
 
         this.setState({ selectedDate: Moment(value).format('YYYY-M-DD') })
@@ -142,16 +147,16 @@ class CateringScreen extends BaseScreen {
                     _id: "5da86b1e91408d5e60025782",
 
                     image11: "https://api.ketering.rtech.rs/uploads/bf7966d5-c162-e61b-d79c-3d35ac11339c-11.png?caption=Brusketi",
-                
+
                     image11t: "https://api.ketering.rtech.rs/uploads/bf7966d5-c162-e61b-d79c-3d35ac11339c-11t.png?caption=Brusketi",
-                
+
                     image169: "https://api.ketering.rtech.rs/uploads/bf7966d5-c162-e61b-d79c-3d35ac11339c-169.png?caption=Brusketi",
-                
+
                     image169t: "https://api.ketering.rtech.rs/uploads/bf7966d5-c162-e61b-d79c-3d35ac11339c-169t.png?caption=Brusketi",
-                
+
                     link: "/uploads/bf7966d5-c162-e61b-d79c-3d35ac11339c-???.png?caption=Brusketi"
-                    }
-                },
+                }
+            },
         ];
 
         const PlaceData = [
@@ -175,12 +180,12 @@ class CateringScreen extends BaseScreen {
                 // <DishCard name={DishData[0].name} image={DishData[0].link} description={DishData[0].description} />
                 <DishCard dish={DishData[0]} />
             )
-        } else if (Moment(this.state.selectedDate).isAfter(Moment())){
+        } else if (Moment(this.state.selectedDate).isAfter(Moment())) {
             return (
                 <PlaceList data={PlaceData} clickOnPlace={(placeId) => this.placeSelectHandler(placeId)} />
                 //    <PlaceCard />
             )
-        } else if (Moment(this.state.selectedDate).isBefore(Moment())){
+        } else if (Moment(this.state.selectedDate).isBefore(Moment())) {
             return (
                 <Text style={{ marginTop: 100, alignSelf: 'center', fontWeight: 'bold', fontSize: 22 }}>Niste izabrali obrok za ovaj dan!</Text>
             )
@@ -193,6 +198,7 @@ class CateringScreen extends BaseScreen {
 
 
     render() {
+       
         return (
             <SafeAreaView style={styles.safeAreaHeader}>
                 <View style={styles.mainContainer}>
@@ -220,6 +226,13 @@ const styles = StyleSheet.create({
         backgroundColor: BASE_COLOR.white
     }
 });
+const mapStateToProps = state => {
+    return {
+        order: state.order.order,
+        orderForPlace: state.order.orderForPlace,
+        userInfo: state.user.userInfo,
+        isLogin: state.user.isLogin,
+    };
+};
 
-
-export default CateringScreen;
+export default connect(mapStateToProps, null)(CateringScreen);

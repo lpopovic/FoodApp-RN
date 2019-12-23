@@ -71,8 +71,8 @@ class ShoopScreen extends BaseScreen {
                 userInfo: {
                     ...this.state.userInfo,
                     numberMobile: {
-                        valid: isNumber("mobile"),
-                        value: "mobile"
+                        valid: isNumber(phoneNumber),
+                        value: phoneNumber
                     }
                 }
 
@@ -118,14 +118,24 @@ class ShoopScreen extends BaseScreen {
         LayoutAnimation.easeInEaseOut();
     }
 
+    keyAdress = (cityName) => {
+        return `, city: ${cityName}`
+    }
     renderAllAdresses = () => {
+        let filteredArrayUserAdreess = this.props.userInfo.address.filter(
+            (data) => {
+                 if (data.includes(this.keyAdress(this.props.city.name))) {
+                    return data
+                 }
 
-        let filteredAddresses = this.props.userInfo.address.filter(
+            }
+        );
+        let filteredAddresses = filteredArrayUserAdreess.filter(
             (data) => {
                 if (this.state.userInfo.address) {
                     return data.toLowerCase().indexOf(this.state.userInfo.address.toLowerCase()) !== -1
                 } else {
-                    return this.props.userInfo.address
+                    return filteredArrayUserAdreess
                 }
             }
         );
@@ -135,12 +145,12 @@ class ShoopScreen extends BaseScreen {
                     ...this.state,
                     userInfo: {
                         ...this.state.userInfo,
-                        address: text,
+                        address: text.replace(this.keyAdress(this.props.city.name), ''),
                     },
                     showAddressInfo: false
                 })
             }} style={{ borderWidth: 0.5, width: '100%', padding: 8, borderColor: BASE_COLOR.blue }} key={i}>
-                <Text style={{ fontSize: 14 }}>{text}</Text>
+                <Text style={{ fontSize: 14 }}>{text.replace(this.keyAdress(this.props.city.name), '')}</Text>
             </TouchableOpacity>
         ))
     }
@@ -358,12 +368,13 @@ class ShoopScreen extends BaseScreen {
     onPressRemoveHandler(orderdMenuItem) {
         this.props.removeOrderMenuItemHandler(orderdMenuItem)
     }
-    showDialogForAddAdress = () => {
-        if (!this.props.userInfo.address.includes(address)) {
+    showDialogForAddAdress = (address) => {
+        const newAddress = `${address}${this.keyAdress(this.props.city.name)}`
+        if (!this.props.userInfo.address.includes(newAddress)) {
             onPressOk = () => {
-                UserNetwork.fetchUserPutNewAddress(address)
+                UserNetwork.fetchUserPutNewAddress(newAddress)
                 let user = this.props.userInfo
-                user.address.push(address)
+                user.address.push(newAddress)
                 this.props.updateUserProfileHandler(user)
             }
 
@@ -386,7 +397,7 @@ class ShoopScreen extends BaseScreen {
                         this.setNewStateHandler({ loading: false })
                         this.closeScreen()
                         this.props.emptyOrderHandler()
-                        this.showDialogForAddAdress()
+                        this.showDialogForAddAdress(address)
                     },
                     err => {
                         this.setNewStateHandler({ loading: false })
@@ -527,6 +538,7 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = state => {
     return {
+        city: state.location.city,
         order: state.order.order,
         orderForPlace: state.order.orderForPlace,
         userInfo: state.user.userInfo,

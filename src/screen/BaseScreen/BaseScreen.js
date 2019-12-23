@@ -73,6 +73,14 @@ class BaseScreen extends Component {
         this.props.navigation.dispatch(resetAction)
     }
 
+    replaceScreenNavigationStack = (routeName) => {
+        const pushAction = StackActions.replace({
+            routeName
+        });
+
+        this.props.navigation.dispatch(pushAction);
+    }
+
     showAlertMessage = (message) => {
         CustomAlert.showAlert(String(message))
     }

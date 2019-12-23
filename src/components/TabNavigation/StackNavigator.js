@@ -18,6 +18,7 @@ import SearchScreen from '../../screen/Search/SearchScreen'
 // CATERING TAB
 import CateringScreen from '../../screen/Catering/CateringScreen'
 import PlaceDetailScreen from '../../screen/Catering/PlaceDetailsScreen'
+import ContactFormScreen from '../../screen/Catering/ContactFormScreen'
 
 // USER TAB
 import UserScreen from '../../screen/User/UserScreen'
@@ -62,6 +63,7 @@ const CateringStack = createStackNavigator({
     cateringapp_Catering: CateringScreen,
     cateringapp_Detail: DetailScreen,
     cateringapp_PlaceDetail: PlaceDetailScreen,
+    cateringapp_ContactForm: ContactFormScreen,
 
 })
 const UserStack = createStackNavigator({
