@@ -22,7 +22,7 @@ import ShopCard from '../../components/Home/ShopCard';
 import { OrderNetwork, UserNetwork } from '../../service/api';
 import { removeOrderMenuItem, emptyOrder, updateUserProfile } from '../../store/actions'
 import Icon from 'react-native-vector-icons/Ionicons';
-import { ScreenName, isNumber } from '../../helpers'
+import { ScreenName, isNumber, keyAdress } from '../../helpers'
 
 const PAY_BUTTON_KEY = {
     cacheSelected: "cache",
@@ -65,11 +65,12 @@ class ShoopScreen extends BaseScreen {
         this.setStatusBarStyle(NAV_COLOR.headerBackground, true)
 
         if (this.props.isLogin == true) {
-            const { phoneNumber } = this.props.userInfo
+            const { phoneNumber, username } = this.props.userInfo
             this.setNewStateHandler({
                 ...this.state,
                 userInfo: {
                     ...this.state.userInfo,
+                    name: username,
                     numberMobile: {
                         valid: isNumber(phoneNumber),
                         value: phoneNumber
@@ -118,15 +119,13 @@ class ShoopScreen extends BaseScreen {
         LayoutAnimation.easeInEaseOut();
     }
 
-    keyAdress = (cityName) => {
-        return `, city: ${cityName}`
-    }
+
     renderAllAdresses = () => {
         let filteredArrayUserAdreess = this.props.userInfo.address.filter(
             (data) => {
-                 if (data.includes(this.keyAdress(this.props.city.name))) {
+                if (data.includes(keyAdress(this.props.city._id))) {
                     return data
-                 }
+                }
 
             }
         );
@@ -145,12 +144,12 @@ class ShoopScreen extends BaseScreen {
                     ...this.state,
                     userInfo: {
                         ...this.state.userInfo,
-                        address: text.replace(this.keyAdress(this.props.city.name), ''),
+                        address: text.replace(keyAdress(this.props.city._id), ''),
                     },
                     showAddressInfo: false
                 })
             }} style={{ borderWidth: 0.5, width: '100%', padding: 8, borderColor: BASE_COLOR.blue }} key={i}>
-                <Text style={{ fontSize: 14 }}>{text.replace(this.keyAdress(this.props.city.name), '')}</Text>
+                <Text style={{ fontSize: 14 }}>{text.replace(keyAdress(this.props.city._id), '')}</Text>
             </TouchableOpacity>
         ))
     }
@@ -369,7 +368,7 @@ class ShoopScreen extends BaseScreen {
         this.props.removeOrderMenuItemHandler(orderdMenuItem)
     }
     showDialogForAddAdress = (address) => {
-        const newAddress = `${address}${this.keyAdress(this.props.city.name)}`
+        const newAddress = `${address}${keyAdress(this.props.city._id)}`
         if (!this.props.userInfo.address.includes(newAddress)) {
             onPressOk = () => {
                 UserNetwork.fetchUserPutNewAddress(newAddress)
@@ -390,6 +389,10 @@ class ShoopScreen extends BaseScreen {
         const { name, address, numberMobile } = userInfo
 
         if (name.trim() != '' && address.trim() != '' && numberMobile.valid == true) {
+
+            this.setNewStateHandler({
+                loading: true
+            })
             OrderNetwork.fetchOrder(order, placeId, orderType, methodOfPayment, specialInstructions, address, numberMobile.value)
                 .then(
                     res => {

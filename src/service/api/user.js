@@ -6,7 +6,7 @@ import {
     STORAGE_KEY,
 } from '../../helpers'
 class UserNetwork {
-    static fetchUserLogin = (usernameOrEmail, password, ) =>
+    static fetchUserLogin = (usernameOrEmail, password) =>
         new Promise(async (resolve, reject) => {
             const url = RestUrl.userLogin
             let formData = {

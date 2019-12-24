@@ -10,7 +10,7 @@ import {
     TouchableOpacity,
     StyleSheet
 } from 'react-native';
-import { ScreenName } from '../../helpers'
+import { ScreenName, keyAdress } from '../../helpers'
 import Header from '../../components/common/UserHeader'
 import BaseScreen from "../BaseScreen/BaseScreen"
 import { HistoryOrderList } from '../../components/HistoryOrder'
@@ -70,7 +70,7 @@ class UserScreen extends BaseScreen {
         this.pushNewScreen({ routeName: ScreenName.ReviewScreen(), key: `${Math.random() * 10000}`, params: { order } })
     }
     pressOrderDetailHandler = (order) => {
-       
+
         this.pushNewScreen({ routeName: ScreenName.OrderDetailScreen(), key: `${Math.random() * 10000}`, params: { order } })
     }
 
@@ -120,7 +120,16 @@ class UserScreen extends BaseScreen {
         const {
             email,
             username,
-            _id } = this.props.userInfo
+            _id, address } = this.props.userInfo
+        let lastUseAddress = address.filter(
+            (data) => {
+                if (data.includes(keyAdress(this.props.city._id))) {
+                    return data
+                }
+
+            }
+        ).slice(-1)[0]
+        lastUseAddress = lastUseAddress ? lastUseAddress.replace(keyAdress(this.props.city._id), '') : "Nedostupna"
         return (
             <ScrollView
                 refreshControl={
@@ -137,7 +146,7 @@ class UserScreen extends BaseScreen {
                     {this.infoContent("USERNAME", username)}
                     {this.infoContent("EMAIL", email)}
                     {this.infoContent("USER ID", _id)}
-                    {this.infoContent("ADRESS", "Petra Lekovica 30v, Kraljevo")}
+                    {this.infoContent("ADRESS", lastUseAddress)}
                     {this.recentOrdersContent()}
                 </View>
             </ScrollView>
@@ -268,6 +277,7 @@ const mapStateToProps = state => {
         loading: state.ui.isLoading,
         isLogin: state.user.isLogin,
         userOrders: state.user.userOrders,
+        city: state.location.city,
     };
 };
 
