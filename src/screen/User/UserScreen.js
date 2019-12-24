@@ -120,7 +120,9 @@ class UserScreen extends BaseScreen {
         const {
             email,
             username,
-            _id, address } = this.props.userInfo
+            _id,
+            address,
+            phoneNumber } = this.props.userInfo
         let lastUseAddress = address.filter(
             (data) => {
                 if (data.includes(keyAdress(this.props.city._id))) {
@@ -145,7 +147,7 @@ class UserScreen extends BaseScreen {
                     {this.userImageContent()}
                     {this.infoContent("USERNAME", username)}
                     {this.infoContent("EMAIL", email)}
-                    {this.infoContent("USER ID", _id)}
+                    {this.infoContent("PHONE NUMBER", phoneNumber.trim() != '' ? phoneNumber : "Nedostupna")}
                     {this.infoContent("ADRESS", lastUseAddress)}
                     {this.recentOrdersContent()}
                 </View>
