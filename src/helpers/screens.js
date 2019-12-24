@@ -32,5 +32,7 @@ class ScreenName {
     static OrderDetailScreen = () => { return this.withKey('OrderDetail') }
 
     static ContactFormScreen = () => { return this.withKey('ContactForm') }
+    static ReviewListScreen = () => { return this.withKey('ReviewList') }
+
 }
 export { ScreenName };

@@ -8,6 +8,8 @@ import PlaceListScreen from '../../screen/Home/PlaceListScreen'
 import FilterScreen from '../../screen/Home/FilterScreen'
 import ShopScreen from '../../screen/Home/ShopScreen'
 import MenuItemDetailsScreen from '../../screen/Home/MenuItemDetailsScreen'
+import ReviewListScreen from '../../screen/Catering/ReviewListScreen'
+
 // MAP TAB
 import MapScreen from '../../screen/Map/MapScreen'
 
@@ -38,6 +40,7 @@ const HomeStack = createStackNavigator({
     cateringapp_Filter: FilterScreen,
     cateringapp_Shop: ShopScreen,
     cateringapp_MenuItemDetails: MenuItemDetailsScreen,
+    cateringapp_ReviewList: ReviewListScreen,
 
     cateringapp_Detail: DetailScreen,
 })
@@ -48,7 +51,9 @@ const MapStack = createStackNavigator({
     cateringapp_Filter: FilterScreen,
     cateringapp_Shop: ShopScreen,
     cateringapp_PlaceDetail: PlaceDetailScreen,
-    cateringapp_MenuItemDetails: MenuItemDetailsScreen
+    cateringapp_MenuItemDetails: MenuItemDetailsScreen,
+    cateringapp_ReviewList: ReviewListScreen,
+
 
 })
 const SearchStack = createStackNavigator({
@@ -56,7 +61,9 @@ const SearchStack = createStackNavigator({
     cateringapp_Filter: FilterScreen,
     cateringapp_Shop: ShopScreen,
     cateringapp_PlaceDetail: PlaceDetailScreen,
-    cateringapp_MenuItemDetails: MenuItemDetailsScreen
+    cateringapp_MenuItemDetails: MenuItemDetailsScreen,
+    cateringapp_ReviewList: ReviewListScreen,
+
 
 })
 const CateringStack = createStackNavigator({
@@ -64,6 +71,8 @@ const CateringStack = createStackNavigator({
     cateringapp_Detail: DetailScreen,
     cateringapp_PlaceDetail: PlaceDetailScreen,
     cateringapp_ContactForm: ContactFormScreen,
+    cateringapp_ReviewList: ReviewListScreen,
+
 
 })
 const UserStack = createStackNavigator({
@@ -73,6 +82,8 @@ const UserStack = createStackNavigator({
     cateringapp_Filter: FilterScreen,
     cateringapp_Shop: ShopScreen,
     cateringapp_OrderDetail: OrderDetailScreen,
+    cateringapp_ReviewList: ReviewListScreen,
+
 })
 
 
@@ -85,6 +96,7 @@ HomeStack.navigationOptions = ({ navigation }) => {
         case ScreenName.FilterScreen():
         case ScreenName.MenuItemDetailsScreen():
         case ScreenName.ShopScreen():
+        case ScreenName.ReviewListScreen():
             tabBarVisible = false;
             break
         default:
@@ -105,6 +117,7 @@ MapStack.navigationOptions = ({ navigation }) => {
         case ScreenName.FilterScreen():
         case ScreenName.MenuItemDetailsScreen():
         case ScreenName.ShopScreen():
+        case ScreenName.ReviewListScreen():
             tabBarVisible = false;
             break
         default:
@@ -124,6 +137,7 @@ CateringStack.navigationOptions = ({ navigation }) => {
     switch (routes[routes.length - 1].routeName) {
         case ScreenName.FilterScreen():
         case ScreenName.ShopScreen():
+        case ScreenName.ReviewListScreen():
             tabBarVisible = false;
             break
         default:
@@ -143,6 +157,7 @@ SearchStack.navigationOptions = ({ navigation }) => {
         case ScreenName.FilterScreen():
         case ScreenName.MenuItemDetailsScreen():
         case ScreenName.ShopScreen():
+        case ScreenName.ReviewListScreen():
             tabBarVisible = false;
             break
         default:
@@ -164,6 +179,7 @@ UserStack.navigationOptions = ({ navigation }) => {
         case ScreenName.ShopScreen():
         case ScreenName.ReviewScreen():
         case ScreenName.OrderDetailScreen():
+        case ScreenName.ReviewListScreen():
             tabBarVisible = false;
             break
         default:
