@@ -95,7 +95,47 @@ class UserNetwork {
                 }
             }
         });
+    static fetchUserGetCompanyReguests = () =>
+        new Promise(async (resolve, reject) => {
+            const url = RestUrl.getCompanyReguest()
 
+            try {
+                const { data } = await axios.get(url)
+                resolve(data)
+
+            } catch (error) {
+                try {
+                    const { message } = error.response.data.error
+                    reject(message)
+                } catch  {
+                    reject(error.message)
+
+                }
+            }
+        });
+
+    static fetchUserPutCompanyReguestsResponse = (idCompanyReguest, status) =>
+        new Promise(async (resolve, reject) => {
+           
+            const url = RestUrl.getCompanyReguest(idCompanyReguest)
+           
+            let formData = {
+                status
+            }
+            try {
+                const { data } = await axios.put(url, formData)
+                resolve(data)
+
+            } catch (error) {
+                try {
+                    const { message } = error.response.data.error
+                    reject(message)
+                } catch  {
+                    reject(error.message)
+
+                }
+            }
+        });
 
 }
 

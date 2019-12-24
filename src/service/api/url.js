@@ -42,6 +42,10 @@ class RestUrl {
 
     static getAllcategories = withKey(`categories`)
 
+    static getCompanyReguest = (id) => {
+        return this.withKey(`companyrequests${id ? `/${id}` : ''}`)
+    }
+
 
 }
 
