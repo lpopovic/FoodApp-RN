@@ -1,6 +1,6 @@
 import axios from '../axios'
 import { RestUrl } from './url'
-import { User } from '../../model'
+import { User, CompanyRequest } from '../../model'
 import {
     saveStorageData,
     STORAGE_KEY,
@@ -101,7 +101,18 @@ class UserNetwork {
 
             try {
                 const { data } = await axios.get(url)
-                resolve(data)
+                if ( data !== null) {
+                    const companyRequest = new CompanyRequest(data)
+                    if (companyRequest.status === null) {
+                        resolve(companyRequest)
+                    } else {
+                        reject("Nema")
+                    }
+                }else {
+                    reject("NEMA")
+                }
+              
+
 
             } catch (error) {
                 try {
@@ -116,9 +127,8 @@ class UserNetwork {
 
     static fetchUserPutCompanyReguestsResponse = (idCompanyReguest, status) =>
         new Promise(async (resolve, reject) => {
-           
+
             const url = RestUrl.getCompanyReguest(idCompanyReguest)
-           
             let formData = {
                 status
             }

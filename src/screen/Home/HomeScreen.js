@@ -3,18 +3,19 @@ import {
     View,
     ScrollView,
     RefreshControl,
-    StyleSheet
+    StyleSheet,
+    SafeAreaView
 } from 'react-native';
 import { ScreenName } from '../../helpers'
 import BaseScreen from "../BaseScreen/BaseScreen"
 import Header from '../../components/common/BaseHeader'
-import SafeAreaView from 'react-native-safe-area-view';
+import { fetchUserProfile } from '../../store/actions'
 import { connect } from 'react-redux';
 import { NAV_COLOR, BASE_COLOR } from '../../styles';
 import { CategorySectionList } from '../../components/Category/CategoryList'
 import { PlaceSectionList } from '../../components/Place/PlaceList'
 import HomeCaroselComponent from '../../components/Home/HomeCaroselComponent';
-import { PlaceNetwork, CategoryNetwork, ParamsUrl } from '../../service/api'
+import { PlaceNetwork, CategoryNetwork, ParamsUrl, UserNetwork } from '../../service/api'
 
 class HomeScreen extends BaseScreen {
     static navigationOptions = {
@@ -43,9 +44,38 @@ class HomeScreen extends BaseScreen {
         super.componentDidMount()
         this.setStatusBarStyle(NAV_COLOR.headerBackground, true)
         this.apiCallHandler()
+        this.companyRequestApiCheck()
     }
     componentWillUnmount() {
         super.componentWillUnmount()
+    }
+
+
+    companyRequestApiCheck = () => {
+        if (this.props.isLogin && this.props.userInfo.company === null) {
+            UserNetwork.fetchUserGetCompanyReguests()
+                .then(
+                    res => {
+                        onPressOkStatus = () => {
+                            UserNetwork.fetchUserPutCompanyReguestsResponse(res._id, true).then(
+                                res => {
+                                    this.props.fetchUserProfileHandler()
+                                },
+                                err => {
+
+                                }
+                            )
+                        }
+                        onPressCancelStatus = () => {
+                            UserNetwork.fetchUserPutCompanyReguestsResponse(res._id, false)
+                        }
+                        this.showDialogMessage(res.text, onPressOkStatus, onPressCancelStatus)
+                    },
+                    err => {
+
+                    }
+                )
+        }
     }
 
     apiCallHandler = () => {
@@ -368,7 +398,17 @@ const styles = StyleSheet.create({
 const mapStateToProps = state => {
     return {
         filter: state.filter.filter,
+        isLogin: state.user.isLogin,
+        userInfo: state.user.userInfo,
+
     };
 };
 
-export default connect(mapStateToProps, null)(HomeScreen);
+const mapDispatchToProps = dispatch => {
+    return {
+
+        fetchUserProfileHandler: () => dispatch(fetchUserProfile()),
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(HomeScreen);

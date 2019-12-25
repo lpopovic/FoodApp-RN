@@ -16,7 +16,7 @@ import BaseScreen from "../BaseScreen/BaseScreen"
 import { HistoryOrderList } from '../../components/HistoryOrder'
 import { NAV_COLOR, BASE_COLOR } from '../../styles';
 import { connect } from 'react-redux';
-import { updateUserProfile, fetchUserListOrders } from '../../store/actions'
+import { updateUserProfile, fetchUserListOrders, fetchUserProfile } from '../../store/actions'
 import { UserNetwork, OrderNetwork } from '../../service/api'
 import { TestAssets, } from '../../assets'
 
@@ -36,13 +36,37 @@ class UserScreen extends BaseScreen {
     componentDidMount() {
         super.componentDidMount()
         this.setStatusBarStyle(NAV_COLOR.headerBackground, true)
+
     }
     componentWillUnmount() {
         super.componentWillUnmount()
     }
 
 
+    companyRequestApiCheck = () => {
+        UserNetwork.fetchUserGetCompanyReguests()
+            .then(
+                res => {
+                    onPressOkStatus = () => {
+                        UserNetwork.fetchUserPutCompanyReguestsResponse(res._id, true).then(
+                            res => {
+                                this.props.fetchUserProfileHandler()
+                            },
+                            err => {
 
+                            }
+                        )
+                    }
+                    onPressCancelStatus = () => {
+                        UserNetwork.fetchUserPutCompanyReguestsResponse(res._id, false)
+                    }
+                    this.showDialogMessage(res.text, onPressOkStatus, onPressCancelStatus)
+                },
+                err => {
+
+                }
+            )
+    }
     apiCallHandler = () => {
 
         UserNetwork.fetchUserInfo()
@@ -50,6 +74,11 @@ class UserScreen extends BaseScreen {
                 result => {
                     this.props.updateUserProfileHandler(result)
                     this.setNewStateHandler({ refreshing: false });
+                    if (result.company === null) {
+                        this.companyRequestApiCheck()
+                    }
+
+
                 },
                 err => {
                     this.showAlertMessage(err)
@@ -287,6 +316,7 @@ const mapDispatchToProps = dispatch => {
     return {
         fetchUserListOrdersHandler: () => dispatch(fetchUserListOrders()),
         updateUserProfileHandler: (user) => dispatch(updateUserProfile(user)),
+        fetchUserProfileHandler: () => dispatch(fetchUserProfile()),
     };
 };
 

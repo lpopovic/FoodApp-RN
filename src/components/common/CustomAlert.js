@@ -12,13 +12,13 @@ class CustomAlert extends Component {
             'KLOPA',
             message,
             [
-                { text: 'OK'},
+                { text: 'OK' },
             ],
             { cancelable: true },
         );
     }
 
-    static showDialogAlert = (message, onPressOkFunc) => {
+    static showDialogAlert = (message, onPressOkFunc, onPressCancelFunc) => {
         // Works on both iOS and Android
 
         Alert.alert(
@@ -28,6 +28,7 @@ class CustomAlert extends Component {
                 {
                     text: 'Cancel',
                     style: 'cancel',
+                    onPress: () => onPressCancelFunc ? onPressCancelFunc() : null
                 },
                 { text: 'OK', onPress: () => onPressOkFunc() },
             ],
