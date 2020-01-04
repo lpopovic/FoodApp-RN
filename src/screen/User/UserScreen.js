@@ -128,7 +128,7 @@ class UserScreen extends BaseScreen {
         )
     }
     recentOrdersContent = () => {
-        const type = "RECENT ORDERS"
+        const type = "Recent orders"
         const { userOrders } = this.props
         return (
             <View style={[styles.baseContainer, { flexDirection: 'column' }]}>
@@ -174,10 +174,10 @@ class UserScreen extends BaseScreen {
                 style={{ flex: 1 }}>
                 <View style={styles.scrollViewContainer}>
                     {this.userImageContent()}
-                    {this.infoContent("USERNAME", username)}
-                    {this.infoContent("EMAIL", email)}
-                    {this.infoContent("PHONE NUMBER", phoneNumber.trim() != '' ? phoneNumber : "Nedostupna")}
-                    {this.infoContent("ADRESS", lastUseAddress)}
+                    {this.infoContent("Username", username)}
+                    {this.infoContent("Email", email)}
+                    {this.infoContent("Phone number", phoneNumber.trim() != '' ? phoneNumber : "Nedostupna")}
+                    {this.infoContent("Adress", lastUseAddress)}
                     {this.recentOrdersContent()}
                 </View>
             </ScrollView>
