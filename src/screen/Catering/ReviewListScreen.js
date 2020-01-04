@@ -11,15 +11,12 @@ import {
 import BaseScreen from '../BaseScreen/BaseScreen';
 import Header from '../../components/common/BackHeader'
 import SegmentedControlTab from "react-native-segmented-control-tab";
-import StarRating from 'react-native-star-rating';
-import moment from 'moment';
+import ReviewItem from '../../components/Review/ReviewItem'
 import {
-    ScreenName,
     MESSAGE_EMPTY_ARRAY,
     abbrNum
 } from '../../helpers'
 import {
-    STAR_COLOR,
     NAV_COLOR,
     BASE_COLOR,
     segmentedControlStyles
@@ -240,73 +237,3 @@ const styles = StyleSheet.create({
 export default ReviewListScreen;
 
 
-class ReviewItem extends Component {
-
-    returnHoursOrDate = (createdate) => {
-        var now = moment(new Date(), "MM-DD-YYYY HH:mm")
-        var end = moment.utc(createdate).local().format("MM-DD-YYYY HH:mm")
-
-        var duration = moment.duration(now.diff(end))
-        if (duration.asHours().toFixed() < 2) {
-            return duration.asMinutes().toFixed() + ' minutes ago'
-        } else if (duration.asHours().toFixed() >= 2 && duration.asHours().toFixed() <= 24) {
-            return duration.asHours().toFixed() + ' hours ago'
-        } else {
-            return end
-        }
-    }
-    render() {
-        const { username, createdate, rating, text, priceTag } = this.props.review
-        return (
-            <View style={{ margin: 12, flex: 10, flexDirection: 'row' }}>
-
-                <View style={{ flexDirection: 'column', alignItems: 'stretch', flex: 10 }}>
-                    <View style={{ flexDirection: 'row', flex: 6 }}>
-                        <View style={{ flex: 6, flexDirection: 'column' }}>
-                            <Text
-                                numberOfLines={1}
-                                ellipsizeMode='tail'
-                                style={{ fontWeight: 'bold', color: 'black', fontSize: 15 }}>
-                                {username}
-                            </Text>
-
-                        </View>
-                        <StarRating
-                            style={{ flex: 4 }}
-                            disabled={true}
-                            maxStars={5}
-                            emptyStar={'ios-star-outline'}
-                            fullStar={'ios-star'}
-                            halfStar={'ios-star-half'}
-                            iconSet={'Ionicons'}
-                            rating={Number(rating)}
-                            starSize={15}
-                            emptyStarColor={STAR_COLOR}
-                            fullStarColor={STAR_COLOR}
-                            containerStyle={styles.starContainerStyle}
-                        />
-
-                    </View>
-                    <View style={{ flex: 10, marginTop: 5, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                        <Text style={{ color: '#9B9B9B', alignSelf: 'center' }}>{this.returnHoursOrDate(createdate)}</Text>
-                        <Text
-                            style={{
-                                fontWeight: 'bold',
-                                color: BASE_COLOR.white,
-                                padding: 4,
-                                backgroundColor: BASE_COLOR.blue,
-                                width: 60,
-                                textAlign: 'center'
-                            }}>
-                            {priceTag}</Text>
-                    </View>
-                    <View style={{ flex: 10, marginTop: 5, flexDirection: 'column' }}>
-
-                        <Text style={{ color: 'black' }}>{text}</Text>
-                    </View>
-
-                </View>
-            </View>
-        )
-    }
-}
