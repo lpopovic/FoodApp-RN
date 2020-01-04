@@ -177,7 +177,7 @@ class UserScreen extends BaseScreen {
                     {this.infoContent("Username", username)}
                     {this.infoContent("Email", email)}
                     {this.infoContent("Phone number", phoneNumber.trim() != '' ? phoneNumber : "Nedostupna")}
-                    {this.infoContent("Adress", lastUseAddress)}
+                    {this.infoContent("Adress", "dasdasd ad asd asd a asd asd as das das das dsa das das das das das")}
                     {this.recentOrdersContent()}
                 </View>
             </ScrollView>
@@ -278,7 +278,7 @@ const styles = StyleSheet.create({
         flex: 10,
         marginTop: 8,
         flexDirection: 'row',
-        alignItems: 'center',
+        // alignItems: 'center',
         borderBottomColor: BASE_COLOR.gray,
         borderBottomWidth: 1,
         paddingBottom: 8,
