@@ -126,7 +126,7 @@ class UserSettingsScreen extends BaseScreen {
                 <View style={{ flex: 4 }}>
                     <Text style={[styles.baseText, { color: BASE_COLOR.black }]}>{type}:</Text>
                 </View>
-                <View style={{ flex: 6}}>
+                <View style={{ flex: 6 }}>
                     <Text
                         ellipsizeMode='tail'
                         numberOfLines={6}
@@ -137,7 +137,14 @@ class UserSettingsScreen extends BaseScreen {
     }
 
     onSaveBtnPress = () => {
-        this.showAlertMessage("BTN SAVE PRESS")
+        this.setNewStateHandler({
+            loading: true
+        })
+        setTimeout(() => {
+            this.showAlertMessage("BTN SAVE PRESS COMPLETE")
+            this.closeScreen()
+        }, 500);
+     
     }
     editContent = () => (
         <View style={{ marginTop: 20, marginBottom: 20, justifyContent: 'center', }}>
