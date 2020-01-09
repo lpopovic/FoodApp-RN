@@ -195,7 +195,6 @@ class UserSettingsScreen extends BaseScreen {
                 style={styles.mainDisplay}
                 resetScrollToCoords={{ x: 0, y: 0 }}
                 scrollEnabled={true}
-                bounces={false}
                 keyboardShouldPersistTaps='handled'
                 enableOnAndroid={true} >
                 <View style={{
