@@ -45,7 +45,7 @@ class LoginScreen extends BaseScreen {
                     value: "",
                     valid: false,
                     validationRules: {
-                        minLenght: 6
+                        minLenght: 3
                     },
                     touched: false
                 },

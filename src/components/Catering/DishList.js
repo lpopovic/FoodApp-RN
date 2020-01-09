@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, FlatList } from 'react-native';
+import { View, StyleSheet, FlatList } from 'react-native';
 import DishCard from '../Catering/DishCard';
+import AddDish from '../Catering/AddDish';
 
 class DishList extends Component {
 
@@ -11,7 +12,17 @@ class DishList extends Component {
                 <FlatList
                     data={this.props.data}
                     keyExtractor={item => item._id}
-                    renderItem={({ item }) => <DishCard dish={item} onClick={()=> this.props.clickOnDish(item._id)}/>}
+                    renderItem={({ item }) => {
+                        if (!item.addDish) {
+                            return (
+                                <DishCard dish={item} onClick={() => this.props.clickOnDish(item._id)} />
+                            )
+                        } else {
+                            return (
+                                <AddDish />
+                            )
+                        }
+                    }}
                 />
             </View>
         )
