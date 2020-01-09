@@ -81,9 +81,9 @@ class PlaceNetwork {
             }
         });
 
-    static fetchMenuItems = (placeId) =>
+    static fetchMenuItems = (placeId, dayOfWeek) =>
         new Promise(async (resolve, reject) => {
-            const url = RestUrl.getMenuItems(placeId)
+            const url = RestUrl.getMenuItems(placeId, dayOfWeek)
             try {
 
                 const { data } = await axios.get(url)

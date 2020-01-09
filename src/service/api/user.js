@@ -1,12 +1,12 @@
 import axios from '../axios'
 import { RestUrl } from './url'
-import { User } from '../../model'
+import { User, CompanyRequest } from '../../model'
 import {
     saveStorageData,
     STORAGE_KEY,
 } from '../../helpers'
 class UserNetwork {
-    static fetchUserLogin = (usernameOrEmail, password, ) =>
+    static fetchUserLogin = (usernameOrEmail, password) =>
         new Promise(async (resolve, reject) => {
             const url = RestUrl.userLogin
             let formData = {
@@ -95,7 +95,57 @@ class UserNetwork {
                 }
             }
         });
+    static fetchUserGetCompanyReguests = () =>
+        new Promise(async (resolve, reject) => {
+            const url = RestUrl.getCompanyReguest()
 
+            try {
+                const { data } = await axios.get(url)
+                if ( data !== null) {
+                    const companyRequest = new CompanyRequest(data)
+                    if (companyRequest.status === null) {
+                        resolve(companyRequest)
+                    } else {
+                        reject("Nema")
+                    }
+                }else {
+                    reject("NEMA")
+                }
+              
+
+
+            } catch (error) {
+                try {
+                    const { message } = error.response.data.error
+                    reject(message)
+                } catch  {
+                    reject(error.message)
+
+                }
+            }
+        });
+
+    static fetchUserPutCompanyReguestsResponse = (idCompanyReguest, status) =>
+        new Promise(async (resolve, reject) => {
+
+            const url = RestUrl.getCompanyReguest(idCompanyReguest)
+            let formData = {
+                status
+            }
+            try {
+                const { data } = await axios.put(url, formData)
+                resolve(data)
+
+            } catch (error) {
+                try {
+                    const { message } = error.response.data.error
+                    reject(message)
+                } catch  {
+                    reject(error.message)
+
+                }
+            }
+        });
 
 }
 

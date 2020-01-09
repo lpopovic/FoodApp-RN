@@ -70,7 +70,7 @@ export const fetchUserProfile = () => {
                     result => {
                         dispatch(uiStopLoading())
                         dispatch(updateUserProfile(result))
-
+                        
                     },
                     err => {
                         dispatch(uiStopLoading())

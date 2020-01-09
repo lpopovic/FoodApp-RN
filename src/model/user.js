@@ -8,6 +8,7 @@ class User {
         this.catheringOptions = object.catheringOptions;
         this.catheringIsAvailable = object.catheringIsAvailable
         this.address = object.address || []
+        this.phoneNumber = object.phoneNumber || ''
     }
 
     static createArrayTemplate(objectArray) {

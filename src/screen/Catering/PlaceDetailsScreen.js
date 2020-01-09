@@ -18,7 +18,9 @@ import { connect } from 'react-redux';
 import { avgPriceTag, openDays } from '../../helpers/numberHelper';
 import UrlOpen from '../../components/common/UrlOpen'
 import Icon from 'react-native-vector-icons/Ionicons';
+import IconMaterial from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Badge } from 'react-native-elements'
+import Moment from 'moment'
 class PlaceDetailsScreen extends BaseScreen {
 
 
@@ -35,8 +37,11 @@ class PlaceDetailsScreen extends BaseScreen {
             refreshing: false,
             menuItems: [],
             sectionMeniItems: [],
-            place: new Place({})
+            place: new Place({}),
         }
+
+        this.dayOfWeek = Moment().day()
+
         if (isAndroid) {
             UIManager.setLayoutAnimationEnabledExperimental(true);
         }
@@ -45,7 +50,18 @@ class PlaceDetailsScreen extends BaseScreen {
     componentDidMount() {
         super.componentDidMount()
 
+        const setDayOfWeek = this.props.navigation.getParam('dayOfWeek', null)
+
+        if (setDayOfWeek != null) {
+            dayOfWeek = setDayOfWeek
+        }
+
+
         this.apiCallHandler(this.props.navigation.state.params._id)
+
+
+
+
     }
     componentWillUnmount() {
         super.componentWillUnmount()
@@ -61,7 +77,7 @@ class PlaceDetailsScreen extends BaseScreen {
                 this.showAlertMessage(err)
             }
         )
-        PlaceNetwork.fetchMenuItems(placeId).then(
+        PlaceNetwork.fetchMenuItems(placeId, this.dayOfWeek).then(
             res => {
                 this.setNewStateHandler({
                     loading: false,
@@ -152,18 +168,7 @@ class PlaceDetailsScreen extends BaseScreen {
                     maxOverlayOpacity={1}
                     minOverlayOpacity={0}
                     fadeOutForeground
-                    // headerContainerStyle={{color: 'red'}}
-                    // headerContainerStyle={{ width: '100%', height: Dimensions.get('screen').width * 16/9}}
-                    // headerImage={require("./images/star-full.png")}
                     renderHeader={() => <Image source={{ uri: place.image.image169 }} style={{ height: Dimensions.get('screen').width * 9 / 16, width: Dimensions.get('window').width }} />}
-
-                    // renderForeground={() => (
-                    //     <View style={{ height: 150, justifyContent: "center", alignItems: "center" }} >
-                    //         <TouchableOpacity onPress={() => console.log("tap!!")}>
-                    //             <Text style={{ backgroundColor: "transparent" }}>Tap Me!</Text>
-                    //         </TouchableOpacity>
-                    //     </View>
-                    // )}
                     renderFixedForeground={() => (
                         <Animatable.View
                             style={styles.navTitleView}
@@ -183,26 +188,36 @@ class PlaceDetailsScreen extends BaseScreen {
                             colors={[BASE_COLOR.blue]}
                         />}
                 >
-                    {/* <View style={{ height: 1000 }}> */}
                     <TriggeringView
-                        style={{ flexDirection: 'column', height: this.state.expanded ? 300 : 60, paddingLeft: 15, paddingRight: 15, justifyContent: 'center', overflow: 'hidden' }}
+                        style={{ flexDirection: 'column', height: this.state.expanded ? 'auto' : 60, paddingLeft: 15, paddingRight: 15, justifyContent: 'center', overflow: 'hidden' }}
                         onHide={() => this.navTitleView.fadeInUp(180)}
                         onDisplay={() => this.navTitleView.fadeOut((40 + getStatusBarHeight()))}
                     >
-                        <View style={{ flexDirection: 'row', height: 40 }}>
-                            <Text numberOfLines={2} ellipsizeMode='tail' style={{ flex: 7, fontWeight: 'bold', fontSize: 20, alignSelf: 'center' }}>{place.name}</Text>
-                            <View style={{ flex: 4.5, flexDirection: 'row' }}>
+                        <View style={{ flexDirection: 'row', height: this.state.expanded ? 'auto' : 40 }}>
+                            <View style={{ flex: 5.5, justifyContent: 'center' }}>
+                                <Text
+                                    numberOfLines={3}
+                                    ellipsizeMode='tail'
+                                    style={{
+                                        fontWeight: 'bold',
+                                        fontSize: 20,
+                                    }}>
+                                    {place.name}
+                                </Text>
+                            </View>
+
+                            <View style={{ flex: 4.5, flexDirection: 'row', height: 40 }}>
                                 <View style={{ flex: 1.5, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
                                     <Image
                                         style={{
-                                            width: 17,
-                                            height: 16,
+                                            width: 23,
+                                            height: 20,
                                         }}
                                         source={IconAssets.starIcon}
                                     />
-                                    <Text style={{ color: '#646464', fontWeight: '400', fontSize: 11, marginLeft: 2 }}>{place.avgRating}</Text>
+                                    <Text style={{ color: '#646464', fontWeight: 'normal', fontSize: 12, marginLeft: 2 }}>{place.avgRating}</Text>
                                 </View>
-                                <View style={{ flex: 1.5, justifyContent: 'center', alignItems: 'center' }}>
+                                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
                                     <TouchableOpacity>
                                         <Image
                                             style={{
@@ -214,7 +229,7 @@ class PlaceDetailsScreen extends BaseScreen {
                                         />
                                     </TouchableOpacity>
                                 </View>
-                                <View style={{ flex: 1.5, justifyContent: 'center', alignItems: 'center' }}>
+                                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
                                     <TouchableOpacity onPress={() => this.onPressShowPlaceOnMap(place)}>
                                         <Image
                                             style={{
@@ -223,6 +238,15 @@ class PlaceDetailsScreen extends BaseScreen {
                                                 tintColor: '#646464'
                                             }}
                                             source={IconAssets.mapTabIcon}
+                                        />
+                                    </TouchableOpacity>
+                                </View>
+                                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                                    <TouchableOpacity onPress={() => this.onPressShowReviewHandler()}>
+                                        <IconMaterial
+                                            size={23}
+                                            color={'#646464'}
+                                            name={'comment-text-multiple'}
                                         />
                                     </TouchableOpacity>
                                 </View>
@@ -235,8 +259,8 @@ class PlaceDetailsScreen extends BaseScreen {
                             </TouchableOpacity>
                             <View style={{ flex: 3 }}></View>
                         </View>
-                        <View style={{ height: this.state.expanded ? 240 : 0 }}>
-                            <View style={{ flex: 2.5, overflow: 'hidden' }}>
+                        <View style={{ height: this.state.expanded ? 'auto' : 0 }}>
+                            <View style={{ flex: 2.5, overflow: 'hidden', height: 180 }}>
                                 <View style={{ justifyContent: 'center', alignItems: 'flex-start', flex: 0.5 }}>
                                     <Text style={{ fontSize: 15, color: BASE_COLOR.darkGray }}>{avgPriceTag(place.avgPriceTag)}</Text>
                                 </View>
@@ -259,7 +283,7 @@ class PlaceDetailsScreen extends BaseScreen {
                                 </View>
                             </View>
                             <View style={{ backgroundColor: BASE_COLOR.gray, height: 1, marginTop: 10, marginBottom: 10 }}></View>
-                            <Text numberOfLines={4} ellipsizeMode='tail' style={{ marginBottom: 10 }}>{place.description}</Text>
+                            <Text numberOfLines={0} ellipsizeMode='tail' style={{ marginBottom: 10 }}>{place.description}</Text>
                         </View>
 
                     </TriggeringView>
@@ -269,6 +293,18 @@ class PlaceDetailsScreen extends BaseScreen {
                 </HeaderImageScrollView>
             </View>
         )
+    }
+    onPressShowReviewHandler = () => {
+        const { place } = this.state
+        if (place._id != null) {
+            this.pushNewScreen({
+                routeName: ScreenName.ReviewListScreen(),
+                params: {
+                    place
+                }
+            })
+        }
+
     }
     onPressSectionListHeader = (section) => {
 

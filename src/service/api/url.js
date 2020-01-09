@@ -34,8 +34,10 @@ class RestUrl {
     static getPlacesForCathering = withKey(`places/cathering`)
 
 
-    static getMenuItems = (placeId) => {
-        return withKey(`menuitems?isParent=true&place=${placeId}`)
+    // static getMenuItems = (placeId) => {
+        // return withKey(`menuitems?isParent=true&place=${placeId}`)
+    static getMenuItems = (placeId, dayOfWeek) => {
+        return withKey(`menuitems?isParent=true&place=${placeId}&${ParamsUrl.daysAvailable(dayOfWeek)}`)
     }
     static getMenuItemById = (menuItemId) => {
         return withKey(`menuitems/${menuItemId}`)
@@ -49,6 +51,10 @@ class RestUrl {
 
     static getAllcategories = withKey(`categories`)
 
+    static getCompanyReguest = (id) => {
+        return withKey(`companyrequests${id ? `/${id}` : ''}`)
+    }
+
 
 }
 
@@ -59,6 +65,10 @@ class ParamsUrl {
     static category = (value) => { return `category=${value}` }
     static avgRating = (value) => { return `avgRating=${value}` }
     static avgPriceTag = (value) => { return `avgPriceTag=${value}` }
+    static daysAvailable = (value) => { return `daysAvailable=${value}` }
+    static scheduledTime = (value) => { return `scheduledTime=${value}` }
+    static isCatheringOrder = (value) => { return `isCatheringOrder=${value}` }
+
 }
 
 export { RestUrl, ParamsUrl, ROOT_URL_IMAGE };

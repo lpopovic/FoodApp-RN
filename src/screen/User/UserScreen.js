@@ -10,13 +10,13 @@ import {
     TouchableOpacity,
     StyleSheet
 } from 'react-native';
-import { ScreenName } from '../../helpers'
+import { ScreenName, keyAdress } from '../../helpers'
 import Header from '../../components/common/UserHeader'
 import BaseScreen from "../BaseScreen/BaseScreen"
 import { HistoryOrderList } from '../../components/HistoryOrder'
 import { NAV_COLOR, BASE_COLOR } from '../../styles';
 import { connect } from 'react-redux';
-import { updateUserProfile, fetchUserListOrders } from '../../store/actions'
+import { updateUserProfile, fetchUserListOrders, fetchUserProfile } from '../../store/actions'
 import { UserNetwork, OrderNetwork } from '../../service/api'
 import { TestAssets, } from '../../assets'
 
@@ -36,13 +36,37 @@ class UserScreen extends BaseScreen {
     componentDidMount() {
         super.componentDidMount()
         this.setStatusBarStyle(NAV_COLOR.headerBackground, true)
+
     }
     componentWillUnmount() {
         super.componentWillUnmount()
     }
 
 
+    companyRequestApiCheck = () => {
+        UserNetwork.fetchUserGetCompanyReguests()
+            .then(
+                res => {
+                    onPressOkStatus = () => {
+                        UserNetwork.fetchUserPutCompanyReguestsResponse(res._id, true).then(
+                            res => {
+                                this.props.fetchUserProfileHandler()
+                            },
+                            err => {
 
+                            }
+                        )
+                    }
+                    onPressCancelStatus = () => {
+                        UserNetwork.fetchUserPutCompanyReguestsResponse(res._id, false)
+                    }
+                    this.showDialogMessage(res.text, onPressOkStatus, onPressCancelStatus)
+                },
+                err => {
+
+                }
+            )
+    }
     apiCallHandler = () => {
 
         UserNetwork.fetchUserInfo()
@@ -50,6 +74,11 @@ class UserScreen extends BaseScreen {
                 result => {
                     this.props.updateUserProfileHandler(result)
                     this.setNewStateHandler({ refreshing: false });
+                    if (this.props.isLogin == true && result.company === null) {
+                        this.companyRequestApiCheck()
+                    }
+
+
                 },
                 err => {
                     this.showAlertMessage(err)
@@ -70,7 +99,7 @@ class UserScreen extends BaseScreen {
         this.pushNewScreen({ routeName: ScreenName.ReviewScreen(), key: `${Math.random() * 10000}`, params: { order } })
     }
     pressOrderDetailHandler = (order) => {
-       
+
         this.pushNewScreen({ routeName: ScreenName.OrderDetailScreen(), key: `${Math.random() * 10000}`, params: { order } })
     }
 
@@ -99,7 +128,7 @@ class UserScreen extends BaseScreen {
         )
     }
     recentOrdersContent = () => {
-        const type = "RECENT ORDERS"
+        const type = "Recent orders"
         const { userOrders } = this.props
         return (
             <View style={[styles.baseContainer, { flexDirection: 'column' }]}>
@@ -120,7 +149,18 @@ class UserScreen extends BaseScreen {
         const {
             email,
             username,
-            _id } = this.props.userInfo
+            _id,
+            address,
+            phoneNumber } = this.props.userInfo
+        let lastUseAddress = address.filter(
+            (data) => {
+                if (data.includes(keyAdress(this.props.city._id))) {
+                    return data
+                }
+
+            }
+        ).slice(-1)[0]
+        lastUseAddress = lastUseAddress ? lastUseAddress.replace(keyAdress(this.props.city._id), '') : "Nedostupna"
         return (
             <ScrollView
                 refreshControl={
@@ -134,10 +174,10 @@ class UserScreen extends BaseScreen {
                 style={{ flex: 1 }}>
                 <View style={styles.scrollViewContainer}>
                     {this.userImageContent()}
-                    {this.infoContent("USERNAME", username)}
-                    {this.infoContent("EMAIL", email)}
-                    {this.infoContent("USER ID", _id)}
-                    {this.infoContent("ADRESS", "Petra Lekovica 30v, Kraljevo")}
+                    {this.infoContent("Username", username)}
+                    {this.infoContent("Email", email)}
+                    {this.infoContent("Phone number", phoneNumber.trim() != '' ? phoneNumber : "Nedostupna")}
+                    {this.infoContent("Adress",lastUseAddress )}
                     {this.recentOrdersContent()}
                 </View>
             </ScrollView>
@@ -238,7 +278,7 @@ const styles = StyleSheet.create({
         flex: 10,
         marginTop: 8,
         flexDirection: 'row',
-        alignItems: 'center',
+        // alignItems: 'center',
         borderBottomColor: BASE_COLOR.gray,
         borderBottomWidth: 1,
         paddingBottom: 8,
@@ -268,6 +308,7 @@ const mapStateToProps = state => {
         loading: state.ui.isLoading,
         isLogin: state.user.isLogin,
         userOrders: state.user.userOrders,
+        city: state.location.city,
     };
 };
 
@@ -275,6 +316,7 @@ const mapDispatchToProps = dispatch => {
     return {
         fetchUserListOrdersHandler: () => dispatch(fetchUserListOrders()),
         updateUserProfileHandler: (user) => dispatch(updateUserProfile(user)),
+        fetchUserProfileHandler: () => dispatch(fetchUserProfile()),
     };
 };
 

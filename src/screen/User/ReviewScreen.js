@@ -33,6 +33,7 @@ class ReviewScreen extends BaseScreen {
             loading: false,
             avgRating: 0,
             textReview: '',
+            avgPriceTag: 0
         }
     }
 
@@ -44,9 +45,9 @@ class ReviewScreen extends BaseScreen {
     componentWillUnmount() {
         super.componentWillUnmount()
     }
-    validateInputForme = (avgRating, textReview) => {
+    validateInputForme = (avgRating, textReview, avgPriceTag) => {
 
-        if (avgRating > 0 && textReview.trim() != '') {
+        if (avgRating > 0 && textReview.trim() != '' && avgPriceTag > 0) {
             return true
         } else {
             return false
@@ -103,6 +104,48 @@ class ReviewScreen extends BaseScreen {
             </View>
         )
     }
+    onPriceTagPress(tag) {
+        this.setNewStateHandler({
+            avgPriceTag: tag
+        });
+    }
+    priceContent = () => {
+        const text = 'PRICE TAG'
+        const { avgPriceTag } = this.state
+        return (
+            <View style={styles.baseContainer}>
+                <View style={{ alignSelf: 'flex-start', marginBottom: 16 }}>
+                    <Text style={[styles.baseText, { color: BASE_COLOR.black }]}>{text}</Text>
+                </View>
+                <View style={{ alignSelf: 'center', justifyContent: 'center', alignItems: 'center', flexDirection: 'row' }}>
+
+                    <TouchableOpacity onPress={() => this.onPriceTagPress(1)}>
+                        <View style={[styles.priceTagContainer, { backgroundColor: avgPriceTag >= 1 ? BASE_COLOR.blue : BASE_COLOR.gray }]}>
+                            <Text style={styles.priceTagText}>$$</Text>
+                        </View>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => this.onPriceTagPress(2)}>
+                        <View style={[styles.priceTagContainer, { backgroundColor: avgPriceTag >= 2 ? BASE_COLOR.blue : BASE_COLOR.gray }]}>
+                            <Text style={styles.priceTagText}>$$$</Text>
+                        </View>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => this.onPriceTagPress(3)}>
+                        <View style={[styles.priceTagContainer, { backgroundColor: avgPriceTag >= 3 ? BASE_COLOR.blue : BASE_COLOR.gray }]}>
+                            <Text style={styles.priceTagText}>$$$$</Text>
+                        </View>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => this.onPriceTagPress(4)}>
+                        <View style={[styles.priceTagContainer, { backgroundColor: avgPriceTag >= 4 ? BASE_COLOR.blue : BASE_COLOR.gray }]}>
+                            <Text style={styles.priceTagText}>$$$$$</Text>
+                        </View>
+                    </TouchableOpacity>
+                </View>
+            </View>
+        )
+    }
+
+
+
     reviewTextChangeHandler = (text) => {
         this.setNewStateHandler({
             textReview: text
@@ -163,6 +206,9 @@ class ReviewScreen extends BaseScreen {
                     {this.ratingContent()}
                 </>
                 <>
+                    {this.priceContent()}
+                </>
+                <>
                     {this.reviewTextContent()}
                 </>
 
@@ -170,8 +216,8 @@ class ReviewScreen extends BaseScreen {
         )
     }
     mainContent = () => {
-        const { avgRating, textReview } = this.state
-        const disabled = !this.validateInputForme(avgRating, textReview)
+        const { avgRating, textReview, avgPriceTag } = this.state
+        const disabled = !this.validateInputForme(avgRating, textReview, avgPriceTag)
         return (
             <View style={styles.mainContainer}>
                 {this.reviewContent()}
@@ -271,6 +317,19 @@ const styles = StyleSheet.create({
         width: 200,
         borderRadius: 8,
         backgroundColor: BASE_COLOR.blue
+    },
+    priceTagContainer: {
+        backgroundColor: BASE_COLOR.gray,
+        width: 60,
+        height: 25,
+        margin: 4,
+        borderRadius: 4,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    priceTagText: {
+        color: BASE_COLOR.white,
+        fontSize: 11
     },
 
 });

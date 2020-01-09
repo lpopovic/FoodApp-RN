@@ -25,7 +25,7 @@ class UserHeader extends Component {
         this.props.navigation.navigate(ScreenName.MainLocationScreen(), { backToMainScreen: true })
     }
     onPressUserSettings = () => {
-        alert("onPressUserSettings")
+        this.props.navigation.navigate(ScreenName.UserSettingsScreen())
     }
     onPressShop = () => {
         this.props.navigation.navigate(ScreenName.ShopScreen())

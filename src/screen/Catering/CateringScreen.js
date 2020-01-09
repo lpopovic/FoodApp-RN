@@ -142,7 +142,13 @@ class CateringScreen extends BaseScreen {
             this.setState({ markedDates: allMarkedDates })
         })
     }
+    showContactFormHandler = () => {
+        const { isLogin, userInfo } = this.props
+        if (!isLogin) {
+            this.replaceScreenNavigationStack(ScreenName.ContactFormScreen())
+        }
 
+    }
     onDateSelected(value) {
 
         this.setState({ selectedDate: Moment(value).format('YYYY-MM-DD') })
