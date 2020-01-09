@@ -177,7 +177,7 @@ class UserScreen extends BaseScreen {
                     {this.infoContent("Username", username)}
                     {this.infoContent("Email", email)}
                     {this.infoContent("Phone number", phoneNumber.trim() != '' ? phoneNumber : "Nedostupna")}
-                    {this.infoContent("Adress", "dasdasd ad asd asd a asd asd as das das das dsa das das das das das")}
+                    {this.infoContent("Adress",lastUseAddress )}
                     {this.recentOrdersContent()}
                 </View>
             </ScrollView>
