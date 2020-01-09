@@ -40,7 +40,8 @@ const reducer = (state = initialState, action) => {
                 ...state,
                 JWT: null,
                 isLogin: false,
-                userOrders: []
+                userOrders: [],
+                userInfo: initialState.userInfo,
             }
         case UPDATE_LIST_USER_ORDERS:
             return {
