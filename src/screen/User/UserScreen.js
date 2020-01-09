@@ -74,7 +74,7 @@ class UserScreen extends BaseScreen {
                 result => {
                     this.props.updateUserProfileHandler(result)
                     this.setNewStateHandler({ refreshing: false });
-                    if (result.company === null) {
+                    if (this.props.isLogin == true && result.company === null) {
                         this.companyRequestApiCheck()
                     }
 
