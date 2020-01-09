@@ -57,6 +57,8 @@ class ParamsUrl {
     static avgRating = (value) => { return `avgRating=${value}` }
     static avgPriceTag = (value) => { return `avgPriceTag=${value}` }
     static daysAvailable = (value) => { return `daysAvailable=${value}` }
+    static scheduledTime = (value) => { return `scheduledTime=${value}` }
+    static isCatheringOrder = (value) => { return `isCatheringOrder=${value}` }
 
 }
 
