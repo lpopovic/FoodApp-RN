@@ -36,12 +36,22 @@ class ReviewNetwork {
             }
         });
 
-    static fetchPostCreateReview = (formData) =>
+    static fetchPostCreateReview = (textReview, avgRating, avgPriceTag, orderId, placeId) =>
         new Promise(async (resolve, reject) => {
             const url = RestUrl.postReview
+
+            const formData = {
+                text: textReview,
+                rating: avgRating,
+                priceTag: avgPriceTag,
+                order: orderId,
+                place: placeId
+
+            }
+
             try {
                 const { data } = await axios.post(url, formData)
-                resolve(data)
+                resolve(data.success.message)
 
             } catch (error) {
                 try {
