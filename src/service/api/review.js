@@ -3,7 +3,7 @@ import { RestUrl } from './url'
 class ReviewNetwork {
     static fetchGetReviewsFromPlace = (placeId) =>
         new Promise(async (resolve, reject) => {
-            const url = RestUrl.templateURL()
+            const url = RestUrl.getAllReviewsForPlace(placeId)
             try {
                 const { data } = await axios.get(url)
                 resolve(data)
@@ -38,7 +38,7 @@ class ReviewNetwork {
 
     static fetchPostCreateReview = (formData) =>
         new Promise(async (resolve, reject) => {
-            const url = RestUrl.templateURL()
+            const url = RestUrl.postReview
             try {
                 const { data } = await axios.post(url, formData)
                 resolve(data)

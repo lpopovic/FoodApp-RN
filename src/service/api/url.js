@@ -46,6 +46,15 @@ class RestUrl {
         return withKey(`companyrequests${id ? `/${id}` : ''}`)
     }
 
+    static getAllReviewsForPlace = (placeId) => {
+        return withKey(`reviews/${placeId}`)
+    }
+
+    static getReviewForOrder = (orderId) => {
+        return withKey(`reviews/order/${orderId}`)
+    }
+
+    static postReview = withKey(`reviews`)
 
 }
 
