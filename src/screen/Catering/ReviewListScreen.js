@@ -22,6 +22,7 @@ import {
     segmentedControlStyles
 } from '../../styles'
 import { Place } from '../../model';
+import { ReviewNetwork, ParamsUrl } from '../../service/api';
 
 const widthScreen = Dimensions.get('screen').width - 32
 class ReviewListScreen extends BaseScreen {
@@ -36,7 +37,7 @@ class ReviewListScreen extends BaseScreen {
         this.state = {
             refreshing: false,
             loading: true,
-            arrayReviews: ["", ""],
+            arrayReviews: [],
             place: new Place({}),
             selectedIndex: 0,
         }
@@ -46,43 +47,69 @@ class ReviewListScreen extends BaseScreen {
         super.componentDidMount()
         this.setStatusBarStyle(NAV_COLOR.headerBackground, true)
         const { place } = this.props.navigation.state.params
-
-        setTimeout(() => {
-            this.setNewStateHandler({
-                place,
-                loading: false
-            })
-        }, 500);
+        this.setNewStateHandler({
+            place,
+        })
+        this.apiCallHandler(place._id, this.getSortValue(this.state.selectedIndex))
 
     }
     componentWillUnmount() {
         super.componentWillUnmount()
     }
+
+    apiCallHandler = (placeId, params) => {
+        ReviewNetwork.fetchGetReviewsFromPlace(placeId, params)
+            .then(
+                result => {
+                    this.setNewStateHandler({
+                        arrayReviews: result,
+                        loading: false,
+                        refreshing: false,
+                    })
+                },
+                error => {
+                    this.showAlertMessage(error)
+                    this.setNewStateHandler({
+                        arrayReviews: [],
+                        loading: false,
+                        refreshing: false,
+                    })
+                }
+            )
+    }
+    getSortValue = (index) => {
+        switch (index) {
+            case 0:
+                // 'NEW'
+                return ParamsUrl.sort(ReviewNetwork.KEY_PARAM_SORT.NEW)
+                break;
+            case 1:
+                // 'RATING'
+                return ParamsUrl.sort(ReviewNetwork.KEY_PARAM_SORT.RATING)
+                break;
+            case 2:
+                // 'PRICE TAG'
+                return ParamsUrl.sort(ReviewNetwork.KEY_PARAM_SORT.PRICE_TAG)
+                break;
+            default:
+                return null
+                break;
+        }
+    }
     handleOnTabPress = index => {
         this.setNewStateHandler({
-            ...this.state,
             selectedIndex: index,
             loading: true
         });
-        setTimeout(() => {
-            this.setNewStateHandler({
-                loading: false
-            })
-        }, 500);
-
-        // this.searchApiHandler({ index })
-
+        this.apiCallHandler(this.state.place._id, this.getSortValue(index))
     };
     _onRefresh = () => {
-        this.setNewStateHandler({ refreshing: true, loading: true });
-
-        setTimeout(() => {
-            this.setNewStateHandler({
-                refreshing: false,
-                loading: false
-            });
-        }, 500);
-        // this.apiCallHandler()
+        const { place, selectedIndex } = this.state
+        this.setNewStateHandler({
+            refreshing: true,
+            loading: true
+        });
+        this.apiCallHandler(place._id, this.getSortValue(selectedIndex))
     }
     reviewContent = () => {
         const { refreshing, arrayReviews } = this.state
@@ -101,14 +128,7 @@ class ReviewListScreen extends BaseScreen {
                 keyExtractor={(index) => `${index.toString()}`}
                 renderItem={(info) => (
                     <ReviewItem
-                        review={{
-                            username: "testUsername",
-                            createdate: '2019-10-18T11:41:38.676Z',
-                            rating: 3.5,
-                            text: "dosata asda da d ad as das das d asd",
-                            priceTag: '$$$$$'
-                        }}
-                    />
+                        review={info.item} />
                 )}
                 ItemSeparatorComponent={this.FlatListItemSeparator}
 
@@ -146,7 +166,7 @@ class ReviewListScreen extends BaseScreen {
                                     style={{ textAlign: 'center', fontWeight: 'bold' }}
                                     numberOfLines={3}
                                     ellipsizeMode='tail'>
-                                    {place.returnAvgPriceTag()}{"\n"}{place.avgRating}{"\n"}{abbrNum(Number(3821), 1)}
+                                    {place.returnAvgPriceTag()}{"\n"}{Number(place.avgRating).toFixed(1)}{"\n"}{abbrNum(Number(place.numberOfReviews), 1)}
                                 </Text>
                             </View>
                         </View>

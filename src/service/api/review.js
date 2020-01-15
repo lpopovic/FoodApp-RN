@@ -1,12 +1,24 @@
 import axios from '../axios'
 import { RestUrl } from './url'
+import { Review } from '../../model';
 class ReviewNetwork {
-    static fetchGetReviewsFromPlace = (placeId) =>
+    static  KEY_PARAM_SORT = {
+        NEW: '',
+        PRICE_TAG: 'priceTag',
+        RATING: 'rating'
+    }
+    static fetchGetReviewsFromPlace = (placeId, param) =>
         new Promise(async (resolve, reject) => {
-            const url = RestUrl.getAllReviewsForPlace(placeId)
+            const url = RestUrl.getAllReviewsForPlace(placeId, param)
             try {
                 const { data } = await axios.get(url)
-                resolve(data)
+                const reviews = Review.createArrayReview(data)
+                if (reviews.length > 0) {
+                    resolve(reviews)
+                } else {
+                    reject("Trenutno nema komentara.")
+                }
+
 
             } catch (error) {
                 try {
