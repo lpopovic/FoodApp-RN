@@ -160,7 +160,7 @@ class CateringScreen extends BaseScreen {
         // this.setState({ ordersForDay: ordersForDay })
 
         // console.log(this.state.ordersForDay)
-        alert(Moment(value).format("DD MMM YYYY"))
+        // alert(Moment(value).format("DD MMM YYYY"))
         this.apiCallGetOrdersBetweenDates(true, fromDate, toDate)
     };
 
@@ -247,11 +247,10 @@ class CateringScreen extends BaseScreen {
 
         const { markedDates } = this.state
         if (markedDates.some(item => item.date === this.state.selectedDate)) {
+            console.log("DISH DATA")
+            console.log(DishData)
             return (
-                (Moment(this.state.selectedDate).isBefore(Moment())) ?
-                    <DishList data={DishData} />
-                    :
-                    <DishList data={DishData} />
+                <DishList data={DishData} selectedDate={this.state.selectedDate} selectPlace={(placeId) => this.placeSelectHandler(placeId)}/>
             )
         } else if (Moment(this.state.selectedDate).isAfter(Moment().subtract(1, 'day'))) {
             console.log(placesCathering)
@@ -266,7 +265,11 @@ class CateringScreen extends BaseScreen {
     }
 
     placeSelectHandler(placeId) {
-        this.pushNewScreen({ routeName: ScreenName.PlaceDetailScreen(), key: `${Math.random() * 10000}`, params: { _id: placeId } })
+        let cathering = {
+            isFromCathering: true,
+            selectedDate: this.state.selectedDate,
+        }
+        this.pushNewScreen({ routeName: ScreenName.PlaceDetailScreen(), key: `${Math.random() * 10000}`, params: { _id: placeId, cathering: cathering } })
     }
 
     signUpToCatheringMesage() {

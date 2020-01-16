@@ -48,7 +48,7 @@ class UserScreen extends BaseScreen {
             .then(
                 res => {
                     onPressOkStatus = () => {
-                        UserNetwork.fetchUserPutCompanyReguestsResponse(res._id, true).then(
+                        UserNetwork.fetchUserPutCompanyReguestsResponse(res._id, "true").then(
                             res => {
                                 this.props.fetchUserProfileHandler()
                             },
@@ -58,7 +58,7 @@ class UserScreen extends BaseScreen {
                         )
                     }
                     onPressCancelStatus = () => {
-                        UserNetwork.fetchUserPutCompanyReguestsResponse(res._id, false)
+                        UserNetwork.fetchUserPutCompanyReguestsResponse(res._id, "false")
                     }
                     this.showDialogMessage(res.text, onPressOkStatus, onPressCancelStatus)
                 },

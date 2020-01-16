@@ -69,11 +69,12 @@ const SearchStack = createStackNavigator({
 })
 const CateringStack = createStackNavigator({
     cateringapp_Catering: CateringScreen,
-    cateringapp_Detail: DetailScreen,
     cateringapp_PlaceDetail: PlaceDetailScreen,
     cateringapp_ContactForm: ContactFormScreen,
     cateringapp_ReviewList: ReviewListScreen,
+    cateringapp_MenuItemDetails: MenuItemDetailsScreen,
 
+    cateringapp_Detail: DetailScreen,
 
 })
 const UserStack = createStackNavigator({

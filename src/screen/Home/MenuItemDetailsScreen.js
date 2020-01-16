@@ -4,7 +4,7 @@ import { CheckBox } from 'react-native-elements';
 import BaseScreen from '../BaseScreen/BaseScreen';
 import Header from '../../components/common/BackHeader'
 import { IconAssets, TestAssets } from '../../assets';
-import { PlaceNetwork } from '../../service/api'
+import { PlaceNetwork, OrderNetwork } from '../../service/api'
 import { MenuItem } from '../../model';
 import { connect } from 'react-redux';
 import { ScreenName } from '../../helpers'
@@ -77,7 +77,7 @@ class MenuItemDetailsScreen extends BaseScreen {
                     type: item.buttonOptionsType,
                     text: item.text,
                     // options: [noneRadioOption._id]
-                    options: [noneRadioOption]
+                    options: item.required ? [item.options[0]] : [noneRadioOption]
                 }
                 selectedOption.push(optionItem)
             } else if (item.buttonOptionsType === "check") {
@@ -150,7 +150,7 @@ class MenuItemDetailsScreen extends BaseScreen {
                     {
                         item.options.map((option, indexInArray) => {
 
-                            if (indexInArray == 0) {
+                            if (indexInArray == 0 && item.required == false) {
                                 allOptions.push(
                                     <View key={`${Math.random() * 10000} ${noneRadioOption._id}`} >
                                         {this._renderTitle(indexInArray, item.text)}
@@ -170,6 +170,12 @@ class MenuItemDetailsScreen extends BaseScreen {
                                             </View>
                                         </View>
                                         <View style={{ backgroundColor: BASE_COLOR.gray, height: 1 }}></View>
+                                    </View>
+                                )
+                            } else if (indexInArray == 0 && item.required == true) {
+                                allOptions.push(
+                                    <View>
+                                        {this._renderTitle(indexInArray, item.text)}
                                     </View>
                                 )
                             }
@@ -314,6 +320,7 @@ class MenuItemDetailsScreen extends BaseScreen {
     }
     mainContent = () => {
         const { name, description, image, nominalPrice, menuItemOptions, place, hasSubtypes, subtypes } = this.state.menuItem
+        const cathering = this.props.navigation.getParam('cathering', null)
         return (
             <ScrollView>
                 <TouchableOpacity onPress={() => this.onPressShowPlaceOnMap(place)}>
@@ -335,54 +342,55 @@ class MenuItemDetailsScreen extends BaseScreen {
                     <Text>500 g</Text>
                     <Text>{description}</Text>
                 </View>
-
-                <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', margin: 20, marginBottom: 0 }}>
-                    <TouchableOpacity onPress={() => this.onMinusClickedHandler()}>
-                        <View style={{ alignItems: 'center', justifyContent: 'center', backgroundColor: BASE_COLOR.lightGray, width: 46, height: 46, borderRadius: 30 }}>
-                            <View
-                                style={{
-                                    backgroundColor: BASE_COLOR.gray,
-                                    height: 4,
-                                    width: 30,
-                                    borderBottomLeftRadius: 5,
-                                    borderTopLeftRadius: 5,
-                                    borderBottomRightRadius: 5,
-                                    borderTopRightRadius: 5
-                                }}>
+                {cathering != null && cathering.isFromCathering ? null :
+                    <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', margin: 20, marginBottom: 0 }}>
+                        <TouchableOpacity onPress={() => this.onMinusClickedHandler()}>
+                            <View style={{ alignItems: 'center', justifyContent: 'center', backgroundColor: BASE_COLOR.lightGray, width: 46, height: 46, borderRadius: 30 }}>
+                                <View
+                                    style={{
+                                        backgroundColor: BASE_COLOR.gray,
+                                        height: 4,
+                                        width: 30,
+                                        borderBottomLeftRadius: 5,
+                                        borderTopLeftRadius: 5,
+                                        borderBottomRightRadius: 5,
+                                        borderTopRightRadius: 5
+                                    }}>
+                                </View>
                             </View>
+                        </TouchableOpacity>
+                        <View style={{ marginLeft: 20, marginRight: 20 }}>
+                            <Text style={{ fontWeight: '600', fontSize: 24, color: BASE_COLOR.darkGray, width: 40, textAlign: 'center' }}>{this.state.quantity}</Text>
                         </View>
-                    </TouchableOpacity>
-                    <View style={{ marginLeft: 20, marginRight: 20 }}>
-                        <Text style={{ fontWeight: '600', fontSize: 24, color: BASE_COLOR.darkGray, width: 40, textAlign: 'center' }}>{this.state.quantity}</Text>
+                        <TouchableOpacity onPress={() => this.onPlusClickedHandler()}>
+                            <View style={{ alignItems: 'center', justifyContent: 'center', backgroundColor: BASE_COLOR.lightGray, width: 46, height: 46, borderRadius: 30 }}>
+                                <View
+                                    style={{
+                                        backgroundColor: BASE_COLOR.gray,
+                                        height: 4,
+                                        width: 30,
+                                        borderBottomLeftRadius: 5,
+                                        borderTopLeftRadius: 5,
+                                        borderBottomRightRadius: 5,
+                                        borderTopRightRadius: 5
+                                    }}>
+                                </View>
+                                <View
+                                    style={{
+                                        position: 'absolute',
+                                        backgroundColor: BASE_COLOR.gray,
+                                        height: 30,
+                                        width: 4,
+                                        borderBottomLeftRadius: 5,
+                                        borderTopLeftRadius: 5,
+                                        borderBottomRightRadius: 5,
+                                        borderTopRightRadius: 5
+                                    }}>
+                                </View>
+                            </View>
+                        </TouchableOpacity>
                     </View>
-                    <TouchableOpacity onPress={() => this.onPlusClickedHandler()}>
-                        <View style={{ alignItems: 'center', justifyContent: 'center', backgroundColor: BASE_COLOR.lightGray, width: 46, height: 46, borderRadius: 30 }}>
-                            <View
-                                style={{
-                                    backgroundColor: BASE_COLOR.gray,
-                                    height: 4,
-                                    width: 30,
-                                    borderBottomLeftRadius: 5,
-                                    borderTopLeftRadius: 5,
-                                    borderBottomRightRadius: 5,
-                                    borderTopRightRadius: 5
-                                }}>
-                            </View>
-                            <View
-                                style={{
-                                    position: 'absolute',
-                                    backgroundColor: BASE_COLOR.gray,
-                                    height: 30,
-                                    width: 4,
-                                    borderBottomLeftRadius: 5,
-                                    borderTopLeftRadius: 5,
-                                    borderBottomRightRadius: 5,
-                                    borderTopRightRadius: 5
-                                }}>
-                            </View>
-                        </View>
-                    </TouchableOpacity>
-                </View>
+                }
                 {this._renderMenuItemTypeWithOptions(subtypes)}
                 {/* {hasSubtypes === true && subtypes != [] ? this._renderMenuItemOptions(subtypes.menuItemOptions) : null} */}
                 {this._renderMenuItemOptions(hasSubtypes ? this.state.menuItemType.menuItemOptions : menuItemOptions)}
@@ -390,7 +398,7 @@ class MenuItemDetailsScreen extends BaseScreen {
                 <View style={{ alignItems: 'center', justifyContent: 'center', margin: 20, marginBottom: 30 }}>
                     <TouchableOpacity onPress={() => this.onPressAddToBag()}>
                         <View style={{ backgroundColor: BASE_COLOR.blue, width: 280, height: 45, justifyContent: 'center', alignItems: 'center', borderRadius: 4 }}>
-                            <Text style={{ color: BASE_COLOR.white, fontWeight: '600', fontSize: 16 }}>Dodaj u korpu</Text>
+                            <Text style={{ color: BASE_COLOR.white, fontWeight: '600', fontSize: 16 }}>{cathering != null && cathering.isFromCathering ? "Poruči hranu" : "Dodaj u korpu"}</Text>
                         </View>
                     </TouchableOpacity>
                 </View>
@@ -432,20 +440,45 @@ class MenuItemDetailsScreen extends BaseScreen {
 
     onPressAddToBag = () => {
         const { orderForPlace } = this.props
-        const { menuItem, menuItemType } = this.state
+        const { menuItem, menuItemType, selectedOptions } = this.state
         let item = menuItem.hasSubtypes ? menuItemType : menuItem
 
-        if (orderForPlace == null) {
-            this.putInBagHandler()
-        } else if (orderForPlace._id === item.place._id) {
-            this.putInBagHandler()
-        } else if (orderForPlace._id !== item.place._id) {
-            this.showDialogMessage("U korpi trenutno imate jela iz drugog restorana. Ako nastavite sa kupovinom, korpa sa vec unetim jelima ce se isprazniti.", this.onPressOkPutInBagNHandler)
+        const cathering = this.props.navigation.getParam('cathering', null)
+
+        if (cathering != null && cathering.isFromCathering) {
+
+            // console.log(orderForPlace)
+            console.log(item)
+            // console.log(menuItemType)
+            // this.pushNewScreen(ScreenName.CateringScreen())
+
+            OrderNetwork.fetchCatheringOrder(menuItem, selectedOptions, "delivery", "cash", '', cathering.selectedDate)
+                .then(
+                    res => {
+                        console.log(res)
+                        // this.showAlertMessage("USPESNO NARUCENO")
+                        // this.setNewStateHandler({ loading: false })
+                        this.pushNewScreen(ScreenName.CateringScreen())
+                    },
+                    err => {
+                        // this.setNewStateHandler({ loading: false })
+                        this.showAlertMessage(String(err))
+                    })
+
+
+        } else {
+            if (orderForPlace == null) {
+                this.putInBagHandler()
+            } else if (orderForPlace._id === item.place._id) {
+                this.putInBagHandler()
+            } else if (orderForPlace._id !== item.place._id) {
+                this.showDialogMessage("U korpi trenutno imate jela iz drugog restorana. Ako nastavite sa kupovinom, korpa sa vec unetim jelima ce se isprazniti.", this.onPressOkPutInBagNHandler)
+            }
         }
 
     }
 
-    onPressOkPutInBagNHandler = ()=>{
+    onPressOkPutInBagNHandler = () => {
         const { menuItem, selectedOptions, quantity, menuItemType } = this.state
         let item = menuItem.hasSubtypes ? menuItemType : menuItem
 
@@ -465,7 +498,6 @@ class MenuItemDetailsScreen extends BaseScreen {
         let item = menuItem.hasSubtypes ? menuItemType : menuItem
 
         const orderdMenuItem = {
-
             _id: `${Math.random()}${Math.random()}${Math.random()}`,
             quantity: quantity,
             menuItem: item,

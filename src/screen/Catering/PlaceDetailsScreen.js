@@ -51,17 +51,16 @@ class PlaceDetailsScreen extends BaseScreen {
         super.componentDidMount()
 
         const setDayOfWeek = this.props.navigation.getParam('dayOfWeek', null)
+        const cathering = this.props.navigation.getParam('cathering', null)
 
+        if (cathering != null) {
+            this.dayOfWeek = Moment(cathering.selectedDate).day()
+        }
         if (setDayOfWeek != null) {
-            dayOfWeek = setDayOfWeek
+            this.dayOfWeek = setDayOfWeek
         }
 
-
         this.apiCallHandler(this.props.navigation.state.params._id)
-
-
-
-
     }
     componentWillUnmount() {
         super.componentWillUnmount()
@@ -122,6 +121,7 @@ class PlaceDetailsScreen extends BaseScreen {
     }
     render() {
         const { place, menuItems, loading, refreshing } = this.state
+        const cathering = this.props.navigation.getParam('cathering', null)
         if (loading) {
             return (
                 <View style={styles.mainContainer}>
@@ -146,20 +146,22 @@ class PlaceDetailsScreen extends BaseScreen {
 
                         </View>
                     </TouchableOpacity>
-                    <TouchableOpacity
-                        onPress={() => this.pushNewScreen(ScreenName.ShopScreen())}
-                        style={{}}>
-                        <View style={{ padding: 4 }}>
-                            <Image
-                                style={{
-                                    height: 25,
-                                    aspectRatio: 1
-                                }}
-                                resizeMode='contain'
-                                source={TestAssets.shopBagIcon} />
-                            {this.badgeContent()}
-                        </View>
-                    </TouchableOpacity>
+                    {cathering != null && cathering.isFromCathering ? null :
+                        <TouchableOpacity
+                            onPress={() => this.pushNewScreen(ScreenName.ShopScreen())}
+                            style={{}}>
+                            <View style={{ padding: 4 }}>
+                                <Image
+                                    style={{
+                                        height: 25,
+                                        aspectRatio: 1
+                                    }}
+                                    resizeMode='contain'
+                                    source={TestAssets.shopBagIcon} />
+                                {this.badgeContent()}
+                            </View>
+                        </TouchableOpacity>
+                    }
                 </View>
                 <HeaderImageScrollView
                     maxHeight={180}
@@ -404,7 +406,7 @@ class PlaceDetailsScreen extends BaseScreen {
         return returnSectionView
     }
     dishSelectHandler(menuItemId) {
-        this.pushNewScreen({ routeName: ScreenName.MenuItemDetailsScreen(), key: `${Math.random() * 10000}`, params: { _id: menuItemId } })
+        this.pushNewScreen({ routeName: ScreenName.MenuItemDetailsScreen(), key: `${Math.random() * 10000}`, params: { _id: menuItemId, cathering: this.props.navigation.state.params.cathering } })
     }
     _onRefresh = () => {
         this.setNewStateHandler({ refreshing: true })
