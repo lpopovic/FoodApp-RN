@@ -18,6 +18,8 @@ import {
     NAV_COLOR,
     STAR_COLOR
 } from '../../styles'
+import { Order } from '../../model';
+import { ReviewNetwork } from '../../service/api';
 
 
 class ReviewScreen extends BaseScreen {
@@ -33,13 +35,22 @@ class ReviewScreen extends BaseScreen {
             loading: false,
             avgRating: 0,
             textReview: '',
-            avgPriceTag: 0
+            avgPriceTag: 0,
+            order: new Order({})
         }
     }
 
     componentDidMount() {
         super.componentDidMount()
         this.setStatusBarStyle(NAV_COLOR.headerBackground, true)
+
+        const order = this.props.navigation.getParam('order', null)
+        if (order !== null) {
+            this.setNewStateHandler({
+                order
+            })
+        }
+
 
     }
     componentWillUnmount() {
@@ -56,16 +67,25 @@ class ReviewScreen extends BaseScreen {
 
     }
     onSaveChangesBtnPress = () => {
-        const { avgRating, textReview } = this.state
-        if (this.validateInputForme(avgRating, textReview) == true) {
+        const { avgRating, textReview, avgPriceTag, order } = this.state
+        if (this.validateInputForme(avgRating, textReview, avgPriceTag) == true) {
             this.setNewStateHandler({
                 loading: true
             })
-            setTimeout(() => {
-                this.setNewStateHandler({
-                    loading: false
-                })
-            }, 1000);
+
+            ReviewNetwork.fetchPostCreateReview(textReview, avgRating, avgPriceTag, order._id, order.place._id)
+                .then(
+                    result => {
+                        this.showAlertMessage(result)
+                        this.closeScreen()
+                    },
+                    error => {
+                        this.showAlertMessage(error)
+                        this.setNewStateHandler({
+                            loading: false
+                        })
+                    }
+                )
         }
     }
 

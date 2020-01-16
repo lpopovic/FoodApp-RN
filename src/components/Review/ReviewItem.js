@@ -13,21 +13,9 @@ import {
 
 class ReviewItem extends Component {
 
-    returnHoursOrDate = (createdate) => {
-        var now = moment(new Date(), "MM-DD-YYYY HH:mm")
-        var end = moment.utc(createdate).local().format("MM-DD-YYYY HH:mm")
-
-        var duration = moment.duration(now.diff(end))
-        if (duration.asHours().toFixed() < 2) {
-            return duration.asMinutes().toFixed() + ' minutes ago'
-        } else if (duration.asHours().toFixed() >= 2 && duration.asHours().toFixed() <= 24) {
-            return duration.asHours().toFixed() + ' hours ago'
-        } else {
-            return end
-        }
-    }
     render() {
-        const { username, createdate, rating, text, priceTag } = this.props.review
+        const { review } = this.props
+        
         return (
             <View style={{ margin: 12, flex: 10, flexDirection: 'row' }}>
 
@@ -38,7 +26,7 @@ class ReviewItem extends Component {
                                 numberOfLines={1}
                                 ellipsizeMode='tail'
                                 style={{ fontWeight: 'bold', color: 'black', fontSize: 15 }}>
-                                {username}
+                                {review.getAuthorReview()}
                             </Text>
 
                         </View>
@@ -50,7 +38,7 @@ class ReviewItem extends Component {
                             fullStar={'ios-star'}
                             halfStar={'ios-star-half'}
                             iconSet={'Ionicons'}
-                            rating={Number(rating)}
+                            rating={review.getRatingReview()}
                             starSize={15}
                             emptyStarColor={STAR_COLOR}
                             fullStarColor={STAR_COLOR}
@@ -59,7 +47,7 @@ class ReviewItem extends Component {
 
                     </View>
                     <View style={{ flex: 10, marginTop: 5, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                        <Text style={{ color: '#9B9B9B', alignSelf: 'center' }}>{this.returnHoursOrDate(createdate)}</Text>
+                        <Text style={{ color: '#9B9B9B', alignSelf: 'center' }}>{review.getHoursOrDate()}</Text>
                         <Text
                             style={{
                                 fontWeight: 'bold',
@@ -69,11 +57,11 @@ class ReviewItem extends Component {
                                 width: 60,
                                 textAlign: 'center'
                             }}>
-                            {priceTag}</Text>
+                            {review.getPriceTag()}</Text>
                     </View>
                     <View style={{ flex: 10, marginTop: 5, flexDirection: 'column' }}>
 
-                        <Text style={{ color: 'black' }}>{text}</Text>
+                        <Text style={{ color: 'black' }}>{review.getTextReview()}</Text>
                     </View>
 
                 </View>

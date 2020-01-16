@@ -55,6 +55,15 @@ class RestUrl {
         return withKey(`companyrequests${id ? `/${id}` : ''}`)
     }
 
+    static getAllReviewsForPlace = (placeId, param) => {
+        return withKey(`reviews/${placeId}?${param}&limit=100`)
+    }
+
+    static getReviewForOrder = (orderId) => {
+        return withKey(`reviews/order/${orderId}`)
+    }
+
+    static postReview = withKey(`reviews`)
 
 }
 
@@ -68,6 +77,7 @@ class ParamsUrl {
     static daysAvailable = (value) => { return `daysAvailable=${value}` }
     static scheduledTime = (value) => { return `scheduledTime=${value}` }
     static isCatheringOrder = (value) => { return `isCatheringOrder=${value}` }
+    static sort = (value) => { return `sort=${value}` }
 
 }
 
