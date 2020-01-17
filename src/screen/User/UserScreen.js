@@ -151,7 +151,10 @@ class UserScreen extends BaseScreen {
             username,
             _id,
             address,
-            phoneNumber } = this.props.userInfo
+            phoneNumber,
+            name,
+            lastName
+        } = this.props.userInfo
         let lastUseAddress = address.filter(
             (data) => {
                 if (data.includes(keyAdress(this.props.city._id))) {
@@ -175,9 +178,11 @@ class UserScreen extends BaseScreen {
                 <View style={styles.scrollViewContainer}>
                     {this.userImageContent()}
                     {this.infoContent("Username", username)}
+                    {this.infoContent("First name", name)}
+                    {this.infoContent("Last name", lastName)}
                     {this.infoContent("Email", email)}
                     {this.infoContent("Phone number", phoneNumber.trim() != '' ? phoneNumber : "Nedostupna")}
-                    {this.infoContent("Adress",lastUseAddress )}
+                    {this.infoContent("Adress", lastUseAddress)}
                     {this.recentOrdersContent()}
                 </View>
             </ScrollView>

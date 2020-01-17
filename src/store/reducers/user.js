@@ -12,6 +12,8 @@ const initialState = {
     userInfo: {
         _id: 'Unknown id',
         username: 'Unknown username',
+        name: 'Unknown name',
+        lastName: 'Unknown last name',
         image: null,
         email: 'Unknown email',
         company: null,

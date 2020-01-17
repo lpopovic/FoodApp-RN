@@ -30,14 +30,16 @@ class UserNetwork {
             }
         });
 
-    static fetchUserRegister = (username, email, password, phoneNumber) =>
+    static fetchUserRegister = (username, email, password, phoneNumber, name, lastName) =>
         new Promise(async (resolve, reject) => {
             const url = RestUrl.userRegister
             let formData = {
                 username,
                 email,
                 password,
-                phoneNumber
+                phoneNumber,
+                name,
+                lastName
             }
 
             try {

@@ -29,6 +29,22 @@ class UserSettingsScreen extends BaseScreen {
             image: null,
             editImage: null,
             controls: {
+                firstName: {
+                    value: "",
+                    valid: false,
+                    validationRules: {
+                        notEmpty: true
+                    },
+                    touched: false
+                },
+                lastName: {
+                    value: "",
+                    valid: false,
+                    validationRules: {
+                        notEmpty: true
+                    },
+                    touched: false
+                },
                 username: {
                     value: "",
                     valid: false,
@@ -82,13 +98,15 @@ class UserSettingsScreen extends BaseScreen {
             })
         }, 500);
 
-        const { username, email, phoneNumber, image } = this.props.userInfo
+        const { username, email, phoneNumber, image, name, lastName } = this.props.userInfo
         this.setNewStateHandler({
             editImage: image
         })
         this.updateInputState('username', username)
         this.updateInputState('phoneNumber', phoneNumber)
         this.updateInputState('email', email)
+        this.updateInputState('firstName', name)
+        this.updateInputState('lastName', lastName)
 
     }
     componentWillUnmount() {
@@ -144,7 +162,7 @@ class UserSettingsScreen extends BaseScreen {
             this.showAlertMessage("BTN SAVE PRESS COMPLETE")
             this.closeScreen()
         }, 500);
-     
+
     }
     editContent = () => (
         <View style={{ marginTop: 20, marginBottom: 20, justifyContent: 'center', }}>
@@ -160,6 +178,36 @@ class UserSettingsScreen extends BaseScreen {
                 autoCorrect={false}
                 returnKeyType={"next"}
                 keyboardType="email-address"
+                onSubmitEditing={() => this.firstName.getInnerRef().focus()}
+            />
+            <DefaultInput
+                style={{ marginTop: 16, backgroundColor: BASE_COLOR.blue }}
+                placeholder='First name'
+                value={this.state.controls.firstName.value}
+                onChangeText={(val) => this.updateInputState('firstName', val)}
+                valid={this.state.controls.firstName.valid}
+                touched={this.state.controls.firstName.touched}
+                autoCapitalize="none"
+                autoCorrect={false}
+                // keyboardType="email-address"
+                returnKeyType={"next"}
+                textContentType='none'
+                ref={(input) => this.firstName = input}
+                onSubmitEditing={() => this.lastName.getInnerRef().focus()}
+            />
+            <DefaultInput
+                style={{ marginTop: 16, backgroundColor: BASE_COLOR.blue }}
+                placeholder='Last name'
+                value={this.state.controls.lastName.value}
+                onChangeText={(val) => this.updateInputState('lastName', val)}
+                valid={this.state.controls.lastName.valid}
+                touched={this.state.controls.lastName.touched}
+                autoCapitalize="none"
+                autoCorrect={false}
+                // keyboardType="email-address"
+                returnKeyType={"next"}
+                textContentType='none'
+                ref={(input) => this.lastName = input}
                 onSubmitEditing={() => this.email.getInnerRef().focus()}
             />
             <DefaultInput
