@@ -93,14 +93,14 @@ class PlaceListScreen extends BaseScreen {
         this.apiCallHandler()
     }
     loadMoreComponents = () => {
-        const { loadingMore, arrayPlaces } = this.state
-        if (arrayPlaces.length > 0) {
-            this.setNewStateHandler({
-                loadingMore: true
-            })
+        // const { loadingMore, arrayPlaces } = this.state
+        // if (arrayPlaces.length > 0) {
+        //     this.setNewStateHandler({
+        //         loadingMore: true
+        //     })
 
-            this.apiCallLoadMoreHandler()
-        }
+        //     this.apiCallLoadMoreHandler()
+        // }
     }
     mainContent = () => {
         const { refreshing, arrayPlaces, loadingMore } = this.state
@@ -122,8 +122,8 @@ class PlaceListScreen extends BaseScreen {
                         _id: item._id
                     }
                 })}
-                loadMoreComponents={() => this.loadMoreComponents()}
-                loadingMore={loadingMore}
+                 loadMoreComponents={() => this.loadMoreComponents()}
+                // loadingMore={loadingMore}
             />
         )
     }
@@ -145,7 +145,7 @@ class PlaceListScreen extends BaseScreen {
     }
 
     _filterData = () => {
-        this.setNewStateHandler({ loading: true })
+        this.setNewStateHandler({ loading: true, loadingMore: false, refreshing: false })
         setTimeout(() => {
             this.apiCallHandler()
         }, 100);
