@@ -6,7 +6,8 @@ import {
     StyleSheet,
     FlatList,
     RefreshControl,
-    Dimensions
+    Dimensions,
+    ActivityIndicator,
 } from 'react-native';
 import BaseScreen from '../BaseScreen/BaseScreen';
 import Header from '../../components/common/BackHeader'
@@ -40,6 +41,8 @@ class ReviewListScreen extends BaseScreen {
             arrayReviews: [],
             place: new Place({}),
             selectedIndex: 0,
+            loadingMore: true,
+            endPagination: false,
         }
     }
 
@@ -61,10 +64,18 @@ class ReviewListScreen extends BaseScreen {
         ReviewNetwork.fetchGetReviewsFromPlace(placeId, params)
             .then(
                 result => {
+                    let endPagination = false
+                    if (result.length == 0) {
+                        this.showAlertMessage('Trenutno nema komentara.')
+                        endPagination = true
+                    }
+
                     this.setNewStateHandler({
                         arrayReviews: result,
                         loading: false,
                         refreshing: false,
+                        loadingMore: false,
+                        endPagination,
                     })
                 },
                 error => {
@@ -73,6 +84,31 @@ class ReviewListScreen extends BaseScreen {
                         arrayReviews: [],
                         loading: false,
                         refreshing: false,
+                        loadingMore: false
+                    })
+                }
+            )
+    }
+    apiCallLoadMoreHandler = (placeId, params) => {
+
+        ReviewNetwork.fetchGetReviewsFromPlace(placeId, params)
+            .then(
+                result => {
+                    this.setNewStateHandler({
+                        arrayReviews: this.state.arrayReviews.concat(result),
+                        // loading: false,
+                        // refreshing: false,
+                        loadingMore: false,
+                        endPagination: result.length == 0 ? true : false
+                    })
+                },
+                error => {
+                    // this.showAlertMessage(error)
+                    this.setNewStateHandler({
+                        // arrayReviews: [],
+                        // loading: false,
+                        // refreshing: false,
+                        loadingMore: false
                     })
                 }
             )
@@ -107,10 +143,35 @@ class ReviewListScreen extends BaseScreen {
         const { place, selectedIndex } = this.state
         this.setNewStateHandler({
             refreshing: true,
-            loading: true
+            loading: true,
+            loadingMore: false,
         });
         this.apiCallHandler(place._id, this.getSortValue(selectedIndex))
     }
+    loadMoreComponents = () => {
+        const { arrayReviews, place, selectedIndex, endPagination } = this.state
+        if (arrayReviews.length > 19 && endPagination == false) {
+            this.setNewStateHandler({
+                loadingMore: true
+            })
+
+            this.apiCallLoadMoreHandler(place._id, `${this.getSortValue(selectedIndex)}&${ParamsUrl.offset(arrayReviews.length)}`)
+        }
+    }
+    renderFooter = () => {
+        if (!this.state.loadingMore) return null;
+        return (
+            <ActivityIndicator
+                size={"large"}
+                color={BASE_COLOR.blue}
+            />
+        );
+    };
+    handleLoadMore = () => {
+        if (!this.state.loadingMore) {
+            this.loadMoreComponents()
+        }
+    };
     reviewContent = () => {
         const { refreshing, arrayReviews } = this.state
         return (
@@ -131,6 +192,9 @@ class ReviewListScreen extends BaseScreen {
                         review={info.item} />
                 )}
                 ItemSeparatorComponent={this.FlatListItemSeparator}
+                onEndReachedThreshold={0.4}
+                onEndReached={() => this.handleLoadMore()}
+                ListFooterComponent={this.renderFooter.bind(this)}
 
             />
         )

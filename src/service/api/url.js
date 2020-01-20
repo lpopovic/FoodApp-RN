@@ -47,7 +47,7 @@ class RestUrl {
     }
 
     static getAllReviewsForPlace = (placeId, param) => {
-        return withKey(`reviews/${placeId}?${param}&limit=100`)
+        return withKey(`reviews/${placeId}?${param}&limit=20`)
     }
 
     static getReviewForOrder = (orderId) => {
@@ -69,6 +69,7 @@ class ParamsUrl {
     static scheduledTime = (value) => { return `scheduledTime=${value}` }
     static isCatheringOrder = (value) => { return `isCatheringOrder=${value}` }
     static sort = (value) => { return `sort=${value}` }
+    static offset = (value) => { return `offset=${value}` }
 
 }
 
