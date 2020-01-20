@@ -33,6 +33,7 @@ class HistoryOrderList extends Component {
                 renderItem={(info) => (
                     <HistoryOrder
                         item={info.item}
+                        isCatheringOrder = {this.props.isCatheringOrder}
                         onPressDetailOrder={() => this.props.PressDetailOrder(info.item)}
                         onPressOrderAgain={() => this.props.PressOrderAgain(info.item)}
                         onPressReview={() => this.props.PressReview(info.item)}

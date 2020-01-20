@@ -12,9 +12,14 @@ import {
 } from 'react-native';
 import { ScreenName, keyAdress } from '../../helpers'
 import Header from '../../components/common/UserHeader'
+import SegmentedControlTab from "react-native-segmented-control-tab";
 import BaseScreen from "../BaseScreen/BaseScreen"
 import { HistoryOrderList } from '../../components/HistoryOrder'
-import { NAV_COLOR, BASE_COLOR } from '../../styles';
+import {
+    NAV_COLOR,
+    BASE_COLOR,
+    segmentedControlStyles
+} from '../../styles';
 import { connect } from 'react-redux';
 import { updateUserProfile, fetchUserListOrders, fetchUserProfile } from '../../store/actions'
 import { UserNetwork, OrderNetwork } from '../../service/api'
@@ -28,8 +33,10 @@ class UserScreen extends BaseScreen {
     };
     constructor(props) {
         super(props)
+        this.typeOfSortOrder = ["Porudžbine", "Ketering"]
         this.state = {
             refreshing: false,
+            selectedIndex: 0,
         }
     }
 
@@ -41,7 +48,11 @@ class UserScreen extends BaseScreen {
     componentWillUnmount() {
         super.componentWillUnmount()
     }
-
+    handleOnTabPress = index => {
+        this.setNewStateHandler({
+            selectedIndex: index,
+        });
+    };
 
     companyRequestApiCheck = () => {
         UserNetwork.fetchUserGetCompanyReguests()
@@ -128,21 +139,55 @@ class UserScreen extends BaseScreen {
         )
     }
     recentOrdersContent = () => {
-        const type = "Recent orders"
-        const { userOrders } = this.props
-        return (
-            <View style={[styles.baseContainer, { flexDirection: 'column' }]}>
-                <View style={{ alignSelf: 'flex-start', marginBottom: 8 }}>
-                    <Text style={[styles.baseText, { color: BASE_COLOR.black }]}>{type}:</Text>
+        const type = "Recent"
+        const { selectedIndex } = this.state
+        const { userOrders, userCatherings, userInfo } = this.props
+        if (userInfo.catheringIsAvailable == true) {
+            return (
+                <View style={[styles.baseContainer, { flexDirection: 'column' }]}>
+                    <View style={{ alignSelf: 'flex-start', marginBottom: 8 }}>
+                        <Text style={[styles.baseText, { color: BASE_COLOR.black }]}>{type}:</Text>
+                    </View>
+                    <View style={styles.segmentedControlContainer}>
+                        <SegmentedControlTab
+                            values={this.typeOfSortOrder}
+                            selectedIndex={userInfo.catheringIsAvailable == true ? this.state.selectedIndex : 0}
+                            onTabPress={this.handleOnTabPress}
+                            borderRadius={8}
+                            tabsContainerStyle={segmentedControlStyles.container}
+                            tabStyle={segmentedControlStyles.commonStyle}
+                            activeTabStyle={{ ...segmentedControlStyles.commonStyle, ...segmentedControlStyles.activeStyle }}
+                            tabTextStyle={segmentedControlStyles.text}
+                            activeTabTextStyle={segmentedControlStyles.text}
+                        />
+                    </View>
+
+                    <HistoryOrderList
+                        arrayObject={selectedIndex == 0 ? userOrders : userCatherings}
+                        isCatheringOrder={selectedIndex == 0 ? false : true}
+                        PressDetailOrder={(order) => this.pressOrderDetailHandler(order)}
+                        PressOrderAgain={(order) => alert(order)}
+                        PressReview={(order) => this.pressReviewOrderHandler(order)}
+                    />
                 </View>
-                <HistoryOrderList
-                    arrayObject={userOrders}
-                    PressDetailOrder={(order) => this.pressOrderDetailHandler(order)}
-                    PressOrderAgain={(order) => alert(order)}
-                    PressReview={(order) => this.pressReviewOrderHandler(order)}
-                />
-            </View>
-        )
+            )
+        } else {
+            return (
+                <View style={[styles.baseContainer, { flexDirection: 'column' }]}>
+                    <View style={{ alignSelf: 'flex-start', marginBottom: 8 }}>
+                        <Text style={[styles.baseText, { color: BASE_COLOR.black }]}>{type}:</Text>
+                    </View>
+                    <HistoryOrderList
+                        arrayObject={userOrders}
+                        isCatheringOrder={false}
+                        PressDetailOrder={(order) => this.pressOrderDetailHandler(order)}
+                        PressOrderAgain={(order) => alert(order)}
+                        PressReview={(order) => this.pressReviewOrderHandler(order)}
+                    />
+                </View>
+            )
+        }
+
     }
     mainContent = () => {
         const { refreshing } = this.state
@@ -305,6 +350,16 @@ const styles = StyleSheet.create({
         backgroundColor: BASE_COLOR.blue,
         overflow: 'hidden'
     },
+    segmentedControlContainer: {
+        paddingLeft: 16,
+        paddingRight: 16,
+        paddingTop: 8,
+        paddingBottom: 8,
+        marginBottom: 8,
+        //  backgroundColor: NAV_COLOR.headerBackground,
+        // borderBottomColor: NAV_COLOR.borderBottomColor,
+        // borderBottomWidth: 0.7
+    },
 
 });
 const mapStateToProps = state => {
@@ -313,6 +368,7 @@ const mapStateToProps = state => {
         loading: state.ui.isLoading,
         isLogin: state.user.isLogin,
         userOrders: state.user.userOrders,
+        userCatherings: state.user.userCatherings,
         city: state.location.city,
     };
 };

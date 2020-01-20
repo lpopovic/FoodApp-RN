@@ -39,6 +39,9 @@ class RestUrl {
     }
 
     static order = withKey(`orders`)
+    static getOrderCatherings = () => {
+        return withKey(`orders?${ParamsUrl.isCatheringOrder(true)}`)
+    }
 
     static getAllcategories = withKey(`categories`)
 

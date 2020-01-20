@@ -2,7 +2,8 @@ import {
     ADD_ORDERED_MENU_ITEM,
     REMOVE_ORDERED_MENU_ITEM,
     EMPTY_CURRENT_ORDER,
-    UPDATE_LIST_USER_ORDERS
+    UPDATE_LIST_USER_ORDERS,
+    UPDATE_LIST_USER_CATHERING_ORDERS,
 } from "./actionTypes";
 
 export const addOrderMenuItem = (orderMenuItem) => {
@@ -27,6 +28,12 @@ export const emptyOrder = () => {
 export const updateListUserOrders = (orders) => {
     return {
         type: UPDATE_LIST_USER_ORDERS,
+        payload: orders
+    };
+};
+export const updateListUserCatheringsOrders = (orders) => {
+    return {
+        type: UPDATE_LIST_USER_CATHERING_ORDERS,
         payload: orders
     };
 };
