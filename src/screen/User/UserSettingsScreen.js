@@ -268,7 +268,7 @@ class UserSettingsScreen extends BaseScreen {
                     {this.editContent()}
                     {this.infoContent("Company", company ? company.name : 'Unavailable')}
                     {this.infoContent("Cathering", catheringIsAvailable != true ? 'Unavailable' : 'Available')}
-                    {this.infoContent("Cathering Options", `Balance: 3000.00${`\n`}Reserve: 500.00`)}
+                    {catheringIsAvailable != true ? null : this.infoContent("Cathering Options", `Package: ${catheringOptions.package}${`\n`}Balance: ${catheringOptions.balance != null? Number(catheringOptions.balance).toFixed(2):catheringOptions.balance}${`\n`}Reserved: ${Number(catheringOptions.reserved).toFixed(2)}`)}
 
                 </View>
             </KeyboardAwareScrollView>
