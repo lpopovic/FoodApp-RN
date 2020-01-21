@@ -23,6 +23,7 @@ class PlaceListScreen extends BaseScreen {
             refreshing: false,
             loading: true,
             arrayPlaces: [],
+            loadingMore: false
         }
     }
 
@@ -78,12 +79,31 @@ class PlaceListScreen extends BaseScreen {
             }
         )
     }
+    apiCallLoadMoreHandler = () => {
+        // define api  func for more loading
+        // const {loadingMore, arrayPlaces} = this.state
+        // this.setNewStateHandler({
+        //     loadingMore: false,
+        //     arrayPlaces:  arrayPlaces.concat(res)
+        // })
+
+    }
     _onRefresh = () => {
-        this.setNewStateHandler({ refreshing: true });
+        this.setNewStateHandler({ refreshing: true, loadingMore: false });
         this.apiCallHandler()
     }
+    loadMoreComponents = () => {
+        // const { loadingMore, arrayPlaces } = this.state
+        // if (arrayPlaces.length > 0) {
+        //     this.setNewStateHandler({
+        //         loadingMore: true
+        //     })
+
+        //     this.apiCallLoadMoreHandler()
+        // }
+    }
     mainContent = () => {
-        const { refreshing, arrayPlaces } = this.state
+        const { refreshing, arrayPlaces, loadingMore } = this.state
         return (
             <PlaceList
                 refreshControl={
@@ -95,7 +115,16 @@ class PlaceListScreen extends BaseScreen {
                     />
                 }
                 arrayObject={arrayPlaces}
-                onPressItem={(item) => this.pushNewScreen({ routeName: ScreenName.PlaceDetailScreen(), key: `${Math.random() * 10000}${item._id}`, params: { _id: item._id } })} />
+                onPressItem={(item) => this.pushNewScreen({
+                    routeName: ScreenName.PlaceDetailScreen(),
+                    key: `${Math.random() * 10000}${item._id}`
+                    , params: {
+                        _id: item._id
+                    }
+                })}
+                 loadMoreComponents={() => this.loadMoreComponents()}
+                // loadingMore={loadingMore}
+            />
         )
     }
     render() {
@@ -116,7 +145,7 @@ class PlaceListScreen extends BaseScreen {
     }
 
     _filterData = () => {
-        this.setNewStateHandler({ loading: true })
+        this.setNewStateHandler({ loading: true, loadingMore: false, refreshing: false })
         setTimeout(() => {
             this.apiCallHandler()
         }, 100);

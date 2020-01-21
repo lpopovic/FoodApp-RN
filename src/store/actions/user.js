@@ -8,6 +8,7 @@ import {
     uiStartLoading,
     uiStopLoading,
     updateListUserOrders,
+    updateListUserCatheringsOrders,
 } from './index'
 
 import {
@@ -58,6 +59,16 @@ export const fetchUserListOrders = () => {
 
             }
         )
+
+        OrderNetwork.fetchGetAllCatheringOrders().then(
+            result => {
+                result = result.reverse()
+                dispatch(updateListUserCatheringsOrders(result))
+            },
+            error => {
+                alert(error)
+            }
+        )
     }
 }
 export const fetchUserProfile = () => {
@@ -70,7 +81,7 @@ export const fetchUserProfile = () => {
                     result => {
                         dispatch(uiStopLoading())
                         dispatch(updateUserProfile(result))
-                        
+
                     },
                     err => {
                         dispatch(uiStopLoading())

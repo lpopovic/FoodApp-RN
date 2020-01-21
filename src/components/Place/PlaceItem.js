@@ -40,7 +40,7 @@ class PlaceItem extends Component {
     render() {
         const { item } = this.props
         const title = item.name
-        const rating = item.avgRating
+        const rating = Number(item.avgRating).toFixed(1)
         const delivery = item.delivery
         const timeDelivery = item.estimatedDeliveryTime
         const priceTag = item.returnAvgPriceTag()
@@ -162,7 +162,7 @@ class PlaceSmallItem extends Component {
     render() {
         const { item } = this.props
         const title = item.name
-        const rating = item.avgRating
+        const rating = Number(item.avgRating).toFixed(1)
         const delivery = item.delivery // == true ? '45 min.' : 'No delivery'
         const timeDelivery = item.estimatedDeliveryTime
         const priceTag = item.returnAvgPriceTag()

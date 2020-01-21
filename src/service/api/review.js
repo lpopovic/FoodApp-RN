@@ -2,7 +2,7 @@ import axios from '../axios'
 import { RestUrl } from './url'
 import { Review } from '../../model';
 class ReviewNetwork {
-    static  KEY_PARAM_SORT = {
+    static KEY_PARAM_SORT = {
         NEW: '',
         PRICE_TAG: 'priceTag',
         RATING: 'rating'
@@ -13,11 +13,8 @@ class ReviewNetwork {
             try {
                 const { data } = await axios.get(url)
                 const reviews = Review.createArrayReview(data)
-                if (reviews.length > 0) {
-                    resolve(reviews)
-                } else {
-                    reject("Trenutno nema komentara.")
-                }
+
+                resolve(reviews)
 
 
             } catch (error) {

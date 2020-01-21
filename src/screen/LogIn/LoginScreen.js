@@ -270,10 +270,11 @@ const styles = StyleSheet.create({
 
     },
     headerContainer: {
-        marginTop: 60,
+        marginTop: 16,
         justifyContent: 'center',
         alignItems: 'center',
-    }, logoImage: {
+    }, 
+    logoImage: {
         height: 120,
         width: 120,
     },

@@ -121,6 +121,24 @@ class OrderNetwork {
                 }
             }
         });
+
+    static fetchGetAllCatheringOrders = () =>
+        new Promise(async (resolve, reject) => {
+            const url = RestUrl.getOrderCatherings()
+            try {
+                const { data } = await axios.get(url)
+                resolve(Order.createArrayOrder(data))
+
+            } catch (error) {
+                try {
+                    const { message } = error.response.data.error
+                    reject(message)
+                } catch  {
+                    reject(error.message)
+
+                }
+            }
+        });
 }
 
 export { OrderNetwork }

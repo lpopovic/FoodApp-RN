@@ -5,14 +5,28 @@ import {
     Text,
     TouchableOpacity,
     StyleSheet,
-    Keyboard
+    Keyboard,
+    ActivityIndicator,
 } from 'react-native';
-import { PlaceItem ,PlaceSmallItem} from './PlaceItem'
+import { PlaceItem, PlaceSmallItem } from './PlaceItem'
 import { BASE_COLOR } from '../../styles'
 
 
 class PlaceList extends Component {
-
+    renderFooter = () => {
+        if (!this.props.loadingMore) return null;
+        return (
+            <ActivityIndicator
+                size={"large"}
+                color={BASE_COLOR.blue}
+            />
+        );
+    };
+    handleLoadMore = () => {
+        if (!this.props.loadingMore) {
+            this.props.loadMoreComponents()
+        }
+    };
     render() {
         return (
             <FlatList
@@ -27,6 +41,9 @@ class PlaceList extends Component {
                         onPress={() => this.props.onPressItem(info.item)}
                     />
                 )}
+                onEndReachedThreshold={0.4}
+                onEndReached={this.handleLoadMore.bind(this)}
+                ListFooterComponent={this.renderFooter.bind(this)}
 
             />
         )

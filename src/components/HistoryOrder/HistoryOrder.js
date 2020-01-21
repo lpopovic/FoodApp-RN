@@ -41,10 +41,19 @@ class HistoryOrder extends Component {
         return (
             <View style={styles.mainContainer}>
                 <View style={{ margin: 8, flex: 10 }}>
-                    <View style={styles.date}>
-                        <Text style={[styles.baseText, { color: BASE_COLOR.black, textAlign: 'left', fontWeight: 'normal' }]}>
-                            {dateText}
-                        </Text>
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between'}}>
+                        <View style={styles.date}>
+                            <Text style={[styles.baseText, { color: BASE_COLOR.black, textAlign: 'left', fontWeight: 'normal' }]}>
+                                {dateText}
+                            </Text>
+                        </View>
+                        <View style={{width:'50%'}}>
+                            <Text
+                                numberOfLines={1}
+                                ellipsizeMode={'tail'}
+                                style={[styles.baseText, { color: BASE_COLOR.orange, textAlign: 'right', fontSize: 14 }]}>
+                                {statusOrder}</Text>
+                        </View>
                     </View>
                     <View style={styles.titleContainer}>
                         <Text
@@ -62,13 +71,11 @@ class HistoryOrder extends Component {
                         <Text style={[styles.baseText, { color: BASE_COLOR.blue, textAlign: 'left', fontSize: 16 }]}>
                             Iznos: {priceText}
                         </Text>
-                        <Text style={[styles.baseText, { color: BASE_COLOR.blue, textAlign: 'left', fontSize: 16 }]}>
-                            Status narudzbine: {statusOrder}
-                        </Text>
+
                     </View>
                     <View style={styles.footerContainer}>
                         {this.btnContent("Detalji", this.onPressDetailOrder)}
-                        {this.btnContent("Poruči", this.onPressOrderAgain)}
+                        {this.props.isCatheringOrder == true ? null : this.btnContent("Poruči", this.onPressOrderAgain)}
                         {this.btnContent("Review", this.onPressReview)}
                     </View>
                 </View>
