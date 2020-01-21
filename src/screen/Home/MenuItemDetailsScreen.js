@@ -444,15 +444,11 @@ class MenuItemDetailsScreen extends BaseScreen {
         let item = menuItem.hasSubtypes ? menuItemType : menuItem
 
         const cathering = this.props.navigation.getParam('cathering', null)
+        const catheringOptions = this.props.userInfo.catheringOptions
 
         if (cathering != null && cathering.isFromCathering) {
-
-            // console.log(orderForPlace)
-            console.log(item)
-            // console.log(menuItemType)
-            // this.pushNewScreen(ScreenName.CateringScreen())
-
-            OrderNetwork.fetchCatheringOrder(menuItem, selectedOptions, "delivery", "cash", '', cathering.selectedDate)
+            if ( catheringOptions.balance + catheringOptions.reserved >= this.subTotalPrice(item, selectedOptions, 1)) {
+                OrderNetwork.fetchCatheringOrder(menuItem, selectedOptions, "delivery", "cash", '', cathering.selectedDate)
                 .then(
                     res => {
                         console.log(res)
@@ -464,8 +460,11 @@ class MenuItemDetailsScreen extends BaseScreen {
                         // this.setNewStateHandler({ loading: false })
                         this.showAlertMessage(String(err))
                     })
+            } else {
+                alert("Nemate dovoljno sredstava na Vašem nalogu!")
+            }
 
-
+            
         } else {
             if (orderForPlace == null) {
                 this.putInBagHandler()
@@ -542,7 +541,8 @@ const styles = StyleSheet.create({
 const mapStateToProps = state => {
     return {
         order: state.order.order,
-        orderForPlace: state.order.orderForPlace
+        orderForPlace: state.order.orderForPlace,
+        userInfo: state.user.userInfo
     };
 };
 

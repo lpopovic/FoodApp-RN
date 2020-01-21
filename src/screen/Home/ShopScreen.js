@@ -11,6 +11,8 @@ import {
     UIManager,
     LayoutAnimation
 } from 'react-native';
+import DatePicker from 'react-native-date-picker';
+import Moment from 'moment';
 import BaseScreen from '../BaseScreen/BaseScreen';
 import SafeAreaView from 'react-native-safe-area-view';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
@@ -56,7 +58,10 @@ class ShoopScreen extends BaseScreen {
                     valid: false
                 }
             },
-            showAddressInfo: false
+            showAddressInfo: false,
+            // date: Moment().toDate(),
+            scheduledTime: Moment().toDate(),
+            scheduledViewOpen: false,
         }
     }
 
@@ -168,7 +173,6 @@ class ShoopScreen extends BaseScreen {
         )
     }
     mainContent = () => {
-
         const { userInfo } = this.state
         return (
             <View style={styles.mainContainer}>
@@ -330,6 +334,20 @@ class ShoopScreen extends BaseScreen {
                                 <View style={styles.textInputNoteContainer}>
                                     {this.textInputNoteContent()}
                                 </View>
+
+                                <View style={{ alignSelf: 'center', height: this.state.scheduledViewOpen ? 230 : 20, overflow: 'hidden', marginTop: 10, marginBottom: 10 }}>
+                                    <Text style={{ fontWeight: '500', fontSize: 17 }} onPress={() => this.schedulingOnPress()} >Zakaži porudzbinu za odredjeno vreme</Text>
+                                    <DatePicker
+                                        locale="sr-Latn-RS"
+                                        date={this.state.scheduledTime}
+                                        minuteInterval={5}
+                                        minimumDate={Moment().add(this.estimateDeliveryTime(this.props.orderForPlace.estimatedDeliveryTime), 'm').toDate()}
+                                        // minimumDate = {this.roundDate(Moment().add(30, 'm').toDate(), null, 5)}
+                                        maximumDate={Moment().add(15, 'd').toDate()}
+                                        onDateChange={scheduledTime => this.setState({ scheduledTime })}
+                                    />
+                                </View>
+
                             </>
                             :
                             <View />
@@ -357,6 +375,31 @@ class ShoopScreen extends BaseScreen {
             </View >
         )
     }
+
+    // roundDate = (date, type, offset) => {   
+    //     let val = date[type]()  
+    //     let roundedVal = Math.ceil((val+1)/offset)*offset  
+    //     return date[type](roundedVal)  
+    //  }
+    estimateDeliveryTime = (estimatedDeliveryTime) => {
+        console.log(estimatedDeliveryTime)
+        switch (estimatedDeliveryTime) {
+            case "any":
+                return 60
+            case 45:
+                return 45
+            case 60:
+                return 60
+            default:
+                break;
+        }
+    }
+    schedulingOnPress() {
+        this.setNewStateHandler({
+            scheduledViewOpen: !this.state.scheduledViewOpen
+        })
+        console.log(this.state.scheduledViewOpen)
+    }
     onPressLogInHandler = () => {
         this.pushNewScreen({
             routeName: ScreenName.LoginScreen(),
@@ -381,10 +424,11 @@ class ShoopScreen extends BaseScreen {
         }
     }
     onPressOrderHandler(order) {
-        const { cacheSelected, wayOfDelivery, specialInstructions, userInfo } = this.state
+        const { cacheSelected, wayOfDelivery, specialInstructions, userInfo, scheduledTime, scheduledViewOpen } = this.state
         const { orderForPlace } = this.props
         const placeId = orderForPlace._id
         const orderType = wayOfDelivery
+        const scheduledTimeForOrder = scheduledViewOpen ? scheduledTime : null
         const methodOfPayment = cacheSelected ? 'cash' : 'online'
         const { name, address, numberMobile } = userInfo
 
@@ -393,7 +437,7 @@ class ShoopScreen extends BaseScreen {
             this.setNewStateHandler({
                 loading: true
             })
-            OrderNetwork.fetchOrder(order, placeId, orderType, methodOfPayment, specialInstructions, address, numberMobile.value)
+            OrderNetwork.fetchOrder(order, placeId, orderType, methodOfPayment, specialInstructions, address, numberMobile.value, scheduledTimeForOrder)
                 .then(
                     res => {
                         this.showAlertMessage("USPESNO NARUCENO")

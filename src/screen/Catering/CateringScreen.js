@@ -5,18 +5,20 @@ import {
     StyleSheet,
     SafeAreaView,
 } from 'react-native';
-import { ScreenName } from '../../helpers'
+import { ScreenName, STORAGE_KEY, getStorageData } from '../../helpers'
 import BaseScreen from "../BaseScreen/BaseScreen"
 import PlaceCard from '../../components/Catering/PlaceCard';
 import PlaceList from '../../components/Catering/PlaceList';
 import DishList from '../../components/Catering/DishList';
 import DishCard from '../../components/Catering/DishCard';
 import CalendarStrip from 'react-native-calendar-strip';
-import { CatheringNetwork } from '../../service/api'
+import { CatheringNetwork, UserNetwork } from '../../service/api'
 import Moment from 'moment';
 import { connect } from 'react-redux';
+import { updateUserProfile } from '../../store/actions';
 import { BASE_COLOR, NAV_COLOR } from '../../styles';
 import { ImageAssets } from '../../model/image';
+import { User } from '../../model';
 class CateringScreen extends BaseScreen {
 
     static navigationOptions = {
@@ -29,19 +31,12 @@ class CateringScreen extends BaseScreen {
             loading: true,
             isCatheringAvailable: false,
             selectedDate: Moment().format('YYYY-MM-DD'),
-            markedDates: [
-                // {
-                //     name: 'SRX',
-                //     date: '2019-10-26',
-                //     dots: [
-                //         { key: 22, color: 'red', selectedDotColor: 'yellow' },
-                //     ],
-                // },
-            ],
+            markedDates: [],
             placesCathering: [],
             ordersForWeek: [],
             ordersForDay: [],
-            places: []
+            places: [],
+            balance: null
         }
     }
 
@@ -64,7 +59,9 @@ class CateringScreen extends BaseScreen {
     }
 
     apiCallGetOrdersBetweenDates = async (isDay, fromDate, toDate) => {
-
+        this.setNewStateHandler({
+            loading: true,
+        })
         CatheringNetwork.fetchCatheringOrderFromDateToDate(fromDate, toDate).then(
             res => {
 
@@ -97,6 +94,7 @@ class CateringScreen extends BaseScreen {
 
     apiDidMountFunction = async () => {
         this.apiCallGetPlacesCathering()
+        this.apiCallGetUserInfo()
         let dayStartTime = Moment(this.state.selectedDate).startOf('day')._d
         let dayEndTime = Moment(this.state.selectedDate).endOf('day')._d
         // console.log(fromDate)
@@ -107,6 +105,9 @@ class CateringScreen extends BaseScreen {
         // console.log(weekEndDay)
         await this.apiCallGetOrdersBetweenDates(false, weekStartDay, weekEndDay)
         await this.apiCallGetOrdersBetweenDates(true, dayStartTime, dayEndTime)
+
+
+
     }
 
     apiCallGetPlacesCathering() {
@@ -125,6 +126,56 @@ class CateringScreen extends BaseScreen {
                 })
             }
         )
+    }
+
+    apiCallGetUserInfo() {
+        UserNetwork.fetchUserInfo()
+            .then(
+                res => {
+                    console.log("ZAVRSIO JE XXX")
+                    this.props.updateUserProfileHandler(res)
+                    this.balanceHandler()
+                },
+                err => {
+                    // this.showAlertMessage(err)
+                }
+            )
+    }
+
+    balanceHandler = async () => {
+        // const user = await getStorageData(STORAGE_KEY.USER_APP_DATA)
+        // if (user !== null) {
+        //     let me = new User(user)
+        //     let catheringOptions = me.catheringOptions
+        //     if (catheringOptions !== null) {
+        //         if (catheringOptions.package === "unlimited") {
+        //             this.setNewStateHandler({
+        //                 // balance: "neograničeno"
+        //                 balance: catheringOptions.reserved
+        //             })
+        //         } else {
+        //             this.setNewStateHandler({
+        //                 // balance: catheringOptions.balance
+        //                 balance: catheringOptions.reserved
+        //             })
+        //         }
+        //     }
+        // }
+        const user = this.props.userInfo
+        if (this.props.isLogin === true) {
+            let catheringOptions = user.catheringOptions
+            if (catheringOptions !== null) {
+                if (catheringOptions.package === "unlimited") {
+                    this.setNewStateHandler({
+                        balance: "neograničeno"
+                    })
+                } else {
+                    this.setNewStateHandler({
+                        balance: catheringOptions.balance + catheringOptions.reserved
+                    })
+                }
+            }
+        }
     }
 
 
@@ -188,32 +239,51 @@ class CateringScreen extends BaseScreen {
             }
         };
         return (
-            <CalendarStrip
-                ref={component => this._calendar = component}
-                onDateSelected={(value) => this.onDateSelected(value)}
-                responsiveSizingOffset={-6}
-                markedDates={this.state.markedDates}
-                // markedDatesStyle={{backgroundColor: 'red', color: 'red'}}
-                onWeekChanged={(date) => {
-                    const { _calendar } = this
-                    const currentDate = _calendar.getSelectedDate().format("DD MMM YYYY hh:mm a")
-                    this.onWeekChanged(date)
-                    // alert(Moment(date).format("DD MMM YYYY"))
-                    // alert(Moment(date).week())
-                    // alert(Moment(date).startOf('isoWeek').format("DD MMM YYYY hh:mm a"))
-                    // alert(Moment(date).endOf('isoWeek').format("DD MMM YYYY hh:mm a"))
-                }}
-                style={{ height: 120, paddingTop: 20, paddingBottom: 10, backgroundColor: NAV_COLOR.headerBackground }}
-                locale={locale}
-                daySelectionAnimation={{ type: 'background', duration: 200, highlightColor: BASE_COLOR.blue }}
-                minDate={Moment().subtract(21, 'd')}
-                maxDate={Moment().add(7, 'd')}
-                updateWeek={true}
-                highlightDateNumberStyle={{ color: 'white' }}
-                highlightDateNameStyle={{ color: 'white' }}
-                disabledDateNameStyle={{ color: 'grey' }}
-                disabledDateNumberStyle={{ color: 'grey' }}
-            />
+            <View>
+                <View style={{ height: 30, backgroundColor: NAV_COLOR.headerBackground, marginLeft: 10, marginRight: 10, flexDirection: 'row', alignItems: 'center' }}>
+                    <Text style={{ fontSize: 16, flex: 5, alignItems: 'flex-start', textAlignVertical: 'center', fontWeight: '500' }}>Balans: {this.state.balance}</Text>
+                    <View style={{ flex: 5, alignItems: 'flex-end' }}>
+                        <View style={{ flex: 5, alignItems: 'flex-start' }}>
+                            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                <View style={{ backgroundColor: 'limegreen', borderRadius: 10, width: 8, height: 8 }}></View>
+                                <Text style={{ marginLeft: 10, fontSize: 11 }}>Sledeći obroci</Text>
+                            </View>
+                            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                <View style={{ backgroundColor: 'red', borderRadius: 10, width: 8, height: 8 }}></View>
+                                <Text style={{ marginLeft: 10, fontSize: 11 }}>Prošli obroci</Text>
+                            </View>
+                        </View>
+                    </View>
+                </View>
+                <View style={{ backgroundColor: BASE_COLOR.gray, height: 0.5 }}></View>
+                <CalendarStrip
+                    ref={component => this._calendar = component}
+                    onDateSelected={(value) => this.onDateSelected(value)}
+                    responsiveSizingOffset={-6}
+                    markedDates={this.state.markedDates}
+                    // markedDatesStyle={{backgroundColor: 'red', color: 'red'}}
+                    onWeekChanged={(date) => {
+                        const { _calendar } = this
+                        const currentDate = _calendar.getSelectedDate().format("DD MMM YYYY hh:mm a")
+                        this.onWeekChanged(date)
+                        // alert(Moment(date).format("DD MMM YYYY"))
+                        // alert(Moment(date).week())
+                        // alert(Moment(date).startOf('isoWeek').format("DD MMM YYYY hh:mm a"))
+                        // alert(Moment(date).endOf('isoWeek').format("DD MMM YYYY hh:mm a"))
+                    }}
+                    style={{ height: 120, paddingTop: 10, paddingBottom: 10, backgroundColor: NAV_COLOR.headerBackground }}
+                    locale={locale}
+                    daySelectionAnimation={{ type: 'background', duration: 200, highlightColor: BASE_COLOR.blue }}
+                    minDate={Moment().subtract(21, 'd')}
+                    maxDate={Moment().add(7, 'd')}
+                    updateWeek={true}
+                    highlightDateNumberStyle={{ color: 'white' }}
+                    highlightDateNameStyle={{ color: 'white' }}
+                    disabledDateNameStyle={{ color: 'grey' }}
+                    disabledDateNumberStyle={{ color: 'grey' }}
+                    calendarHeaderStyle={{ fontWeight: 'bold', fontSize: 20 }}
+                />
+            </View>
         )
     }
 
@@ -250,7 +320,7 @@ class CateringScreen extends BaseScreen {
             console.log("DISH DATA")
             console.log(DishData)
             return (
-                <DishList data={DishData} selectedDate={this.state.selectedDate} selectPlace={(placeId) => this.placeSelectHandler(placeId)}/>
+                <DishList data={DishData} selectedDate={this.state.selectedDate} selectPlace={(placeId) => this.placeSelectHandler(placeId)} />
             )
         } else if (Moment(this.state.selectedDate).isAfter(Moment().subtract(1, 'day'))) {
             console.log(placesCathering)
@@ -315,5 +385,10 @@ const mapStateToProps = state => {
         isLogin: state.user.isLogin,
     };
 };
+const mapDispatchToProps = dispatch => {
+    return {
+        updateUserProfileHandler: (user) => dispatch(updateUserProfile(user)),
+    };
+};
 
-export default connect(mapStateToProps, null)(CateringScreen);
+export default connect(mapStateToProps, mapDispatchToProps)(CateringScreen);
