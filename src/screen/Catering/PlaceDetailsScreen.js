@@ -13,7 +13,7 @@ import {
 } from '../../assets';
 import { BASE_COLOR, NAV_COLOR } from '../../styles';
 import { PlaceNetwork } from '../../service/api'
-import { Place } from '../../model';
+import { Place, Category } from '../../model';
 import { connect } from 'react-redux';
 import { avgPriceTag, openDays } from '../../helpers/numberHelper';
 import UrlOpen from '../../components/common/UrlOpen'
@@ -327,8 +327,15 @@ class PlaceDetailsScreen extends BaseScreen {
     }
     setupSectionList = () => {
         const { menuItems, place } = this.state
-        const { categories } = place
+        let { categories } = place
+      
         let sectionMeniItems = []
+
+        if (this.props.isLogin == true && menuItems.length > 0) {
+            const favoriteCategory = new Category({ _id: 'favorite', name: "❤️ Omiljena jela" })
+            sectionMeniItems.push({ category:favoriteCategory, menuItems: [menuItems[0]], hide: true })
+        }
+
         categories.forEach(category => {
             sectionMeniItems.push({ category, menuItems: [], hide: true })
         });
@@ -349,6 +356,7 @@ class PlaceDetailsScreen extends BaseScreen {
                 }
             });
         }
+
         this.setNewStateHandler({ sectionMeniItems })
     }
     dishlistContent = (menuItems, hide) => {
@@ -442,7 +450,8 @@ const styles = StyleSheet.create({
 });
 const mapStateToProps = state => {
     return {
-        order: state.order.order
+        order: state.order.order,
+        isLogin: state.user.isLogin
     };
 };
 
