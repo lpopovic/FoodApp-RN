@@ -12,6 +12,7 @@ class Order {
         this.place = new Place(object.place || {})
         this.orderType = object.orderType || "delivery"
         this.status = object.status
+        this.scheduledTime = object.scheduledTime
     }
 
     generateTitleOfOrder() {
