@@ -58,11 +58,23 @@ class PlaceSectionList extends Component {
     constructor(props) {
         super(props)
     }
+    render_FlatList_footer = () => {
+
+        var footer_View = (
+
+            <View style={{ width: 8 }}>
+            </View>
+
+        );
+
+        return footer_View;
+
+    };
     render() {
         const titleSection = this.props.titleSection ? this.props.titleSection : "NEPOZNATO"
         const titleSeeMore = "vidi sve"
         return (
-            <View style={styles.mainContainer}>
+            <View style={[styles.mainContainer, this.props.style]}>
                 <View style={styles.sectionContainer}>
                     <Text style={styles.text}>{titleSection}</Text>
                     <TouchableOpacity onPress={() => this.props.onPressSeeMore()}>
@@ -85,7 +97,7 @@ class PlaceSectionList extends Component {
                             onPress={() => this.props.onPressItem(info.item)}
                         />
                     )}
-
+                    ListFooterComponent={this.render_FlatList_footer}
                 />
             </View>
         )

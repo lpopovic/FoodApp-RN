@@ -254,7 +254,7 @@ class UserSettingsScreen extends BaseScreen {
                 enableOnAndroid={true} >
                 <View style={{
                     flex: 1,
-                    padding: 16,
+                    padding: 8,
                     paddingTop: 8,
                 }}>
 

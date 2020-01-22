@@ -157,11 +157,13 @@ class UserScreen extends BaseScreen {
             return (
                 <View style={{
                     marginTop: 8,
-                    borderBottomColor: BASE_COLOR.orange,
-                    borderBottomWidth: 1,
+                    marginRight: -8,
+                    // borderBottomColor: BASE_COLOR.gray,
+                    // borderBottomWidth: 1,
                     paddingBottom: 16,
                 }}>
                     <PlaceSectionList
+                        style={{ marginLeft: -8 }}
                         titleSection={"❤️ OMILJENI RESTORANI"}
                         arrayObject={favoritePlaces}
                         onPressItem={(item) => this.pushNewScreen({ routeName: ScreenName.PlaceDetailScreen(), key: `${Math.random() * 10000}${item._id}`, params: { _id: item._id } })}
@@ -180,11 +182,13 @@ class UserScreen extends BaseScreen {
             return (
                 <View style={{
                     marginTop: 8,
-                    borderBottomColor: BASE_COLOR.orange,
-                    borderBottomWidth: 1,
+                    // borderBottomColor: BASE_COLOR.gray,
+                    // borderBottomWidth: 1,
                     paddingBottom: 16,
+                    marginRight: -8,
                 }}>
                     <MenuItemList
+                        style={{ marginLeft: -8, }}
                         titleSection={"❤️ OMILJENA JELA"}
                         arrayObject={favoriteMenuItems}
                         onPressItem={(item) => this.pushNewScreen({ routeName: ScreenName.MenuItemDetailsScreen(), key: `${Math.random() * 10000}${item._id}`, params: { _id: item._id } })}
@@ -383,8 +387,8 @@ const styles = StyleSheet.create({
     },
     scrollViewContainer: {
         flex: 1,
-        padding: 16,
-        paddingTop: 8,
+        padding: 8,
+        // paddingTop: 8,
     },
     baseContainer: {
         flex: 10,
