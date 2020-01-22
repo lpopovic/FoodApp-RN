@@ -132,7 +132,6 @@ class CateringScreen extends BaseScreen {
         UserNetwork.fetchUserInfo()
             .then(
                 res => {
-                    console.log("ZAVRSIO JE XXX")
                     this.props.updateUserProfileHandler(res)
                     this.balanceHandler()
                 },
