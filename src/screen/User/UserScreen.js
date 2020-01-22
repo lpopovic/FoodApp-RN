@@ -15,6 +15,8 @@ import Header from '../../components/common/UserHeader'
 import SegmentedControlTab from "react-native-segmented-control-tab";
 import BaseScreen from "../BaseScreen/BaseScreen"
 import { HistoryOrderList } from '../../components/HistoryOrder'
+import { PlaceSectionList } from '../../components/Place/PlaceList'
+import MenuItemList from '../../components/MenuItem/MenuItemList'
 import {
     NAV_COLOR,
     BASE_COLOR,
@@ -24,8 +26,9 @@ import { connect } from 'react-redux';
 import { updateUserProfile, fetchUserListOrders, fetchUserProfile } from '../../store/actions'
 import { UserNetwork, OrderNetwork } from '../../service/api'
 import { TestAssets, } from '../../assets'
-
-
+import { Place, MenuItem } from '../../model';
+import testPlaces from '../../static/places.json'
+import testMenuItems from '../../static/menuItems.json'
 class UserScreen extends BaseScreen {
     static navigationOptions = {
         header: null,
@@ -37,12 +40,20 @@ class UserScreen extends BaseScreen {
         this.state = {
             refreshing: false,
             selectedIndex: 0,
+            favoritePlaces: [],
+            favoriteMenuItems: [],
         }
     }
 
     componentDidMount() {
         super.componentDidMount()
         this.setStatusBarStyle(NAV_COLOR.headerBackground, true)
+        const favoritePlaces = Place.createArrayPlaces(testPlaces)
+        const favoriteMenuItems = MenuItem.createArrayMenuItems(testMenuItems)
+        this.setNewStateHandler({
+            favoritePlaces,
+            favoriteMenuItems
+        })
 
     }
     componentWillUnmount() {
@@ -138,6 +149,52 @@ class UserScreen extends BaseScreen {
             </View>
         )
     }
+    placeListFavoriteContent = () => {
+
+        const { favoritePlaces } = this.state
+
+        if (favoritePlaces.length > 0) {
+            return (
+                <View style={{
+                    marginTop: 8,
+                    borderBottomColor: BASE_COLOR.orange,
+                    borderBottomWidth: 1,
+                    paddingBottom: 16,
+                }}>
+                    <PlaceSectionList
+                        titleSection={"❤️ OMILJENI RESTORANI"}
+                        arrayObject={favoritePlaces}
+                        onPressItem={(item) => console.log(item._id)}
+                        onPressSeeMore={() => console.log("see more")}
+                    />
+                </View>
+            )
+        }
+
+    }
+    menuItemsListFavoriteContent = () => {
+
+        const { favoriteMenuItems } = this.state
+
+        if (favoriteMenuItems.length > 0) {
+            return (
+                <View style={{
+                    marginTop: 8,
+                    borderBottomColor: BASE_COLOR.orange,
+                    borderBottomWidth: 1,
+                    paddingBottom: 16,
+                }}>
+                    <MenuItemList
+                        titleSection={"❤️ OMILJENA JELA"}
+                        arrayObject={favoriteMenuItems}
+                        onPressItem={(item) => console.log(item._id)}
+                        onPressSeeMore={() => console.log("see more")}
+                    />
+                </View>
+            )
+        }
+
+    }
     recentOrdersContent = () => {
         const type = "Recent"
         const { selectedIndex } = this.state
@@ -228,9 +285,14 @@ class UserScreen extends BaseScreen {
                     {this.infoContent("Email", email)}
                     {this.infoContent("Phone number", phoneNumber.trim() != '' ? phoneNumber : "Nedostupna")}
                     {this.infoContent("Adress", lastUseAddress)}
+
+                    {this.placeListFavoriteContent()}
+
+                    {this.menuItemsListFavoriteContent()}
+
                     {this.recentOrdersContent()}
                 </View>
-            </ScrollView>
+            </ScrollView >
         )
     }
     onPressLogInHandler = () => {

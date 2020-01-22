@@ -1,0 +1,425 @@
+[
+    {
+        "_id": "5da86ac391408d5e60025780",
+        "avgRating": 3.9,
+        "administrator": "5d97121b08d44419247a871b",
+        "categories": [
+            {
+                "_id": "5da8683e91408d5e6002577d",
+                "image": "5da8688091408d5e6002577e",
+                "isCuisine": false,
+                "name": "Hrono",
+                "createdAt": "2019-10-17T13:10:22.557Z",
+                "updatedAt": "2019-10-17T13:11:46.905Z",
+                "__v": 0
+            },
+            {
+                "_id": "5da9a4f24157831bf8c616e9",
+                "image": "5da9a4b34157831bf8c616e6",
+                "isCuisine": false,
+                "name": "Pizza",
+                "createdAt": "2019-10-18T11:41:38.676Z",
+                "updatedAt": "2019-10-18T11:41:38.676Z",
+                "__v": 0
+            },
+            {
+                "_id": "5da9a5284157831bf8c616eb",
+                "image": "5da9a49d4157831bf8c616e5",
+                "isCuisine": false,
+                "name": "Piletina",
+                "createdAt": "2019-10-18T11:42:32.499Z",
+                "updatedAt": "2019-10-18T11:42:32.499Z",
+                "__v": 0
+            },
+            {
+                "_id": "5da9a5654157831bf8c616ee",
+                "image": "5da9a4e54157831bf8c616e8",
+                "isCuisine": false,
+                "name": "Kuvana jela",
+                "createdAt": "2019-10-18T11:43:33.155Z",
+                "updatedAt": "2019-10-18T11:43:33.155Z",
+                "__v": 0
+            }
+        ],
+        "image": {
+            "_id": "5dada9014157831bf8c61725",
+            "link": "/uploads/eadca22d-2f9f-feca-8cd5-b306bb62330a-???.png?caption=Hrono%20klopa"
+        },
+        "numberOfReviews": 0,
+        "avgPriceTag": 3.6,
+        "pickup": true,
+        "delivery": true,
+        "onlinePayment": false,
+        "name": "Hrono Klopa",
+        "city": {
+            "_id": "5da867ba91408d5e6002577b",
+            "name": "Čačak",
+            "location": {
+                "type": "Point",
+                "coordinates": [
+                    20.328154,
+                    43.848831
+                ]
+            },
+            "createdAt": "2019-10-17T13:08:10.797Z",
+            "updatedAt": "2019-11-25T14:20:33.542Z",
+            "__v": 1,
+            "slug": "cacak"
+        },
+        "location": {
+            "type": "Point",
+            "coordinates": [
+                20.328155,
+                43.848831
+            ]
+        },
+        "openDays": [
+            {
+                "from": "1970-01-01T07:00:00.000Z",
+                "to": "1970-01-01T21:00:00.000Z",
+                "open": true,
+                "day": 1
+            },
+            {
+                "from": "1970-01-01T07:00:00.000Z",
+                "to": "1970-01-01T21:00:00.000Z",
+                "open": true,
+                "day": 2
+            },
+            {
+                "from": "1970-01-01T07:00:00.000Z",
+                "to": "1970-01-01T21:00:00.000Z",
+                "open": true,
+                "day": 3
+            },
+            {
+                "from": "1970-01-01T07:00:00.000Z",
+                "to": "1970-01-01T21:00:00.000Z",
+                "open": true,
+                "day": 4
+            },
+            {
+                "from": "1970-01-01T07:00:00.000Z",
+                "to": "1970-01-01T15:00:00.000Z",
+                "open": true,
+                "day": 5
+            },
+            {
+                "from": "1970-01-01T07:00:00.000Z",
+                "to": "1970-01-01T22:00:00.000Z",
+                "open": true,
+                "day": 6
+            },
+            {
+                "from": "1970-01-01T07:00:00.000Z",
+                "to": "1970-01-01T21:00:00.000Z",
+                "open": true,
+                "day": 0
+            }
+        ],
+        "__v": 8,
+        "description": "Ovde treba da bude opis. Ovde treba da bude opis. Ovde treba da bude opis. Ovde treba da bude opis. Ovde treba da bude opis. Ovde treba da bude opis. Ovde treba da bude opis.",
+        "deliveryPrice": 0,
+        "estimatedDeliveryTime": "any",
+        "minimalDeliveryPrice": 0,
+        "headerImage": "5da99f984157831bf8c616ce",
+        "updatedAt": "2019-12-17T13:55:28.407Z",
+        "createdAt": "2019-12-17T13:55:28.407Z",
+        "isPromotionActive": false,
+        "isPromotionAvailable": false
+    },
+    {
+        "_id": "5da9bcac4157831bf8c6170a",
+        "avgRating": 1,
+        "administrator": "5d97121b08d44419247a871b",
+        "categories": [
+            {
+                "_id": "5da9a5284157831bf8c616eb",
+                "image": "5da9a49d4157831bf8c616e5",
+                "isCuisine": false,
+                "name": "Piletina",
+                "createdAt": "2019-10-18T11:42:32.499Z",
+                "updatedAt": "2019-10-18T11:42:32.499Z",
+                "__v": 0
+            },
+            {
+                "_id": "5da8683e91408d5e6002577d",
+                "image": "5da8688091408d5e6002577e",
+                "isCuisine": false,
+                "name": "Hrono",
+                "createdAt": "2019-10-17T13:10:22.557Z",
+                "updatedAt": "2019-10-17T13:11:46.905Z",
+                "__v": 0
+            },
+            {
+                "_id": "5da9a5134157831bf8c616ea",
+                "image": "5da9a48a4157831bf8c616e4",
+                "isCuisine": false,
+                "name": "Roštilj",
+                "createdAt": "2019-10-18T11:42:11.493Z",
+                "updatedAt": "2019-10-18T11:42:11.493Z",
+                "__v": 0
+            },
+            {
+                "_id": "5da9a5654157831bf8c616ee",
+                "image": "5da9a4e54157831bf8c616e8",
+                "isCuisine": false,
+                "name": "Kuvana jela",
+                "createdAt": "2019-10-18T11:43:33.155Z",
+                "updatedAt": "2019-10-18T11:43:33.155Z",
+                "__v": 0
+            },
+            {
+                "_id": "5da9a53c4157831bf8c616ec",
+                "image": "5da9a4744157831bf8c616e3",
+                "isCuisine": false,
+                "name": "Sendvič",
+                "createdAt": "2019-10-18T11:42:52.681Z",
+                "updatedAt": "2019-10-18T11:42:52.681Z",
+                "__v": 0
+            }
+        ],
+        "image": {
+            "_id": "5da9bc814157831bf8c61709",
+            "link": "/uploads/4a5ea9d3-8459-5fc3-82c6-27f0e6d4f323-???.png?caption=Bojana%20Cook"
+        },
+        "numberOfReviews": 1,
+        "avgPriceTag": 1,
+        "pickup": true,
+        "delivery": true,
+        "onlinePayment": false,
+        "name": "Bojana Cook",
+        "city": {
+            "_id": "5da867ba91408d5e6002577b",
+            "name": "Čačak",
+            "location": {
+                "type": "Point",
+                "coordinates": [
+                    20.328154,
+                    43.848831
+                ]
+            },
+            "createdAt": "2019-10-17T13:08:10.797Z",
+            "updatedAt": "2019-11-25T14:20:33.542Z",
+            "__v": 1,
+            "slug": "cacak"
+        },
+        "location": {
+            "type": "Point",
+            "coordinates": [
+                20.323155,
+                43.841831
+            ]
+        },
+        "openDays": [
+            {
+                "from": "1970-01-01T07:00:00.000Z",
+                "to": "1970-01-01T17:00:00.000Z",
+                "open": true,
+                "day": 1
+            },
+            {
+                "from": "1970-01-01T07:00:00.000Z",
+                "to": "1970-01-01T17:00:00.000Z",
+                "open": true,
+                "day": 2
+            },
+            {
+                "from": "1970-01-01T07:00:00.000Z",
+                "to": "1970-01-01T17:00:00.000Z",
+                "open": true,
+                "day": 3
+            },
+            {
+                "from": "1970-01-01T07:00:00.000Z",
+                "to": "1970-01-01T17:00:00.000Z",
+                "open": true,
+                "day": 4
+            },
+            {
+                "from": "1970-01-01T07:00:00.000Z",
+                "to": "1970-01-01T17:00:00.000Z",
+                "open": true,
+                "day": 5
+            },
+            {
+                "from": "1970-01-01T07:00:00.000Z",
+                "to": "1970-01-01T17:00:00.000Z",
+                "open": true,
+                "day": 6
+            },
+            {
+                "from": "1970-01-01T07:00:00.000Z",
+                "to": "1970-01-01T17:00:00.000Z",
+                "open": true,
+                "day": 0
+            }
+        ],
+        "__v": 16,
+        "description": "Ovde treba da bude opis. Ovde treba da bude opis. Ovde treba da bude opis. Ovde treba da bude opis. Ovde treba da bude opis. Ovde treba da bude opis. Ovde treba da bude opis.",
+        "createdAt": "2019-12-13T11:55:17.090Z",
+        "deliveryPrice": 0,
+        "estimatedDeliveryTime": "any",
+        "isPromotionActive": false,
+        "isPromotionAvailable": false,
+        "minimalDeliveryPrice": 0,
+        "updatedAt": "2020-01-15T12:09:15.324Z",
+        "headerImage": null
+    },
+    {
+        "_id": "5da99a884157831bf8c616c6",
+        "avgRating": 3.25,
+        "administrator": "5da99a204157831bf8c616c5",
+        "categories": [
+            {
+                "_id": "5da9a5134157831bf8c616ea",
+                "image": "5da9a48a4157831bf8c616e4",
+                "isCuisine": false,
+                "name": "Roštilj",
+                "createdAt": "2019-10-18T11:42:11.493Z",
+                "updatedAt": "2019-10-18T11:42:11.493Z",
+                "__v": 0
+            },
+            {
+                "_id": "5da9a5284157831bf8c616eb",
+                "image": "5da9a49d4157831bf8c616e5",
+                "isCuisine": false,
+                "name": "Piletina",
+                "createdAt": "2019-10-18T11:42:32.499Z",
+                "updatedAt": "2019-10-18T11:42:32.499Z",
+                "__v": 0
+            },
+            {
+                "_id": "5da9a5654157831bf8c616ee",
+                "image": "5da9a4e54157831bf8c616e8",
+                "isCuisine": false,
+                "name": "Kuvana jela",
+                "createdAt": "2019-10-18T11:43:33.155Z",
+                "updatedAt": "2019-10-18T11:43:33.155Z",
+                "__v": 0
+            },
+            {
+                "_id": "5da8683e91408d5e6002577d",
+                "image": "5da8688091408d5e6002577e",
+                "isCuisine": false,
+                "name": "Hrono",
+                "createdAt": "2019-10-17T13:10:22.557Z",
+                "updatedAt": "2019-10-17T13:11:46.905Z",
+                "__v": 0
+            },
+            {
+                "_id": "5da9a53c4157831bf8c616ec",
+                "image": "5da9a4744157831bf8c616e3",
+                "isCuisine": false,
+                "name": "Sendvič",
+                "createdAt": "2019-10-18T11:42:52.681Z",
+                "updatedAt": "2019-10-18T11:42:52.681Z",
+                "__v": 0
+            },
+            {
+                "_id": "5da9a54e4157831bf8c616ed",
+                "image": "5da9a4d04157831bf8c616e7",
+                "isCuisine": false,
+                "name": "Palačinke",
+                "createdAt": "2019-10-18T11:43:10.944Z",
+                "updatedAt": "2019-10-18T11:43:10.944Z",
+                "__v": 0
+            },
+            {
+                "_id": "5da9a4f24157831bf8c616e9",
+                "image": "5da9a4b34157831bf8c616e6",
+                "isCuisine": false,
+                "name": "Pizza",
+                "createdAt": "2019-10-18T11:41:38.676Z",
+                "updatedAt": "2019-10-18T11:41:38.676Z",
+                "__v": 0
+            }
+        ],
+        "image": {
+            "_id": "5da99c3a4157831bf8c616c8",
+            "link": "/uploads/1b5decf1-a2c6-3361-04be-4a7600de8f94-???.png?caption=Restoran%20Gurman"
+        },
+        "numberOfReviews": 12,
+        "avgPriceTag": 2.33,
+        "pickup": false,
+        "delivery": true,
+        "onlinePayment": false,
+        "name": "Gurman",
+        "city": {
+            "_id": "5da867ba91408d5e6002577b",
+            "name": "Čačak",
+            "location": {
+                "type": "Point",
+                "coordinates": [
+                    20.328154,
+                    43.848831
+                ]
+            },
+            "createdAt": "2019-10-17T13:08:10.797Z",
+            "updatedAt": "2019-11-25T14:20:33.542Z",
+            "__v": 1,
+            "slug": "cacak"
+        },
+        "location": {
+            "type": "Point",
+            "coordinates": [
+                20.347558,
+                43.887528
+            ]
+        },
+        "openDays": [
+            {
+                "from": "1970-01-01T06:00:00.000Z",
+                "to": "1970-01-01T14:00:00.000Z",
+                "open": true,
+                "day": 1
+            },
+            {
+                "from": "1970-01-01T06:00:00.000Z",
+                "to": "1970-01-01T14:00:00.000Z",
+                "open": true,
+                "day": 2
+            },
+            {
+                "from": "1970-01-01T06:00:00.000Z",
+                "to": "1970-01-01T14:00:00.000Z",
+                "open": true,
+                "day": 3
+            },
+            {
+                "from": "1970-01-01T06:00:00.000Z",
+                "to": "1970-01-01T14:00:00.000Z",
+                "open": true,
+                "day": 4
+            },
+            {
+                "from": "1970-01-01T06:00:00.000Z",
+                "to": "1970-01-01T14:00:00.000Z",
+                "open": true,
+                "day": 5
+            },
+            {
+                "open": false,
+                "day": 6,
+                "from": null,
+                "to": null
+            },
+            {
+                "open": false,
+                "day": 0,
+                "from": null,
+                "to": null
+            }
+        ],
+        "__v": 22,
+        "description": "Ovde treba da bude opis. Ovde treba da bude opis. Ovde treba da bude opis. Ovde treba da bude opis. Ovde treba da bude opis. Ovde treba da bude opis. Ovde treba da bude opis.",
+        "deliveryPrice": 0,
+        "estimatedDeliveryTime": "any",
+        "minimalDeliveryPrice": 0,
+        "createdAt": "2019-12-13T10:40:07.212Z",
+        "isPromotionActive": false,
+        "isPromotionAvailable": false,
+        "updatedAt": "2020-01-20T13:50:02.796Z",
+        "headerImage": null
+    }
+]
