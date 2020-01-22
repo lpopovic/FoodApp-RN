@@ -300,7 +300,7 @@ class HomeScreen extends BaseScreen {
                 <PlaceSectionList
                     titleSection={"❤️ OMILJENI RESTORANI"}
                     arrayObject={favoritePlaces}
-                    onPressItem={(item) => console.log(item._id)}// this.pushNewScreen({ routeName: ScreenName.PlaceDetailScreen(), key: `${Math.random() * 10000}${item._id}`, params: { _id: item._id } })}
+                    onPressItem={(item) =>this.pushNewScreen({ routeName: ScreenName.PlaceDetailScreen(), key: `${Math.random() * 10000}${item._id}`, params: { _id: item._id } })}
                     // onPressSeeMore={() => this.pushNewScreen({
                     //     routeName: ScreenName.PlaceListScreen(),
                     //     key: `${Math.random() * 10000}`,
@@ -324,7 +324,7 @@ class HomeScreen extends BaseScreen {
                 <MenuItemList
                     titleSection={"❤️ OMILJENA JELA"}
                     arrayObject={favoriteMenuItems}
-                    onPressItem={(item) => console.log(item._id)}
+                    onPressItem={(item) => this.pushNewScreen({ routeName: ScreenName.MenuItemDetailsScreen(), key: `${Math.random() * 10000}${item._id}`, params: { _id: item._id } })}
                     onPressSeeMore={() => console.log("see more")}
                 />
             )

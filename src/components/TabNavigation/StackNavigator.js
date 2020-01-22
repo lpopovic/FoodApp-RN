@@ -85,6 +85,8 @@ const UserStack = createStackNavigator({
     cateringapp_OrderDetail: OrderDetailScreen,
     cateringapp_ReviewList: ReviewListScreen,
     cateringapp_UserSettings: UserSettingsScreen,
+    cateringapp_PlaceDetail: PlaceDetailScreen,
+    cateringapp_MenuItemDetails: MenuItemDetailsScreen,
 
 })
 
@@ -183,6 +185,7 @@ UserStack.navigationOptions = ({ navigation }) => {
         case ScreenName.OrderDetailScreen():
         case ScreenName.ReviewListScreen():
         case ScreenName.UserSettingsScreen():
+        case ScreenName.MenuItemDetailsScreen():
             tabBarVisible = false;
             break
         default:
