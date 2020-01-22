@@ -316,12 +316,46 @@ class MenuItemDetailsScreen extends BaseScreen {
         const { name, description, image, nominalPrice, menuItemOptions, place, hasSubtypes, subtypes } = this.state.menuItem
         return (
             <ScrollView>
-                <TouchableOpacity onPress={() => this.onPressShowPlaceOnMap(place)}>
-                    <View style={{ flexDirection: 'row', margin: 20, marginBottom: 0, alignItems: 'center' }}>
-                        <Icon name="map-marker" size={26} color={BASE_COLOR.gray} />
-                        <Text style={{ fontSize: 15, fontWeight: '400', color: BASE_COLOR.gray, marginLeft: 8 }}>{place.name}</Text>
+                <View style={{
+                    flexDirection: 'row',
+                    margin: 8,
+                    marginLeft: 20,
+                    marginRight: 20,
+                    flex: 10,
+                    alignItems: 'center'
+                }}>
+                    <View style={{ flex: 7 }}>
+                        <TouchableOpacity
+                            onPress={() => this.onPressShowPlaceOnMap(place)} >
+                            <View style={{ flexDirection: 'row', alignItems: 'center', padding: 8 }}>
+                                <Icon name="map-marker" size={26} color={BASE_COLOR.gray} />
+                                <Text
+                                    numberOfLines={1}
+                                    ellipsizeMode={'tail'}
+                                    style={{ fontSize: 15, fontWeight: '400', color: BASE_COLOR.gray, marginLeft: 8 }}>
+                                    {place.name}
+                                </Text>
+                            </View>
+
+                        </TouchableOpacity>
                     </View>
-                </TouchableOpacity>
+                    {this.props.isLogin == true ?
+                        <View style={{ flex: 3, alignItems: 'flex-end', }}>
+                            <TouchableOpacity
+                                onPress={() => alert("press heart image")}>
+                                <View style={{ padding: 8 }}>
+                                    <Image
+                                        style={[styles.heartImage,]}
+                                        source={IconAssets.heartIcon}
+                                        resizeMode='contain' />
+                                </View >
+                            </TouchableOpacity>
+                        </View>
+                        :
+                        null
+                    }
+
+                </View>
                 <Image style={styles.imageStyle} source={{ uri: image.image169 }} resizeMode='cover' />
                 <View style={{ flexDirection: 'row', margin: 20 }}>
                     <View style={{ flex: 7 }}>
@@ -445,7 +479,7 @@ class MenuItemDetailsScreen extends BaseScreen {
 
     }
 
-    onPressOkPutInBagNHandler = ()=>{
+    onPressOkPutInBagNHandler = () => {
         const { menuItem, selectedOptions, quantity, menuItemType } = this.state
         let item = menuItem.hasSubtypes ? menuItemType : menuItem
 
@@ -504,13 +538,19 @@ const styles = StyleSheet.create({
         height: (Dimensions.get('screen').width - 40) * 9 / 16,
         alignSelf: 'center',
         marginTop: 10
-    }
+    },
+    heartImage: {
+        height: 26,
+        width: 26,
+        tintColor: BASE_COLOR.gray,
+    },
 });
 
 const mapStateToProps = state => {
     return {
         order: state.order.order,
-        orderForPlace: state.order.orderForPlace
+        orderForPlace: state.order.orderForPlace,
+        isLogin: state.user.isLogin,
     };
 };
 
