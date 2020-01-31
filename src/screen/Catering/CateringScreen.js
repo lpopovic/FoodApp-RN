@@ -357,7 +357,14 @@ class CateringScreen extends BaseScreen {
         return (
             <SafeAreaView style={styles.safeAreaHeader}>
                 <View style={styles.mainContainer}>
-                    {isCatheringAvailable ? [this.cateringCalendarStrip(), mainDisplay] : this.signUpToCatheringMesage()}
+                    {isCatheringAvailable ?
+                        <>
+                            {this.cateringCalendarStrip()}
+                            {mainDisplay}
+
+                        </>
+                        :
+                        this.signUpToCatheringMesage()}
                     {/* {this.cateringCalendarStrip()}
                  {mainDisplay} */}
                 </View>
