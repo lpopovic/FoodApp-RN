@@ -12,7 +12,7 @@ class DishList extends Component {
             <View style={styles.mainContainer}>
                 <FlatList
                     data={this.props.data}
-                    keyExtractor={item => item._id}
+                    keyExtractor={(item, index) => `${index.toString()}`}
                     renderItem={({ item }) => {
                         if (!item.addDish) {
                             return (
@@ -20,7 +20,7 @@ class DishList extends Component {
                             )
                         } else {
                             return (
-                                Moment(this.props.selectedDate).isAfter(Moment().subtract(1, 'day')) ? <AddDish placeSelect={this.props.selectPlace}/> : null
+                                Moment(this.props.selectedDate).isAfter(Moment().subtract(1, 'day')) ? <AddDish placeSelect={this.props.selectPlace} /> : null
                             )
                         }
                     }}
@@ -32,7 +32,7 @@ class DishList extends Component {
 
 const styles = StyleSheet.create({
     mainContainer: {
-        flex: 1
+        flex: 1,
     }
 });
 

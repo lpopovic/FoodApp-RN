@@ -186,7 +186,7 @@ class ReviewListScreen extends BaseScreen {
                 }
                 style={{ backgroundColor: 'transparent' }}
                 data={arrayReviews}
-                keyExtractor={(index) => `${index.toString()}`}
+                keyExtractor={(item, index) => `${index.toString()}`}
                 renderItem={(info) => (
                     <ReviewItem
                         review={info.item} />

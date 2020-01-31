@@ -34,7 +34,7 @@ class PlaceList extends Component {
                 style={styles.listContainer}
                 data={this.props.arrayObject}
                 onScroll={this._onScroll}
-                keyExtractor={(index) => `${index.toString()}`}
+                keyExtractor={(item, index) => `${index.toString()}`}
                 renderItem={(info) => (
                     <PlaceItem
                         item={info.item}
@@ -89,7 +89,7 @@ class PlaceSectionList extends Component {
                     style={styles.listContainer}
                     data={this.props.arrayObject}
                     horizontal
-                    keyExtractor={(index) => `${index.toString()}`}
+                    keyExtractor={(item, index)=> `${index.toString()}`}
                     renderItem={(info) => (
                         <PlaceSmallItem
                             item={info.item}

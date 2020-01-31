@@ -9,8 +9,8 @@ class PlaceList extends Component {
             <View style={styles.mainContainer}>
                 <FlatList
                     data={this.props.data}
-                    keyExtractor={item => item._id}
-                    renderItem={({ item }) => <PlaceCard data={item} onClick={() => this.props.clickOnPlace(item._id)}/>}
+                    keyExtractor={(item, index) => `${index.toString()}`}
+                    renderItem={({ item }) => <PlaceCard data={item} onClick={() => this.props.clickOnPlace(item._id)} />}
                 />
             </View>
         )
@@ -19,6 +19,7 @@ class PlaceList extends Component {
 
 const styles = StyleSheet.create({
     mainContainer: {
+     
     }
 });
 

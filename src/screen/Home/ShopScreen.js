@@ -189,7 +189,7 @@ class ShoopScreen extends BaseScreen {
                             style={{ marginBottom: 30 }}
                             scrollEnabled={false}
                             data={this.props.order}
-                            keyExtractor={(index) => `${index.toString()}`}
+                            keyExtractor={(item, index) => `${index.toString()}`}
                             renderItem={(info) => (
                                 <ShopCard
                                     data={info.item}
