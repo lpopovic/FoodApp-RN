@@ -338,11 +338,11 @@ class ShoopScreen extends BaseScreen {
                                 <View style={{ alignSelf: 'center', height: this.state.scheduledViewOpen ? 230 : 20, overflow: 'hidden', marginTop: 10, marginBottom: 10 }}>
                                     <Text style={{ fontWeight: '500', fontSize: 17 }} onPress={() => this.schedulingOnPress()} >Zakaži porudzbinu za odredjeno vreme</Text>
                                     <DatePicker
-                                        locale="sr-Latn-RS"
+                                        // mode={'time'}
+                                        // locale='sr-Latn'
                                         date={this.state.scheduledTime}
                                         minuteInterval={5}
                                         minimumDate={Moment().add(this.estimateDeliveryTime(this.props.orderForPlace.estimatedDeliveryTime), 'm').toDate()}
-                                        // minimumDate = {this.roundDate(Moment().add(30, 'm').toDate(), null, 5)}
                                         maximumDate={Moment().add(15, 'd').toDate()}
                                         onDateChange={scheduledTime => this.setState({ scheduledTime })}
                                     />

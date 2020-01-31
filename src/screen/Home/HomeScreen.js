@@ -298,9 +298,10 @@ class HomeScreen extends BaseScreen {
         if (favoritePlaces.length > 0 && isLogin == true) {
             return (
                 <PlaceSectionList
+                    hideSeeMore={true}
                     titleSection={"❤️ OMILJENI RESTORANI"}
                     arrayObject={favoritePlaces}
-                    onPressItem={(item) =>this.pushNewScreen({ routeName: ScreenName.PlaceDetailScreen(), key: `${Math.random() * 10000}${item._id}`, params: { _id: item._id } })}
+                    onPressItem={(item) => this.pushNewScreen({ routeName: ScreenName.PlaceDetailScreen(), key: `${Math.random() * 10000}${item._id}`, params: { _id: item._id } })}
                     // onPressSeeMore={() => this.pushNewScreen({
                     //     routeName: ScreenName.PlaceListScreen(),
                     //     key: `${Math.random() * 10000}`,

@@ -165,6 +165,7 @@ class UserScreen extends BaseScreen {
                     <PlaceSectionList
                         style={{ marginLeft: -8 }}
                         titleSection={"❤️ OMILJENI RESTORANI"}
+                        hideSeeMore={true}
                         arrayObject={favoritePlaces}
                         onPressItem={(item) => this.pushNewScreen({ routeName: ScreenName.PlaceDetailScreen(), key: `${Math.random() * 10000}${item._id}`, params: { _id: item._id } })}
                         onPressSeeMore={() => console.log("see more")}
@@ -181,7 +182,7 @@ class UserScreen extends BaseScreen {
         if (favoriteMenuItems.length > 0) {
             return (
                 <View style={{
-                    marginTop: 8,
+                    marginTop: 16,
                     // borderBottomColor: BASE_COLOR.gray,
                     // borderBottomWidth: 1,
                     paddingBottom: 16,

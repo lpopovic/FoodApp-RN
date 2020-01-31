@@ -7,6 +7,7 @@ import BaseScreen from '../BaseScreen/BaseScreen';
 import { ScreenName, isAndroid } from '../../helpers'
 import DishCard from '../../components/Catering/DishCard';
 import DishList from '../../components/Catering/DishList';
+import MenuItemList from '../../components/MenuItem/MenuItemList'
 import {
     IconAssets,
     TestAssets,
@@ -290,6 +291,9 @@ class PlaceDetailsScreen extends BaseScreen {
 
                     </TriggeringView>
                     <View style={{ backgroundColor: '#E5E5E5', height: 3 }}></View>
+                    <>
+                        {this.menuItemsListFavoriteContent()}
+                    </>
                     {this.sectionListContent(menuItems)}
                     <Image source={{ uri: place.image169 }} />
                 </HeaderImageScrollView>
@@ -330,13 +334,8 @@ class PlaceDetailsScreen extends BaseScreen {
     setupSectionList = () => {
         const { menuItems, place } = this.state
         let { categories } = place
-      
-        let sectionMeniItems = []
 
-        if (this.props.isLogin == true && menuItems.length > 0) {
-            const favoriteCategory = new Category({ _id: 'favorite', name: "❤️ Omiljena jela" })
-            sectionMeniItems.push({ category:favoriteCategory, menuItems: [menuItems[0]], hide: true })
-        }
+        let sectionMeniItems = []
 
         categories.forEach(category => {
             sectionMeniItems.push({ category, menuItems: [], hide: true })
@@ -374,6 +373,26 @@ class PlaceDetailsScreen extends BaseScreen {
                 <DishList
                     data={singleArray}
                     clickOnDish={(menuItemId) => this.dishSelectHandler(menuItemId)} />
+            )
+        }
+
+    }
+    menuItemsListFavoriteContent = () => {
+
+        const { menuItems } = this.state
+        const { isLogin } = this.props
+
+
+        if (menuItems.length > 0 && isLogin == true) {
+            return (
+                <View style={{ marginTop: 16, marginBottom: 16 }}>
+                    <MenuItemList
+                        titleSection={"❤️ OMILJENA JELA"}
+                        arrayObject={menuItems}
+                        onPressItem={(item) => this.pushNewScreen({ routeName: ScreenName.MenuItemDetailsScreen(), key: `${Math.random() * 10000}${item._id}`, params: { _id: item._id } })}
+                        onPressSeeMore={() => console.log("see more")}
+                    />
+                </View>
             )
         }
 

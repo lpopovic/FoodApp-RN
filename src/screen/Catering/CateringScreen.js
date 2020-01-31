@@ -19,6 +19,20 @@ import { updateUserProfile } from '../../store/actions';
 import { BASE_COLOR, NAV_COLOR } from '../../styles';
 import { ImageAssets } from '../../model/image';
 import { User } from '../../model';
+const locale = {
+    name: 'sr',
+    config: {
+        months: 'Januar_Februar_Mart_April_Maj_Jun_Jul_Avgust_Septembar_Oktobar_Novembar_Decembar'.split('_'),
+        monthsShort: 'Jan_Feb_Mar_Apr_Maj_Jun_Jul_Avg_Sep_Okt_Nov_Dec'.split('_'),
+        weekdays: 'Ponedeljak_Utorak_Sreda_Četvrtak_Petak_Subota_Nedelja'.split('_'),
+        weekdaysShort: 'NED_PON_UTO_SRE_ČET_PET_SUB'.split('_'),
+        weekdaysMin: 'PO_UT_SR_ČE_PE_SU_NE'.split('_'),
+    },
+    week: {
+        dow: 1,
+        doy: 4
+    }
+};
 class CateringScreen extends BaseScreen {
 
     static navigationOptions = {
@@ -48,7 +62,10 @@ class CateringScreen extends BaseScreen {
         // if (this.props.isLogin) {
         this.focusListener = this.props.navigation.addListener('didFocus', () => {
             // alert(this.props.isLogin)
-            this.apiDidMountFunction()
+            const { isLogin } = this.props
+            if (isLogin == true) {
+                this.apiDidMountFunction()
+            }
         })
         // }
     }
@@ -223,20 +240,7 @@ class CateringScreen extends BaseScreen {
 
     cateringCalendarStrip = () => {
 
-        const locale = {
-            name: 'sr',
-            config: {
-                months: 'Januar_Februar_Mart_April_Maj_Jun_Jul_Avgust_Septembar_Oktobar_Novembar_Decembar'.split('_'),
-                monthsShort: 'Jan_Feb_Mar_Apr_Maj_Jun_Jul_Avg_Sep_Okt_Nov_Dec'.split('_'),
-                weekdays: 'Ponedeljak_Utorak_Sreda_Četvrtak_Petak_Subota_Nedelja'.split('_'),
-                weekdaysShort: 'NED_PON_UTO_SRE_ČET_PET_SUB'.split('_'),
-                weekdaysMin: 'PO_UT_SR_ČE_PE_SU_NE'.split('_'),
-            },
-            week: {
-                dow: 1,
-                doy: 4
-            }
-        };
+
         return (
             <View>
                 <View style={{ height: 30, backgroundColor: NAV_COLOR.headerBackground, marginLeft: 10, marginRight: 10, flexDirection: 'row', alignItems: 'center' }}>
@@ -271,7 +275,7 @@ class CateringScreen extends BaseScreen {
                         // alert(Moment(date).endOf('isoWeek').format("DD MMM YYYY hh:mm a"))
                     }}
                     style={{ height: 120, paddingTop: 10, paddingBottom: 10, backgroundColor: NAV_COLOR.headerBackground }}
-                    locale={locale}
+                    // locale={locale}
                     daySelectionAnimation={{ type: 'background', duration: 200, highlightColor: BASE_COLOR.blue }}
                     minDate={Moment().subtract(21, 'd')}
                     maxDate={Moment().add(7, 'd')}
@@ -353,11 +357,17 @@ class CateringScreen extends BaseScreen {
 
     render() {
         const { loading, isCatheringAvailable } = this.state
+        const { isLogin } = this.props
         const mainDisplay = loading ? this.activityIndicatorContent(BASE_COLOR.blue) : this.renderList()
         return (
             <SafeAreaView style={styles.safeAreaHeader}>
                 <View style={styles.mainContainer}>
-                    {isCatheringAvailable ? [this.cateringCalendarStrip(), mainDisplay] : this.signUpToCatheringMesage()}
+                    {isCatheringAvailable && isLogin ?
+                        <>
+                            {this.cateringCalendarStrip()}
+                            {mainDisplay}
+                        </>
+                        : this.signUpToCatheringMesage()}
                     {/* {this.cateringCalendarStrip()}
                  {mainDisplay} */}
                 </View>

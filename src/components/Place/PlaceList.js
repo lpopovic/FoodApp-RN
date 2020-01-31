@@ -24,7 +24,7 @@ class PlaceList extends Component {
     };
     handleLoadMore = () => {
         if (!this.props.loadingMore) {
-            this.props.loadMoreComponents()
+            // this.props.loadMoreComponents()
         }
     };
     render() {
@@ -42,8 +42,8 @@ class PlaceList extends Component {
                     />
                 )}
                 onEndReachedThreshold={0.4}
-                onEndReached={this.handleLoadMore.bind(this)}
-                ListFooterComponent={this.renderFooter.bind(this)}
+                // onEndReached={this.handleLoadMore.bind(this)}
+                // ListFooterComponent={this.renderFooter.bind(this)}
 
             />
         )
@@ -70,6 +70,26 @@ class PlaceSectionList extends Component {
         return footer_View;
 
     };
+    seeMoreContent = (titleSeeMore) => {
+        const { hideSeeMore } = this.props
+        if (hideSeeMore == null) {
+            return (
+                <TouchableOpacity onPress={() => this.props.onPressSeeMore()}>
+                    <View style={styles.seeMoreContainer}>
+                        <Text style={[styles.text, { color: BASE_COLOR.gray }]}>{titleSeeMore}</Text>
+                    </View>
+                </TouchableOpacity>
+            )
+        } else {
+            return (
+
+                <View style={styles.seeMoreContainer}>
+                    <Text style={[styles.text, { color: BASE_COLOR.gray }]}></Text>
+                </View>
+
+            )
+        }
+    }
     render() {
         const titleSection = this.props.titleSection ? this.props.titleSection : "NEPOZNATO"
         const titleSeeMore = "vidi sve"
@@ -77,11 +97,7 @@ class PlaceSectionList extends Component {
             <View style={[styles.mainContainer, this.props.style]}>
                 <View style={styles.sectionContainer}>
                     <Text style={styles.text}>{titleSection}</Text>
-                    <TouchableOpacity onPress={() => this.props.onPressSeeMore()}>
-                        <View style={styles.seeMoreContainer}>
-                            <Text style={[styles.text, { color: BASE_COLOR.gray }]}>{titleSeeMore}</Text>
-                        </View>
-                    </TouchableOpacity>
+                    {this.seeMoreContent(titleSeeMore)}
 
                 </View>
                 <FlatList
@@ -89,7 +105,7 @@ class PlaceSectionList extends Component {
                     style={styles.listContainer}
                     data={this.props.arrayObject}
                     horizontal
-                    keyExtractor={(item, index)=> `${index.toString()}`}
+                    keyExtractor={(item, index) => `${index.toString()}`}
                     renderItem={(info) => (
                         <PlaceSmallItem
                             item={info.item}
