@@ -73,11 +73,19 @@ class BaseScreen extends Component {
         this.props.navigation.dispatch(resetAction)
     }
 
+    replaceScreenNavigationStack = (routeName) => {
+        const pushAction = StackActions.replace({
+            routeName
+        });
+
+        this.props.navigation.dispatch(pushAction);
+    }
+
     showAlertMessage = (message) => {
         CustomAlert.showAlert(String(message))
     }
-    showDialogMessage = (message, onPressOk) => {
-        CustomAlert.showDialogAlert(String(message), onPressOk)
+    showDialogMessage = (message, onPressOk, onPressCancel) => {
+        CustomAlert.showDialogAlert(String(message), onPressOk, onPressCancel)
     }
     activityIndicatorContent = (color) => (
 

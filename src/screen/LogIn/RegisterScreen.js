@@ -5,6 +5,7 @@ import {
     Image,
     TouchableOpacity,
     StyleSheet,
+    Keyboard,
 } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import BaseScreen from '../BaseScreen/BaseScreen';
@@ -25,6 +26,22 @@ class RegisterScreen extends BaseScreen {
         this.state = {
             loading: false,
             controls: {
+                firstName: {
+                    value: "",
+                    valid: false,
+                    validationRules: {
+                        notEmpty: true
+                    },
+                    touched: false
+                },
+                lastName: {
+                    value: "",
+                    valid: false,
+                    validationRules: {
+                        notEmpty: true
+                    },
+                    touched: false
+                },
                 username: {
                     value: "",
                     valid: false,
@@ -77,9 +94,9 @@ class RegisterScreen extends BaseScreen {
     componentWillUnmount() {
         super.componentWillUnmount()
     }
-    apiCallSignUpHandler = (email, password, username, phoneNumber) => {
+    apiCallSignUpHandler = (email, password, username, phoneNumber, firstName, lastName) => {
         this.setNewStateHandler({ loading: true })
-        UserNetwork.fetchUserRegister(username, email, password, phoneNumber)
+        UserNetwork.fetchUserRegister(username, email, password, phoneNumber, firstName, lastName)
             .then(
                 res => {
                     this.showAlertMessage(String(res))
@@ -97,14 +114,20 @@ class RegisterScreen extends BaseScreen {
             !this.state.controls.password.valid ||
             !this.state.controls.confirmPassword.valid ||
             !this.state.controls.username.valid ||
-            !this.state.controls.phoneNumber.valid
+            !this.state.controls.phoneNumber.valid ||
+            !this.state.controls.firstName.valid ||
+            !this.state.controls.lastName.valid
 
         const { controls } = this.state
         if (!disabled) {
 
-            this.apiCallSignUpHandler(controls.email.value, controls.password.value, controls.username.value, controls.phoneNumber.value)
+            this.apiCallSignUpHandler(controls.email.value, controls.password.value, controls.username.value, controls.phoneNumber.value, controls.firstName.value, controls.lastName.value)
         } else {
-            if (controls.email.value !== '' && controls.password.value !== '' && controls.confirmPassword.value !== '' && controls.username.value !== '' && controls.phoneNumber.value !== '') {
+            if (controls.email.value !== '' &&
+                controls.password.value !== '' &&
+                controls.confirmPassword.value !== '' &&
+                controls.username.value !== '' &&
+                controls.phoneNumber.value !== '') {
                 if (!this.state.controls.email.valid) {
 
                     this.showAlertMessage("Not valide email addrese.")
@@ -116,7 +139,11 @@ class RegisterScreen extends BaseScreen {
                 } else if (!this.state.controls.username.valid) {
                     this.showAlertMessage('Username not valide, minumum 6 characters.')
                 } else if (!this.state.controls.phoneNumber.valid) {
-                    this.showAlertMessage('Phone number not valide')
+                    this.showAlertMessage('Phone number not valide.')
+                } else if (!this.state.controls.firstName.valid) {
+                    this.showAlertMessage('First name not valide.')
+                } else if (!this.state.controls.lastName.valid) {
+                    this.showAlertMessage('Last name not valide.')
                 }
             } else {
                 alert(MESSAGE_NO_VALIDE_INPUT_FORM)
@@ -151,7 +178,37 @@ class RegisterScreen extends BaseScreen {
                         autoCapitalize="none"
                         autoCorrect={false}
                         returnKeyType={"next"}
-                        keyboardType="email-address"
+                        // keyboardType="email-address"
+                        onSubmitEditing={() => this.firstName.getInnerRef().focus()}
+                    />
+                    <DefaultInput
+                        style={{ marginTop: 16 }}
+                        placeholder='First name'
+                        value={this.state.controls.firstName.value}
+                        onChangeText={(val) => this.updateInputState('firstName', val)}
+                        valid={this.state.controls.firstName.valid}
+                        touched={this.state.controls.firstName.touched}
+                        autoCapitalize="none"
+                        autoCorrect={false}
+                        // keyboardType="email-address"
+                        returnKeyType={"next"}
+                        textContentType='none'
+                        ref={(input) => this.firstName = input}
+                        onSubmitEditing={() => this.lastName.getInnerRef().focus()}
+                    />
+                    <DefaultInput
+                        style={{ marginTop: 16 }}
+                        placeholder='Last name'
+                        value={this.state.controls.lastName.value}
+                        onChangeText={(val) => this.updateInputState('lastName', val)}
+                        valid={this.state.controls.lastName.valid}
+                        touched={this.state.controls.lastName.touched}
+                        autoCapitalize="none"
+                        autoCorrect={false}
+                        // keyboardType="email-address"
+                        returnKeyType={"next"}
+                        textContentType='none'
+                        ref={(input) => this.lastName = input}
                         onSubmitEditing={() => this.email.getInnerRef().focus()}
                     />
                     <DefaultInput
@@ -189,10 +246,11 @@ class RegisterScreen extends BaseScreen {
                         onChangeText={val => this.updateInputState('confirmPassword', val)}
                         valid={this.state.controls.confirmPassword.valid}
                         touched={this.state.controls.confirmPassword.touched}
-                        returnKeyType={"done"}
+                        returnKeyType={"next"}
                         secureTextEntry={true}
                         textContentType='none'
                         ref={(input) => this.confirmPass = input}
+                        onSubmitEditing={() => this.phoneNumber.getInnerRef().focus()}
                     />
                     <DefaultInput
                         style={{ marginTop: 16 }}
@@ -203,8 +261,10 @@ class RegisterScreen extends BaseScreen {
                         touched={this.state.controls.phoneNumber.touched}
                         autoCapitalize="none"
                         autoCorrect={false}
-                        returnKeyType={"next"}
+                        returnKeyType={"done"}
                         keyboardType='number-pad'
+                        ref={(input) => this.phoneNumber = input}
+                        onSubmitEditing={() => Keyboard.dismiss()}
                     />
 
                 </View>

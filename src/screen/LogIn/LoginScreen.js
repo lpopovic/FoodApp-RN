@@ -45,7 +45,7 @@ class LoginScreen extends BaseScreen {
                     value: "",
                     valid: false,
                     validationRules: {
-                        minLenght: 6
+                        minLenght: 3
                     },
                     touched: false
                 },
@@ -79,7 +79,8 @@ class LoginScreen extends BaseScreen {
                 this.props.fetchUserProfileHandler()
 
                 if (this.state.showBackButton == true) {
-                    this.closeScreen()
+                    // this.closeScreen()
+                    this.resetNavigationStack(ScreenName.TabNavigatorScreen())
                 } else {
                     this.resetNavigationStack(ScreenName.MainLocationScreen())
                 }
@@ -269,10 +270,11 @@ const styles = StyleSheet.create({
 
     },
     headerContainer: {
-        marginTop: 60,
+        marginTop: 16,
         justifyContent: 'center',
         alignItems: 'center',
-    }, logoImage: {
+    }, 
+    logoImage: {
         height: 120,
         width: 120,
     },

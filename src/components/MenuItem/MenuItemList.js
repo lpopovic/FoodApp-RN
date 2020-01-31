@@ -1,27 +1,42 @@
 import React, { Component } from 'react';
 import {
     View,
-    Text,
     FlatList,
-    StyleSheet
+    Text,
+    TouchableOpacity,
+    StyleSheet,
+    Keyboard,
+    ActivityIndicator,
 } from 'react-native';
-import CategoryItem from './CategoryItem'
-import { BASE_COLOR } from '../../styles';
-import { TouchableOpacity } from 'react-native-gesture-handler';
-class CategorySectionList extends Component {
+import MenuItem from './MenuItem'
+import { BASE_COLOR } from '../../styles'
+
+class MenuItemList extends Component {
     constructor(props) {
         super(props)
-        this.titleSection = "KATEGORIJE"
-        this.titleSeeMore = "vidi sve"
     }
+    render_FlatList_footer = () => {
+
+        var footer_View = (
+
+            <View style={{ width: 8 }}>
+            </View>
+
+        );
+
+        return footer_View;
+
+    };
     render() {
+        const titleSection = this.props.titleSection ? this.props.titleSection : "NEPOZNATO"
+        const titleSeeMore = "vidi sve"
         return (
-            <View style={styles.mainContainer}>
+            <View style={[styles.mainContainer,this.props.style]}>
                 <View style={styles.sectionContainer}>
-                    <Text style={styles.text}>{this.titleSection}</Text>
+                    <Text style={styles.text}>{titleSection}</Text>
                     <TouchableOpacity onPress={() => this.props.onPressSeeMore()}>
                         <View style={styles.seeMoreContainer}>
-                            <Text style={[styles.text, { color: BASE_COLOR.gray }]}>{this.titleSeeMore}</Text>
+                            <Text style={[styles.text, { color: BASE_COLOR.gray }]}>{titleSeeMore}</Text>
                         </View>
                     </TouchableOpacity>
 
@@ -31,38 +46,16 @@ class CategorySectionList extends Component {
                     style={styles.listContainer}
                     data={this.props.arrayObject}
                     horizontal
-                    keyExtractor={(item, index) => `${index.toString()}`}
+                    keyExtractor={(item,index) => `${index.toString()}`}
                     renderItem={(info) => (
-                        <CategoryItem
+                        <MenuItem
                             item={info.item}
-                            setSmall
                             onPress={() => this.props.onPressItem(info.item)}
                         />
                     )}
-
+                    ListFooterComponent={this.render_FlatList_footer}
                 />
             </View>
-        )
-    }
-}
-
-class CategoryList extends Component {
-    render() {
-        return (
-            <FlatList
-                refreshControl={this.props.refreshControl}
-                style={styles.listContainer}
-                data={this.props.arrayObject}
-                numColumns={2}
-                keyExtractor={(item, index) => `${index.toString()}`}
-                renderItem={(info) => (
-                    <CategoryItem
-                        item={info.item}
-                        onPress={() => this.props.onPressItem(info.item)}
-                    />
-                )}
-
-            />
         )
     }
 }
@@ -94,4 +87,4 @@ const styles = StyleSheet.create({
 });
 
 
-export { CategorySectionList, CategoryList };
+export default MenuItemList;

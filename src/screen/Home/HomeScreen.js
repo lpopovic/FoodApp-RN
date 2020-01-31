@@ -3,19 +3,22 @@ import {
     View,
     ScrollView,
     RefreshControl,
-    StyleSheet
+    StyleSheet,
+    SafeAreaView
 } from 'react-native';
 import { ScreenName } from '../../helpers'
 import BaseScreen from "../BaseScreen/BaseScreen"
 import Header from '../../components/common/BaseHeader'
-import SafeAreaView from 'react-native-safe-area-view';
+import { fetchUserProfile } from '../../store/actions'
 import { connect } from 'react-redux';
 import { NAV_COLOR, BASE_COLOR } from '../../styles';
 import { CategorySectionList } from '../../components/Category/CategoryList'
 import { PlaceSectionList } from '../../components/Place/PlaceList'
+import MenuItemList from '../../components/MenuItem/MenuItemList'
 import HomeCaroselComponent from '../../components/Home/HomeCaroselComponent';
-import { PlaceNetwork, CategoryNetwork, ParamsUrl } from '../../service/api'
-
+import { PlaceNetwork, CategoryNetwork, ParamsUrl, UserNetwork } from '../../service/api'
+import testMenuItems from '../../static/menuItems.json'
+import { MenuItem } from '../../model';
 class HomeScreen extends BaseScreen {
     static navigationOptions = {
         header: null,
@@ -34,6 +37,8 @@ class HomeScreen extends BaseScreen {
             recommendedPlaces: [],
             pickupPlaces: [],
             deliveryPlaces: [],
+            favoritePlaces: [],
+            favoriteMenuItems: [],
 
 
         }
@@ -43,9 +48,43 @@ class HomeScreen extends BaseScreen {
         super.componentDidMount()
         this.setStatusBarStyle(NAV_COLOR.headerBackground, true)
         this.apiCallHandler()
+        this.companyRequestApiCheck()
+        const favoriteMenuItems = MenuItem.createArrayMenuItems(testMenuItems)
+        this.setNewStateHandler({
+
+            favoriteMenuItems
+        })
     }
     componentWillUnmount() {
         super.componentWillUnmount()
+    }
+
+
+    companyRequestApiCheck = () => {
+        if (this.props.isLogin && this.props.userInfo.company === null) {
+            UserNetwork.fetchUserGetCompanyReguests()
+                .then(
+                    res => {
+                        onPressOkStatus = () => {
+                            UserNetwork.fetchUserPutCompanyReguestsResponse(res._id, "true").then(
+                                res => {
+                                    this.props.fetchUserProfileHandler()
+                                },
+                                err => {
+
+                                }
+                            )
+                        }
+                        onPressCancelStatus = () => {
+                            UserNetwork.fetchUserPutCompanyReguestsResponse(res._id, "false")
+                        }
+                        this.showDialogMessage(res.text, onPressOkStatus, onPressCancelStatus)
+                    },
+                    err => {
+
+                    }
+                )
+        }
     }
 
     apiCallHandler = () => {
@@ -69,6 +108,7 @@ class HomeScreen extends BaseScreen {
                     newPlaces: res,
                     actionPlaces: res,
                     recommendedPlaces: res,
+                    favoritePlaces: res,
                 })
             },
             err => {
@@ -250,7 +290,47 @@ class HomeScreen extends BaseScreen {
         }
 
     }
+    placeListFavoriteContent = () => {
+        const { favoritePlaces } = this.state
+        const { isLogin } = this.props
 
+
+        if (favoritePlaces.length > 0 && isLogin == true) {
+            return (
+                <PlaceSectionList
+                    titleSection={"❤️ OMILJENI RESTORANI"}
+                    arrayObject={favoritePlaces}
+                    onPressItem={(item) =>this.pushNewScreen({ routeName: ScreenName.PlaceDetailScreen(), key: `${Math.random() * 10000}${item._id}`, params: { _id: item._id } })}
+                    // onPressSeeMore={() => this.pushNewScreen({
+                    //     routeName: ScreenName.PlaceListScreen(),
+                    //     key: `${Math.random() * 10000}`,
+                    //     params: {
+                    //         title: "OMILJENI",
+                    //     }
+                    // })}
+                    onPressSeeMore={() => { }}
+                />
+            )
+        }
+
+    }
+    menuItemsListFavoriteContent = () => {
+        const { favoriteMenuItems } = this.state
+        const { isLogin } = this.props
+
+
+        if (favoriteMenuItems.length > 0 && isLogin == true) {
+            return (
+                <MenuItemList
+                    titleSection={"❤️ OMILJENA JELA"}
+                    arrayObject={favoriteMenuItems}
+                    onPressItem={(item) => this.pushNewScreen({ routeName: ScreenName.MenuItemDetailsScreen(), key: `${Math.random() * 10000}${item._id}`, params: { _id: item._id } })}
+                    onPressSeeMore={() => console.log("see more")}
+                />
+            )
+        }
+
+    }
     categoryListContent = () => {
         const { categories } = this.state
         return (
@@ -324,6 +404,12 @@ class HomeScreen extends BaseScreen {
                     <View style={{ marginTop: 8 }}>
                         {this.placeListPickupContent()}
                     </View>
+                    <View style={{ marginTop: 8 }}>
+                        {this.placeListFavoriteContent()}
+                    </View>
+                    <View style={{ marginTop: 8, marginBottom: 8 }}>
+                        {this.menuItemsListFavoriteContent()}
+                    </View>
                 </View>
             </ScrollView>
         )
@@ -368,7 +454,17 @@ const styles = StyleSheet.create({
 const mapStateToProps = state => {
     return {
         filter: state.filter.filter,
+        isLogin: state.user.isLogin,
+        userInfo: state.user.userInfo,
+
     };
 };
 
-export default connect(mapStateToProps, null)(HomeScreen);
+const mapDispatchToProps = dispatch => {
+    return {
+
+        fetchUserProfileHandler: () => dispatch(fetchUserProfile()),
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(HomeScreen);

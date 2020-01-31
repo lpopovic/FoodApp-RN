@@ -11,7 +11,7 @@ class DishCard extends Component {
         const { image, description, name } = this.props.dish
         return (
             <View style={styles.mainContainer}>
-                <TouchableOpacity style={{ flex: 1, flexDirection: 'row'}} onPress={() => this.props.onClick()}>
+                <TouchableOpacity style={{ flex: 1, flexDirection: 'row' }} onPress={() => this.props.onClick()}>
                     <Image
                         style={{
                             height: 80,

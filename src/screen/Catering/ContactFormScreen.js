@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
-class ContactScreen extends Component {
+class ContactFormScreen extends Component {
 
     render() {
         return (
@@ -19,4 +19,4 @@ const styles = StyleSheet.create({
 });
 
 
-export default ContactScreen;
+export default ContactFormScreen;

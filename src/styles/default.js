@@ -45,7 +45,8 @@ export const segmentedControlStyles = StyleSheet.create({
         borderBottomRightRadius: 8,
         padding: 2,
         margin: 5,
-        borderWidth: 0
+        borderWidth: 0,
+        borderColor: 'transparent'
     },
     activeStyle: {
         backgroundColor: '#fff',

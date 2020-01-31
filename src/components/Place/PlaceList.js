@@ -5,14 +5,28 @@ import {
     Text,
     TouchableOpacity,
     StyleSheet,
-    Keyboard
+    Keyboard,
+    ActivityIndicator,
 } from 'react-native';
-import { PlaceItem ,PlaceSmallItem} from './PlaceItem'
+import { PlaceItem, PlaceSmallItem } from './PlaceItem'
 import { BASE_COLOR } from '../../styles'
 
 
 class PlaceList extends Component {
-
+    renderFooter = () => {
+        if (!this.props.loadingMore) return null;
+        return (
+            <ActivityIndicator
+                size={"large"}
+                color={BASE_COLOR.blue}
+            />
+        );
+    };
+    handleLoadMore = () => {
+        if (!this.props.loadingMore) {
+            this.props.loadMoreComponents()
+        }
+    };
     render() {
         return (
             <FlatList
@@ -20,13 +34,16 @@ class PlaceList extends Component {
                 style={styles.listContainer}
                 data={this.props.arrayObject}
                 onScroll={this._onScroll}
-                keyExtractor={(index) => `${index.toString()}`}
+                keyExtractor={(item, index) => `${index.toString()}`}
                 renderItem={(info) => (
                     <PlaceItem
                         item={info.item}
                         onPress={() => this.props.onPressItem(info.item)}
                     />
                 )}
+                onEndReachedThreshold={0.4}
+                onEndReached={this.handleLoadMore.bind(this)}
+                ListFooterComponent={this.renderFooter.bind(this)}
 
             />
         )
@@ -41,11 +58,23 @@ class PlaceSectionList extends Component {
     constructor(props) {
         super(props)
     }
+    render_FlatList_footer = () => {
+
+        var footer_View = (
+
+            <View style={{ width: 8 }}>
+            </View>
+
+        );
+
+        return footer_View;
+
+    };
     render() {
         const titleSection = this.props.titleSection ? this.props.titleSection : "NEPOZNATO"
         const titleSeeMore = "vidi sve"
         return (
-            <View style={styles.mainContainer}>
+            <View style={[styles.mainContainer, this.props.style]}>
                 <View style={styles.sectionContainer}>
                     <Text style={styles.text}>{titleSection}</Text>
                     <TouchableOpacity onPress={() => this.props.onPressSeeMore()}>
@@ -60,7 +89,7 @@ class PlaceSectionList extends Component {
                     style={styles.listContainer}
                     data={this.props.arrayObject}
                     horizontal
-                    keyExtractor={(index) => `${index.toString()}`}
+                    keyExtractor={(item, index)=> `${index.toString()}`}
                     renderItem={(info) => (
                         <PlaceSmallItem
                             item={info.item}
@@ -68,7 +97,7 @@ class PlaceSectionList extends Component {
                             onPress={() => this.props.onPressItem(info.item)}
                         />
                     )}
-
+                    ListFooterComponent={this.render_FlatList_footer}
                 />
             </View>
         )

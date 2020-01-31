@@ -11,6 +11,8 @@ import {
     UIManager,
     LayoutAnimation
 } from 'react-native';
+import DatePicker from 'react-native-date-picker';
+import Moment from 'moment';
 import BaseScreen from '../BaseScreen/BaseScreen';
 import SafeAreaView from 'react-native-safe-area-view';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
@@ -22,7 +24,7 @@ import ShopCard from '../../components/Home/ShopCard';
 import { OrderNetwork, UserNetwork } from '../../service/api';
 import { removeOrderMenuItem, emptyOrder, updateUserProfile } from '../../store/actions'
 import Icon from 'react-native-vector-icons/Ionicons';
-import { ScreenName, isNumber } from '../../helpers'
+import { ScreenName, isNumber, keyAdress } from '../../helpers'
 
 const PAY_BUTTON_KEY = {
     cacheSelected: "cache",
@@ -56,13 +58,32 @@ class ShoopScreen extends BaseScreen {
                     valid: false
                 }
             },
-            showAddressInfo: false
+            showAddressInfo: false,
+            // date: Moment().toDate(),
+            scheduledTime: Moment().toDate(),
+            scheduledViewOpen: false,
         }
     }
 
     componentDidMount() {
         super.componentDidMount()
         this.setStatusBarStyle(NAV_COLOR.headerBackground, true)
+
+        if (this.props.isLogin == true) {
+            const { phoneNumber, username } = this.props.userInfo
+            this.setNewStateHandler({
+                ...this.state,
+                userInfo: {
+                    ...this.state.userInfo,
+                    name: username,
+                    numberMobile: {
+                        valid: isNumber(phoneNumber),
+                        value: phoneNumber
+                    }
+                }
+
+            })
+        }
     }
     componentWillUnmount() {
         super.componentWillUnmount()
@@ -103,14 +124,22 @@ class ShoopScreen extends BaseScreen {
         LayoutAnimation.easeInEaseOut();
     }
 
-    renderAllAdresses = () => {
 
-        let filteredAddresses = this.props.userInfo.address.filter(
+    renderAllAdresses = () => {
+        let filteredArrayUserAdreess = this.props.userInfo.address.filter(
+            (data) => {
+                if (data.includes(keyAdress(this.props.city._id))) {
+                    return data
+                }
+
+            }
+        );
+        let filteredAddresses = filteredArrayUserAdreess.filter(
             (data) => {
                 if (this.state.userInfo.address) {
                     return data.toLowerCase().indexOf(this.state.userInfo.address.toLowerCase()) !== -1
                 } else {
-                    return this.props.userInfo.address
+                    return filteredArrayUserAdreess
                 }
             }
         );
@@ -120,12 +149,12 @@ class ShoopScreen extends BaseScreen {
                     ...this.state,
                     userInfo: {
                         ...this.state.userInfo,
-                        address: text,
+                        address: text.replace(keyAdress(this.props.city._id), ''),
                     },
                     showAddressInfo: false
                 })
             }} style={{ borderWidth: 0.5, width: '100%', padding: 8, borderColor: BASE_COLOR.blue }} key={i}>
-                <Text style={{ fontSize: 14 }}>{text}</Text>
+                <Text style={{ fontSize: 14 }}>{text.replace(keyAdress(this.props.city._id), '')}</Text>
             </TouchableOpacity>
         ))
     }
@@ -144,7 +173,6 @@ class ShoopScreen extends BaseScreen {
         )
     }
     mainContent = () => {
-
         const { userInfo } = this.state
         return (
             <View style={styles.mainContainer}>
@@ -161,7 +189,7 @@ class ShoopScreen extends BaseScreen {
                             style={{ marginBottom: 30 }}
                             scrollEnabled={false}
                             data={this.props.order}
-                            keyExtractor={(index) => `${index.toString()}`}
+                            keyExtractor={(item, index) => `${index.toString()}`}
                             renderItem={(info) => (
                                 <ShopCard
                                     data={info.item}
@@ -306,6 +334,20 @@ class ShoopScreen extends BaseScreen {
                                 <View style={styles.textInputNoteContainer}>
                                     {this.textInputNoteContent()}
                                 </View>
+
+                                <View style={{ alignSelf: 'center', height: this.state.scheduledViewOpen ? 230 : 20, overflow: 'hidden', marginTop: 10, marginBottom: 10 }}>
+                                    <Text style={{ fontWeight: '500', fontSize: 17 }} onPress={() => this.schedulingOnPress()} >Zakaži porudzbinu za odredjeno vreme</Text>
+                                    <DatePicker
+                                        locale="sr-Latn-RS"
+                                        date={this.state.scheduledTime}
+                                        minuteInterval={5}
+                                        minimumDate={Moment().add(this.estimateDeliveryTime(this.props.orderForPlace.estimatedDeliveryTime), 'm').toDate()}
+                                        // minimumDate = {this.roundDate(Moment().add(30, 'm').toDate(), null, 5)}
+                                        maximumDate={Moment().add(15, 'd').toDate()}
+                                        onDateChange={scheduledTime => this.setState({ scheduledTime })}
+                                    />
+                                </View>
+
                             </>
                             :
                             <View />
@@ -333,6 +375,31 @@ class ShoopScreen extends BaseScreen {
             </View >
         )
     }
+
+    // roundDate = (date, type, offset) => {   
+    //     let val = date[type]()  
+    //     let roundedVal = Math.ceil((val+1)/offset)*offset  
+    //     return date[type](roundedVal)  
+    //  }
+    estimateDeliveryTime = (estimatedDeliveryTime) => {
+        console.log(estimatedDeliveryTime)
+        switch (estimatedDeliveryTime) {
+            case "any":
+                return 60
+            case 45:
+                return 45
+            case 60:
+                return 60
+            default:
+                break;
+        }
+    }
+    schedulingOnPress() {
+        this.setNewStateHandler({
+            scheduledViewOpen: !this.state.scheduledViewOpen
+        })
+        console.log(this.state.scheduledViewOpen)
+    }
     onPressLogInHandler = () => {
         this.pushNewScreen({
             routeName: ScreenName.LoginScreen(),
@@ -343,35 +410,48 @@ class ShoopScreen extends BaseScreen {
     onPressRemoveHandler(orderdMenuItem) {
         this.props.removeOrderMenuItemHandler(orderdMenuItem)
     }
+    showDialogForAddAdress = (address) => {
+        const newAddress = `${address}${keyAdress(this.props.city._id)}`
+        if (!this.props.userInfo.address.includes(newAddress)) {
+            onPressOk = () => {
+                UserNetwork.fetchUserPutNewAddress(newAddress)
+                let user = this.props.userInfo
+                user.address.push(newAddress)
+                this.props.updateUserProfileHandler(user)
+            }
 
+            this.showDialogMessage("Da li želite da sačuvate novu adresu?", onPressOk)
+        }
+    }
     onPressOrderHandler(order) {
-        const { cacheSelected, wayOfDelivery, specialInstructions, userInfo } = this.state
+        const { cacheSelected, wayOfDelivery, specialInstructions, userInfo, scheduledTime, scheduledViewOpen } = this.state
         const { orderForPlace } = this.props
         const placeId = orderForPlace._id
         const orderType = wayOfDelivery
+        const scheduledTimeForOrder = scheduledViewOpen ? scheduledTime : null
         const methodOfPayment = cacheSelected ? 'cash' : 'online'
-
         const { name, address, numberMobile } = userInfo
+
         if (name.trim() != '' && address.trim() != '' && numberMobile.valid == true) {
-            OrderNetwork.fetchOrder(order, placeId, orderType, methodOfPayment, specialInstructions, address, numberMobile.value)
+
+            this.setNewStateHandler({
+                loading: true
+            })
+            OrderNetwork.fetchOrder(order, placeId, orderType, methodOfPayment, specialInstructions, address, numberMobile.value, scheduledTimeForOrder)
                 .then(
                     res => {
                         this.showAlertMessage("USPESNO NARUCENO")
                         this.setNewStateHandler({ loading: false })
                         this.closeScreen()
                         this.props.emptyOrderHandler()
-
-                        if (!this.props.userInfo.address.includes(address)) {
-                            UserNetwork.fetchUserPutNewAddress(address)
-                            let user = this.props.userInfo
-                            user.address.push(address)
-                            this.props.updateUserProfileHandler(user)
-                        }
+                        this.showDialogForAddAdress(address)
                     },
                     err => {
                         this.setNewStateHandler({ loading: false })
                         this.showAlertMessage(String(err))
                     })
+        } else if (!numberMobile.valid) {
+            this.showAlertMessage("Molimo vas popunite polje za kontakt telefon. \nHvala.")
         } else {
             this.showAlertMessage("Molimo vas popunite polje sa vasim podacima. \nHvala.")
         }
@@ -505,6 +585,7 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = state => {
     return {
+        city: state.location.city,
         order: state.order.order,
         orderForPlace: state.order.orderForPlace,
         userInfo: state.user.userInfo,

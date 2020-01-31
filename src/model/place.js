@@ -1,5 +1,5 @@
 
-import { City, ImageAssets, Category } from './index'
+import { ImageAssets, Category } from './index'
 
 class Place {
     constructor(object) {
@@ -77,6 +77,25 @@ class Place {
     }
 }
 
+class PlaceCathering {
+    constructor(object) {
+        this._id = object._id;
+        this.place = new Place(object.place);
+    }
+
+    static createArrayPlacesCathering(objectArray) {
+
+        const arrayTemplate = objectArray.map(item => {
+
+            return new PlaceCathering(item);
+
+        })
+    
+        return arrayTemplate;
+    }
+
+}
+
 class PlaceDetail {
     constructor(object) {
         this.field = object.field || '';
@@ -85,4 +104,4 @@ class PlaceDetail {
         this.image = object.image || '';
     }
 }
-export { Place, PlaceDetail };
+export { Place, PlaceDetail, PlaceCathering };

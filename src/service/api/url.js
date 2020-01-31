@@ -31,31 +31,42 @@ class RestUrl {
     static getPlaceById = (placeId) => {
         return withKey(`places/${placeId}`)
     }
-    static getMenuItems = (placeId) => {
-        return withKey(`menuitems?isParent=true&place=${placeId}`)
+    static getPlacesForCathering = withKey(`places/cathering`)
+
+
+    // static getMenuItems = (placeId) => {
+        // return withKey(`menuitems?isParent=true&place=${placeId}`)
+    static getMenuItems = (placeId, dayOfWeek) => {
+        return withKey(`menuitems?isParent=true&place=${placeId}&${ParamsUrl.daysAvailable(dayOfWeek)}`)
     }
     static getMenuItemById = (menuItemId) => {
         return withKey(`menuitems/${menuItemId}`)
     }
 
     static order = withKey(`orders`)
+    static getOrderCatherings = () => {
+        return withKey(`orders?${ParamsUrl.isCatheringOrder(true)}`)
+    }
 
-
-    // static getMenuItems = (params) => {
-    //     if(params){
-    //         let param = ''
-    //         params.forEach(element => {
-    //             param = `${param}${element}&`
-    //         });
-    //         param = param.slice(0, -1)
-    //         return withKey(`menuitems?${param}`)
-    //     }else {
-    //         return withKey(`menuitems`)
-    //     }
-    // }
+    static catheringOrderFromDateToDate = (fromDate, toDate) => {
+        return withKey(`orders?from=${fromDate}&to=${toDate}&isCatheringOrder=true`)
+    } 
 
     static getAllcategories = withKey(`categories`)
 
+    static getCompanyReguest = (id) => {
+        return withKey(`companyrequests${id ? `/${id}` : ''}`)
+    }
+
+    static getAllReviewsForPlace = (placeId, param) => {
+        return withKey(`reviews/${placeId}?${param}&limit=20`)
+    }
+
+    static getReviewForOrder = (orderId) => {
+        return withKey(`reviews/order/${orderId}`)
+    }
+
+    static postReview = withKey(`reviews`)
 
 }
 
@@ -66,6 +77,12 @@ class ParamsUrl {
     static category = (value) => { return `category=${value}` }
     static avgRating = (value) => { return `avgRating=${value}` }
     static avgPriceTag = (value) => { return `avgPriceTag=${value}` }
+    static daysAvailable = (value) => { return `daysAvailable=${value}` }
+    static scheduledTime = (value) => { return `scheduledTime=${value}` }
+    static isCatheringOrder = (value) => { return `isCatheringOrder=${value}` }
+    static sort = (value) => { return `sort=${value}` }
+    static offset = (value) => { return `offset=${value}` }
+
 }
 
 export { RestUrl, ParamsUrl, ROOT_URL_IMAGE };

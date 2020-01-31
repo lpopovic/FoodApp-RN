@@ -113,7 +113,7 @@ class OrderDetailScreen extends BaseScreen {
             <View style={[styles.mainContainer, { margin: 16 }]}>
                 <FlatList
                     data={menuItems}
-                    keyExtractor={(index) => `${index.toString()}`}
+                    keyExtractor={(item, index) => `${index.toString()}`}
                     renderItem={(info) => (
                         <View style={{
                             flex: 1,

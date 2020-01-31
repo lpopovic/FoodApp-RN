@@ -3,21 +3,26 @@ import {
     UPDATE_USER_JWT_DATA,
     USER_LOG_OUT,
     UPDATE_LIST_USER_ORDERS,
+    UPDATE_LIST_USER_CATHERING_ORDERS,
 } from '../actions/actionTypes';
 
 const initialState = {
     JWT: null,
     isLogin: false,
     userOrders: [],
+    userCatherings: [],
     userInfo: {
         _id: 'Unknown id',
         username: 'Unknown username',
+        name: 'Unknown name',
+        lastName: 'Unknown last name',
         image: null,
         email: 'Unknown email',
         company: null,
         catheringOptions: null,
         catheringIsAvailable: null,
-        address:[]
+        address: [],
+        phoneNumber: ''
     },
 };
 
@@ -39,12 +44,20 @@ const reducer = (state = initialState, action) => {
                 ...state,
                 JWT: null,
                 isLogin: false,
-                userOrders: []
+                userOrders: [],
+                userCatherings: [],
+                userInfo: initialState.userInfo,
             }
         case UPDATE_LIST_USER_ORDERS:
             return {
                 ...state,
                 userOrders: action.payload
+            }
+
+        case UPDATE_LIST_USER_CATHERING_ORDERS:
+            return {
+                ...state,
+                userCatherings: action.payload
             }
         default:
             return state;
