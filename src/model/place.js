@@ -48,8 +48,8 @@ class Place {
         if (location) {
             if (location.coordinates.length == 2) {
                 this.coordinate = {
-                    latitude: location.coordinates[0],
-                    longitude: location.coordinates[1],
+                    latitude: location.coordinates[1],
+                    longitude: location.coordinates[0],
                 }
             } else {
                 this.coordinate = {
