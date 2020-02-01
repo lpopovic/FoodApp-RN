@@ -19,7 +19,7 @@ class PlaceList extends Component {
 
 const styles = StyleSheet.create({
     mainContainer: {
-     
+        flex: 1
     }
 });
 
