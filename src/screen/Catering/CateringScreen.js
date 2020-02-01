@@ -43,7 +43,7 @@ class CateringScreen extends BaseScreen {
         super(props)
         this.state = {
             loading: true,
-            isCatheringAvailable: false,
+            isCatheringAvailable: null,
             selectedDate: Moment().format('YYYY-MM-DD'),
             markedDates: [],
             placesCathering: [],
@@ -355,6 +355,15 @@ class CateringScreen extends BaseScreen {
     }
 
 
+    loginToCatheringMesage() {
+        return (
+            <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+                <Text style={{ textAlign: 'center', textAlignVertical: 'center', fontSize: 24, fontWeight: 'bold' }}>Da biste koristili ketering tab, molimo vas da se prijavite</Text>
+            </View>
+
+        )
+    }
+
     render() {
         const { loading, isCatheringAvailable } = this.state
         const { isLogin } = this.props
@@ -362,14 +371,15 @@ class CateringScreen extends BaseScreen {
         return (
             <SafeAreaView style={styles.safeAreaHeader}>
                 <View style={styles.mainContainer}>
-                    {isCatheringAvailable && isLogin ?
+                    { isLogin ? isCatheringAvailable != false ?
                         <>
                             {this.cateringCalendarStrip()}
                             {mainDisplay}
                         </>
-                        : this.signUpToCatheringMesage()}
-                    {/* {this.cateringCalendarStrip()}
-                 {mainDisplay} */}
+                        : this.signUpToCatheringMesage()
+                    : this.loginToCatheringMesage()
+                    }
+                   
                 </View>
             </SafeAreaView>
 
