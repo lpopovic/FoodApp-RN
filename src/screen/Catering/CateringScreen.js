@@ -18,21 +18,7 @@ import { connect } from 'react-redux';
 import { updateUserProfile } from '../../store/actions';
 import { BASE_COLOR, NAV_COLOR } from '../../styles';
 import { ImageAssets } from '../../model/image';
-import { User } from '../../model';
-const locale = {
-    name: 'sr',
-    config: {
-        months: 'Januar_Februar_Mart_April_Maj_Jun_Jul_Avgust_Septembar_Oktobar_Novembar_Decembar'.split('_'),
-        monthsShort: 'Jan_Feb_Mar_Apr_Maj_Jun_Jul_Avg_Sep_Okt_Nov_Dec'.split('_'),
-        weekdays: 'Ponedeljak_Utorak_Sreda_Četvrtak_Petak_Subota_Nedelja'.split('_'),
-        weekdaysShort: 'NED_PON_UTO_SRE_ČET_PET_SUB'.split('_'),
-        weekdaysMin: 'PO_UT_SR_ČE_PE_SU_NE'.split('_'),
-    },
-    week: {
-        dow: 1,
-        doy: 4
-    }
-};
+
 class CateringScreen extends BaseScreen {
 
     static navigationOptions = {
@@ -52,6 +38,16 @@ class CateringScreen extends BaseScreen {
             places: [],
             balance: null
         }
+        Moment.locale('Latinica', {
+            months: 'Januar_Februar_Mart_April_Maj_Jun_Jul_Avgust_Septembar_Oktobar_Novembar_Decembar'.split('_'),
+            monthsShort: 'Jan_Feb_Mar_Apr_Maj_Jun_Jul_Avg_Sep_Okt_Nov_Dec'.split('_'),
+            weekdays: 'Ponedeljak_Utorak_Sreda_Četvrtak_Petak_Subota_Nedelja'.split('_'),
+            weekdaysShort: 'NED_PON_UTO_SRE_ČET_PET_SUB'.split('_'),
+            weekdaysMin: 'PO_UT_SR_ČE_PE_SU_NE'.split('_'),
+            weekdaysParseExact: true,
+        });
+
+
     }
 
     componentDidMount() {
@@ -371,15 +367,15 @@ class CateringScreen extends BaseScreen {
         return (
             <SafeAreaView style={styles.safeAreaHeader}>
                 <View style={styles.mainContainer}>
-                    { isLogin ? isCatheringAvailable != false ?
+                    {isLogin ? isCatheringAvailable != false ?
                         <>
                             {this.cateringCalendarStrip()}
                             {mainDisplay}
                         </>
                         : this.signUpToCatheringMesage()
-                    : this.loginToCatheringMesage()
+                        : this.loginToCatheringMesage()
                     }
-                   
+
                 </View>
             </SafeAreaView>
 
