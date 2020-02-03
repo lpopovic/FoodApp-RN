@@ -22,7 +22,7 @@ class FilterScreen extends BaseScreen {
 
     static navigationOptions = {
         header: null,
-        gesturesEnabled: false,
+        // gesturesEnabled: false,
     };
 
     constructor(props) {
