@@ -6,6 +6,7 @@ export const STORAGE_KEY = {
     USER_APP_DATA: 'USER_APP_DATA',
     USER_LAST_LOCATION: 'USER_LAST_LOCATION',
     SEARCH_FILTER:'SEARCH_FILTER',
+    LANGUAGE_APP: 'LANGUAGE_APP'
 }
 
 export const saveStorageData = async (object, key) => {
