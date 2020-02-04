@@ -5,7 +5,7 @@
  * @format
  * @flow
  */
-
+import 'react-native-gesture-handler'
 import React, { Component } from 'react';
 
 import Navigator  from './src/components/TabNavigation/Navigator'

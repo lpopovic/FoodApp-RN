@@ -300,6 +300,9 @@
 						CreatedOnToolsVersion = 6.2;
 						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
+					13B07F861A680F5B00A75B9A = {
+						DevelopmentTeam = AQAC7X9NZH;
+					};
 					2D02E47A1E0B4A5D006451C7 = {
 						CreatedOnToolsVersion = 8.2.1;
 						ProvisioningStyle = Automatic;
@@ -683,8 +686,9 @@
 			baseConfigurationReference = C33CB300FC17EF207724746E /* Pods-Ketering.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 4;
 				DEAD_CODE_STRIPPING = NO;
+				DEVELOPMENT_TEAM = AQAC7X9NZH;
 				INFOPLIST_FILE = Ketering/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
@@ -692,7 +696,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.riitech.KLOPAJ-Test";
 				PRODUCT_NAME = Ketering;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
@@ -703,7 +707,8 @@
 			baseConfigurationReference = 938D50DABF4D39EE8AE6A9CB /* Pods-Ketering.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 4;
+				DEVELOPMENT_TEAM = AQAC7X9NZH;
 				INFOPLIST_FILE = Ketering/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
@@ -711,7 +716,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.riitech.KLOPAJ-Test";
 				PRODUCT_NAME = Ketering;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
