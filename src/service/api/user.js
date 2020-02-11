@@ -67,11 +67,12 @@ class UserNetwork {
                 resolve(user)
 
             } catch (error) {
-                try {
+                const logOut = error.response.status === 401 ? true : false
+                try { // 401
                     const { message } = error.response.data.error
-                    reject(message)
+                    reject({ message, logOut })
                 } catch  {
-                    reject(error.message)
+                    reject({ message: error.message, logOut })
 
                 }
             }
@@ -103,17 +104,17 @@ class UserNetwork {
 
             try {
                 const { data } = await axios.get(url)
-                if ( data !== null) {
+                if (data !== null) {
                     const companyRequest = new CompanyRequest(data)
                     if (companyRequest.status === null) {
                         resolve(companyRequest)
                     } else {
                         reject("Nema")
                     }
-                }else {
+                } else {
                     reject("NEMA")
                 }
-              
+
 
 
             } catch (error) {

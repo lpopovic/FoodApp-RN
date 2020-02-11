@@ -15,7 +15,7 @@ import CalendarStrip from 'react-native-calendar-strip';
 import { CatheringNetwork, UserNetwork } from '../../service/api'
 import Moment from 'moment';
 import { connect } from 'react-redux';
-import { updateUserProfile } from '../../store/actions';
+import { updateUserProfile, userLogOut } from '../../store/actions';
 import { BASE_COLOR, NAV_COLOR } from '../../styles';
 import { ImageAssets } from '../../model/image';
 
@@ -149,7 +149,9 @@ class CateringScreen extends BaseScreen {
                     this.balanceHandler()
                 },
                 err => {
-                    // this.showAlertMessage(err)
+                    if (err.logOut) {
+                        this.props.userLogOutHandler()
+                    }
                 }
             )
     }
@@ -403,6 +405,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return {
         updateUserProfileHandler: (user) => dispatch(updateUserProfile(user)),
+        userLogOutHandler: () => dispatch(userLogOut())
     };
 };
 
