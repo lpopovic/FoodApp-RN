@@ -15,6 +15,7 @@ import {
 import { BASE_COLOR, NAV_COLOR } from '../../styles';
 import { PlaceNetwork } from '../../service/api'
 import { Place, Category } from '../../model';
+import { userFavoritePlaces } from '../../store/actions'
 import { connect } from 'react-redux';
 import { avgPriceTag, openDays } from '../../helpers/numberHelper';
 import UrlOpen from '../../components/common/UrlOpen'
@@ -23,7 +24,6 @@ import IconMaterial from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Badge } from 'react-native-elements'
 import Moment from 'moment'
 class PlaceDetailsScreen extends BaseScreen {
-
 
     static navigationOptions = {
         header: null,
@@ -221,14 +221,15 @@ class PlaceDetailsScreen extends BaseScreen {
                                     <Text style={{ color: '#646464', fontWeight: 'normal', fontSize: 12, marginLeft: 2 }}>{Number(place.avgRating).toFixed(1)}</Text>
                                 </View>
                                 <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                                    <TouchableOpacity>
+                                    <TouchableOpacity onPress={() => this.onPressFavoritePlaceHandler(place)}>
                                         <Image
                                             style={{
                                                 width: 23,
-                                                height: 20,
-                                                tintColor: '#646464'
+                                                height: 23,
+                                                tintColor: this.props.userFavoritePlacesIDs.includes(place._id) ? '#FF4233' : '#646464'
                                             }}
-                                            source={IconAssets.heartIcon}
+                                            source={
+                                                this.props.userFavoritePlacesIDs.includes(place._id) ? IconAssets.heartFillIcon : IconAssets.heartIcon}
                                         />
                                     </TouchableOpacity>
                                 </View>
@@ -300,6 +301,15 @@ class PlaceDetailsScreen extends BaseScreen {
             </View>
         )
     }
+
+
+    onPressFavoritePlaceHandler = async (place) => {
+        // console.log("TRENUTNO STANJE PRE"+this.props.userFavoritePlaces)
+        // console.log("TRENUTNO STANJE IDs PRE"+this.props.userFavoritePlacesIDs)
+        this.props.userFavoritePlacesHandler(place)
+    }
+
+
     onPressShowReviewHandler = () => {
         const { place } = this.state
         if (place._id != null) {
@@ -472,8 +482,15 @@ const styles = StyleSheet.create({
 const mapStateToProps = state => {
     return {
         order: state.order.order,
-        isLogin: state.user.isLogin
+        isLogin: state.user.isLogin,
+        // userFavoritePlaces: state.user.userFavoritePlaces,
+        userFavoritePlacesIDs: state.user.userFavoritePlacesIDs
+    };
+};
+const mapDispatchToProps = dispatch => {
+    return {
+        userFavoritePlacesHandler: (place) => dispatch(userFavoritePlaces(place)),
     };
 };
 
-export default connect(mapStateToProps, null)(PlaceDetailsScreen);
+export default connect(mapStateToProps, mapDispatchToProps)(PlaceDetailsScreen);

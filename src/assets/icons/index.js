@@ -4,6 +4,7 @@ const IconAssets = {
     leftArrow: require(`./left-arrow.png`),
     starIcon: require('./Star.png'),
     heartIcon: require('./Union.png'),
+    heartFillIcon: require('./UnionFill.png'),
     backIcon: require('./back.png'),
     cashIcon: require('./cash_icon.png'),
     cardIcon: require('./card_icon.png'),

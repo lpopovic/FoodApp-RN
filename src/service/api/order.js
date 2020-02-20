@@ -87,10 +87,8 @@ class OrderNetwork {
                 methodOfPayment: methodOfPayment,
                 scheduledTime: scheduledTime
             }
-            // console.log("FORM DATA:" + formData)
             try {
                 const { data } = await axios.post(url, formData)
-                console.log(data)
                 resolve(data)
 
             } catch (error) {

@@ -68,6 +68,12 @@ class RestUrl {
 
     static postReview = withKey(`reviews`)
 
+    //FAVORITE
+    static favoritePlace = withKey('favoriteplaces')
+    static deleteFavoritePlace = (favoriteId) => {
+        return withKey(`favoriteplaces/${favoriteId}`)
+    }
+
 }
 
 class ParamsUrl {

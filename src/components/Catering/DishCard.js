@@ -29,16 +29,18 @@ class DishCard extends Component {
                                 <Text numberOfLines={2} ellipsizeMode='tail' style={{ fontSize: 14, fontWeight: '400' }}>{name}</Text>
                             </View>
                             <View style={{ flex: 2.5, flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'flex-start' }}>
-                                <View style={{ flex: 2.5, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
-                                    <Image
-                                        style={{
-                                            width: 17,
-                                            height: 16,
-                                        }}
-                                        source={IconAssets.starIcon}
-                                    />
-                                    <Text style={{ color: '#646464', fontWeight: '400', fontSize: 11, marginLeft: 2 }}>8.9</Text>
-                                </View>
+                                <TouchableOpacity>
+                                    <View style={{ borderRadius: 20, height: 35, width: 35, backgroundColor: '#F1F1F1', justifyContent: "center", alignItems: "center", }}>
+                                        <Image
+                                            style={{
+                                                width: 21,
+                                                height: 21,
+                                                tintColor: '#646464',
+                                            }}
+                                            source={IconAssets.heartIcon}
+                                        />
+                                    </View>
+                                </TouchableOpacity>
                             </View>
                         </View>
                         <View style={{ height: 50, flexDirection: 'row', paddingTop: 5 }}>
