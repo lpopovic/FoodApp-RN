@@ -303,7 +303,7 @@ class PlaceDetailsScreen extends BaseScreen {
     }
 
 
-    onPressFavoritePlaceHandler = async (place) => {
+    onPressFavoritePlaceHandler = (place) => {
         // console.log("TRENUTNO STANJE PRE"+this.props.userFavoritePlaces)
         // console.log("TRENUTNO STANJE IDs PRE"+this.props.userFavoritePlacesIDs)
         this.props.userFavoritePlacesHandler(place)

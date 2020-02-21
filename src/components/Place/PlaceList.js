@@ -8,7 +8,8 @@ import {
     Keyboard,
     ActivityIndicator,
 } from 'react-native';
-import { PlaceItem, PlaceSmallItem } from './PlaceItem'
+import PlaceItem from './PlaceItem'
+import PlaceSmallItem from './PlaceSmallItem'
 import { BASE_COLOR } from '../../styles'
 
 
