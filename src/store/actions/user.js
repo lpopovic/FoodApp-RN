@@ -9,7 +9,8 @@ import {
     uiStopLoading,
     updateListUserOrders,
     updateListUserCatheringsOrders,
-    updateUserFavoritePlaces
+    updateUserFavoritePlaces,
+    updateUserFavoriteMenuItems
 } from './index'
 
 import {
@@ -80,7 +81,16 @@ export const fetchUserFavorites = () => {
             result => {
                 result = result.reverse()
                 dispatch(updateUserFavoritePlaces(result))
-                console.log("FETCH NA USER PROFILE:"+result)
+            },
+            error => {
+
+            }
+        )
+
+        FavoriteNetwork.fetchGetAllFavoritedMenuItems(false).then(
+            result => {
+                result = result.reverse()
+                dispatch(updateUserFavoriteMenuItems(result))
             },
             error => {
 

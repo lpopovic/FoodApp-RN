@@ -3,12 +3,15 @@ import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import {
     IconAssets
 } from '../../assets';
+import { connect } from 'react-redux';
+import { userFavoriteMenuItems } from '../../store/actions'
 import { BASE_COLOR } from '../../styles';
 
 class DishCard extends Component {
 
     render() {
-        const { image, description, name } = this.props.dish
+        const { dish, userFavoriteMenuItemsIDs } = this.props
+        const { image, description, name, _id } = this.props.dish
         return (
             <View style={styles.mainContainer}>
                 <TouchableOpacity style={{ flex: 1, flexDirection: 'row' }} onPress={() => this.props.onClick()}>
@@ -29,15 +32,15 @@ class DishCard extends Component {
                                 <Text numberOfLines={2} ellipsizeMode='tail' style={{ fontSize: 14, fontWeight: '400' }}>{name}</Text>
                             </View>
                             <View style={{ flex: 2.5, flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'flex-start' }}>
-                                <TouchableOpacity>
+                                <TouchableOpacity onPress={() => this.onPressFavoriteMenuItemHandler(dish)}>
                                     <View style={{ borderRadius: 20, height: 35, width: 35, backgroundColor: '#F1F1F1', justifyContent: "center", alignItems: "center", }}>
                                         <Image
                                             style={{
                                                 width: 21,
                                                 height: 21,
-                                                tintColor: '#646464',
+                                                tintColor: userFavoriteMenuItemsIDs.includes(_id) ? '#FF4233' : '#646464'
                                             }}
-                                            source={IconAssets.heartIcon}
+                                            source={userFavoriteMenuItemsIDs.includes(_id) ? IconAssets.heartFillIcon : IconAssets.heartIcon}
                                         />
                                     </View>
                                 </TouchableOpacity>
@@ -50,6 +53,10 @@ class DishCard extends Component {
                 </TouchableOpacity>
             </View>
         )
+    }
+
+    onPressFavoriteMenuItemHandler = (menuItem) => {
+        this.props.userFavoriteMenuItemsHandler(menuItem)
     }
 }
 
@@ -65,5 +72,15 @@ const styles = StyleSheet.create({
     }
 });
 
+const mapStateToProps = state => {
+    return {
+        userFavoriteMenuItemsIDs: state.user.userFavoriteMenuItemsIDs
+    };
+};
+const mapDispatchToProps = dispatch => {
+    return {
+        userFavoriteMenuItemsHandler: (menuItem) => dispatch(userFavoriteMenuItems(menuItem))
+    };
+};
 
-export default DishCard;
+export default connect(mapStateToProps, mapDispatchToProps)(DishCard);

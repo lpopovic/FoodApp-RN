@@ -73,6 +73,10 @@ class RestUrl {
     static deleteFavoritePlace = (favoriteId) => {
         return withKey(`favoriteplaces/${favoriteId}`)
     }
+    static favoriteMenuItem = withKey('favoritemenuitems')
+    static deleteFavoriteMenuItem = (favoriteId) => {
+        return withKey(`favoritemenuitems/${favoriteId}`)
+    }
 
 }
 

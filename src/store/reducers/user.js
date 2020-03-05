@@ -5,10 +5,12 @@ import {
     UPDATE_LIST_USER_ORDERS,
     UPDATE_LIST_USER_CATHERING_ORDERS,
     UPDATE_USER_FAVORITE_PLACES,
-    USER_FAVORITE_PLACES
+    USER_FAVORITE_PLACES,
+    UPDATE_USER_FAVORITE_MENU_ITEMS,
+    USER_FAVORITE_MENU_ITEMS
 } from '../actions/actionTypes';
 import { FavoriteNetwork } from '../../service/api'
-import { PlaceFavorite } from '../../model'
+import { PlaceFavorite, MenuItemFavoriteSmallObject } from '../../model'
 
 const initialState = {
     JWT: null,
@@ -17,6 +19,8 @@ const initialState = {
     userCatherings: [],
     userFavoritePlaces: [],
     userFavoritePlacesIDs: [],
+    userFavoriteMenuItems: [],
+    userFavoriteMenuItemsIDs: [],
     userInfo: {
         _id: 'Unknown id',
         username: 'Unknown username',
@@ -70,53 +74,57 @@ const reducer = (state = initialState, action) => {
             return {
                 ...state,
                 userFavoritePlaces: action.payload,
-                userFavoritePlacesIDs: action.payload.map(item => {return item.place})
+                userFavoritePlacesIDs: action.payload.map(item => { return item.place })
             }
 
         case USER_FAVORITE_PLACES:
-            
-            let favoritePlaces = state.userFavoritePlaces
+
             let userFavoritePlacesIDs = [...state.userFavoritePlacesIDs]
-
             if (state.isLogin === true) {
-                let current = favoritePlaces.filter(item => item.place === action.payload._id)
                 if (userFavoritePlacesIDs.includes(action.payload._id)) {
-                    // alert("DELETE")
-                    favoritePlaces = favoritePlaces.filter(item => item._id !== current[0]._id)
-                    userFavoritePlacesIDs = userFavoritePlacesIDs.filter(item => item != action.payload._id)
-                    console.log(state.userFavoritePlacesIDs)
-
-                    FavoriteNetwork.fetchDeleteFavoritePlace(current[0]._id).then(
-                        res => {
-                            // favoritePlaces = favoritePlaces.filter(item => item._id != current[0]._id)
-                            console.log(state.userFavoritePlaces)
-                        }, err => {
-                            this.showAlertMessage(err)
-                        }
-                    )
+                    userFavoritePlacesIDs = userFavoritePlacesIDs.filter(item => item !== action.payload._id)
+                    FavoriteNetwork.fetchDeleteFavoritePlace(action.payload._id)
+                    // console.log(state.userFavoritePlacesIDs)
                 } else {
-                    // alert("FAVORITE")
                     userFavoritePlacesIDs.push(String(action.payload._id))
-                    console.log(state.userFavoritePlacesIDs)
-
-                    FavoriteNetwork.fetchPostFavoritePlace(action.payload._id).then(
-                        res => {
-                            var temp = { _id: res._id, place: res.place }
-                            favoritePlaces.push(new PlaceFavorite(temp))
-                            console.log(state.userFavoritePlaces)
-                        },
-                        err => {
-                            this.showAlertMessage(err)
-                        }
-                    )
+                    FavoriteNetwork.fetchPostFavoritePlace(action.payload._id)
+                    // console.log(state.userFavoritePlacesIDs)
                 }
             } else {
                 alert("Da biste favorizovali restoran morate biti ulogovani!")
             }
             return {
                 ...state,
-                userFavoritePlaces: favoritePlaces,
                 userFavoritePlacesIDs: userFavoritePlacesIDs
+            }
+
+
+        case UPDATE_USER_FAVORITE_MENU_ITEMS:
+            return {
+                ...state,
+                userFavoriteMenuItems: action.payload,
+                userFavoriteMenuItemsIDs: action.payload.map(item => { return item.menuItem })
+            }
+
+        case USER_FAVORITE_MENU_ITEMS:
+
+            let favoriteMenuItemsIDs = [...state.userFavoriteMenuItemsIDs]
+            if (state.isLogin === true) {
+                if (favoriteMenuItemsIDs.includes(action.payload._id)) {
+                    favoriteMenuItemsIDs = favoriteMenuItemsIDs.filter(item => item != action.payload._id)
+                    FavoriteNetwork.fetchDeleteFavoriteMenuItem(action.payload._id)
+                    // console.log(state.favoriteMenuItemsIDs)
+                } else {
+                    favoriteMenuItemsIDs.push(String(action.payload._id))
+                    FavoriteNetwork.fetchPostFavoriteMenuItem(action.payload._id)
+                    // console.log(state.favoriteMenuItemsIDs)
+                }
+            } else {
+                alert("Da biste favorizovali jelo morate biti ulogovani!")
+            }
+            return {
+                ...state,
+                userFavoriteMenuItemsIDs: favoriteMenuItemsIDs
             }
 
         default:
