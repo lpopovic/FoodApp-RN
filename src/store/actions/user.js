@@ -77,7 +77,7 @@ export const fetchUserListOrders = () => {
 export const fetchUserFavorites = () => {
     return dispatch => {
 
-        FavoriteNetwork.fetchGetAllFavoritedPlaces(false).then(
+        FavoriteNetwork.fetchGetAllFavoritedPlaces(true).then(
             result => {
                 result = result.reverse()
                 dispatch(updateUserFavoritePlaces(result))
@@ -87,7 +87,7 @@ export const fetchUserFavorites = () => {
             }
         )
 
-        FavoriteNetwork.fetchGetAllFavoritedMenuItems(false).then(
+        FavoriteNetwork.fetchGetAllFavoritedMenuItems(true).then(
             result => {
                 result = result.reverse()
                 dispatch(updateUserFavoriteMenuItems(result))

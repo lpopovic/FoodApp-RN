@@ -390,16 +390,24 @@ class PlaceDetailsScreen extends BaseScreen {
     menuItemsListFavoriteContent = () => {
 
         const { menuItems } = this.state
-        const { isLogin } = this.props
+        const { isLogin, userFavoriteMenuItems } = this.props
+        let menuItemsForPlaceAndDay = []
+        
+        userFavoriteMenuItems.map(favoriteItem => {
+            menuItems.map(item => {
+                if (favoriteItem._id === item._id){
+                    menuItemsForPlaceAndDay.push(favoriteItem)
+                }     
+            })
+        })
 
-
-        if (menuItems.length > 0 && isLogin == true) {
+        if (menuItemsForPlaceAndDay.length > 0 && isLogin == true) {
             return (
                 <View style={{ marginTop: 16, marginBottom: 16 }}>
                     <MenuItemList
                         titleSection={"❤️ OMILJENA JELA"}
-                        arrayObject={menuItems}
-                        onPressItem={(item) => this.pushNewScreen({ routeName: ScreenName.MenuItemDetailsScreen(), key: `${Math.random() * 10000}${item._id}`, params: { _id: item._id } })}
+                        arrayObject={menuItemsForPlaceAndDay}
+                        onPressItem={(item) => this.pushNewScreen({ routeName: ScreenName.MenuItemDetailsScreen(), key: `${Math.random() * 10000}${item._id}`, params: { _id: item._id, cathering: this.props.navigation.state.params.cathering } })}
                         onPressSeeMore={() => console.log("see more")}
                     />
                 </View>
@@ -483,8 +491,9 @@ const mapStateToProps = state => {
     return {
         order: state.order.order,
         isLogin: state.user.isLogin,
-        // userFavoritePlaces: state.user.userFavoritePlaces,
-        userFavoritePlacesIDs: state.user.userFavoritePlacesIDs
+        userFavoritePlaces: state.user.userFavoritePlaces,
+        userFavoritePlacesIDs: state.user.userFavoritePlacesIDs,
+        userFavoriteMenuItems: state.user.userFavoriteMenuItems
     };
 };
 const mapDispatchToProps = dispatch => {
