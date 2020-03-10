@@ -23,7 +23,24 @@ class CatheringNetwork {
                 }
             }
         });
+    static fetchCatheringOrderFromDateToDateByCompany = (fromDate, toDate, companyId) =>
+        new Promise(async (resolve, reject) => {
+            const url = RestUrl.catheringOrderFromDateToDateForCompany(fromDate, toDate, companyId)
 
+            try {
+                const { data } = await axios.get(url)
+                resolve(Order.createArrayOrder(data))
+
+            } catch (error) {
+                try {
+                    const { message } = error.response.data.error
+                    reject(message)
+                } catch  {
+                    reject(error.message)
+
+                }
+            }
+        });
 
     static fetchPlacesCathering = () =>
         new Promise(async (resolve, reject) => {
@@ -43,7 +60,7 @@ class CatheringNetwork {
             }
         });
 
-    
+
 
 
 }

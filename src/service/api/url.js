@@ -35,7 +35,7 @@ class RestUrl {
 
 
     // static getMenuItems = (placeId) => {
-        // return withKey(`menuitems?isParent=true&place=${placeId}`)
+    // return withKey(`menuitems?isParent=true&place=${placeId}`)
     static getMenuItems = (placeId, dayOfWeek) => {
         return withKey(`menuitems?isParent=true&place=${placeId}&${ParamsUrl.daysAvailable(dayOfWeek)}`)
     }
@@ -50,7 +50,10 @@ class RestUrl {
 
     static catheringOrderFromDateToDate = (fromDate, toDate) => {
         return withKey(`orders?from=${fromDate}&to=${toDate}&isCatheringOrder=true`)
-    } 
+    }
+    static catheringOrderFromDateToDateForCompany = (fromDate, toDate, companyId) => {
+        return withKey(`orders?from=${fromDate}&to=${toDate}&isCatheringOrder=true&company=${companyId}`)
+    }
 
     static getAllcategories = withKey(`categories`)
 
