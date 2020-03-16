@@ -109,11 +109,12 @@ class CateringScreen extends BaseScreen {
             CatheringNetwork.fetchCatheringOrderFromDateToDateByCompany(fromDate, toDate, this.props.userInfo.company._id)
                 .then(
                     res => {
+                        console.log("RES",res)
                         this.sortRecentMenuItemsOrders2(res)
 
                     },
                     err => {
-
+                        alert(err)
                     }
                 )
         }
@@ -488,7 +489,7 @@ class CateringScreen extends BaseScreen {
             recentMenuItemsOrder
         })
         // recentMenuItemsOrder for catheringOrder Home Screen
-        console.log("TEST - Array", recentMenuItemsOrder)
+        console.log("TEST", recentMenuItemsOrder)
     }
     render() {
         const { loading, isCatheringAvailable } = this.state
