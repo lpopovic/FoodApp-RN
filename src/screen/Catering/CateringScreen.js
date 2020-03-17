@@ -15,9 +15,10 @@ import CalendarStrip from 'react-native-calendar-strip';
 import { CatheringNetwork, UserNetwork } from '../../service/api'
 import Moment from 'moment';
 import { connect } from 'react-redux';
-import { updateUserProfile } from '../../store/actions';
+import { updateUserProfile, userLogOut } from '../../store/actions';
 import { BASE_COLOR, NAV_COLOR } from '../../styles';
 import { ImageAssets } from '../../model/image';
+import { MenuItem, Place } from '../../model';
 
 class CateringScreen extends BaseScreen {
 
@@ -36,7 +37,8 @@ class CateringScreen extends BaseScreen {
             ordersForWeek: [],
             ordersForDay: [],
             places: [],
-            balance: null
+            balance: null,
+            recentMenuItemsOrder: []
         }
         Moment.locale('Latinica', {
             months: 'Januar_Februar_Mart_April_Maj_Jun_Jul_Avgust_Septembar_Oktobar_Novembar_Decembar'.split('_'),
@@ -103,6 +105,19 @@ class CateringScreen extends BaseScreen {
                 })
             }
         )
+        if (isDay) {
+            CatheringNetwork.fetchCatheringOrderFromDateToDateByCompany(fromDate, toDate, this.props.userInfo.company._id)
+                .then(
+                    res => {
+                        console.log("RES",res)
+                        this.sortRecentMenuItemsOrders2(res)
+
+                    },
+                    err => {
+                        alert(err)
+                    }
+                )
+        }
     }
 
     apiDidMountFunction = async () => {
@@ -149,7 +164,9 @@ class CateringScreen extends BaseScreen {
                     this.balanceHandler()
                 },
                 err => {
-                    // this.showAlertMessage(err)
+                    if (err.logOut) {
+                        this.props.userLogOutHandler()
+                    }
                 }
             )
     }
@@ -360,6 +377,120 @@ class CateringScreen extends BaseScreen {
         )
     }
 
+    sortRecentMenuItemsOrders = (userCatherings) => {
+
+        // recentMenuItemsOrder.push({
+        //     menuItem: currentMenuItem,
+        //     place: currentMenuItem.place,
+        //     quantityNumber: 1
+        // })
+        let { recentMenuItemsOrder } = this.state
+
+
+        recentMenuItemsOrder = []
+
+        userCatherings.map(item => {
+
+            if (item.orderedMenuItems.length > 0) {
+
+                let currentMenuItem = new MenuItem(item.orderedMenuItems[0].food)
+                let existMenuItem = false
+                for (let index = 0; index < recentMenuItemsOrder.length; index++) {
+
+                    if (currentMenuItem._id === recentMenuItemsOrder[index].menuItem._id) {
+
+                        recentMenuItemsOrder[index].quantityNumber = recentMenuItemsOrder[index].quantityNumber + 1
+                        existMenuItem = true
+                        index = recentMenuItemsOrder.length
+                    }
+                }
+                if (existMenuItem == false) {
+                    recentMenuItemsOrder.push({
+                        menuItem: currentMenuItem,
+                        place: currentMenuItem.place,
+                        quantityNumber: 1
+                    })
+                }
+
+            }
+
+
+
+        })
+        this.setNewStateHandler({
+            recentMenuItemsOrder
+        })
+        // recentMenuItemsOrder for catheringOrder Home Screen
+        console.log("TEST - Array", recentMenuItemsOrder)
+    }
+    sortRecentMenuItemsOrders2 = (userCatherings) => {
+
+        // recentMenuItemsOrder.push({
+        //     menuItemArray: [{
+        //             menuItem: currentMenuItem,
+        //             quantityNumber: 1
+        //         }],
+        //     place: currentMenuItem.place,
+
+        // })
+
+
+        let { recentMenuItemsOrder } = this.state
+
+        recentMenuItemsOrder = []
+
+        userCatherings.map(item => {
+
+            if (item.orderedMenuItems.length > 0) {
+
+                let currentMenuItem = new MenuItem(item.orderedMenuItems[0].food)
+                let existMenuItem = false
+                let existPlace = null
+                for (let position = 0; position < recentMenuItemsOrder.length; position++) {
+
+                    if (currentMenuItem.place._id === recentMenuItemsOrder[position].place._id) {
+                        existPlace = position
+
+                        for (let index = 0; index < recentMenuItemsOrder[position].menuItemArray.length; index++) {
+
+                            if (currentMenuItem._id === recentMenuItemsOrder[position].menuItemArray[index].menuItem._id) {
+
+                                recentMenuItemsOrder[position].menuItemArray[index].quantityNumber = recentMenuItemsOrder[position].menuItemArray[index].quantityNumber + 1
+                                existMenuItem = true
+                                index = recentMenuItemsOrder.length
+                            }
+                        }
+                        position = recentMenuItemsOrder.length
+                    }
+                }
+
+
+                if (existPlace !== null) {
+                    if (existMenuItem == false) {
+                        recentMenuItemsOrder[existPlace].menuItemArray.push({
+                            quantityNumber: 1,
+                            menuItem: currentMenuItem
+                        })
+                    }
+                } else {
+                    recentMenuItemsOrder.push({
+                        menuItemArray: [{
+                            quantityNumber: 1,
+                            menuItem: currentMenuItem
+                        }],
+                        place: currentMenuItem.place,
+                    })
+                }
+
+            }
+
+        })
+        this.setNewStateHandler({
+            recentMenuItemsOrder
+        })
+        // recentMenuItemsOrder for catheringOrder Home Screen
+        console.log("TEST", recentMenuItemsOrder)
+    }
     render() {
         const { loading, isCatheringAvailable } = this.state
         const { isLogin } = this.props
@@ -398,11 +529,13 @@ const mapStateToProps = state => {
     return {
         userInfo: state.user.userInfo,
         isLogin: state.user.isLogin,
+        userCatherings: state.user.userCatherings,
     };
 };
 const mapDispatchToProps = dispatch => {
     return {
         updateUserProfileHandler: (user) => dispatch(updateUserProfile(user)),
+        userLogOutHandler: () => dispatch(userLogOut())
     };
 };
 

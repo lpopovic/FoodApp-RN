@@ -23,7 +23,7 @@ import {
     segmentedControlStyles
 } from '../../styles';
 import { connect } from 'react-redux';
-import { updateUserProfile, fetchUserListOrders, fetchUserProfile } from '../../store/actions'
+import { updateUserProfile, fetchUserListOrders, fetchUserProfile, userLogOut } from '../../store/actions'
 import { UserNetwork, OrderNetwork } from '../../service/api'
 import { TestAssets, } from '../../assets'
 import { Place, MenuItem } from '../../model';
@@ -93,8 +93,11 @@ class UserScreen extends BaseScreen {
 
                 },
                 err => {
-                    this.showAlertMessage(err)
+                    this.showAlertMessage(err.message)
                     this.setNewStateHandler({ refreshing: false });
+                    if (err.logOut) {
+                        this.props.userLogOutHandler()
+                    }
                 }
             )
 
@@ -436,6 +439,7 @@ const mapDispatchToProps = dispatch => {
         fetchUserListOrdersHandler: () => dispatch(fetchUserListOrders()),
         updateUserProfileHandler: (user) => dispatch(updateUserProfile(user)),
         fetchUserProfileHandler: () => dispatch(fetchUserProfile()),
+        userLogOutHandler: () => dispatch(userLogOut())
     };
 };
 

@@ -115,7 +115,10 @@ export const fetchUserProfile = () => {
                     },
                     err => {
                         dispatch(uiStopLoading())
-                        alert(err)
+                        alert(err.message)
+                        if (err.logOut) {
+                            dispatch(userLogOut())
+                        }
                     }
                 )
             dispatch(fetchUserListOrders())
