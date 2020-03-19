@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { View, StyleSheet, FlatList } from 'react-native';
 import DishCard from '../Catering/DishCard';
+import CatheringDishCard from '../Catering/CatheringDishCard';
 import AddDish from '../Catering/AddDish';
 import Moment from 'moment';
 
@@ -16,7 +17,10 @@ class DishList extends Component {
                     renderItem={({ item }) => {
                         if (!item.addDish) {
                             return (
-                                <DishCard dish={item} onClick={() => this.props.clickOnDish != undefined ? this.props.clickOnDish(item._id) : null} />
+                                this.props.isCathering ?
+                                    <CatheringDishCard dish={item} onClick={() => this.props.clickOnDish != undefined ? this.props.clickOnDish(item._id) : null} />
+                                    :
+                                    <DishCard dish={item} onClick={() => this.props.clickOnDish != undefined ? this.props.clickOnDish(item._id) : null} />
                             )
                         } else {
                             return (

@@ -83,8 +83,8 @@ const styles = StyleSheet.create({
         overflow: 'hidden',
         borderRadius: 5,
         height: 100,
-        borderWidth: 2,
-        borderColor: BASE_COLOR.blue
+        borderWidth: 1.5,
+        borderColor: BASE_COLOR.gray,
     }
 });
 

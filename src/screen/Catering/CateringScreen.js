@@ -19,6 +19,7 @@ import { updateUserProfile, userLogOut } from '../../store/actions';
 import { BASE_COLOR, NAV_COLOR } from '../../styles';
 import { ImageAssets } from '../../model/image';
 import { MenuItem, Place } from '../../model';
+import RecentOrders from '../../components/Catering//RecentOrders'
 
 class CateringScreen extends BaseScreen {
 
@@ -109,7 +110,7 @@ class CateringScreen extends BaseScreen {
             CatheringNetwork.fetchCatheringOrderFromDateToDateByCompany(fromDate, toDate, this.props.userInfo.company._id)
                 .then(
                     res => {
-                        console.log("RES",res)
+                        console.log("RES", res)
                         this.sortRecentMenuItemsOrders2(res)
 
                     },
@@ -318,7 +319,9 @@ class CateringScreen extends BaseScreen {
                         _id: item._id,
                         description: item.food.description,
                         name: item.food.name,
-                        image: image
+                        image: image,
+                        status: order.status,
+                        selectedOptions: order.orderedMenuItems
                     }
                     DishData.push(dish)
                 })
@@ -331,17 +334,24 @@ class CateringScreen extends BaseScreen {
             PlaceData.push(place.place)
         })
 
-        const { markedDates } = this.state
+        const { markedDates, recentMenuItemsOrder } = this.state
         if (markedDates.some(item => item.date === this.state.selectedDate)) {
             console.log("DISH DATA")
             console.log(DishData)
             return (
-                <DishList data={DishData} selectedDate={this.state.selectedDate} selectPlace={(placeId) => this.placeSelectHandler(placeId)} />
+                <>
+                    {recentMenuItemsOrder.length > 0 ? <RecentOrders recentOrders={recentMenuItemsOrder}  onPressSection={ (sectionIndex) => this.onPressSectionListHeader(sectionIndex)}/> : null}
+                    <DishList data={DishData} isCathering={true} recentOrders={recentMenuItemsOrder} selectedDate={this.state.selectedDate} selectPlace={(placeId) => this.placeSelectHandler(placeId)} />
+                </>
             )
         } else if (Moment(this.state.selectedDate).isAfter(Moment().subtract(1, 'day'))) {
             console.log(placesCathering)
             return (
-                <PlaceList data={PlaceData} clickOnPlace={(placeId) => this.placeSelectHandler(placeId)} />
+                <>
+                    {recentMenuItemsOrder.length > 0 ? <RecentOrders recentOrders={recentMenuItemsOrder}  onPressSection={ (sectionIndex) => this.onPressSectionListHeader(sectionIndex)}/> : null}
+                    <PlaceList data={PlaceData} clickOnPlace={(placeId) => this.placeSelectHandler(placeId)} />
+                </>
+
             )
         } else if (Moment(this.state.selectedDate).isBefore(Moment().subtract(1, 'day'))) {
             return (
@@ -479,6 +489,7 @@ class CateringScreen extends BaseScreen {
                             menuItem: currentMenuItem
                         }],
                         place: currentMenuItem.place,
+                        hide: true
                     })
                 }
 
@@ -491,6 +502,25 @@ class CateringScreen extends BaseScreen {
         // recentMenuItemsOrder for catheringOrder Home Screen
         console.log("TEST", recentMenuItemsOrder)
     }
+
+    onPressSectionListHeader = (sectionIndex) => {
+
+        let { recentMenuItemsOrder } = this.state
+
+        for (let index = 0; index < recentMenuItemsOrder.length; index++) {
+
+            if (sectionIndex == index) {
+                recentMenuItemsOrder[index].hide = !recentMenuItemsOrder[index].hide
+            } else {
+                recentMenuItemsOrder[index].hide = true
+            }
+
+        }
+
+        // this.setState({ sectionItems })
+        this.setNewStateHandler({ recentMenuItemsOrder })
+    }
+
     render() {
         const { loading, isCatheringAvailable } = this.state
         const { isLogin } = this.props

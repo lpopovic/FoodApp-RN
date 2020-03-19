@@ -97,7 +97,7 @@ const styles = StyleSheet.create({
         width: Dimensions.get('window').width - 20,
         alignSelf: 'center',
         borderColor: BASE_COLOR.blue,
-        borderWidth: 5,
+        borderWidth: 1.5,
         borderRadius: 5,
     },
     cardContainerHidden: {
