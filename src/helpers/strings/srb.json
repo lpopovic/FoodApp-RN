@@ -27,5 +27,9 @@
     "delivery": "Dostava",
     "thereIsNoNearbyPlaces": "Nema obližnjih mesta!",
     "insertKeyWordForSearch": "Unesite ključnu reč za pretragu.",
-    "myLocation": "Moja lokacija"
+    "myLocation": "Moja lokacija",
+    "restaurantOrders": "Porudžbine iz restorana:",
+    "orderDate": "Datum porudžbine:",
+    "orderType": "Tip porudžbine:",
+    "totalPrice": "Ukupna cena:"
 }

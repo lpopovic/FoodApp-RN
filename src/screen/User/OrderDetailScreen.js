@@ -7,6 +7,7 @@ import {
     Image,
     StyleSheet
 } from 'react-native';
+import { connect } from 'react-redux';
 import BaseScreen from '../BaseScreen/BaseScreen';
 import Header from '../../components/common/BackHeader'
 import ShopCard from '../../components/Home/ShopCard';
@@ -37,7 +38,7 @@ class OrderDetailScreen extends BaseScreen {
     componentDidMount() {
         super.componentDidMount()
         this.setStatusBarStyle(NAV_COLOR.headerBackground, true)
-      
+
         const order = this.props.navigation.getParam('order', null)
         if (order !== null) {
             let menuItems = Order.createArrayOrderFoodMenuItems(order.orderedMenuItems)
@@ -75,33 +76,34 @@ class OrderDetailScreen extends BaseScreen {
         super.componentWillUnmount()
     }
     infoOrderContent = (order) => {
+        const { strings } = this.props
         const { totalAmount, additionalPrice, orderedTime, status, place, orderType } = order
 
         var date = new Date(orderedTime);
         const dateText = Moment(date).format("DD/MM/YYYY")
-        const orderTypeText = orderType == 'delivery' ? 'Dostava' : 'Preuzeti'
+        const orderTypeText = orderType == 'delivery' ? strings.delivery : strings.pickup
         const priceText = Number(totalAmount + additionalPrice).toFixed(2)//'750.00'
 
         return (
             <View style={{ borderColor: BASE_COLOR.blue, borderWidth: 1, padding: 8 }}>
 
                 <View style={{ marginBottom: 8, }}>
-                    <Text style={[styles.baseText, { fontSize: 20, fontWeight: 'bold', color: BASE_COLOR.black }]}>Porudžbina iz restorana:</Text>
+                    <Text style={[styles.baseText, { fontSize: 20, fontWeight: 'bold', color: BASE_COLOR.black }]}>{strings.restaurantOrders}</Text>
                     <Text style={[styles.baseText, { fontSize: 20, color: BASE_COLOR.black }]}>{place.name}</Text>
                 </View>
 
                 <View style={{ marginBottom: 8, flexDirection: 'row' }}>
-                    <Text style={[styles.baseText, styles.podSectionText]}>Datum porudzbine:</Text>
+                    <Text style={[styles.baseText, styles.podSectionText]}>{strings.orderDate}</Text>
                     <Text style={[styles.baseText]}>{dateText}</Text>
                 </View>
 
                 <View style={{ marginBottom: 8, flexDirection: 'row' }}>
-                    <Text style={[styles.baseText, styles.podSectionText]}>Tip porudžbine:</Text>
+                    <Text style={[styles.baseText, styles.podSectionText]}>{strings.orderType}</Text>
                     <Text style={[styles.baseText]}>{orderTypeText}</Text>
                 </View>
 
                 <View style={{ flexDirection: 'row' }}>
-                    <Text style={[styles.baseText, styles.podSectionText]}>Ukupna cena:</Text>
+                    <Text style={[styles.baseText, styles.podSectionText]}>{strings.totalPrice}</Text>
                     <Text style={[styles.baseText]}>{priceText}</Text>
                 </View>
             </View>
@@ -205,5 +207,10 @@ const styles = StyleSheet.create({
 
 });
 
+const mapStateToProps = state => {
+    return {
+        strings: state.location.language.strings,
+    };
+};
 
-export default OrderDetailScreen;
+export default connect(mapStateToProps, null)(OrderDetailScreen);

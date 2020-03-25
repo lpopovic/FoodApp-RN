@@ -26,6 +26,10 @@
    "pickup": "Pickup",
    "delivery": "Delivery",
    "thereIsNoNearbyPlaces": "There is no nearby places!",
-   "insertKeyWordForSearch":"Insert key word for search.",
-   "myLocation":"My location"
+   "insertKeyWordForSearch": "Insert key word for search.",
+   "myLocation": "My location",
+   "restaurantOrders": "Restaurant orders:",
+   "orderDate": "Order date:",
+   "orderType":"Order type:",
+   "totalPrice":"Total price:"
 }
