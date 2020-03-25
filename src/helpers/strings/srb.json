@@ -8,7 +8,18 @@
     "password": "Lozinka",
     "ok": "Ok",
     "allFieldsAreRequired": "Sva polja su obavezna!",
-    "mustBeEmailAddrese": "Mоrа biti email adresa.",
+    "notValideEmailAddrese": "Nevažeća email adresa.",
     "passwordMustBeMinumum": "Lozinka моrа dа bude najmanje 6 znakova i sadrž brojeve и slova.",
-    "createAnAccount": "Kreiraj nalog"
+    "createAnAccount": "Kreiraj nalog",
+    "username": "Korisničko ime",
+    "firstName": "Ime",
+    "lastName": "Prezime",
+    "choosePassword": "Izaberite lozinku",
+    "confirmPassword": "Potvrdi lozinku",
+    "phonePlaceholder": "Telefon: 06X-XXX-XXX",
+    "rePasswordAreNotTheSame": "Ponovna lozinke nisu iste.",
+    "usernameNotValidateMinumum": "Korisničko ime nije validno, najmanje 6 znakova.",
+    "phoneNumberNotValide": "Broj telefona nije validan.",
+    "firstNameNotValide": "Ime nije validno.",
+    "lastNameNotValide": "Prezime nije validno."
 }

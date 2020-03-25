@@ -8,7 +8,18 @@
    "password": "Password",
    "ok": "Ok",
    "allFieldsAreRequired": "All fields are required!",
-   "mustBeEmailAddrese": "Must be email addrese.",
+   "notValideEmailAddrese": "Not valide email addrese.",
    "passwordMustBeMinumum": "Password must be minumum 6 characters and include both numbers and letters.",
-   "createAnAccount": "Create an account"
+   "createAnAccount": "Create an account",
+   "username": "Username",
+   "firstName": "First name",
+   "lastName": "Last name",
+   "choosePassword": "Choose password",
+   "confirmPassword": "Confirm Password",
+   "phonePlaceholder": "Phone: 06X-XXX-XXX",
+   "rePasswordAreNotTheSame": "Re-Password are not the same.",
+   "usernameNotValidateMinumum": "Username not valide, minumum 6 characters.",
+   "phoneNumberNotValide": "Phone number not valide.",
+   "firstNameNotValide": "First name not valide.",
+   "lastNameNotValide": "Last name not valide."
 }

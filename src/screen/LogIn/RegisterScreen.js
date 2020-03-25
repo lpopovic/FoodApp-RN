@@ -7,6 +7,7 @@ import {
     StyleSheet,
     Keyboard,
 } from 'react-native';
+import { connect } from 'react-redux';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import BaseScreen from '../BaseScreen/BaseScreen';
 import SafeAreaView from 'react-native-safe-area-view';
@@ -22,7 +23,6 @@ class RegisterScreen extends BaseScreen {
 
     constructor(props) {
         super(props)
-        this.title = "REGISTRUJ SE";
         this.state = {
             loading: false,
             controls: {
@@ -110,7 +110,8 @@ class RegisterScreen extends BaseScreen {
     }
 
     onPressRegisterHandler = () => {
-        disabled = !this.state.controls.email.valid ||
+        const { strings } = this.props
+        const disabled = !this.state.controls.email.valid ||
             !this.state.controls.password.valid ||
             !this.state.controls.confirmPassword.valid ||
             !this.state.controls.username.valid ||
@@ -130,159 +131,162 @@ class RegisterScreen extends BaseScreen {
                 controls.phoneNumber.value !== '') {
                 if (!this.state.controls.email.valid) {
 
-                    this.showAlertMessage("Not valide email addrese.")
+                    this.showAlertMessage(strings.notValideEmailAddrese)
                 } else if (!this.state.controls.password.valid) {
 
-                    this.showAlertMessage("Password must be minumum 6 characters and include both numbers and letters.")
+                    this.showAlertMessage(strings.passwordMustBeMinumum)
                 } else if (!this.state.controls.confirmPassword.valid) {
-                    this.showAlertMessage('Re-Password are not the same.')
+                    this.showAlertMessage(strings.rePasswordAreNotTheSame)
                 } else if (!this.state.controls.username.valid) {
-                    this.showAlertMessage('Username not valide, minumum 6 characters.')
+                    this.showAlertMessage(strings.usernameNotValidateMinumum)
                 } else if (!this.state.controls.phoneNumber.valid) {
-                    this.showAlertMessage('Phone number not valide.')
+                    this.showAlertMessage(strings.phoneNumberNotValide)
                 } else if (!this.state.controls.firstName.valid) {
-                    this.showAlertMessage('First name not valide.')
+                    this.showAlertMessage(strings.firstNameNotValide)
                 } else if (!this.state.controls.lastName.valid) {
-                    this.showAlertMessage('Last name not valide.')
+                    this.showAlertMessage(strings.lastNameNotValide)
                 }
             } else {
-                alert(MESSAGE_NO_VALIDE_INPUT_FORM)
+                alert(strings.allFieldsAreRequired)
             }
         }
 
     }
 
-    mainContent = () => (
-        <KeyboardAwareScrollView
-            style={styles.mainDisplay}
-            resetScrollToCoords={{ x: 0, y: 0 }}
-            scrollEnabled={true}
-            bounces={false}
-            keyboardShouldPersistTaps='handled'
-            enableOnAndroid={true} >
-            <View style={{ flex: 0.8 }}>
+    mainContent = () => {
+        const { strings } = this.props
+        return (
+            <KeyboardAwareScrollView
+                style={styles.mainDisplay}
+                resetScrollToCoords={{ x: 0, y: 0 }}
+                scrollEnabled={true}
+                bounces={false}
+                keyboardShouldPersistTaps='handled'
+                enableOnAndroid={true} >
+                <View style={{ flex: 0.8 }}>
 
-                <View style={styles.headerContainer}>
-                    <View style={styles.titleContainer}>
-                        <Text style={styles.textHeaderStyle}>{this.title}</Text>
+                    <View style={styles.headerContainer}>
+                        <View style={styles.titleContainer}>
+                            <Text style={styles.textHeaderStyle}>{String(strings.createAnAccount).toUpperCase()}</Text>
+                        </View>
                     </View>
-                </View>
-                <View style={{ marginTop: 20, marginBottom: 20, justifyContent: 'center' }}>
+                    <View style={{ marginTop: 20, marginBottom: 20, justifyContent: 'center' }}>
 
-                    <DefaultInput
-                        placeholder='Username'
-                        value={this.state.controls.username.value}
-                        onChangeText={(val) => this.updateInputState('username', val)}
-                        valid={this.state.controls.username.valid}
-                        touched={this.state.controls.username.touched}
-                        autoCapitalize="none"
-                        autoCorrect={false}
-                        returnKeyType={"next"}
-                        // keyboardType="email-address"
-                        onSubmitEditing={() => this.firstName.getInnerRef().focus()}
-                    />
-                    <DefaultInput
-                        style={{ marginTop: 16 }}
-                        placeholder='First name'
-                        value={this.state.controls.firstName.value}
-                        onChangeText={(val) => this.updateInputState('firstName', val)}
-                        valid={this.state.controls.firstName.valid}
-                        touched={this.state.controls.firstName.touched}
-                        autoCapitalize="none"
-                        autoCorrect={false}
-                        // keyboardType="email-address"
-                        returnKeyType={"next"}
-                        textContentType='none'
-                        ref={(input) => this.firstName = input}
-                        onSubmitEditing={() => this.lastName.getInnerRef().focus()}
-                    />
-                    <DefaultInput
-                        style={{ marginTop: 16 }}
-                        placeholder='Last name'
-                        value={this.state.controls.lastName.value}
-                        onChangeText={(val) => this.updateInputState('lastName', val)}
-                        valid={this.state.controls.lastName.valid}
-                        touched={this.state.controls.lastName.touched}
-                        autoCapitalize="none"
-                        autoCorrect={false}
-                        // keyboardType="email-address"
-                        returnKeyType={"next"}
-                        textContentType='none'
-                        ref={(input) => this.lastName = input}
-                        onSubmitEditing={() => this.email.getInnerRef().focus()}
-                    />
-                    <DefaultInput
-                        style={{ marginTop: 16 }}
-                        placeholder='Email'
-                        value={this.state.controls.email.value}
-                        onChangeText={(val) => this.updateInputState('email', val)}
-                        valid={this.state.controls.email.valid}
-                        touched={this.state.controls.email.touched}
-                        autoCapitalize="none"
-                        autoCorrect={false}
-                        keyboardType="email-address"
-                        returnKeyType={"next"}
-                        textContentType='none'
-                        ref={(input) => this.email = input}
-                        onSubmitEditing={() => this.pass.getInnerRef().focus()}
-                    />
-                    <DefaultInput
-                        placeholder='Choose Password'
-                        style={{ marginTop: 16 }}
-                        value={this.state.controls.password.value}
-                        onChangeText={val => this.updateInputState('password', val)}
-                        valid={this.state.controls.password.valid}
-                        touched={this.state.controls.password.touched}
-                        returnKeyType={"next"}
-                        secureTextEntry={true}
-                        textContentType='none'
-                        ref={(input) => this.pass = input}
-                        onSubmitEditing={() => this.confirmPass.getInnerRef().focus()}
-                    />
-                    <DefaultInput
-                        placeholder="Confirm Password"
-                        style={{ marginTop: 16 }}
-                        value={this.state.controls.confirmPassword.value}
-                        onChangeText={val => this.updateInputState('confirmPassword', val)}
-                        valid={this.state.controls.confirmPassword.valid}
-                        touched={this.state.controls.confirmPassword.touched}
-                        returnKeyType={"next"}
-                        secureTextEntry={true}
-                        textContentType='none'
-                        ref={(input) => this.confirmPass = input}
-                        onSubmitEditing={() => this.phoneNumber.getInnerRef().focus()}
-                    />
-                    <DefaultInput
-                        style={{ marginTop: 16 }}
-                        placeholder='Phone: 06X-XXX-XXX'
-                        value={this.state.controls.phoneNumber.value}
-                        onChangeText={(val) => this.updateInputState('phoneNumber', val)}
-                        valid={this.state.controls.phoneNumber.valid}
-                        touched={this.state.controls.phoneNumber.touched}
-                        autoCapitalize="none"
-                        autoCorrect={false}
-                        returnKeyType={"done"}
-                        keyboardType='number-pad'
-                        ref={(input) => this.phoneNumber = input}
-                        onSubmitEditing={() => Keyboard.dismiss()}
-                    />
+                        <DefaultInput
+                            placeholder={strings.username}
+                            value={this.state.controls.username.value}
+                            onChangeText={(val) => this.updateInputState('username', val)}
+                            valid={this.state.controls.username.valid}
+                            touched={this.state.controls.username.touched}
+                            autoCapitalize="none"
+                            autoCorrect={false}
+                            returnKeyType={"next"}
+                            // keyboardType="email-address"
+                            onSubmitEditing={() => this.firstName.getInnerRef().focus()}
+                        />
+                        <DefaultInput
+                            style={{ marginTop: 16 }}
+                            placeholder={strings.firstName}
+                            value={this.state.controls.firstName.value}
+                            onChangeText={(val) => this.updateInputState('firstName', val)}
+                            valid={this.state.controls.firstName.valid}
+                            touched={this.state.controls.firstName.touched}
+                            autoCapitalize="none"
+                            autoCorrect={false}
+                            // keyboardType="email-address"
+                            returnKeyType={"next"}
+                            textContentType='none'
+                            ref={(input) => this.firstName = input}
+                            onSubmitEditing={() => this.lastName.getInnerRef().focus()}
+                        />
+                        <DefaultInput
+                            style={{ marginTop: 16 }}
+                            placeholder={strings.lastName}
+                            value={this.state.controls.lastName.value}
+                            onChangeText={(val) => this.updateInputState('lastName', val)}
+                            valid={this.state.controls.lastName.valid}
+                            touched={this.state.controls.lastName.touched}
+                            autoCapitalize="none"
+                            autoCorrect={false}
+                            // keyboardType="email-address"
+                            returnKeyType={"next"}
+                            textContentType='none'
+                            ref={(input) => this.lastName = input}
+                            onSubmitEditing={() => this.email.getInnerRef().focus()}
+                        />
+                        <DefaultInput
+                            style={{ marginTop: 16 }}
+                            placeholder={strings.email}
+                            value={this.state.controls.email.value}
+                            onChangeText={(val) => this.updateInputState('email', val)}
+                            valid={this.state.controls.email.valid}
+                            touched={this.state.controls.email.touched}
+                            autoCapitalize="none"
+                            autoCorrect={false}
+                            keyboardType="email-address"
+                            returnKeyType={"next"}
+                            textContentType='none'
+                            ref={(input) => this.email = input}
+                            onSubmitEditing={() => this.pass.getInnerRef().focus()}
+                        />
+                        <DefaultInput
+                            placeholder={strings.choosePassword}
+                            style={{ marginTop: 16 }}
+                            value={this.state.controls.password.value}
+                            onChangeText={val => this.updateInputState('password', val)}
+                            valid={this.state.controls.password.valid}
+                            touched={this.state.controls.password.touched}
+                            returnKeyType={"next"}
+                            secureTextEntry={true}
+                            textContentType='none'
+                            ref={(input) => this.pass = input}
+                            onSubmitEditing={() => this.confirmPass.getInnerRef().focus()}
+                        />
+                        <DefaultInput
+                            placeholder={strings.confirmPassword}
+                            style={{ marginTop: 16 }}
+                            value={this.state.controls.confirmPassword.value}
+                            onChangeText={val => this.updateInputState('confirmPassword', val)}
+                            valid={this.state.controls.confirmPassword.valid}
+                            touched={this.state.controls.confirmPassword.touched}
+                            returnKeyType={"next"}
+                            secureTextEntry={true}
+                            textContentType='none'
+                            ref={(input) => this.confirmPass = input}
+                            onSubmitEditing={() => this.phoneNumber.getInnerRef().focus()}
+                        />
+                        <DefaultInput
+                            style={{ marginTop: 16 }}
+                            placeholder={strings.phonePlaceholder}
+                            value={this.state.controls.phoneNumber.value}
+                            onChangeText={(val) => this.updateInputState('phoneNumber', val)}
+                            valid={this.state.controls.phoneNumber.valid}
+                            touched={this.state.controls.phoneNumber.touched}
+                            autoCapitalize="none"
+                            autoCorrect={false}
+                            returnKeyType={"done"}
+                            keyboardType='number-pad'
+                            ref={(input) => this.phoneNumber = input}
+                            onSubmitEditing={() => Keyboard.dismiss()}
+                        />
 
-                </View>
-                <View style={styles.buttonsContainer}>
-                    <View style={{ width: 130, margin: 8, alignSelf: 'center', }}>
-                        <TouchableOpacity
-                            onPress={() => this.onPressRegisterHandler()}>
-                            <View style={styles.buttonSignIn}>
-                                <Text style={styles.textButtonStyle}>OK</Text>
-                            </View>
-                        </TouchableOpacity>
                     </View>
+                    <View style={styles.buttonsContainer}>
+                        <View style={{ width: 130, margin: 8, alignSelf: 'center', }}>
+                            <TouchableOpacity
+                                onPress={() => this.onPressRegisterHandler()}>
+                                <View style={styles.buttonSignIn}>
+                                    <Text style={styles.textButtonStyle}>{String(strings.ok).toUpperCase()}</Text>
+                                </View>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+
                 </View>
+            </KeyboardAwareScrollView>
 
-            </View>
-        </KeyboardAwareScrollView>
-
-    )
+        )
+    }
 
     render() {
         const { loading } = this.state
@@ -401,5 +405,10 @@ const styles = StyleSheet.create({
     }
 
 });
+const mapStateToProps = state => {
+    return {
+        strings: state.location.language.strings,
+    };
+};
 
-export default RegisterScreen;
+export default connect(mapStateToProps, null)(RegisterScreen);

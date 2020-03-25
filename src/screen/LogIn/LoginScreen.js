@@ -93,7 +93,7 @@ class LoginScreen extends BaseScreen {
 
     onPressSignInHandler = () => {
         const { strings } = this.props
-        disabled = !this.state.controls.email.valid || !this.state.controls.password.valid
+        const disabled = !this.state.controls.email.valid || !this.state.controls.password.valid
         const { controls } = this.state
         if (!disabled) {
             this.apiCallSignUpHandler(controls.email.value, controls.password.value)
@@ -101,7 +101,7 @@ class LoginScreen extends BaseScreen {
             if (controls.email.value !== '' && controls.password.value !== '') {
                 if (!this.state.controls.email.valid) {
 
-                    this.showAlertMessage(strings.mustBeEmailAddrese)
+                    this.showAlertMessage(strings.notValideEmailAddrese)
                 } else if (!this.state.controls.password.valid) {
 
                     this.showAlertMessage(strings.passwordMustBeMinumum)
