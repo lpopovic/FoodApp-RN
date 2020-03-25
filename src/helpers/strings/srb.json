@@ -45,5 +45,14 @@
     "notAvailable": "Nedostupno",
     "phoneNumber": "Br. telefona",
     "address": "Adresa",
-    "toUseTheUserTabPleaseLogIn": "Da bi ste koristili korisnički tab, molimo vas da se prijavite."
+    "toUseTheUserTabPleaseLogIn": "Da bi ste koristili korisnički tab, molimo vas da se prijavite.",
+    "unavailable": "Nije dostupno",
+    "available": "Dostupno",
+    "company": "Kompanija",
+    "cateringOptions": "Ketering opcije",
+    "package": "Paket",
+    "balance": "Bilans",
+    "reserved": "Rezervisano",
+    "save": "Sačuvaj",
+    "back": "Nazad"
 }

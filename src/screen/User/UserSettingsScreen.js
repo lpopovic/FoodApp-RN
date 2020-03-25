@@ -164,85 +164,88 @@ class UserSettingsScreen extends BaseScreen {
         }, 500);
 
     }
-    editContent = () => (
-        <View style={{ marginTop: 20, marginBottom: 20, justifyContent: 'center', }}>
+    editContent = () => {
+        const { strings } = this.props
+        return (
+            <View style={{ marginTop: 20, marginBottom: 20, justifyContent: 'center', }}>
 
-            <DefaultInput
-                style={{ backgroundColor: BASE_COLOR.blue }}
-                placeholder='Username'
-                value={this.state.controls.username.value}
-                onChangeText={(val) => this.updateInputState('username', val)}
-                valid={this.state.controls.username.valid}
-                touched={this.state.controls.username.touched}
-                autoCapitalize="none"
-                autoCorrect={false}
-                returnKeyType={"next"}
-                keyboardType="email-address"
-                onSubmitEditing={() => this.firstName.getInnerRef().focus()}
-            />
-            <DefaultInput
-                style={{ marginTop: 16, backgroundColor: BASE_COLOR.blue }}
-                placeholder='First name'
-                value={this.state.controls.firstName.value}
-                onChangeText={(val) => this.updateInputState('firstName', val)}
-                valid={this.state.controls.firstName.valid}
-                touched={this.state.controls.firstName.touched}
-                autoCapitalize="none"
-                autoCorrect={false}
-                // keyboardType="email-address"
-                returnKeyType={"next"}
-                textContentType='none'
-                ref={(input) => this.firstName = input}
-                onSubmitEditing={() => this.lastName.getInnerRef().focus()}
-            />
-            <DefaultInput
-                style={{ marginTop: 16, backgroundColor: BASE_COLOR.blue }}
-                placeholder='Last name'
-                value={this.state.controls.lastName.value}
-                onChangeText={(val) => this.updateInputState('lastName', val)}
-                valid={this.state.controls.lastName.valid}
-                touched={this.state.controls.lastName.touched}
-                autoCapitalize="none"
-                autoCorrect={false}
-                // keyboardType="email-address"
-                returnKeyType={"next"}
-                textContentType='none'
-                ref={(input) => this.lastName = input}
-                onSubmitEditing={() => this.email.getInnerRef().focus()}
-            />
-            <DefaultInput
-                style={{ marginTop: 16, backgroundColor: BASE_COLOR.blue }}
-                placeholder='Email'
-                value={this.state.controls.email.value}
-                onChangeText={(val) => this.updateInputState('email', val)}
-                valid={this.state.controls.email.valid}
-                touched={this.state.controls.email.touched}
-                autoCapitalize="none"
-                autoCorrect={false}
-                keyboardType="email-address"
-                returnKeyType={"next"}
-                textContentType='none'
-                ref={(input) => this.email = input}
-                onSubmitEditing={() => this.mob.getInnerRef().focus()}
-            />
+                <DefaultInput
+                    style={{ backgroundColor: BASE_COLOR.blue }}
+                    placeholder={strings.username}
+                    value={this.state.controls.username.value}
+                    onChangeText={(val) => this.updateInputState('username', val)}
+                    valid={this.state.controls.username.valid}
+                    touched={this.state.controls.username.touched}
+                    autoCapitalize="none"
+                    autoCorrect={false}
+                    returnKeyType={"next"}
+                    keyboardType="email-address"
+                    onSubmitEditing={() => this.firstName.getInnerRef().focus()}
+                />
+                <DefaultInput
+                    style={{ marginTop: 16, backgroundColor: BASE_COLOR.blue }}
+                    placeholder={strings.firstName}
+                    value={this.state.controls.firstName.value}
+                    onChangeText={(val) => this.updateInputState('firstName', val)}
+                    valid={this.state.controls.firstName.valid}
+                    touched={this.state.controls.firstName.touched}
+                    autoCapitalize="none"
+                    autoCorrect={false}
+                    // keyboardType="email-address"
+                    returnKeyType={"next"}
+                    textContentType='none'
+                    ref={(input) => this.firstName = input}
+                    onSubmitEditing={() => this.lastName.getInnerRef().focus()}
+                />
+                <DefaultInput
+                    style={{ marginTop: 16, backgroundColor: BASE_COLOR.blue }}
+                    placeholder={strings.lastName}
+                    value={this.state.controls.lastName.value}
+                    onChangeText={(val) => this.updateInputState('lastName', val)}
+                    valid={this.state.controls.lastName.valid}
+                    touched={this.state.controls.lastName.touched}
+                    autoCapitalize="none"
+                    autoCorrect={false}
+                    // keyboardType="email-address"
+                    returnKeyType={"next"}
+                    textContentType='none'
+                    ref={(input) => this.lastName = input}
+                    onSubmitEditing={() => this.email.getInnerRef().focus()}
+                />
+                <DefaultInput
+                    style={{ marginTop: 16, backgroundColor: BASE_COLOR.blue }}
+                    placeholder={strings.email}
+                    value={this.state.controls.email.value}
+                    onChangeText={(val) => this.updateInputState('email', val)}
+                    valid={this.state.controls.email.valid}
+                    touched={this.state.controls.email.touched}
+                    autoCapitalize="none"
+                    autoCorrect={false}
+                    keyboardType="email-address"
+                    returnKeyType={"next"}
+                    textContentType='none'
+                    ref={(input) => this.email = input}
+                    onSubmitEditing={() => this.mob.getInnerRef().focus()}
+                />
 
-            <DefaultInput
-                style={{ marginTop: 16, backgroundColor: BASE_COLOR.blue }}
-                placeholder='Phone: 06X-XXX-XXX'
-                value={this.state.controls.phoneNumber.value}
-                onChangeText={(val) => this.updateInputState('phoneNumber', val)}
-                valid={this.state.controls.phoneNumber.valid}
-                touched={this.state.controls.phoneNumber.touched}
-                autoCapitalize="none"
-                autoCorrect={false}
-                returnKeyType={'done'}
-                keyboardType='number-pad'
-                ref={(input) => this.mob = input}
-            />
-        </View>
-    )
+                <DefaultInput
+                    style={{ marginTop: 16, backgroundColor: BASE_COLOR.blue }}
+                    placeholder={strings.phonePlaceholder}
+                    value={this.state.controls.phoneNumber.value}
+                    onChangeText={(val) => this.updateInputState('phoneNumber', val)}
+                    valid={this.state.controls.phoneNumber.valid}
+                    touched={this.state.controls.phoneNumber.touched}
+                    autoCapitalize="none"
+                    autoCorrect={false}
+                    returnKeyType={'done'}
+                    keyboardType='number-pad'
+                    ref={(input) => this.mob = input}
+                />
+            </View>
+        )
+    }
     mainContent = () => {
-
+        const { strings } = this.props
         const { company, catheringIsAvailable, catheringOptions } = this.props.userInfo
 
         return (
@@ -266,9 +269,11 @@ class UserSettingsScreen extends BaseScreen {
 
                     </View>
                     {this.editContent()}
-                    {this.infoContent("Company", company ? company.name : 'Unavailable')}
-                    {this.infoContent("Cathering", catheringIsAvailable != true ? 'Unavailable' : 'Available')}
-                    {catheringIsAvailable != true ? null : this.infoContent("Cathering Options", `Package: ${catheringOptions.package}${`\n`}Balance: ${catheringOptions.balance != null? Number(catheringOptions.balance).toFixed(2):catheringOptions.balance}${`\n`}Reserved: ${Number(catheringOptions.reserved).toFixed(2)}`)}
+                    {this.infoContent(strings.company, company ? company.name : strings.unavailable)}
+                    {this.infoContent(strings.catering, catheringIsAvailable != true ? strings.unavailable : strings.available)}
+                    {catheringIsAvailable != true ? null : this.infoContent(strings.cateringOptions,
+                        `${strings.package}: ${catheringOptions.package}${`\n`}${strings.balance}: ${catheringOptions.balance != null ? Number(catheringOptions.balance).toFixed(2)
+                            : catheringOptions.balance}${`\n`}${strings.reserved}: ${Number(catheringOptions.reserved).toFixed(2)}`)}
 
                 </View>
             </KeyboardAwareScrollView>
@@ -276,14 +281,15 @@ class UserSettingsScreen extends BaseScreen {
     }
     render() {
         const { loading } = this.state
+        const { strings } = this.props
         const mainDisplay = loading ? this.activityIndicatorContent(BASE_COLOR.blue) : this.mainContent()
         return (
             <SafeAreaView style={styles.safeAreaHeader}>
                 <View style={styles.mainContainer}>
                     <Header
                         tintColor={BASE_COLOR.darkGray}
-                        title={'Back'}
-                        btnTitle={'Save'}
+                        title={strings.back}
+                        btnTitle={strings.save}
                         btnPress={() => this.onSaveBtnPress()}
                         backgroundColor={NAV_COLOR.headerBackground} />
                     {mainDisplay}
@@ -364,6 +370,7 @@ const styles = StyleSheet.create({
 const mapStateToProps = state => {
     return {
         userInfo: state.user.userInfo,
+        strings: state.location.language.strings,
     };
 };
 

@@ -45,5 +45,14 @@
    "notAvailable": "Not available",
    "phoneNumber": "Phone number",
    "address": "Address",
-   "toUseTheUserTabPleaseLogIn": "To use the user tab, please log in."
+   "toUseTheUserTabPleaseLogIn": "To use the user tab, please log in.",
+   "unavailable": "Unavailable",
+   "available": "Available",
+   "company": "Comapany",
+   "cateringOptions": "Catering options",
+   "package": "Package",
+   "balance": "Balance",
+   "reserved": "Reserved",
+   "save": "Save",
+   "back": "Back"
 }
