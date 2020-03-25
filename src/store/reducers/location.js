@@ -14,8 +14,8 @@ const initialState = {
         }
     },
     language: {
-        name: LANGUAGE_KEY.SRB,
-        strings: setLanguage(LANGUAGE_KEY.SRB)
+        name: LANGUAGE_KEY.EN,
+        strings: setLanguage(LANGUAGE_KEY.EN)
     }
 };
 

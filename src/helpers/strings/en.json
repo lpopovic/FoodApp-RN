@@ -1,3 +1,14 @@
 {
-   "HELLO_EVERYONE": "Hello everyone!"
+   "HELLO_EVERYONE": "Zdravo svima!",
+   "signUp": "Sign up",
+   "noAccount": "No account",
+   "register": "Register",
+   "skip": "Skip",
+   "email": "Email",
+   "password": "Password",
+   "ok": "Ok",
+   "allFieldsAreRequired": "All fields are required!",
+   "mustBeEmailAddrese": "Must be email addrese.",
+   "passwordMustBeMinumum": "Password must be minumum 6 characters and include both numbers and letters.",
+   "createAnAccount": "Create an account"
 }
