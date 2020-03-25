@@ -31,5 +31,10 @@
    "restaurantOrders": "Restaurant orders:",
    "orderDate": "Order date:",
    "orderType":"Order type:",
-   "totalPrice":"Total price:"
+   "totalPrice":"Total price:",
+   "send":"Send",
+   "rating":"Rating",
+   "priceTag":"Price tag",
+   "reviewText":"Review text",
+   "enterYourText":"Enter your text."
 }

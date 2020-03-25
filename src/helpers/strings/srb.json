@@ -31,5 +31,10 @@
     "restaurantOrders": "Porudžbine iz restorana:",
     "orderDate": "Datum porudžbine:",
     "orderType": "Tip porudžbine:",
-    "totalPrice": "Ukupna cena:"
+    "totalPrice": "Ukupna cena:",
+    "send": "Pošalji",
+    "rating": "Ocena",
+    "priceTag": "Price tag",
+    "reviewText": "Tekst recenzije",
+    "enterYourText":"Unesite vaš tekst."
 }
