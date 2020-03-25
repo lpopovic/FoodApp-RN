@@ -23,7 +23,7 @@ import {
     segmentedControlStyles
 } from '../../styles';
 import { connect } from 'react-redux';
-import { updateUserProfile, fetchUserListOrders, fetchUserProfile } from '../../store/actions'
+import { updateUserProfile, fetchUserListOrders, fetchUserProfile, userLogOut } from '../../store/actions'
 import { UserNetwork, OrderNetwork } from '../../service/api'
 import { TestAssets, } from '../../assets'
 import { Place, MenuItem } from '../../model';
@@ -103,8 +103,11 @@ class UserScreen extends BaseScreen {
 
                 },
                 err => {
-                    this.showAlertMessage(err)
+                    this.showAlertMessage(err.message)
                     this.setNewStateHandler({ refreshing: false });
+                    if (err.logOut) {
+                        this.props.userLogOutHandler()
+                    }
                 }
             )
 
@@ -165,6 +168,7 @@ class UserScreen extends BaseScreen {
                     <PlaceSectionList
                         style={{ marginLeft: -8 }}
                         titleSection={"❤️ OMILJENI RESTORANI"}
+                        hideSeeMore={true}
                         arrayObject={favoritePlaces}
                         onPressItem={(item) => this.pushNewScreen({ routeName: ScreenName.PlaceDetailScreen(), key: `${Math.random() * 10000}${item._id}`, params: { _id: item._id } })}
                         onPressSeeMore={() => console.log("see more")}
@@ -181,7 +185,7 @@ class UserScreen extends BaseScreen {
         if (favoriteMenuItems.length > 0) {
             return (
                 <View style={{
-                    marginTop: 8,
+                    marginTop: 16,
                     // borderBottomColor: BASE_COLOR.gray,
                     // borderBottomWidth: 1,
                     paddingBottom: 16,
@@ -444,6 +448,7 @@ const mapDispatchToProps = dispatch => {
         fetchUserListOrdersHandler: () => dispatch(fetchUserListOrders()),
         updateUserProfileHandler: (user) => dispatch(updateUserProfile(user)),
         fetchUserProfileHandler: () => dispatch(fetchUserProfile()),
+        userLogOutHandler: () => dispatch(userLogOut())
     };
 };
 

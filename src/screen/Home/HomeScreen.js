@@ -19,6 +19,7 @@ import HomeCaroselComponent from '../../components/Home/HomeCaroselComponent';
 import { PlaceNetwork, CategoryNetwork, ParamsUrl, UserNetwork } from '../../service/api'
 import testMenuItems from '../../static/menuItems.json'
 import { MenuItem } from '../../model';
+
 class HomeScreen extends BaseScreen {
     static navigationOptions = {
         header: null,
@@ -39,9 +40,8 @@ class HomeScreen extends BaseScreen {
             deliveryPlaces: [],
             favoritePlaces: [],
             favoriteMenuItems: [],
-
-
         }
+
     }
 
     componentDidMount() {
@@ -298,9 +298,10 @@ class HomeScreen extends BaseScreen {
         if (favoritePlaces.length > 0 && isLogin == true) {
             return (
                 <PlaceSectionList
+                    hideSeeMore={true}
                     titleSection={"❤️ OMILJENI RESTORANI"}
                     arrayObject={favoritePlaces}
-                    onPressItem={(item) =>this.pushNewScreen({ routeName: ScreenName.PlaceDetailScreen(), key: `${Math.random() * 10000}${item._id}`, params: { _id: item._id } })}
+                    onPressItem={(item) => this.pushNewScreen({ routeName: ScreenName.PlaceDetailScreen(), key: `${Math.random() * 10000}${item._id}`, params: { _id: item._id } })}
                     // onPressSeeMore={() => this.pushNewScreen({
                     //     routeName: ScreenName.PlaceListScreen(),
                     //     key: `${Math.random() * 10000}`,

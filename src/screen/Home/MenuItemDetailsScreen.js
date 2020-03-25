@@ -481,24 +481,24 @@ class MenuItemDetailsScreen extends BaseScreen {
         const catheringOptions = this.props.userInfo.catheringOptions
 
         if (cathering != null && cathering.isFromCathering) {
-            if ( catheringOptions.balance + catheringOptions.reserved >= this.subTotalPrice(item, selectedOptions, 1)) {
+            if (catheringOptions.package == 'unlimited' || catheringOptions.balance + Math.abs(catheringOptions.reserved) >= this.subTotalPrice(item, selectedOptions, 1)) {
                 OrderNetwork.fetchCatheringOrder(menuItem, selectedOptions, "delivery", "cash", '', cathering.selectedDate)
-                .then(
-                    res => {
-                        console.log(res)
-                        // this.showAlertMessage("USPESNO NARUCENO")
-                        // this.setNewStateHandler({ loading: false })
-                        this.pushNewScreen(ScreenName.CateringScreen())
-                    },
-                    err => {
-                        // this.setNewStateHandler({ loading: false })
-                        this.showAlertMessage(String(err))
-                    })
+                    .then(
+                        res => {
+                            console.log(res)
+                            // this.showAlertMessage("USPESNO NARUCENO")
+                            // this.setNewStateHandler({ loading: false })
+                            this.pushNewScreen(ScreenName.CateringScreen())
+                        },
+                        err => {
+                            // this.setNewStateHandler({ loading: false })
+                            this.showAlertMessage(String(err))
+                        })
             } else {
                 alert("Nemate dovoljno sredstava na Vašem nalogu!")
             }
 
-            
+
         } else {
             if (orderForPlace == null) {
                 this.putInBagHandler()

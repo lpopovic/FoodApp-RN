@@ -5,3 +5,4 @@ export * from './numberHelper';
 export * from './messageText';
 export * from './api';
 export * from './storage';
+export * from './language';

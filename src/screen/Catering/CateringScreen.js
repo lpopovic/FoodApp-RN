@@ -15,10 +15,10 @@ import CalendarStrip from 'react-native-calendar-strip';
 import { CatheringNetwork, UserNetwork } from '../../service/api'
 import Moment from 'moment';
 import { connect } from 'react-redux';
-import { updateUserProfile } from '../../store/actions';
+import { updateUserProfile, userLogOut } from '../../store/actions';
 import { BASE_COLOR, NAV_COLOR } from '../../styles';
 import { ImageAssets } from '../../model/image';
-import { User } from '../../model';
+
 class CateringScreen extends BaseScreen {
 
     static navigationOptions = {
@@ -29,7 +29,7 @@ class CateringScreen extends BaseScreen {
         super(props)
         this.state = {
             loading: true,
-            isCatheringAvailable: false,
+            isCatheringAvailable: null,
             selectedDate: Moment().format('YYYY-MM-DD'),
             markedDates: [],
             placesCathering: [],
@@ -38,6 +38,16 @@ class CateringScreen extends BaseScreen {
             places: [],
             balance: null
         }
+        Moment.locale('Latinica', {
+            months: 'Januar_Februar_Mart_April_Maj_Jun_Jul_Avgust_Septembar_Oktobar_Novembar_Decembar'.split('_'),
+            monthsShort: 'Jan_Feb_Mar_Apr_Maj_Jun_Jul_Avg_Sep_Okt_Nov_Dec'.split('_'),
+            weekdays: 'Ponedeljak_Utorak_Sreda_Četvrtak_Petak_Subota_Nedelja'.split('_'),
+            weekdaysShort: 'NED_PON_UTO_SRE_ČET_PET_SUB'.split('_'),
+            weekdaysMin: 'PO_UT_SR_ČE_PE_SU_NE'.split('_'),
+            weekdaysParseExact: true,
+        });
+
+
     }
 
     componentDidMount() {
@@ -48,7 +58,10 @@ class CateringScreen extends BaseScreen {
         // if (this.props.isLogin) {
         this.focusListener = this.props.navigation.addListener('didFocus', () => {
             // alert(this.props.isLogin)
-            this.apiDidMountFunction()
+            const { isLogin } = this.props
+            if (isLogin == true) {
+                this.apiDidMountFunction()
+            }
         })
         // }
     }
@@ -136,7 +149,9 @@ class CateringScreen extends BaseScreen {
                     this.balanceHandler()
                 },
                 err => {
-                    // this.showAlertMessage(err)
+                    if (err.logOut) {
+                        this.props.userLogOutHandler()
+                    }
                 }
             )
     }
@@ -223,20 +238,7 @@ class CateringScreen extends BaseScreen {
 
     cateringCalendarStrip = () => {
 
-        const locale = {
-            name: 'sr',
-            config: {
-                months: 'Januar_Februar_Mart_April_Maj_Jun_Jul_Avgust_Septembar_Oktobar_Novembar_Decembar'.split('_'),
-                monthsShort: 'Jan_Feb_Mar_Apr_Maj_Jun_Jul_Avg_Sep_Okt_Nov_Dec'.split('_'),
-                weekdays: 'Ponedeljak_Utorak_Sreda_Četvrtak_Petak_Subota_Nedelja'.split('_'),
-                weekdaysShort: 'NED_PON_UTO_SRE_ČET_PET_SUB'.split('_'),
-                weekdaysMin: 'PO_UT_SR_ČE_PE_SU_NE'.split('_'),
-            },
-            week: {
-                dow: 1,
-                doy: 4
-            }
-        };
+
         return (
             <View>
                 <View style={{ height: 30, backgroundColor: NAV_COLOR.headerBackground, marginLeft: 10, marginRight: 10, flexDirection: 'row', alignItems: 'center' }}>
@@ -271,7 +273,7 @@ class CateringScreen extends BaseScreen {
                         // alert(Moment(date).endOf('isoWeek').format("DD MMM YYYY hh:mm a"))
                     }}
                     style={{ height: 120, paddingTop: 10, paddingBottom: 10, backgroundColor: NAV_COLOR.headerBackground }}
-                    locale={locale}
+                    // locale={locale}
                     daySelectionAnimation={{ type: 'background', duration: 200, highlightColor: BASE_COLOR.blue }}
                     minDate={Moment().subtract(21, 'd')}
                     maxDate={Moment().add(7, 'd')}
@@ -351,22 +353,31 @@ class CateringScreen extends BaseScreen {
     }
 
 
+    loginToCatheringMesage() {
+        return (
+            <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+                <Text style={{ textAlign: 'center', textAlignVertical: 'center', fontSize: 24, fontWeight: 'bold' }}>Da biste koristili ketering tab, molimo vas da se prijavite</Text>
+            </View>
+
+        )
+    }
+
     render() {
         const { loading, isCatheringAvailable } = this.state
+        const { isLogin } = this.props
         const mainDisplay = loading ? this.activityIndicatorContent(BASE_COLOR.blue) : this.renderList()
         return (
             <SafeAreaView style={styles.safeAreaHeader}>
                 <View style={styles.mainContainer}>
-                    {isCatheringAvailable ?
+                    {isLogin ? isCatheringAvailable != false ?
                         <>
                             {this.cateringCalendarStrip()}
                             {mainDisplay}
-
                         </>
-                        :
-                        this.signUpToCatheringMesage()}
-                    {/* {this.cateringCalendarStrip()}
-                 {mainDisplay} */}
+                        : this.signUpToCatheringMesage()
+                        : this.loginToCatheringMesage()
+                    }
+
                 </View>
             </SafeAreaView>
 
@@ -394,6 +405,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return {
         updateUserProfileHandler: (user) => dispatch(updateUserProfile(user)),
+        userLogOutHandler: () => dispatch(userLogOut())
     };
 };
 

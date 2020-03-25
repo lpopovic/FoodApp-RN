@@ -113,15 +113,25 @@ class MainLocationScreen extends BaseScreen {
         <SafeAreaView style={styles.mainContainer}>
             {this.topContent()}
             <View style={styles.searchTextContainer}>
-                <TextInput
-                    ref={ref => this.searchInput = ref}
-                    style={[styles.baseTextStyle, styles.searchTextStyle]}
-                    value={this.state.searchText}
-                    onChangeText={(searchText) => this.onChangeTextInput(searchText)}
-                    keyboardType={'default'}
-                    returnKeyType='done'
-                    autoCorrect={false}
-                />
+                <View style={{ width: 25, height: 25, alignContent: 'center', alignItems: 'center' }}>
+                    <Image
+                        source={TestAssets.searchIcon}
+                        resizeMode='contain'
+                        style={{ width: '100%', height: '100%', tintColor: BASE_COLOR.white, }} />
+                </View>
+                <View style={{ alignContent: 'flex-start', alignItems: 'center', width: 225, paddingLeft: 8 }}>
+                    <TextInput
+                        ref={ref => this.searchInput = ref}
+                        style={[styles.baseTextStyle, styles.searchTextStyle]}
+                        placeholder={'Pretraži grad...'}
+                        placeholderTextColor={BASE_COLOR.white}
+                        value={this.state.searchText}
+                        onChangeText={(searchText) => this.onChangeTextInput(searchText)}
+                        keyboardType={'default'}
+                        returnKeyType='done'
+                        autoCorrect={false}
+                    />
+                </View>
             </View>
             {this.countryCityListContent()}
 
@@ -217,12 +227,19 @@ const styles = StyleSheet.create({
         fontWeight: '300'
     },
     searchTextContainer: {
-        margin: 16,
-    },
-    searchTextStyle: {
+        flexDirection: 'row',
+        alignSelf: 'center',
+        alignItems: 'center',
+        marginTop: 16,
+        marginBottom: 16,
         borderBottomColor: BASE_COLOR.white,
         borderBottomWidth: 1,
-        fontWeight: '300'
+        width: 250,
+    },
+    searchTextStyle: {
+        fontWeight: '300',
+        textAlign: 'left',
+        width: '100%'
 
     }
 });
