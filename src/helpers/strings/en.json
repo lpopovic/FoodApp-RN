@@ -21,5 +21,11 @@
    "usernameNotValidateMinumum": "Username not valide, minumum 6 characters.",
    "phoneNumberNotValide": "Phone number not valide.",
    "firstNameNotValide": "First name not valide.",
-   "lastNameNotValide": "Last name not valide."
+   "lastNameNotValide": "Last name not valide.",
+   "nearMe": "Near me",
+   "pickup": "Pickup",
+   "delivery": "Delivery",
+   "thereIsNoNearbyPlaces": "There is no nearby places!",
+   "insertKeyWordForSearch":"Insert key word for search.",
+   "myLocation":"My location"
 }

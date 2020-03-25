@@ -21,5 +21,11 @@
     "usernameNotValidateMinumum": "Korisničko ime nije validno, najmanje 6 znakova.",
     "phoneNumberNotValide": "Broj telefona nije validan.",
     "firstNameNotValide": "Ime nije validno.",
-    "lastNameNotValide": "Prezime nije validno."
+    "lastNameNotValide": "Prezime nije validno.",
+    "nearMe": "Okolina",
+    "pickup": "Pokupi",
+    "delivery": "Dostava",
+    "thereIsNoNearbyPlaces": "Nema obližnjih mesta!",
+    "insertKeyWordForSearch": "Unesite ključnu reč za pretragu.",
+    "myLocation": "Moja lokacija"
 }

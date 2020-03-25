@@ -49,7 +49,8 @@ class MapScreen extends BaseScreen {
     constructor(props) {
         super(props)
         this.keyMarkerUser = "#keyMarkerUser"
-        this.typeOfSortRestMap = ["Near me", "Pickup", "Delivery"]
+        const { strings } = props
+        this.typeOfSortRestMap = [strings.nearMe, strings.pickup, strings.delivery]
         this.state = {
             currentSlideIndex: 0,
             selectedSegmentedIndex: 0,
@@ -125,7 +126,7 @@ class MapScreen extends BaseScreen {
         this.setNewStateHandler({
             loading: true
         })
-
+        const { strings } = this.props
         const {
             pickup,
             delivery,
@@ -146,7 +147,7 @@ class MapScreen extends BaseScreen {
                     region: res.length > 0 ? this.getInitRegionForCoordinates(res) : this.state.region
                 })
                 if (res.length == 0) {
-                    this.showAlertMessage(MESSAGE_NO_PLACE)
+                    this.showAlertMessage(strings.thereIsNoNearbyPlaces)
                 } else {
                     // this.setNewRegion(0)
                 }
@@ -164,7 +165,7 @@ class MapScreen extends BaseScreen {
     }
 
     searchApiHandler = ({ text, index }) => {
-
+        const { strings } = this.props
         const {
             pickup,
             delivery,
@@ -215,7 +216,7 @@ class MapScreen extends BaseScreen {
                     })
 
                     if (res.length == 0) {
-                        this.showAlertMessage(MESSAGE_NO_PLACE)
+                        this.showAlertMessage(strings.thereIsNoNearbyPlaces)
                     } else {
                         // this.setNewRegion(0)
                     }
@@ -229,7 +230,7 @@ class MapScreen extends BaseScreen {
                 }
             )
         } else {
-            this.showAlertMessage("Insert key word for search.")
+            this.showAlertMessage(strings.insertKeyWordForSearch)
         }
     }
 
@@ -407,6 +408,7 @@ class MapScreen extends BaseScreen {
     }
     setUserMarkerContent = () => {
         const { userMarker } = this.state
+        const { strings } = this.props
         return (
             <MapView.Marker
                 // draggable
@@ -415,7 +417,7 @@ class MapScreen extends BaseScreen {
                     userMarker: event.nativeEvent.coordinate
                 })}
                 coordinate={userMarker}
-                title={"MOJA LOKACIJA"}
+                title={strings.myLocation}
                 description={`${Math.round(userMarker.latitude * 100) / 100}°N, ${Math.round(userMarker.longitude * 100) / 100}°E`}
                 pinColor={BASE_COLOR.red} >
                 <View style={[styles.markerWrap, { backgroundColor: BASE_COLOR.red, padding: 5, height: 40, width: 40, borderRadius: 20, borderWidth: 4, borderColor: BASE_COLOR.blue }]}>
@@ -640,6 +642,7 @@ const stylesCard = StyleSheet.create({
 const mapStateToProps = state => {
     return {
         city: state.location.city,
+        strings: state.location.language.strings,
         filter: state.filter.filter,
     };
 };
