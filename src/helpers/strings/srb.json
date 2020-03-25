@@ -36,5 +36,14 @@
     "rating": "Ocena",
     "priceTag": "Price tag",
     "reviewText": "Tekst recenzije",
-    "enterYourText":"Unesite vaš tekst."
+    "enterYourText": "Unesite vaš tekst.",
+    "orders": "Porudžbine",
+    "catering": "Ketering",
+    "favoriteRestaurants": "Omiljeni restorani",
+    "favoriteMeals": "Omiljena jela",
+    "recent": "Nedavno",
+    "notAvailable": "Nedostupno",
+    "phoneNumber": "Br. telefona",
+    "address": "Adresa",
+    "toUseTheUserTabPleaseLogIn": "Da bi ste koristili korisnički tab, molimo vas da se prijavite."
 }
