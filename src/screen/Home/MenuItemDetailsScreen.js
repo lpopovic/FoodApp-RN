@@ -10,7 +10,7 @@ import { connect } from 'react-redux';
 import { ScreenName } from '../../helpers'
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { BASE_COLOR, NAV_COLOR } from '../../styles';
-import { addOrderMenuItem, emptyOrder } from '../../store/actions'
+import { addOrderMenuItem, emptyOrder, userFavoriteMenuItems } from '../../store/actions'
 import UrlOpen from '../../components/common/UrlOpen'
 
 var noneRadioOption = {
@@ -313,7 +313,11 @@ class MenuItemDetailsScreen extends BaseScreen {
         this.setState({ selectedOptions: selectedOptions })
     }
 
-
+    onPressFavoriteMenuItemHandler = (menuItem) => {
+        // console.log(this.props.userFavoriteMenuItems)
+        console.log(this.props.userFavoriteMenuItemsIDs)
+        this.props.userFavoriteMenuItemsHandler(menuItem)
+    }
 
     onPressShowPlaceOnMap = (place) => {
         UrlOpen.openUrlInBrowser(UrlOpen.generateUrlForGoogleMap(place.coordinate.latitude, place.coordinate.longitude))
@@ -349,11 +353,11 @@ class MenuItemDetailsScreen extends BaseScreen {
                     {this.props.isLogin == true ?
                         <View style={{ flex: 3, alignItems: 'flex-end', }}>
                             <TouchableOpacity
-                                onPress={() => alert("press heart image")}>
+                                onPress={() => this.onPressFavoriteMenuItemHandler(this.state.menuItem)}>
                                 <View style={{ padding: 8 }}>
                                     <Image
-                                        style={[styles.heartImage,]}
-                                        source={IconAssets.heartIcon}
+                                        style={[styles.heartImage, { tintColor: this.props.userFavoriteMenuItemsIDs.includes(this.state.menuItem._id) ? '#FF4233' : BASE_COLOR.gray }]}
+                                        source={this.props.userFavoriteMenuItemsIDs.includes(this.state.menuItem._id) ? IconAssets.heartFillIcon : IconAssets.heartIcon}
                                         resizeMode='contain' />
                                 </View >
                             </TouchableOpacity>
@@ -573,7 +577,7 @@ const styles = StyleSheet.create({
     heartImage: {
         height: 26,
         width: 26,
-        tintColor: BASE_COLOR.gray,
+        // tintColor: BASE_COLOR.gray,
     },
 });
 
@@ -582,7 +586,9 @@ const mapStateToProps = state => {
         order: state.order.order,
         orderForPlace: state.order.orderForPlace,
         isLogin: state.user.isLogin,
-        userInfo: state.user.userInfo
+        userInfo: state.user.userInfo,
+        userFavoriteMenuItems: state.user.userFavoriteMenuItems,
+        userFavoriteMenuItemsIDs: state.user.userFavoriteMenuItemsIDs
     };
 };
 
@@ -590,6 +596,7 @@ const mapDispatchToProps = dispatch => {
     return {
         addOrderMenuItemHandler: (orderdMenuItem) => dispatch(addOrderMenuItem(orderdMenuItem)),
         emptyCurentOrderHandler: () => dispatch(emptyOrder()),
+        userFavoriteMenuItemsHandler: (menuItem) => dispatch(userFavoriteMenuItems(menuItem)),
     };
 };
 

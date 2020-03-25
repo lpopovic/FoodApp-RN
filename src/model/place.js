@@ -93,9 +93,25 @@ class PlaceCathering {
     
         return arrayTemplate;
     }
-
 }
 
+class PlaceFavorite {
+    constructor(object) {
+        this._id = object._id;
+        this.place = object.place._id || object.place;
+    }
+
+    static createArrayPlacesFavorite(objectArray) {
+
+        const arrayTemplate = objectArray.map(item => {
+
+            return new PlaceFavorite(item);
+
+        })
+    
+        return arrayTemplate;
+    }
+}
 class PlaceDetail {
     constructor(object) {
         this.field = object.field || '';
@@ -104,4 +120,4 @@ class PlaceDetail {
         this.image = object.image || '';
     }
 }
-export { Place, PlaceDetail, PlaceCathering };
+export { Place, PlaceDetail, PlaceCathering, PlaceFavorite };

@@ -17,7 +17,6 @@ import { PlaceSectionList } from '../../components/Place/PlaceList'
 import MenuItemList from '../../components/MenuItem/MenuItemList'
 import HomeCaroselComponent from '../../components/Home/HomeCaroselComponent';
 import { PlaceNetwork, CategoryNetwork, ParamsUrl, UserNetwork } from '../../service/api'
-import testMenuItems from '../../static/menuItems.json'
 import { MenuItem } from '../../model';
 
 class HomeScreen extends BaseScreen {
@@ -38,8 +37,6 @@ class HomeScreen extends BaseScreen {
             recommendedPlaces: [],
             pickupPlaces: [],
             deliveryPlaces: [],
-            favoritePlaces: [],
-            favoriteMenuItems: [],
         }
 
     }
@@ -49,11 +46,6 @@ class HomeScreen extends BaseScreen {
         this.setStatusBarStyle(NAV_COLOR.headerBackground, true)
         this.apiCallHandler()
         this.companyRequestApiCheck()
-        const favoriteMenuItems = MenuItem.createArrayMenuItems(testMenuItems)
-        this.setNewStateHandler({
-
-            favoriteMenuItems
-        })
     }
     componentWillUnmount() {
         super.componentWillUnmount()
@@ -108,7 +100,6 @@ class HomeScreen extends BaseScreen {
                     newPlaces: res,
                     actionPlaces: res,
                     recommendedPlaces: res,
-                    favoritePlaces: res,
                 })
             },
             err => {
@@ -291,16 +282,15 @@ class HomeScreen extends BaseScreen {
 
     }
     placeListFavoriteContent = () => {
-        const { favoritePlaces } = this.state
+        const { userFavoritePlaces } = this.props
         const { isLogin } = this.props
 
-
-        if (favoritePlaces.length > 0 && isLogin == true) {
+        if (userFavoritePlaces.length > 0 && isLogin == true) {
             return (
                 <PlaceSectionList
                     hideSeeMore={true}
                     titleSection={"❤️ OMILJENI RESTORANI"}
-                    arrayObject={favoritePlaces}
+                    arrayObject={userFavoritePlaces}
                     onPressItem={(item) => this.pushNewScreen({ routeName: ScreenName.PlaceDetailScreen(), key: `${Math.random() * 10000}${item._id}`, params: { _id: item._id } })}
                     // onPressSeeMore={() => this.pushNewScreen({
                     //     routeName: ScreenName.PlaceListScreen(),
@@ -316,15 +306,15 @@ class HomeScreen extends BaseScreen {
 
     }
     menuItemsListFavoriteContent = () => {
-        const { favoriteMenuItems } = this.state
+        const { userFavoriteMenuItems } = this.props
         const { isLogin } = this.props
 
 
-        if (favoriteMenuItems.length > 0 && isLogin == true) {
+        if (userFavoriteMenuItems.length > 0 && isLogin == true) {
             return (
                 <MenuItemList
                     titleSection={"❤️ OMILJENA JELA"}
-                    arrayObject={favoriteMenuItems}
+                    arrayObject={userFavoriteMenuItems}
                     onPressItem={(item) => this.pushNewScreen({ routeName: ScreenName.MenuItemDetailsScreen(), key: `${Math.random() * 10000}${item._id}`, params: { _id: item._id } })}
                     onPressSeeMore={() => console.log("see more")}
                 />
@@ -457,7 +447,8 @@ const mapStateToProps = state => {
         filter: state.filter.filter,
         isLogin: state.user.isLogin,
         userInfo: state.user.userInfo,
-
+        userFavoritePlaces: state.user.userFavoritePlaces,
+        userFavoriteMenuItems: state.user.userFavoriteMenuItems
     };
 };
 

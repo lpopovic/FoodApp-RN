@@ -18,6 +18,8 @@ import { connect } from 'react-redux';
 import { updateUserProfile, userLogOut } from '../../store/actions';
 import { BASE_COLOR, NAV_COLOR } from '../../styles';
 import { ImageAssets } from '../../model/image';
+import { MenuItem, Place } from '../../model';
+import RecentOrders from '../../components/Catering//RecentOrders'
 
 class CateringScreen extends BaseScreen {
 
@@ -36,7 +38,8 @@ class CateringScreen extends BaseScreen {
             ordersForWeek: [],
             ordersForDay: [],
             places: [],
-            balance: null
+            balance: null,
+            recentMenuItemsOrder: []
         }
         Moment.locale('Latinica', {
             months: 'Januar_Februar_Mart_April_Maj_Jun_Jul_Avgust_Septembar_Oktobar_Novembar_Decembar'.split('_'),
@@ -103,6 +106,19 @@ class CateringScreen extends BaseScreen {
                 })
             }
         )
+        if (isDay) {
+            CatheringNetwork.fetchCatheringOrderFromDateToDateByCompany(fromDate, toDate, this.props.userInfo.company._id)
+                .then(
+                    res => {
+                        console.log("RES", res)
+                        this.sortRecentMenuItemsOrders2(res)
+
+                    },
+                    err => {
+                        alert(err)
+                    }
+                )
+        }
     }
 
     apiDidMountFunction = async () => {
@@ -303,7 +319,9 @@ class CateringScreen extends BaseScreen {
                         _id: item._id,
                         description: item.food.description,
                         name: item.food.name,
-                        image: image
+                        image: image,
+                        status: order.status,
+                        selectedOptions: order.orderedMenuItems
                     }
                     DishData.push(dish)
                 })
@@ -316,17 +334,24 @@ class CateringScreen extends BaseScreen {
             PlaceData.push(place.place)
         })
 
-        const { markedDates } = this.state
+        const { markedDates, recentMenuItemsOrder } = this.state
         if (markedDates.some(item => item.date === this.state.selectedDate)) {
             console.log("DISH DATA")
             console.log(DishData)
             return (
-                <DishList data={DishData} selectedDate={this.state.selectedDate} selectPlace={(placeId) => this.placeSelectHandler(placeId)} />
+                <>
+                    {recentMenuItemsOrder.length > 0 ? <RecentOrders recentOrders={recentMenuItemsOrder}  onPressSection={ (sectionIndex) => this.onPressSectionListHeader(sectionIndex)}/> : null}
+                    <DishList data={DishData} isCathering={true} recentOrders={recentMenuItemsOrder} selectedDate={this.state.selectedDate} selectPlace={(placeId) => this.placeSelectHandler(placeId)} />
+                </>
             )
         } else if (Moment(this.state.selectedDate).isAfter(Moment().subtract(1, 'day'))) {
             console.log(placesCathering)
             return (
-                <PlaceList data={PlaceData} clickOnPlace={(placeId) => this.placeSelectHandler(placeId)} />
+                <>
+                    {recentMenuItemsOrder.length > 0 ? <RecentOrders recentOrders={recentMenuItemsOrder}  onPressSection={ (sectionIndex) => this.onPressSectionListHeader(sectionIndex)}/> : null}
+                    <PlaceList data={PlaceData} clickOnPlace={(placeId) => this.placeSelectHandler(placeId)} />
+                </>
+
             )
         } else if (Moment(this.state.selectedDate).isBefore(Moment().subtract(1, 'day'))) {
             return (
@@ -360,6 +385,140 @@ class CateringScreen extends BaseScreen {
             </View>
 
         )
+    }
+
+    sortRecentMenuItemsOrders = (userCatherings) => {
+
+        // recentMenuItemsOrder.push({
+        //     menuItem: currentMenuItem,
+        //     place: currentMenuItem.place,
+        //     quantityNumber: 1
+        // })
+        let { recentMenuItemsOrder } = this.state
+
+
+        recentMenuItemsOrder = []
+
+        userCatherings.map(item => {
+
+            if (item.orderedMenuItems.length > 0) {
+
+                let currentMenuItem = new MenuItem(item.orderedMenuItems[0].food)
+                let existMenuItem = false
+                for (let index = 0; index < recentMenuItemsOrder.length; index++) {
+
+                    if (currentMenuItem._id === recentMenuItemsOrder[index].menuItem._id) {
+
+                        recentMenuItemsOrder[index].quantityNumber = recentMenuItemsOrder[index].quantityNumber + 1
+                        existMenuItem = true
+                        index = recentMenuItemsOrder.length
+                    }
+                }
+                if (existMenuItem == false) {
+                    recentMenuItemsOrder.push({
+                        menuItem: currentMenuItem,
+                        place: currentMenuItem.place,
+                        quantityNumber: 1
+                    })
+                }
+
+            }
+
+
+
+        })
+        this.setNewStateHandler({
+            recentMenuItemsOrder
+        })
+        // recentMenuItemsOrder for catheringOrder Home Screen
+        console.log("TEST - Array", recentMenuItemsOrder)
+    }
+    sortRecentMenuItemsOrders2 = (userCatherings) => {
+
+        // recentMenuItemsOrder.push({
+        //     menuItemArray: [{
+        //             menuItem: currentMenuItem,
+        //             quantityNumber: 1
+        //         }],
+        //     place: currentMenuItem.place,
+
+        // })
+
+
+        let { recentMenuItemsOrder } = this.state
+
+        recentMenuItemsOrder = []
+
+        userCatherings.map(item => {
+
+            if (item.orderedMenuItems.length > 0) {
+
+                let currentMenuItem = new MenuItem(item.orderedMenuItems[0].food)
+                let existMenuItem = false
+                let existPlace = null
+                for (let position = 0; position < recentMenuItemsOrder.length; position++) {
+
+                    if (currentMenuItem.place._id === recentMenuItemsOrder[position].place._id) {
+                        existPlace = position
+
+                        for (let index = 0; index < recentMenuItemsOrder[position].menuItemArray.length; index++) {
+
+                            if (currentMenuItem._id === recentMenuItemsOrder[position].menuItemArray[index].menuItem._id) {
+
+                                recentMenuItemsOrder[position].menuItemArray[index].quantityNumber = recentMenuItemsOrder[position].menuItemArray[index].quantityNumber + 1
+                                existMenuItem = true
+                                index = recentMenuItemsOrder.length
+                            }
+                        }
+                        position = recentMenuItemsOrder.length
+                    }
+                }
+
+
+                if (existPlace !== null) {
+                    if (existMenuItem == false) {
+                        recentMenuItemsOrder[existPlace].menuItemArray.push({
+                            quantityNumber: 1,
+                            menuItem: currentMenuItem
+                        })
+                    }
+                } else {
+                    recentMenuItemsOrder.push({
+                        menuItemArray: [{
+                            quantityNumber: 1,
+                            menuItem: currentMenuItem
+                        }],
+                        place: currentMenuItem.place,
+                        hide: true
+                    })
+                }
+
+            }
+
+        })
+        this.setNewStateHandler({
+            recentMenuItemsOrder
+        })
+        // recentMenuItemsOrder for catheringOrder Home Screen
+        console.log("TEST", recentMenuItemsOrder)
+    }
+
+    onPressSectionListHeader = (sectionIndex) => {
+
+        let { recentMenuItemsOrder } = this.state
+
+        for (let index = 0; index < recentMenuItemsOrder.length; index++) {
+
+            if (sectionIndex == index) {
+                recentMenuItemsOrder[index].hide = !recentMenuItemsOrder[index].hide
+            } else {
+                recentMenuItemsOrder[index].hide = true
+            }
+
+        }
+
+        // this.setState({ sectionItems })
+        this.setNewStateHandler({ recentMenuItemsOrder })
     }
 
     render() {
@@ -400,6 +559,7 @@ const mapStateToProps = state => {
     return {
         userInfo: state.user.userInfo,
         isLogin: state.user.isLogin,
+        userCatherings: state.user.userCatherings,
     };
 };
 const mapDispatchToProps = dispatch => {

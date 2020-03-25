@@ -9,6 +9,8 @@ import {
     uiStopLoading,
     updateListUserOrders,
     updateListUserCatheringsOrders,
+    updateUserFavoritePlaces,
+    updateUserFavoriteMenuItems
 } from './index'
 
 import {
@@ -17,7 +19,7 @@ import {
     STORAGE_KEY,
 } from '../../helpers'
 
-import { UserNetwork, OrderNetwork } from '../../service/api'
+import { UserNetwork, OrderNetwork, FavoriteNetwork } from '../../service/api'
 
 export const updateUserProfile = (userProfile) => {
     saveStorageData(userProfile, STORAGE_KEY.USER_APP_DATA)
@@ -71,6 +73,34 @@ export const fetchUserListOrders = () => {
         )
     }
 }
+
+export const fetchUserFavorites = () => {
+    return dispatch => {
+
+        FavoriteNetwork.fetchGetAllFavoritedPlaces(true).then(
+            result => {
+                result = result.reverse()
+                dispatch(updateUserFavoritePlaces(result))
+            },
+            error => {
+
+            }
+        )
+
+        FavoriteNetwork.fetchGetAllFavoritedMenuItems(true).then(
+            result => {
+                result = result.reverse()
+                dispatch(updateUserFavoriteMenuItems(result))
+            },
+            error => {
+
+            }
+        )
+    }
+}
+
+
+
 export const fetchUserProfile = () => {
 
     return dispatch => {
@@ -92,10 +122,10 @@ export const fetchUserProfile = () => {
                     }
                 )
             dispatch(fetchUserListOrders())
+            dispatch(fetchUserFavorites())
         }, 200);
-
-
-
     }
-
 }
+
+
+

@@ -27,7 +27,6 @@ import { updateUserProfile, fetchUserListOrders, fetchUserProfile, userLogOut } 
 import { UserNetwork, OrderNetwork } from '../../service/api'
 import { TestAssets, } from '../../assets'
 import { Place, MenuItem } from '../../model';
-import testPlaces from '../../static/places.json'
 import testMenuItems from '../../static/menuItems.json'
 class UserScreen extends BaseScreen {
     static navigationOptions = {
@@ -40,21 +39,12 @@ class UserScreen extends BaseScreen {
         this.state = {
             refreshing: false,
             selectedIndex: 0,
-            favoritePlaces: [],
-            favoriteMenuItems: [],
         }
     }
 
     componentDidMount() {
         super.componentDidMount()
         this.setStatusBarStyle(NAV_COLOR.headerBackground, true)
-        const favoritePlaces = Place.createArrayPlaces(testPlaces)
-        const favoriteMenuItems = MenuItem.createArrayMenuItems(testMenuItems)
-        this.setNewStateHandler({
-            favoritePlaces,
-            favoriteMenuItems
-        })
-
     }
     componentWillUnmount() {
         super.componentWillUnmount()
@@ -153,10 +143,9 @@ class UserScreen extends BaseScreen {
         )
     }
     placeListFavoriteContent = () => {
+        const { userFavoritePlaces } = this.props
 
-        const { favoritePlaces } = this.state
-
-        if (favoritePlaces.length > 0) {
+        if (userFavoritePlaces.length > 0) {
             return (
                 <View style={{
                     marginTop: 8,
@@ -169,7 +158,7 @@ class UserScreen extends BaseScreen {
                         style={{ marginLeft: -8 }}
                         titleSection={"❤️ OMILJENI RESTORANI"}
                         hideSeeMore={true}
-                        arrayObject={favoritePlaces}
+                        arrayObject={userFavoritePlaces}
                         onPressItem={(item) => this.pushNewScreen({ routeName: ScreenName.PlaceDetailScreen(), key: `${Math.random() * 10000}${item._id}`, params: { _id: item._id } })}
                         onPressSeeMore={() => console.log("see more")}
                     />
@@ -180,9 +169,9 @@ class UserScreen extends BaseScreen {
     }
     menuItemsListFavoriteContent = () => {
 
-        const { favoriteMenuItems } = this.state
+        const { userFavoriteMenuItems } = this.props
 
-        if (favoriteMenuItems.length > 0) {
+        if (userFavoriteMenuItems.length > 0) {
             return (
                 <View style={{
                     marginTop: 16,
@@ -194,7 +183,7 @@ class UserScreen extends BaseScreen {
                     <MenuItemList
                         style={{ marginLeft: -8, }}
                         titleSection={"❤️ OMILJENA JELA"}
-                        arrayObject={favoriteMenuItems}
+                        arrayObject={userFavoriteMenuItems}
                         onPressItem={(item) => this.pushNewScreen({ routeName: ScreenName.MenuItemDetailsScreen(), key: `${Math.random() * 10000}${item._id}`, params: { _id: item._id } })}
                         onPressSeeMore={() => console.log("see more")}
                     />
@@ -440,6 +429,8 @@ const mapStateToProps = state => {
         userOrders: state.user.userOrders,
         userCatherings: state.user.userCatherings,
         city: state.location.city,
+        userFavoritePlaces: state.user.userFavoritePlaces,
+        userFavoriteMenuItems: state.user.userFavoriteMenuItems
     };
 };
 

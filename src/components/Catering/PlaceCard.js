@@ -3,6 +3,8 @@ import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import {
     IconAssets
 } from '../../assets';
+import { connect } from 'react-redux';
+import { userFavoritePlaces } from '../../store/actions'
 import { BASE_COLOR } from '../../styles';
 
 class PlaceCard extends Component {
@@ -13,6 +15,7 @@ class PlaceCard extends Component {
     }
 
     render() {
+        const { data, userFavoritePlacesIDs } = this.props
         return (
             // <TouchableOpacity onPress={() => this.props.onClick()} activeOpacity={0.5}>
             <View style={(styles.mainContainer)}>
@@ -21,22 +24,23 @@ class PlaceCard extends Component {
                         width: 100,
                         aspectRatio: 1 / 1,
                     }}
-                    source={{ uri: this.props.data.image.image11t }}
+                    source={{ uri: data.image.image11t }}
                 />
                 <View style={{ flex: 10, flexDirection: 'column', height: '100%', paddingLeft: 10, paddingRight: 10 }}>
                     <View style={{ height: 50, flexDirection: 'row' }}>
                         <View style={{ flex: 8, justifyContent: 'center' }}>
-                            <Text numberOfLines={2} ellipsizeMode='tail' style={{ fontSize: 18, fontWeight: 'bold', }}>{this.props.data.name}</Text>
+                            <Text numberOfLines={2} ellipsizeMode='tail' style={{ fontSize: 18, fontWeight: 'bold', }}>{data.name}</Text>
                         </View>
                         <View style={{ flex: 2, justifyContent: 'center', alignItems: 'flex-end' }}>
-                            <TouchableOpacity>
+                            <TouchableOpacity onPress={() => this.onPressFavoritePlaceHandler(data)}>
                                 <View style={{ borderRadius: 20, height: 35, width: 35, backgroundColor: '#F1F1F1', justifyContent: "center", alignItems: "center", }}>
                                     <Image
                                         style={{
                                             width: 21,
-                                            height: 18,
+                                            height: 21,
+                                            tintColor: userFavoritePlacesIDs.includes(data._id) ? '#FF4233' : '#646464'
                                         }}
-                                        source={IconAssets.heartIcon}
+                                        source={userFavoritePlacesIDs.includes(data._id) ? IconAssets.heartFillIcon : IconAssets.heartIcon}
                                     />
                                 </View>
                             </TouchableOpacity>
@@ -52,7 +56,7 @@ class PlaceCard extends Component {
                                     }}
                                     source={IconAssets.starIcon}
                                 />
-                                <Text style={{ color: '#646464', fontWeight: '400', fontSize: 11, marginLeft: 2 }}>{Number(this.props.data.avgRating).toFixed(1)}</Text>
+                                <Text style={{ color: '#646464', fontWeight: '400', fontSize: 11, marginLeft: 2 }}>{Number(data.avgRating).toFixed(1)}</Text>
                             </View>
                         </TouchableOpacity>
                         <TouchableOpacity onPress={() => this.props.onClick()} activeOpacity={0.5} style={{ flex: 3, marginTop: 10, marginLeft: 10 }}>
@@ -66,6 +70,10 @@ class PlaceCard extends Component {
             // </TouchableOpacity>
         )
     }
+
+    onPressFavoritePlaceHandler = (place) => {
+        this.props.userFavoritePlacesHandler(place)
+    }
 }
 
 const styles = StyleSheet.create({
@@ -75,10 +83,21 @@ const styles = StyleSheet.create({
         overflow: 'hidden',
         borderRadius: 5,
         height: 100,
-        borderWidth: 2,
-        borderColor: BASE_COLOR.blue
+        borderWidth: 1.5,
+        borderColor: BASE_COLOR.gray,
     }
 });
 
 
-export default PlaceCard;
+const mapStateToProps = state => {
+    return {
+        userFavoritePlacesIDs: state.user.userFavoritePlacesIDs
+    };
+};
+const mapDispatchToProps = dispatch => {
+    return {
+        userFavoritePlacesHandler: (place) => dispatch(userFavoritePlaces(place)),
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(PlaceCard);

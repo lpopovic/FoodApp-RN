@@ -46,4 +46,40 @@ class MenuItem {
     }
 }
 
-export { MenuItem };
+class MenuItemFavorite {
+    constructor(object) {
+        this._id = object._id;
+        this.menuItem = new MenuItem(object.menuItem);
+    }
+
+    static createArrayMenuItemsFavorite(objectArray) {
+
+        const arrayTemplate = objectArray.map(item => {
+
+            return new MenuItemFavorite(item);
+
+        })
+    
+        return arrayTemplate;
+    }
+}
+
+class MenuItemFavoriteSmallObject {
+    constructor(object) {
+        this._id = object._id;
+        this.menuItem = object.menuItem._id;
+    }
+
+    static createArrayMenuItemsFavoriteSmallObject(objectArray) {
+
+        const arrayTemplate = objectArray.map(item => {
+
+            return new MenuItemFavoriteSmallObject(item)
+        })
+
+        return arrayTemplate;
+    }
+}
+
+
+export { MenuItem, MenuItemFavorite, MenuItemFavoriteSmallObject};
