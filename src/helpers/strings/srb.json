@@ -81,5 +81,11 @@
     "doYouWantToSaveTheNewAddress": "Da li želite da sačuvate novu adresu?",
     "successfullyOrdered": "Uspešno naručeno!",
     "pleaseFillInTheContactPhoneField": "Molimo vas popunite polje za kontakt telefon. \nHvala.",
-    "pleaseFillInTheFieldWithYourDetails": "Molimo vas popunite polje sa vašim podacima. \nHvala."
+    "pleaseFillInTheFieldWithYourDetails": "Molimo vas popunite polje sa vašim podacima. \nHvala.",
+    "noBasicExtras": "Bez osnovnih dodataka",
+    "youCannotTakeMoreThanSupplements": "Ne možete uzeti više od %d dodatka.",
+    "orderFood": "Poruči hranu",
+    "addToCart": "Dodaj u korpu",
+    "youDoNotHaveEnoughFundsInYourAccount": "Nemate dovoljno sredstava na Vašem nalogu!",
+    "youCurrentlyHaveDishesInYourCartFromAnotherRestaurant": "U korpi trenutno imate jela iz drugog restorana. Ako nastavite sa kupovinom, korpa sa već unetim jelima će se isprazniti."
 }

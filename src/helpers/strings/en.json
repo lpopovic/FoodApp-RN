@@ -81,5 +81,11 @@
    "doYouWantToSaveTheNewAddress": "Do you want to save the new address?",
    "successfullyOrdered": "Successfully ordered!",
    "pleaseFillInTheContactPhoneField": "Please fill in the contact phone field. \nThank you.",
-   "pleaseFillInTheFieldWithYourDetails": "Please fill in the field with your details. \nThank you."
+   "pleaseFillInTheFieldWithYourDetails": "Please fill in the field with your details. \nThank you.",
+   "noBasicExtras": "No basic extras",
+   "youCannotTakeMoreThanSupplements": "You cannot take more than %d supplements.",
+   "orderFood": "Order food",
+   "addToCart":"Add to cart",
+   "youDoNotHaveEnoughFundsInYourAccount":"You do not have enough funds in your account!",
+   "youCurrentlyHaveDishesInYourCartFromAnotherRestaurant":"You currently have dishes in your cart from another restaurant. If you continue shopping, the basket with the dishes already entered will empty."
 }
