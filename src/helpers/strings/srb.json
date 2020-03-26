@@ -114,5 +114,8 @@
     "toUseTheCateringTabPleaseLogIn": "Da bi ste koristili ketering tab, molimo vas da se prijavite.",
     "contactUs": "Kontaktirajte nas",
     "currentOrders": "Trenutne porudžbine",
-    "thereIsNoResults": "Nema rezultata!"
+    "thereIsNoResults": "Nema rezultata!",
+    "order": "Naruči",
+    "review": "Komentar",
+    "details": "Detalji"
 }

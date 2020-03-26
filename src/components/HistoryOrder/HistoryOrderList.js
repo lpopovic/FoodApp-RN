@@ -5,7 +5,7 @@ import {
     Keyboard,
     StyleSheet
 } from 'react-native';
-import { HistoryOrder } from './HistoryOrder'
+import HistoryOrder  from './HistoryOrder'
 class HistoryOrderList extends Component {
     _onScroll = (event) => {
         Keyboard.dismiss()
@@ -53,4 +53,4 @@ const styles = StyleSheet.create({
 });
 
 
-export { HistoryOrderList }
+export default HistoryOrderList 

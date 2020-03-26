@@ -114,5 +114,8 @@
    "toUseTheCateringTabPleaseLogIn": "To use the catering tab, please log in.",
    "contactUs": "Contact us",
    "currentOrders": "Current orders",
-   "thereIsNoResults":"There is no results!"
+   "thereIsNoResults": "There is no results!",
+   "order": "Order",
+   "review": "Review",
+   "details": "Details"
 }
