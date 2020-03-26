@@ -65,5 +65,21 @@
     "onboardingTitle2": "Kada putujete ili kod kuće",
     "onboardingText2": "Jednostavno bilo gde!",
     "getStarted": "Krenite",
-    "next": "Sledeći"
+    "next": "Sledeći",
+    "note": "Napomena",
+    "theBasketIsEmpty": "Korpa je prazna.",
+    "basket": "Korpa",
+    "orderAmount": "Iznos porudžbine",
+    "takeOver": "Način preuzimanja",
+    "payment": "Plaćanje",
+    "cash": "Gotovina",
+    "onLine": "On-line",
+    "personalData": "Lični podaci:",
+    "nameAndSurname": "Ime i prezime",
+    "scheduleOrdeForSpecificTime": "Zakaži porudžbinu za odredjeno vreme",
+    "placeYourOrder": "Naruči",
+    "doYouWantToSaveTheNewAddress": "Da li želite da sačuvate novu adresu?",
+    "successfullyOrdered": "Uspešno naručeno!",
+    "pleaseFillInTheContactPhoneField": "Molimo vas popunite polje za kontakt telefon. \nHvala.",
+    "pleaseFillInTheFieldWithYourDetails": "Molimo vas popunite polje sa vašim podacima. \nHvala."
 }

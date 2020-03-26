@@ -65,5 +65,21 @@
    "onboardingTitle2": "When traveling or at home",
    "onboardingText2": "Simply anywhere!",
    "getStarted": "Get Started",
-   "next": "Next"
+   "next": "Next",
+   "note": "Note",
+   "theBasketIsEmpty": "The basket is empty.",
+   "basket": "Basket",
+   "orderAmount": "Order amount",
+   "takeOver": "Take over",
+   "payment": "Payment",
+   "cash": "Cash",
+   "onLine": "On-line",
+   "personalData": "Personal data:",
+   "nameAndSurname": "Name and surname",
+   "scheduleOrdeForSpecificTime": "Schedule an order for a specific time",
+   "placeYourOrder": "Place your order",
+   "doYouWantToSaveTheNewAddress": "Do you want to save the new address?",
+   "successfullyOrdered": "Successfully ordered!",
+   "pleaseFillInTheContactPhoneField": "Please fill in the contact phone field. \nThank you.",
+   "pleaseFillInTheFieldWithYourDetails": "Please fill in the field with your details. \nThank you."
 }
