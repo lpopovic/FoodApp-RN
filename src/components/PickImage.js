@@ -6,6 +6,7 @@ import {
     TouchableOpacity,
     StyleSheet,
 } from 'react-native';
+import { connect } from 'react-redux';
 import ImagePicker from 'react-native-image-picker';
 import { BASE_COLOR } from '../styles'
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -16,7 +17,7 @@ class PickImage extends Component {
     }
 
     pickImageHandler = () => {
-        ImagePicker.showImagePicker({ title: "Pick an Image" }, res => {
+        ImagePicker.showImagePicker({ title: this.props.strings.pickImage }, res => {
             if (res.didCancel) {
                 console.log("User canceled!");
 
@@ -55,7 +56,7 @@ class PickImage extends Component {
     }
 
     buttonContent = (btnTitle) => (
-        <View style={{ height: '100%', width: '100%'}}>
+        <View style={{ height: '100%', width: '100%' }}>
             <TouchableOpacity onPress={() => this.pickImageHandler()}>
                 <View style={styles.button}>
                     <View style={styles.icon}>
@@ -79,7 +80,7 @@ class PickImage extends Component {
     render() {
 
         let mainContent = null
-        const btnTitle = this.props.showOptional ? `Add photo${"\n"}(Optional)` : `Add photo`
+        const btnTitle = this.props.showOptional ? `${this.props.strings.addPhoto}${"\n"}(${this.props.strings.optional})` : `${this.props.strings.addPhoto}`
         if (!(this.state.pickedImaged || this.props.currentImage)) {
             mainContent = this.buttonContent(btnTitle)
         } else {
@@ -105,7 +106,7 @@ const styles = StyleSheet.create({
         backgroundColor: BASE_COLOR.lightGray,
         width: "100%",
         height: "100%",
-        overflow:'hidden'
+        overflow: 'hidden'
     },
     borderStyle: {
         borderStyle: 'solid'
@@ -131,7 +132,11 @@ const styles = StyleSheet.create({
         overflow: 'hidden'
     }
 });
+const mapStateToProps = state => {
+    return {
+        strings: state.location.language.strings,
+    };
+};
 
+export default connect(mapStateToProps, null)(PickImage);
 
-
-export default PickImage;

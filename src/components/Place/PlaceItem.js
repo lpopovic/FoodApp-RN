@@ -98,7 +98,7 @@ class PlaceItem extends Component {
                                                     style={[styles.otherImage, { tintColor: BASE_COLOR.blue, }]}
                                                     source={TestAssets.locationMarkerIcon}
                                                     resizeMode='contain' />
-                                                <Text style={[styles.baseText]}>{distance} od tebe</Text>
+                                                <Text style={[styles.baseText]}>{distance}</Text>
                                             </View>
                                             {this.deliveryIcon(delivery, timeDelivery)}
                                         </View>

@@ -102,5 +102,14 @@
     "thereAreNoComments": "Trenutno nema komentara.",
     "reviews": "Komentara",
     "minimum": "Minimum",
-    "openToday": "Otvoreno danas"
+    "openToday": "Otvoreno danas",
+    "pickImage": "Izaberite sliku",
+    "addPhoto": "Dodaj sliku",
+    "optional": "Opciono",
+    "unlimited": "Neograničeno",
+    "nextMeals": "Sledeći obroci",
+    "lastMeals": "Prošli obroci",
+    "youDidntChooseMealForThisDay": "Niste izabrali obrok za ovaj dan!",
+    "youAreNotSignedUpForCatering": "Niste prijavljeni za ketering.",
+    "toUseTheCateringTabPleaseLogIn": "Da bi ste koristili ketering tab, molimo vas da se prijavite."
 }

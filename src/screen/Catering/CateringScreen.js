@@ -173,31 +173,13 @@ class CateringScreen extends BaseScreen {
     }
 
     balanceHandler = async () => {
-        // const user = await getStorageData(STORAGE_KEY.USER_APP_DATA)
-        // if (user !== null) {
-        //     let me = new User(user)
-        //     let catheringOptions = me.catheringOptions
-        //     if (catheringOptions !== null) {
-        //         if (catheringOptions.package === "unlimited") {
-        //             this.setNewStateHandler({
-        //                 // balance: "neograničeno"
-        //                 balance: catheringOptions.reserved
-        //             })
-        //         } else {
-        //             this.setNewStateHandler({
-        //                 // balance: catheringOptions.balance
-        //                 balance: catheringOptions.reserved
-        //             })
-        //         }
-        //     }
-        // }
         const user = this.props.userInfo
         if (this.props.isLogin === true) {
             let catheringOptions = user.catheringOptions
             if (catheringOptions !== null) {
                 if (catheringOptions.package === "unlimited") {
                     this.setNewStateHandler({
-                        balance: "neograničeno"
+                        balance: this.props.strings.unlimited
                     })
                 } else {
                     this.setNewStateHandler({
@@ -253,21 +235,21 @@ class CateringScreen extends BaseScreen {
 
 
     cateringCalendarStrip = () => {
-
+        const { strings } = this.props
 
         return (
             <View>
                 <View style={{ height: 30, backgroundColor: NAV_COLOR.headerBackground, marginLeft: 10, marginRight: 10, flexDirection: 'row', alignItems: 'center' }}>
-                    <Text style={{ fontSize: 16, flex: 5, alignItems: 'flex-start', textAlignVertical: 'center', fontWeight: '500' }}>Balans: {this.state.balance}</Text>
+                    <Text style={{ fontSize: 16, flex: 5, alignItems: 'flex-start', textAlignVertical: 'center', fontWeight: '500' }}>{strings.balance}: {this.state.balance}</Text>
                     <View style={{ flex: 5, alignItems: 'flex-end' }}>
                         <View style={{ flex: 5, alignItems: 'flex-start' }}>
                             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                                 <View style={{ backgroundColor: 'limegreen', borderRadius: 10, width: 8, height: 8 }}></View>
-                                <Text style={{ marginLeft: 10, fontSize: 11 }}>Sledeći obroci</Text>
+                                <Text style={{ marginLeft: 10, fontSize: 11 }}>{strings.nextMeals}</Text>
                             </View>
                             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                                 <View style={{ backgroundColor: 'red', borderRadius: 10, width: 8, height: 8 }}></View>
-                                <Text style={{ marginLeft: 10, fontSize: 11 }}>Prošli obroci</Text>
+                                <Text style={{ marginLeft: 10, fontSize: 11 }}>{strings.lastMeals}</Text>
                             </View>
                         </View>
                     </View>
@@ -340,7 +322,7 @@ class CateringScreen extends BaseScreen {
             console.log(DishData)
             return (
                 <>
-                    {recentMenuItemsOrder.length > 0 ? <RecentOrders recentOrders={recentMenuItemsOrder}  onPressSection={ (sectionIndex) => this.onPressSectionListHeader(sectionIndex)}/> : null}
+                    {recentMenuItemsOrder.length > 0 ? <RecentOrders recentOrders={recentMenuItemsOrder} onPressSection={(sectionIndex) => this.onPressSectionListHeader(sectionIndex)} /> : null}
                     <DishList data={DishData} isCathering={true} recentOrders={recentMenuItemsOrder} selectedDate={this.state.selectedDate} selectPlace={(placeId) => this.placeSelectHandler(placeId)} />
                 </>
             )
@@ -348,14 +330,14 @@ class CateringScreen extends BaseScreen {
             console.log(placesCathering)
             return (
                 <>
-                    {recentMenuItemsOrder.length > 0 ? <RecentOrders recentOrders={recentMenuItemsOrder}  onPressSection={ (sectionIndex) => this.onPressSectionListHeader(sectionIndex)}/> : null}
+                    {recentMenuItemsOrder.length > 0 ? <RecentOrders recentOrders={recentMenuItemsOrder} onPressSection={(sectionIndex) => this.onPressSectionListHeader(sectionIndex)} /> : null}
                     <PlaceList data={PlaceData} clickOnPlace={(placeId) => this.placeSelectHandler(placeId)} />
                 </>
 
             )
         } else if (Moment(this.state.selectedDate).isBefore(Moment().subtract(1, 'day'))) {
             return (
-                <Text style={{ marginTop: 100, alignSelf: 'center', fontWeight: 'bold', fontSize: 22 }}>Niste izabrali obrok za ovaj dan!</Text>
+                <Text style={{ marginTop: 100, alignSelf: 'center', fontWeight: 'bold', fontSize: 22 }}>{this.props.strings.youDidntChooseMealForThisDay}</Text>
             )
         }
     }
@@ -371,7 +353,7 @@ class CateringScreen extends BaseScreen {
     signUpToCatheringMesage() {
         return (
             <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-                <Text style={{ textAlign: 'center', textAlignVertical: 'center', fontSize: 24, fontWeight: 'bold' }}>NISTE PRIJAVLJENI NA KETERING!!!</Text>
+                <Text style={{ textAlign: 'center', textAlignVertical: 'center', fontSize: 24, fontWeight: 'bold' }}>{this.props.strings.youAreNotSignedUpForCatering}</Text>
             </View>
 
         )
@@ -381,7 +363,7 @@ class CateringScreen extends BaseScreen {
     loginToCatheringMesage() {
         return (
             <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-                <Text style={{ textAlign: 'center', textAlignVertical: 'center', fontSize: 24, fontWeight: 'bold' }}>Da biste koristili ketering tab, molimo vas da se prijavite</Text>
+                <Text style={{ textAlign: 'center', textAlignVertical: 'center', fontSize: 24, fontWeight: 'bold' }}>{this.props.strings.toUseTheCateringTabPleaseLogIn}</Text>
             </View>
 
         )
@@ -560,6 +542,7 @@ const mapStateToProps = state => {
         userInfo: state.user.userInfo,
         isLogin: state.user.isLogin,
         userCatherings: state.user.userCatherings,
+        strings: state.location.language.strings,
     };
 };
 const mapDispatchToProps = dispatch => {
