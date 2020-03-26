@@ -11,17 +11,18 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 class CategorySectionList extends Component {
     constructor(props) {
         super(props)
-        this.titleSection = "KATEGORIJE"
-        this.titleSeeMore = "vidi sve"
+
     }
     render() {
+        const { titleSection, titleSeeMore } = this.props
+
         return (
             <View style={styles.mainContainer}>
                 <View style={styles.sectionContainer}>
-                    <Text style={styles.text}>{this.titleSection}</Text>
+                    <Text style={styles.text}>{titleSection}</Text>
                     <TouchableOpacity onPress={() => this.props.onPressSeeMore()}>
                         <View style={styles.seeMoreContainer}>
-                            <Text style={[styles.text, { color: BASE_COLOR.gray }]}>{this.titleSeeMore}</Text>
+                            <Text style={[styles.text, { color: BASE_COLOR.gray }]}>{titleSeeMore}</Text>
                         </View>
                     </TouchableOpacity>
 

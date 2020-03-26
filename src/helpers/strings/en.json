@@ -85,7 +85,13 @@
    "noBasicExtras": "No basic extras",
    "youCannotTakeMoreThanSupplements": "You cannot take more than %d supplements.",
    "orderFood": "Order food",
-   "addToCart":"Add to cart",
-   "youDoNotHaveEnoughFundsInYourAccount":"You do not have enough funds in your account!",
-   "youCurrentlyHaveDishesInYourCartFromAnotherRestaurant":"You currently have dishes in your cart from another restaurant. If you continue shopping, the basket with the dishes already entered will empty."
+   "addToCart": "Add to cart",
+   "youDoNotHaveEnoughFundsInYourAccount": "You do not have enough funds in your account!",
+   "youCurrentlyHaveDishesInYourCartFromAnotherRestaurant": "You currently have dishes in your cart from another restaurant. If you continue shopping, the basket with the dishes already entered will empty.",
+   "new": "New",
+   "bestEvaluations": "Best evaluations",
+   "recommended": "Recommended",
+   "actions": "Actions",
+   "categories":"Categories",
+   "seeMore":"See more"
 }

@@ -43,8 +43,8 @@ class PlaceList extends Component {
                     />
                 )}
                 onEndReachedThreshold={0.4}
-                // onEndReached={this.handleLoadMore.bind(this)}
-                // ListFooterComponent={this.renderFooter.bind(this)}
+            // onEndReached={this.handleLoadMore.bind(this)}
+            // ListFooterComponent={this.renderFooter.bind(this)}
 
             />
         )
@@ -93,7 +93,7 @@ class PlaceSectionList extends Component {
     }
     render() {
         const titleSection = this.props.titleSection ? this.props.titleSection : "NEPOZNATO"
-        const titleSeeMore = "vidi sve"
+        const titleSeeMore = this.props.titleSeeMore ? this.props.titleSeeMore : "NEPOZNATO"
         return (
             <View style={[styles.mainContainer, this.props.style]}>
                 <View style={styles.sectionContainer}>

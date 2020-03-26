@@ -87,5 +87,11 @@
     "orderFood": "Poruči hranu",
     "addToCart": "Dodaj u korpu",
     "youDoNotHaveEnoughFundsInYourAccount": "Nemate dovoljno sredstava na Vašem nalogu!",
-    "youCurrentlyHaveDishesInYourCartFromAnotherRestaurant": "U korpi trenutno imate jela iz drugog restorana. Ako nastavite sa kupovinom, korpa sa već unetim jelima će se isprazniti."
+    "youCurrentlyHaveDishesInYourCartFromAnotherRestaurant": "U korpi trenutno imate jela iz drugog restorana. Ako nastavite sa kupovinom, korpa sa već unetim jelima će se isprazniti.",
+    "new": "Novo",
+    "bestEvaluations": "Najbolje ocene",
+    "recommended": "Preporučeno",
+    "actions": "Akcije",
+    "categories": "Kategorije",
+    "seeMore": "Vidi sve"
 }
