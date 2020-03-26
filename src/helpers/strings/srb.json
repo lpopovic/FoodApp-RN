@@ -111,5 +111,8 @@
     "lastMeals": "Prošli obroci",
     "youDidntChooseMealForThisDay": "Niste izabrali obrok za ovaj dan!",
     "youAreNotSignedUpForCatering": "Niste prijavljeni za ketering.",
-    "toUseTheCateringTabPleaseLogIn": "Da bi ste koristili ketering tab, molimo vas da se prijavite."
+    "toUseTheCateringTabPleaseLogIn": "Da bi ste koristili ketering tab, molimo vas da se prijavite.",
+    "contactUs": "Kontaktirajte nas",
+    "currentOrders": "Trenutne porudžbine",
+    "thereIsNoResults": "Nema rezultata!"
 }

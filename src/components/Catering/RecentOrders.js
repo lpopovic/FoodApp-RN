@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { BASE_COLOR } from '../../styles';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { FlatList } from 'react-native-gesture-handler';
-
+import { connect } from 'react-redux';
 class RecentOrders extends Component {
 
     sectionListContent = (sectionItems) => {
@@ -64,7 +64,7 @@ class RecentOrders extends Component {
     render() {
         return (
             <View style={styles.mainContainer}>
-                <Text style={{ marginLeft: 8, fontWeight: 'bold', fontSize: 16 }}>Trenutne porudzbine:</Text>
+                <Text style={{ marginLeft: 8, fontWeight: 'bold', fontSize: 16 }}>{this.props.strings.currentOrders}:</Text>
                 {this.sectionListContent(this.props.recentOrders)}
             </View>
         )
@@ -80,5 +80,10 @@ const styles = StyleSheet.create({
     }
 });
 
+const mapStateToProps = state => {
+    return {
+        strings: state.location.language.strings,
+    };
+};
 
-export default RecentOrders;
+export default connect(mapStateToProps, null)(RecentOrders);

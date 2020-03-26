@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {
     View,
     Text,
+    TouchableOpacity,
     StyleSheet,
     SafeAreaView,
 } from 'react-native';
@@ -349,23 +350,110 @@ class CateringScreen extends BaseScreen {
         }
         this.pushNewScreen({ routeName: ScreenName.PlaceDetailScreen(), key: `${Math.random() * 10000}`, params: { _id: placeId, cathering: cathering } })
     }
+    onPressContactUs = () => {
 
+    }
     signUpToCatheringMesage() {
         return (
-            <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-                <Text style={{ textAlign: 'center', textAlignVertical: 'center', fontSize: 24, fontWeight: 'bold' }}>{this.props.strings.youAreNotSignedUpForCatering}</Text>
-            </View>
+            <View style={{ flex: 1, alignItems: 'center' }}>
+                <View style={{ flex: 0.6, alignItems: 'center', justifyContent: 'center' }}>
+                    <Text style={{
+                        width: '80%',
+                        color: BASE_COLOR.black,
+                        fontSize: 30,
+                        fontWeight: 'bold',
+                        textAlignVertical: 'center',
+                        textAlign: 'center',
+                        margin: 0,
+                    }}>KLOPAJ</Text>
+                    <Text style={{
+                        width: 300,
+                        color: BASE_COLOR.black,
+                        fontSize: 14,
+                        fontWeight: 'bold',
+                        textAlignVertical: 'center',
+                        textAlign: 'center',
+                        margin: 16,
+                    }}>{this.props.strings.youAreNotSignedUpForCatering}</Text>
+                </View>
+                <View style={{ flex: 0.4, alignItems: 'center', justifyContent: 'center' }}>
+                    <TouchableOpacity onPress={() => this.onPressContactUs()}>
+                        <View style={{
+                            alignContent: 'center',
+                            justifyContent: 'center',
+                            height: 40,
+                            width: 200,
+                            borderRadius: 8,
+                            backgroundColor: BASE_COLOR.blue,
+                        }}>
+                            <Text style={{
+                                width: '100%',
+                                color: BASE_COLOR.white,
+                                fontSize: 17,
+                                fontWeight: 'bold',
+                                textAlignVertical: 'center',
+                                textAlign: 'center',
+                            }}>{String(this.props.strings.contactUs).toUpperCase()}</Text>
+                        </View>
+                    </TouchableOpacity>
+                </View>
+            </View >
 
         )
     }
 
-
+    onPressLogInHandler = () => {
+        this.pushNewScreen({
+            routeName: ScreenName.LoginScreen(),
+            key: `${Math.random() * 10000}`,
+            params: { showBackButton: true }
+        })
+    }
     loginToCatheringMesage() {
         return (
-            <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-                <Text style={{ textAlign: 'center', textAlignVertical: 'center', fontSize: 24, fontWeight: 'bold' }}>{this.props.strings.toUseTheCateringTabPleaseLogIn}</Text>
-            </View>
-
+            <View style={{ flex: 1, alignItems: 'center' }}>
+                <View style={{ flex: 0.6, alignItems: 'center', justifyContent: 'center' }}>
+                    <Text style={{
+                        width: '80%',
+                        color: BASE_COLOR.black,
+                        fontSize: 30,
+                        fontWeight: 'bold',
+                        textAlignVertical: 'center',
+                        textAlign: 'center',
+                        margin: 0,
+                    }}>KLOPAJ</Text>
+                    <Text style={{
+                        width: 300,
+                        color: BASE_COLOR.black,
+                        fontSize: 14,
+                        fontWeight: 'bold',
+                        textAlignVertical: 'center',
+                        textAlign: 'center',
+                        margin: 16,
+                    }}>{this.props.strings.toUseTheCateringTabPleaseLogIn}</Text>
+                </View>
+                <View style={{ flex: 0.4, alignItems: 'center', justifyContent: 'center' }}>
+                    <TouchableOpacity onPress={() => this.onPressLogInHandler()}>
+                        <View style={{
+                            alignContent: 'center',
+                            justifyContent: 'center',
+                            height: 40,
+                            width: 200,
+                            borderRadius: 8,
+                            backgroundColor: BASE_COLOR.blue,
+                        }}>
+                            <Text style={{
+                                width: '100%',
+                                color: BASE_COLOR.white,
+                                fontSize: 17,
+                                fontWeight: 'bold',
+                                textAlignVertical: 'center',
+                                textAlign: 'center',
+                            }}>{String(this.props.strings.signUp).toUpperCase()}</Text>
+                        </View>
+                    </TouchableOpacity>
+                </View>
+            </View >
         )
     }
 
@@ -518,7 +606,6 @@ class CateringScreen extends BaseScreen {
                         : this.signUpToCatheringMesage()
                         : this.loginToCatheringMesage()
                     }
-
                 </View>
             </SafeAreaView>
 

@@ -15,7 +15,6 @@ import Header from '../../components/common/BackHeader'
 import SegmentedControlTab from "react-native-segmented-control-tab";
 import ReviewItem from '../../components/Review/ReviewItem'
 import {
-    MESSAGE_EMPTY_ARRAY,
     abbrNum
 } from '../../helpers'
 import {

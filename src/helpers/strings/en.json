@@ -111,5 +111,8 @@
    "lastMeals": "Last meals",
    "youDidntChooseMealForThisDay": "You didn't choose a meal for this day!",
    "youAreNotSignedUpForCatering": "You are not signed up for catering.",
-   "toUseTheCateringTabPleaseLogIn": "To use the catering tab, please log in."
+   "toUseTheCateringTabPleaseLogIn": "To use the catering tab, please log in.",
+   "contactUs": "Contact us",
+   "currentOrders": "Current orders",
+   "thereIsNoResults":"There is no results!"
 }

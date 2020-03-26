@@ -13,7 +13,6 @@ import {
 import {
     ScreenName,
     isAndroid,
-    MESSAGE_NO_PLACE
 } from '../../helpers'
 import { NAV_COLOR, BASE_COLOR, segmentedControlStyles } from '../../styles'
 import BaseScreen from "../BaseScreen/BaseScreen"
