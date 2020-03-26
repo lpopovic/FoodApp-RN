@@ -97,5 +97,7 @@
    "saveChanges": "Save changes",
    "range": "Radius",
    "deliveryTime": "Delivery Time",
-   "reset": "Reset"
+   "reset": "Reset",
+   "thereAreNoComments": "There are no comments.",
+   "reviews":"Reviews"
 }

@@ -9,6 +9,7 @@ import {
     Dimensions,
     ActivityIndicator,
 } from 'react-native';
+import { connect } from 'react-redux';
 import BaseScreen from '../BaseScreen/BaseScreen';
 import Header from '../../components/common/BackHeader'
 import SegmentedControlTab from "react-native-segmented-control-tab";
@@ -33,7 +34,8 @@ class ReviewListScreen extends BaseScreen {
     };
     constructor(props) {
         super(props)
-        this.typeOfSortRestMap = ["New", "Rating", "Price Tag"]
+
+        this.typeOfSortRestMap = [props.strings.new, props.strings.rating, props.strings.priceTag]
 
         this.state = {
             refreshing: false,
@@ -66,7 +68,7 @@ class ReviewListScreen extends BaseScreen {
                 result => {
                     let endPagination = false
                     if (result.length == 0) {
-                        this.showAlertMessage('Trenutno nema komentara.')
+                        this.showAlertMessage(this.props.strings.thereAreNoComments)
                         endPagination = true
                     }
 
@@ -222,7 +224,7 @@ class ReviewListScreen extends BaseScreen {
                                     style={{ fontWeight: 'bold' }}
                                     numberOfLines={3}
                                     ellipsizeMode='tail'>
-                                    Price:{"\n"}Rating:{"\n"}Reviews:
+                                    {this.props.strings.priceTag}:{"\n"}{this.props.strings.rating}:{"\n"}{this.props.strings.reviews}:
                                 </Text>
                             </View>
                             <View style={{ marginLeft: 4 }}>
@@ -316,8 +318,14 @@ const styles = StyleSheet.create({
         borderBottomWidth: 0.7
     },
 });
+const mapStateToProps = state => {
+    return {
+        strings: state.location.language.strings,
+    };
+};
 
 
-export default ReviewListScreen;
+export default connect(mapStateToProps, null)(ReviewListScreen);
+
 
 

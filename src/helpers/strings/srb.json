@@ -97,5 +97,7 @@
     "saveChanges": "Sačuvaj izmene",
     "range": "Domet",
     "deliveryTime": "Vreme dostave",
-    "reset": "Reset"
+    "reset": "Reset",
+    "thereAreNoComments": "Trenutno nema komentara.",
+    "reviews": "Komentara"
 }
