@@ -6,6 +6,7 @@ import {
     TouchableOpacity,
     StyleSheet
 } from 'react-native';
+import { connect } from 'react-redux';
 import { withNavigation } from 'react-navigation'
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
 import { IconAssets, TestAssets } from '../../assets'
@@ -15,7 +16,7 @@ class BackHeader extends Component {
 
     constructor(props) {
         super(props)
-        this.leftBtnTitle = 'Back'
+
     }
     backPressHandler = () => {
         this.props.navigation.goBack()
@@ -63,7 +64,7 @@ class BackHeader extends Component {
                                     style={[headerStyles.btnImage, { tintColor }]}
                                     resizeMode='contain' />
                             </View>
-                            <Text style={[headerStyles.btnText, { color: tintColor }]}>{this.leftBtnTitle}</Text>
+                            <Text style={[headerStyles.btnText, { color: tintColor }]}>{this.props.strings.back}</Text>
                         </View>
                     </TouchableOpacity>
                     {this.titleDisplay(tintColor)}
@@ -104,6 +105,10 @@ const styles = StyleSheet.create({
         aspectRatio: 1
     },
 });
+const mapStateToProps = state => {
+    return {
+        strings: state.location.language.strings,
+    };
+};
 
-
-export default withNavigation(BackHeader);
+export default connect(mapStateToProps, null)(withNavigation(BackHeader));
