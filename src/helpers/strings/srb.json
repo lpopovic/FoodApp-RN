@@ -94,10 +94,13 @@
     "actions": "Akcije",
     "categories": "Kategorije",
     "seeMore": "Vidi sve",
+    "seeLess": "Vidi manje",
     "saveChanges": "Sačuvaj izmene",
     "range": "Domet",
     "deliveryTime": "Vreme dostave",
     "reset": "Reset",
     "thereAreNoComments": "Trenutno nema komentara.",
-    "reviews": "Komentara"
+    "reviews": "Komentara",
+    "minimum": "Minimum",
+    "openToday": "Otvoreno danas"
 }

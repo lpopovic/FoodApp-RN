@@ -122,6 +122,7 @@ class PlaceDetailsScreen extends BaseScreen {
     }
     render() {
         const { place, menuItems, loading, refreshing } = this.state
+        const { strings } = this.props
         const cathering = this.props.navigation.getParam('cathering', null)
         if (loading) {
             return (
@@ -259,7 +260,7 @@ class PlaceDetailsScreen extends BaseScreen {
 
                         <View style={{ height: 20, flexDirection: 'row' }}>
                             <TouchableOpacity style={{ flex: 4 }} activeOpacity={0.5} onPress={this.changeLayout} >
-                                <Text style={{ color: BASE_COLOR.gray }}>{this.state.expanded ? "Show less" : "Show more"}</Text>
+                                <Text style={{ color: BASE_COLOR.gray }}>{this.state.expanded ? strings.seeLess : strings.seeMore}</Text>
                             </TouchableOpacity>
                             <View style={{ flex: 3 }}></View>
                         </View>
@@ -274,7 +275,7 @@ class PlaceDetailsScreen extends BaseScreen {
                                 </View>
                                 <View style={{ flexDirection: 'row', alignItems: 'center', flex: 0.5 }}>
                                     <Image style={{ width: 24 }} resizeMode='contain' source={IconAssets.minimumPriceIcon}></Image>
-                                    <Text style={{ fontSize: 15, marginLeft: 8, color: BASE_COLOR.darkGray }}>Minimum: </Text>
+                                    <Text style={{ fontSize: 15, marginLeft: 8, color: BASE_COLOR.darkGray }}>{strings.minimum}: </Text>
                                     <Text style={{ fontSize: 15, color: BASE_COLOR.darkGray }}>180.00 RSD</Text>
                                 </View>
                                 <View style={{ flexDirection: 'row', alignItems: 'center', flex: 0.5 }}>
@@ -282,7 +283,7 @@ class PlaceDetailsScreen extends BaseScreen {
                                     {place.onlinePayment ? <Image style={{ width: 28, marginLeft: 8 }} resizeMode='contain' source={IconAssets.cardIcon}></Image> : null}
                                 </View>
                                 <View style={{ flexDirection: 'row', alignItems: 'center', flex: 0.5 }}>
-                                    <Text style={{ fontSize: 15, color: BASE_COLOR.darkGray }}>Open today: </Text>
+                                    <Text style={{ fontSize: 15, color: BASE_COLOR.darkGray }}>{strings.openToday}: </Text>
                                     <Text style={{ fontSize: 15, fontWeight: '600' }}>{place.openDays ? openDays(place.openDays) : "-"}</Text>
                                 </View>
                             </View>
@@ -390,22 +391,23 @@ class PlaceDetailsScreen extends BaseScreen {
     menuItemsListFavoriteContent = () => {
 
         const { menuItems } = this.state
-        const { isLogin, userFavoriteMenuItems } = this.props
+        const { isLogin, userFavoriteMenuItems, strings } = this.props
         let menuItemsForPlaceAndDay = []
-        
+
         userFavoriteMenuItems.map(favoriteItem => {
             menuItems.map(item => {
-                if (favoriteItem._id === item._id){
+                if (favoriteItem._id === item._id) {
                     menuItemsForPlaceAndDay.push(favoriteItem)
-                }     
+                }
             })
         })
 
         if (menuItemsForPlaceAndDay.length > 0 && isLogin == true) {
+            const title = String(this.props.strings.favoriteMeals).toUpperCase()
             return (
                 <View style={{ marginTop: 16, marginBottom: 16 }}>
                     <MenuItemList
-                        titleSection={"❤️ OMILJENA JELA"}
+                        titleSection={`❤️ ${title}`}
                         arrayObject={menuItemsForPlaceAndDay}
                         onPressItem={(item) => this.pushNewScreen({ routeName: ScreenName.MenuItemDetailsScreen(), key: `${Math.random() * 10000}${item._id}`, params: { _id: item._id, cathering: this.props.navigation.state.params.cathering } })}
                         onPressSeeMore={() => console.log("see more")}
@@ -493,7 +495,8 @@ const mapStateToProps = state => {
         isLogin: state.user.isLogin,
         userFavoritePlaces: state.user.userFavoritePlaces,
         userFavoritePlacesIDs: state.user.userFavoritePlacesIDs,
-        userFavoriteMenuItems: state.user.userFavoriteMenuItems
+        userFavoriteMenuItems: state.user.userFavoriteMenuItems,
+        strings: state.location.language.strings,
     };
 };
 const mapDispatchToProps = dispatch => {
