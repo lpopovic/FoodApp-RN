@@ -57,5 +57,13 @@
    "back": "Back",
    "welcome": "Welcome",
    "selectCity": "Select a city",
-   "browseTheCity": "Browse the city ..."
+   "browseTheCity": "Browse the city ...",
+   "onboardingTitle0": "Discover top rated dishes nearby",
+   "onboardingText0": "Have you ever wondered what is the best hamburger near you?",
+   "onboardingTitle1": "Always know what to order",
+   "onboardingText1": "Whould you like to know what is the best dish on any menu?",
+   "onboardingTitle2": "When traveling or at home",
+   "onboardingText2": "Simply anywhere!",
+   "getStarted": "Get Started",
+   "next": "Next"
 }

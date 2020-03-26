@@ -6,11 +6,11 @@ import { StyleSheet, View, Text, Image, SafeAreaView, TouchableOpacity } from 'r
 import AppIntroSlider from 'react-native-app-intro-slider';
 //import AppIntroSlider to use it
 import { BASE_COLOR } from '../../styles'
-import {ScreenName}  from '../../helpers'
+import { ScreenName } from '../../helpers'
 import BaseScreen from '../BaseScreen/BaseScreen';
 import { OnboardingAssets } from '../../assets';
-
-export default class OnboardingScreen extends BaseScreen {
+import { connect } from 'react-redux';
+class OnboardingScreen extends BaseScreen {
     constructor(props) {
         super(props);
     }
@@ -39,12 +39,13 @@ export default class OnboardingScreen extends BaseScreen {
         this._onDone()
     }
     btnStartContent = (index) => {
+        const { strings } = this.props
         if (index === 2) {
             return (
                 <View style={styles.buttonContainer}>
                     <TouchableOpacity onPress={() => this.getStartedHandler()}>
                         <View style={styles.searchButton}>
-                            <Text style={styles.searchButtontext}>Get Started</Text>
+                            <Text style={styles.searchButtontext}>{strings.getStarted}</Text>
                         </View>
                     </TouchableOpacity>
                 </View>
@@ -64,11 +65,11 @@ export default class OnboardingScreen extends BaseScreen {
             }]}>
                 <Image
                     style={styles.image}
-                    source={slides[props.index].image}
+                    source={this.slides[props.index].image}
                 />
                 <View style={styles.textContent}>
-                    <Text style={styles.title}>{slides[props.index].title}</Text>
-                    <Text style={styles.text}>{slides[props.index].text}</Text>
+                    <Text style={styles.title}>{this.slides[props.index].title}</Text>
+                    <Text style={styles.text}>{this.slides[props.index].text}</Text>
 
                 </View>
                 {this.btnStartContent(props.index)}
@@ -77,15 +78,16 @@ export default class OnboardingScreen extends BaseScreen {
     }
 
     render() {
-
+        const { strings } = this.props
         //Intro slides
         return (
 
             <AppIntroSlider
                 style={{ backgroundColor: BASE_COLOR.white }}
-                slides={slides}
+                slides={this.slides}
                 //comming from the JsonArray below
                 onDone={this._onDone}
+                nextLabel={strings.next}
                 //Handler for the done On last slide
                 showDoneButton={false}
                 showSkipButton={false}
@@ -111,6 +113,33 @@ export default class OnboardingScreen extends BaseScreen {
         );
 
     }
+    slides = [
+
+        {
+            index: 0,
+            key: 's4',
+            title: this.props.strings.onboardingTitle0,
+            text: this.props.strings.onboardingText0,
+            image: OnboardingAssets.onboarding1,
+            backgroundColor: BASE_COLOR.white,
+        },
+        {
+            index: 1,
+            key: 's5',
+            title: this.props.strings.onboardingTitle1,
+            text: this.props.strings.onboardingText1,
+            image: OnboardingAssets.onboarding2,
+            backgroundColor: BASE_COLOR.white,
+        },
+        {
+            index: 2,
+            key: 's6',
+            title: this.props.strings.onboardingTitle2,
+            text: this.props.strings.onboardingText2,
+            image: OnboardingAssets.onboarding3,
+            backgroundColor: BASE_COLOR.white
+        },
+    ];
 }
 const styles = StyleSheet.create({
     main: {
@@ -167,30 +196,12 @@ const styles = StyleSheet.create({
 
 
 
-const slides = [
 
-    {
-        index: 0,
-        key: 's4',
-        title: 'Discover top rated dishes nearby',
-        text: 'Have you ever wondered what is the best hamburger near you?',
-        image: OnboardingAssets.onboarding1,
-        backgroundColor: BASE_COLOR.white,
-    },
-    {
-        index: 1,
-        key: 's5',
-        title: 'Always know what to order',
-        text: 'Whould you like to know what is the best dish on any menu?',
-        image: OnboardingAssets.onboarding2,
-        backgroundColor: BASE_COLOR.white,
-    },
-    {
-        index: 2,
-        key: 's6',
-        title: 'When traveling or at home',
-        text: 'Simply anywhere!',
-        image: OnboardingAssets.onboarding3,
-        backgroundColor: BASE_COLOR.white
-    },
-];
+const mapStateToProps = state => {
+    return {
+        city: state.location.city,
+        strings: state.location.language.strings,
+    };
+};
+
+export default connect(mapStateToProps, null)(OnboardingScreen);
