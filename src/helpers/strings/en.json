@@ -92,6 +92,10 @@
    "bestEvaluations": "Best evaluations",
    "recommended": "Recommended",
    "actions": "Actions",
-   "categories":"Categories",
-   "seeMore":"See more"
+   "categories": "Categories",
+   "seeMore": "See more",
+   "saveChanges": "Save changes",
+   "range": "Radius",
+   "deliveryTime": "Delivery Time",
+   "reset": "Reset"
 }

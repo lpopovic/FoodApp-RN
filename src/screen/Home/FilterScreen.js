@@ -27,7 +27,6 @@ class FilterScreen extends BaseScreen {
 
     constructor(props) {
         super(props)
-        this.bottomBtnTitle = "Sačuvaj izmene"
         this.state = {
             avgRating: 0.5,
             avgPriceTag: 0,
@@ -94,7 +93,7 @@ class FilterScreen extends BaseScreen {
     }
 
     ratingContent = () => {
-        const text = 'RATING'
+        const text = String(this.props.strings.rating).toUpperCase()
         return (
             <View style={styles.baseContainer}>
                 <View>
@@ -116,7 +115,7 @@ class FilterScreen extends BaseScreen {
         )
     }
     pickupContent = () => {
-        const text = 'PICKUP'
+        const text = String(this.props.strings.pickup).toUpperCase()
         const { pickup } = this.state
         return (
             <View style={styles.baseContainer}>
@@ -135,7 +134,7 @@ class FilterScreen extends BaseScreen {
         )
     }
     deliveryContent = () => {
-        const text = 'DELIVERY'
+        const text = String(this.props.strings.delivery).toUpperCase()
         const { delivery } = this.state
         return (
             <View style={styles.baseContainer}>
@@ -154,7 +153,7 @@ class FilterScreen extends BaseScreen {
         )
     }
     priceContent = () => {
-        const text = 'PRICE'
+        const text = String(this.props.strings.priceTag).toUpperCase()
         const { avgPriceTag } = this.state
         return (
             <View style={styles.baseContainer}>
@@ -188,7 +187,7 @@ class FilterScreen extends BaseScreen {
         )
     }
     rangeContent = () => {
-        const text = 'RANGE'
+        const text = String(this.props.strings.range).toUpperCase()
         const { rangeValue } = this.state
         return (
             <View style={[styles.baseContainer, { flexDirection: 'column' }]}>
@@ -226,7 +225,7 @@ class FilterScreen extends BaseScreen {
         )
     }
     deliveryTimeContent = () => {
-        const text = 'DELIVERY TIME'
+        const text = String(this.props.strings.deliveryTime).toUpperCase()
         const { deliveryTime } = this.state
         let deliveryTimeText = ''
         switch (deliveryTime) {
@@ -304,7 +303,7 @@ class FilterScreen extends BaseScreen {
         )
     }
     mainContent = () => {
-
+        const { strings } = this.props
         return (
             <View style={styles.mainContainer}>
                 <View style={styles.filterContainer}>
@@ -316,7 +315,7 @@ class FilterScreen extends BaseScreen {
                 <View style={styles.bottomMainContainer}>
                     <TouchableOpacity onPress={() => this.onSaveChangesBtnPress()}>
                         <View style={styles.bottomButtonContainer}>
-                            <Text style={[styles.baseText, styles.btnTitleSave]}>{this.bottomBtnTitle}</Text>
+                            <Text style={[styles.baseText, styles.btnTitleSave]}>{strings.saveChanges}</Text>
                         </View>
                     </TouchableOpacity>
                 </View>
@@ -325,14 +324,15 @@ class FilterScreen extends BaseScreen {
     }
     render() {
         const mainDisplay = this.mainContent()
+        const { strings } = this.props
         return (
             <SafeAreaView style={styles.safeAreaHeader}>
                 <View style={styles.mainContainer}>
                     <Header
                         tintColor={BASE_COLOR.darkGray}
                         // title={'Filter'}
-                        title={'Back'}
-                        btnTitle={'Reset'}
+                        title={strings.back}
+                        btnTitle={strings.reset}
                         btnPress={() => this.onResetBtnPress()}
                         backgroundColor={NAV_COLOR.headerBackground} />
                     {mainDisplay}
@@ -433,6 +433,7 @@ const styles = StyleSheet.create({
 const mapStateToProps = state => {
     return {
         filter: state.filter.filter,
+        strings: state.location.language.strings,
     };
 };
 

@@ -93,5 +93,9 @@
     "recommended": "Preporučeno",
     "actions": "Akcije",
     "categories": "Kategorije",
-    "seeMore": "Vidi sve"
+    "seeMore": "Vidi sve",
+    "saveChanges": "Sačuvaj izmene",
+    "range": "Domet",
+    "deliveryTime": "Vreme dostave",
+    "reset": "Reset"
 }
