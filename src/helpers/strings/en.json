@@ -54,5 +54,8 @@
    "balance": "Balance",
    "reserved": "Reserved",
    "save": "Save",
-   "back": "Back"
+   "back": "Back",
+   "welcome": "Welcome",
+   "selectCity": "Select a city",
+   "browseTheCity": "Browse the city ..."
 }

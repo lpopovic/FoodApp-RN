@@ -54,5 +54,8 @@
     "balance": "Bilans",
     "reserved": "Rezervisano",
     "save": "Sačuvaj",
-    "back": "Nazad"
+    "back": "Nazad",
+    "welcome": "Dobro došli",
+    "selectCity": "Izaberite grad",
+    "browseTheCity": "Pretraži grad..."
 }
