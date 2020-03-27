@@ -7,6 +7,7 @@ import {
     TextInput,
     Keyboard,
     StyleSheet,
+    TouchableWithoutFeedback
 } from 'react-native';
 import SafeAreaView from 'react-native-safe-area-view';
 import BaseScreen from '../BaseScreen/BaseScreen';
@@ -81,7 +82,7 @@ class MainLocationScreen extends BaseScreen {
 
         const { arrayCities } = this.state
         const searchValue = removeAccents(value).toUpperCase()
-        
+
         return arrayCities.filter(function (item) {
             const name = removeAccents(item.name).toUpperCase()
             return name.includes(searchValue);
@@ -111,6 +112,7 @@ class MainLocationScreen extends BaseScreen {
 
     }
     mainContent = () => (
+
         <SafeAreaView style={styles.mainContainer}>
             {this.topContent()}
             <View style={styles.searchTextContainer}>
@@ -135,7 +137,6 @@ class MainLocationScreen extends BaseScreen {
                 </View>
             </View>
             {this.countryCityListContent()}
-
         </SafeAreaView>
     )
     topContent = () => {
@@ -184,12 +185,14 @@ class MainLocationScreen extends BaseScreen {
         const { loading } = this.state
         const mainDisplay = loading ? this.activityIndicatorContent(BASE_COLOR.backgroundBlue) : this.mainContent()
         return (
-            < ImageBackground
-                style={styles.imageBackgroundContainer}
-                resizeMode='cover'
-                source={TestAssets.backgroudImage} >
-                {mainDisplay}
-            </ImageBackground>
+            <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+                < ImageBackground
+                    style={styles.imageBackgroundContainer}
+                    resizeMode='cover'
+                    source={TestAssets.backgroudImage} >
+                    {mainDisplay}
+                </ImageBackground>
+            </TouchableWithoutFeedback>
         )
     }
 }
