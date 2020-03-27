@@ -239,7 +239,8 @@ const styles = StyleSheet.create({
     searchTextStyle: {
         fontWeight: '300',
         textAlign: 'left',
-        width: '100%'
+        width: '100%',
+        fontSize: 16
 
     }
 });
