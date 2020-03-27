@@ -6,6 +6,7 @@ import {
     StyleSheet,
     Dimensions,
 } from 'react-native';
+import { connect } from 'react-redux';
 import { BASE_COLOR } from '../../styles';
 import Moment from 'moment'
 const widhtBtn = Dimensions.get('screen').width / 3.8
@@ -29,7 +30,7 @@ class HistoryOrder extends Component {
         this.props.onPressReview()
     }
     render() {
-        const { item } = this.props
+        const { item, strings } = this.props
         const { totalAmount, additionalPrice, orderedTime, status, place } = item
         const priceText = Number(totalAmount + additionalPrice).toFixed(2)//'750.00'
         const titleText = item.generateTitleOfOrder()//'Piletina sa povrcem'
@@ -41,13 +42,13 @@ class HistoryOrder extends Component {
         return (
             <View style={styles.mainContainer}>
                 <View style={{ margin: 8, flex: 10 }}>
-                    <View style={{ flexDirection: 'row', justifyContent: 'space-between'}}>
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                         <View style={styles.date}>
                             <Text style={[styles.baseText, { color: BASE_COLOR.black, textAlign: 'left', fontWeight: 'normal' }]}>
                                 {dateText}
                             </Text>
                         </View>
-                        <View style={{width:'50%'}}>
+                        <View style={{ width: '50%' }}>
                             <Text
                                 numberOfLines={1}
                                 ellipsizeMode={'tail'}
@@ -69,14 +70,14 @@ class HistoryOrder extends Component {
                             {titleText}
                         </Text>
                         <Text style={[styles.baseText, { color: BASE_COLOR.blue, textAlign: 'left', fontSize: 16 }]}>
-                            Iznos: {priceText}
+                            {strings.totalPrice} {priceText}
                         </Text>
 
                     </View>
                     <View style={styles.footerContainer}>
-                        {this.btnContent("Detalji", this.onPressDetailOrder)}
-                        {this.props.isCatheringOrder == true ? null : this.btnContent("Poruči", this.onPressOrderAgain)}
-                        {this.btnContent("Review", this.onPressReview)}
+                        {this.btnContent(strings.details, this.onPressDetailOrder)}
+                        {this.props.isCatheringOrder == true ? null : this.btnContent(strings.order, this.onPressOrderAgain)}
+                        {this.btnContent(strings.review, this.onPressReview)}
                     </View>
                 </View>
             </View>
@@ -126,6 +127,9 @@ const styles = StyleSheet.create({
         marginRight: 4
     }
 });
-
-
-export { HistoryOrder };
+const mapStateToProps = state => {
+    return {
+        strings: state.location.language.strings,
+    };
+};
+export default connect(mapStateToProps, null)(HistoryOrder);

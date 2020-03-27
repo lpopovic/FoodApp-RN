@@ -13,6 +13,7 @@ import {
     fetchUserProfile,
     setLocationCity,
     updateSearchFilter,
+    setLanguage,
 } from '../../store/actions'
 import { connect } from 'react-redux';
 import BaseScreen from '../BaseScreen/BaseScreen';
@@ -48,12 +49,15 @@ class SplashScreen extends BaseScreen {
 
     nextPageHandler = async () => {
         const firstLaunch = await getStorageData(STORAGE_KEY.FIRST_TIME_START_APP)
-        if (firstLaunch === null) {
+        if (firstLaunch !== null) {
             saveStorageData(true, STORAGE_KEY.FIRST_TIME_START_APP)
-            this.resetNavigationStack(ScreenName.OnboardingScreen())
+            this.resetNavigationStack(ScreenName.LanguageScreen())
         } else {
             const token = await getStorageData(STORAGE_KEY.JWT_APP_USER)
-
+            const languageApp = await getStorageData(STORAGE_KEY.LANGUAGE_APP)
+            if (languageApp !== null) {
+                this.props.setLanguageHandler(languageApp)
+            }
             if (token !== null) {
 
                 const user = await getStorageData(STORAGE_KEY.USER_APP_DATA)
@@ -150,6 +154,7 @@ const mapDispatchToProps = dispatch => {
         fetchUserProfileHandler: () => dispatch(fetchUserProfile()),
         locationUpdateCityHandler: (city) => dispatch(setLocationCity(city)),
         updateSearchFilterHandler: (filter) => dispatch(updateSearchFilter(filter)),
+        setLanguageHandler: (language) => dispatch(setLanguage(language)),
     };
 };
 

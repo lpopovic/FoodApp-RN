@@ -13,8 +13,6 @@ import BaseScreen from '../BaseScreen/BaseScreen';
 import SafeAreaView from 'react-native-safe-area-view';
 import DefaultInput from '../../components/common/DefaultInput'
 import Header from '../../components/common/BackHeader'
-import { MESSAGE_NO_VALIDE_INPUT_FORM } from '../../helpers'
-import { IconAssets } from '../../assets'
 import { BASE_COLOR } from '../../styles';
 import { validate } from '../../helpers'
 import { UserNetwork } from '../../service/api'

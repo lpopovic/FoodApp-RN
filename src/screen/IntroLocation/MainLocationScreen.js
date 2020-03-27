@@ -22,8 +22,7 @@ class MainLocationScreen extends BaseScreen {
 
     constructor(props) {
         super(props)
-        this.titleText = 'DOBRO DOŠLI'
-        this.subTitleText = 'Izaberite grad'
+
         this.state = {
             searchText: '',
             arrayCities: [],
@@ -123,7 +122,7 @@ class MainLocationScreen extends BaseScreen {
                     <TextInput
                         ref={ref => this.searchInput = ref}
                         style={[styles.baseTextStyle, styles.searchTextStyle]}
-                        placeholder={'Pretraži grad...'}
+                        placeholder={this.props.strings.browseTheCity}
                         placeholderTextColor={BASE_COLOR.white}
                         value={this.state.searchText}
                         onChangeText={(searchText) => this.onChangeTextInput(searchText)}
@@ -138,6 +137,7 @@ class MainLocationScreen extends BaseScreen {
         </SafeAreaView>
     )
     topContent = () => {
+        const { strings } = this.props
         const backToMainScreen = this.props.navigation.getParam('backToMainScreen', null)
         if (backToMainScreen) {
             return (
@@ -148,7 +148,7 @@ class MainLocationScreen extends BaseScreen {
                         <View style={styles.textContainer}>
                             <Text
                                 style={[styles.baseTextStyle, styles.subTextStyle]}>
-                                {this.subTitleText}
+                                {strings.selectCity}
                             </Text>
                         </View>
                     </View>
@@ -166,11 +166,11 @@ class MainLocationScreen extends BaseScreen {
                     <View style={styles.textContainer}>
                         <Text
                             style={[styles.baseTextStyle, styles.titleTextStyle]}>
-                            {this.titleText}
+                            {String(strings.welcome).toUpperCase()}
                         </Text>
                         <Text
                             style={[styles.baseTextStyle, styles.subTextStyle]}>
-                            {this.subTitleText}
+                            {strings.selectCity}
                         </Text>
                     </View>
                 </View>
@@ -246,6 +246,7 @@ const styles = StyleSheet.create({
 const mapStateToProps = state => {
     return {
         city: state.location.city,
+        strings: state.location.language.strings,
     };
 };
 

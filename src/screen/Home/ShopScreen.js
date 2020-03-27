@@ -93,7 +93,7 @@ class ShoopScreen extends BaseScreen {
             style={styles.textInputNoteStyle}
             value={this.state.specialInstructions}
             multiline={true}
-            placeholder={'Napomena'}
+            placeholder={this.props.strings.note}
             onChangeText={(text) => this.updateTextReview(text)}
             returnKeyType='done'
             ref={(input) => this.textReview = input}
@@ -166,7 +166,7 @@ class ShoopScreen extends BaseScreen {
                     <Icon size={200} name="logo-dropbox" color={BASE_COLOR.blue} />
                     <Text
                         style={{ alignItems: 'center', textAlign: 'center', fontWeight: 'bold', fontSize: 24, }}>
-                        Korpa je prazna.
+                        {this.props.strings.theBasketIsEmpty}
                     </Text>
                 </View>
             </View>
@@ -174,6 +174,7 @@ class ShoopScreen extends BaseScreen {
     }
     mainContent = () => {
         const { userInfo } = this.state
+        const { strings } = this.props
         return (
             <View style={styles.mainContainer}>
                 <KeyboardAwareScrollView
@@ -184,7 +185,7 @@ class ShoopScreen extends BaseScreen {
                     keyboardShouldPersistTaps='handled'
                     enableOnAndroid={true} >
                     <ScrollView keyboardShouldPersistTaps='always'>
-                        <Text style={{ alignItems: 'center', textAlign: 'center', fontWeight: 'bold', fontSize: 24, marginTop: 20, marginBottom: 20 }}>Korpa</Text>
+                        <Text style={{ alignItems: 'center', textAlign: 'center', fontWeight: 'bold', fontSize: 24, marginTop: 20, marginBottom: 20 }}>{strings.basket}</Text>
                         <FlatList
                             style={{ marginBottom: 30 }}
                             scrollEnabled={false}
@@ -200,16 +201,16 @@ class ShoopScreen extends BaseScreen {
 
                         <View style={{ height: 1, backgroundColor: BASE_COLOR.lightGray, margin: 10, marginTop: 0 }}></View>
                         <View style={{ margin: 30 }}>
-                            <Text style={{ fontWeight: '400', fontSize: 18 }}>Način preuzimanja</Text>
+                            <Text style={{ fontWeight: '400', fontSize: 18 }}>{strings.takeOver}</Text>
                             <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 20 }}>
                                 <TouchableOpacity onPress={() => this.wayOfDeliveryHandler(DELIVERY_BUTTON_KEY.pickup)}>
                                     <View style={this.buttonStyle(DELIVERY_BUTTON_KEY.pickup)}>
-                                        <Text style={{ color: this.state.wayOfDelivery == DELIVERY_BUTTON_KEY.pickup ? BASE_COLOR.blue : BASE_COLOR.darkGray, fontWeight: this.state.wayOfDelivery == DELIVERY_BUTTON_KEY.pickup ? 'bold' : '400' }}>POKUPI</Text>
+                                        <Text style={{ color: this.state.wayOfDelivery == DELIVERY_BUTTON_KEY.pickup ? BASE_COLOR.blue : BASE_COLOR.darkGray, fontWeight: this.state.wayOfDelivery == DELIVERY_BUTTON_KEY.pickup ? 'bold' : '400' }}>{String(strings.pickup).toUpperCase()}</Text>
                                     </View>
                                 </TouchableOpacity>
                                 <TouchableOpacity onPress={() => this.wayOfDeliveryHandler(DELIVERY_BUTTON_KEY.delivery)}>
                                     <View style={this.buttonStyle(DELIVERY_BUTTON_KEY.delivery)}>
-                                        <Text style={{ color: this.state.wayOfDelivery == DELIVERY_BUTTON_KEY.delivery ? BASE_COLOR.blue : BASE_COLOR.darkGray, fontWeight: this.state.wayOfDelivery == DELIVERY_BUTTON_KEY.delivery ? 'bold' : '400' }}>DOSTAVA</Text>
+                                        <Text style={{ color: this.state.wayOfDelivery == DELIVERY_BUTTON_KEY.delivery ? BASE_COLOR.blue : BASE_COLOR.darkGray, fontWeight: this.state.wayOfDelivery == DELIVERY_BUTTON_KEY.delivery ? 'bold' : '400' }}>{String(strings.delivery).toUpperCase()}</Text>
                                     </View>
                                 </TouchableOpacity>
 
@@ -218,13 +219,13 @@ class ShoopScreen extends BaseScreen {
                         <View style={{ height: 1, backgroundColor: BASE_COLOR.lightGray, margin: 10 }}></View>
                         <View style={{ flexDirection: 'column' }}>
                             <View style={styles.containerSubAllStyle}>
-                                <Text style={styles.textSubAllStyle}>Ukupno</Text>
+                                <Text style={styles.textSubAllStyle}>{strings.orderAmount}:</Text>
                                 <Text style={styles.textSubAllStyle}>{this.props.order.length > 0 ? `${this.subAllOrder(this.props.order)}.00` : ""}</Text>
                             </View>
                             {
                                 this.state.wayOfDelivery == DELIVERY_BUTTON_KEY.delivery ?
                                     <View style={styles.containerSubAllStyle}>
-                                        <Text style={styles.textSubAllStyle}>Dostava</Text>
+                                        <Text style={styles.textSubAllStyle}>{strings.delivery}:</Text>
                                         <Text style={styles.textSubAllStyle}>+{Number(this.props.orderForPlace.deliveryPrice).toFixed(2)}</Text>
                                     </View>
                                     :
@@ -232,8 +233,8 @@ class ShoopScreen extends BaseScreen {
                             }
                             <View style={{ height: 3, backgroundColor: BASE_COLOR.blue, margin: 10, marginTop: 10 }}></View>
                             <View style={[styles.containerSubAllStyle, { marginTop: 5 }]}>
-                                <Text style={{ fontWeight: 'bold', fontSize: 18, marginLeft: 20, color: BASE_COLOR.blue }}>Sve ukupno</Text>
-                                <Text style={{ fontWeight: 'bold', fontSize: 18, marginRight: 20, color: BASE_COLOR.blue }}>{this.subAllOrder(this.props.order) + this.state.wayOfDelivery == DELIVERY_BUTTON_KEY.delivery ? this.props.orderForPlace.deliveryPrice : 0}.00</Text>
+                                <Text style={{ fontWeight: 'bold', fontSize: 18, marginLeft: 20, color: BASE_COLOR.blue }}>{strings.totalPrice}</Text>
+                                <Text style={{ fontWeight: 'bold', fontSize: 18, marginRight: 20, color: BASE_COLOR.blue }}>{this.subAllOrder(this.props.order) + (this.state.wayOfDelivery == DELIVERY_BUTTON_KEY.delivery ? this.props.orderForPlace.deliveryPrice : 0)}.00</Text>
                             </View>
 
                         </View>
@@ -241,16 +242,16 @@ class ShoopScreen extends BaseScreen {
 
                         <View style={{ height: 1, backgroundColor: BASE_COLOR.lightGray, margin: 10 }}></View>
                         <View style={{ margin: 30 }}>
-                            <Text style={{ fontWeight: '400', fontSize: 18 }}>Plaćanje</Text>
+                            <Text style={{ fontWeight: '400', fontSize: 18 }}>{strings.payment}</Text>
                             <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 20 }}>
                                 <TouchableOpacity onPress={() => this.payButttonHandler(PAY_BUTTON_KEY.cacheSelected)}>
                                     <View style={this.buttonStyle(PAY_BUTTON_KEY.cacheSelected)}>
-                                        <Text style={{ color: this.state.cacheSelected ? BASE_COLOR.blue : BASE_COLOR.darkGray, fontWeight: this.state.cacheSelected ? 'bold' : '400' }}>KEŠ</Text>
+                                        <Text style={{ color: this.state.cacheSelected ? BASE_COLOR.blue : BASE_COLOR.darkGray, fontWeight: this.state.cacheSelected ? 'bold' : '400' }}>{String(strings.cash).toUpperCase()}</Text>
                                     </View>
                                 </TouchableOpacity>
                                 <TouchableOpacity onPress={() => this.payButttonHandler(PAY_BUTTON_KEY.onlineSelected)}>
                                     <View style={this.buttonStyle(PAY_BUTTON_KEY.onlineSelected)}>
-                                        <Text style={{ color: this.state.onlineSelected ? BASE_COLOR.blue : BASE_COLOR.darkGray, fontWeight: this.state.onlineSelected ? 'bold' : '400' }}>ON-LINE</Text>
+                                        <Text style={{ color: this.state.onlineSelected ? BASE_COLOR.blue : BASE_COLOR.darkGray, fontWeight: this.state.onlineSelected ? 'bold' : '400' }}>{String(strings.onLine).toUpperCase()}</Text>
                                     </View>
                                 </TouchableOpacity>
 
@@ -261,7 +262,7 @@ class ShoopScreen extends BaseScreen {
                             <>
                                 <View style={{ margin: 40 }}>
                                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                        <Text style={{ alignItems: 'flex-start', flex: 8, fontWeight: '400', fontSize: 18 }}>Lični podaci:</Text>
+                                        <Text style={{ alignItems: 'flex-start', flex: 8, fontWeight: '400', fontSize: 18 }}>{strings.personalData}</Text>
                                     </View>
                                     <View style={{ marginTop: 20 }}>
                                         <View style={{ marginTop: 0, marginBottom: 8 }}>
@@ -275,7 +276,7 @@ class ShoopScreen extends BaseScreen {
                                                             name: text,
                                                         }
                                                     })}
-                                                    placeholder={'Ime i Prezime'}
+                                                    placeholder={strings.nameAndSurname}
                                                     returnKeyType='next'
                                                     onSubmitEditing={() => this.address.focus()}
                                                     style={[styles.textStyle,]} />
@@ -293,7 +294,7 @@ class ShoopScreen extends BaseScreen {
                                                         },
                                                         showAddressInfo: true
                                                     })}
-                                                    placeholder={'Adresa'}
+                                                    placeholder={strings.address}
                                                     returnKeyType='next'
                                                     onFocus={() => this.showAddresses(true)}
                                                     onBlur={() => this.showAddresses(false)}
@@ -321,7 +322,7 @@ class ShoopScreen extends BaseScreen {
                                                             },
                                                         }
                                                     })}
-                                                    placeholder={'Broj telefona: 06X-XXX-XXX'}
+                                                    placeholder={strings.phonePlaceholder}
                                                     returnKeyType='next'
                                                     ref={(input) => this.phone = input}
                                                     onSubmitEditing={() => this.textReview.focus()}
@@ -336,7 +337,7 @@ class ShoopScreen extends BaseScreen {
                                 </View>
 
                                 <View style={{ alignSelf: 'center', height: this.state.scheduledViewOpen ? 230 : 20, overflow: 'hidden', marginTop: 10, marginBottom: 10 }}>
-                                    <Text style={{ fontWeight: '500', fontSize: 17 }} onPress={() => this.schedulingOnPress()} >Zakaži porudzbinu za odredjeno vreme</Text>
+                                    <Text style={{ fontWeight: '500', fontSize: 17 }} onPress={() => this.schedulingOnPress()} >{strings.scheduleOrdeForSpecificTime}</Text>
                                     <DatePicker
                                         // mode={'time'}
                                         // locale='sr-Latn'
@@ -356,7 +357,7 @@ class ShoopScreen extends BaseScreen {
                             < View style={{ alignItems: 'center', justifyContent: 'center', margin: 20 }}>
                                 <TouchableOpacity onPress={() => this.onPressOrderHandler(this.props.order)}>
                                     <View style={{ backgroundColor: BASE_COLOR.blue, width: 280, height: 65, justifyContent: 'center', alignItems: 'center', borderRadius: 4 }}>
-                                        <Text style={{ color: BASE_COLOR.white, fontWeight: 'bold', fontSize: 22 }}>Naruči</Text>
+                                        <Text style={{ color: BASE_COLOR.white, fontWeight: 'bold', fontSize: 22 }}>{strings.placeYourOrder}</Text>
                                     </View>
                                 </TouchableOpacity>
                             </View>
@@ -364,7 +365,7 @@ class ShoopScreen extends BaseScreen {
                             <View style={{ alignItems: 'center', justifyContent: 'center', margin: 20 }}>
                                 <TouchableOpacity onPress={() => this.onPressLogInHandler()}>
                                     <View style={{ backgroundColor: BASE_COLOR.blue, width: 280, height: 65, justifyContent: 'center', alignItems: 'center', borderRadius: 4 }}>
-                                        <Text style={{ color: BASE_COLOR.white, fontWeight: 'bold', fontSize: 22 }}>Prijavi se</Text>
+                                        <Text style={{ color: BASE_COLOR.white, fontWeight: 'bold', fontSize: 22 }}>{strings.signUp}</Text>
                                     </View>
                                 </TouchableOpacity>
                             </View>
@@ -420,7 +421,7 @@ class ShoopScreen extends BaseScreen {
                 this.props.updateUserProfileHandler(user)
             }
 
-            this.showDialogMessage("Da li želite da sačuvate novu adresu?", onPressOk)
+            this.showDialogMessage(this.props.strings.doYouWantToSaveTheNewAddress, onPressOk)
         }
     }
     onPressOrderHandler(order) {
@@ -440,7 +441,7 @@ class ShoopScreen extends BaseScreen {
             OrderNetwork.fetchOrder(order, placeId, orderType, methodOfPayment, specialInstructions, address, numberMobile.value, scheduledTimeForOrder)
                 .then(
                     res => {
-                        this.showAlertMessage("USPESNO NARUCENO")
+                        this.showAlertMessage(this.props.strings.successfullyOrdered)
                         this.setNewStateHandler({ loading: false })
                         this.closeScreen()
                         this.props.emptyOrderHandler()
@@ -451,9 +452,9 @@ class ShoopScreen extends BaseScreen {
                         this.showAlertMessage(String(err))
                     })
         } else if (!numberMobile.valid) {
-            this.showAlertMessage("Molimo vas popunite polje za kontakt telefon. \nHvala.")
+            this.showAlertMessage(this.props.strings.pleaseFillInTheContactPhoneField)
         } else {
-            this.showAlertMessage("Molimo vas popunite polje sa vasim podacima. \nHvala.")
+            this.showAlertMessage(this.props.strings.pleaseFillInTheFieldWithYourDetails)
         }
 
 
@@ -586,6 +587,7 @@ const styles = StyleSheet.create({
 const mapStateToProps = state => {
     return {
         city: state.location.city,
+        strings: state.location.language.strings,
         order: state.order.order,
         orderForPlace: state.order.orderForPlace,
         userInfo: state.user.userInfo,

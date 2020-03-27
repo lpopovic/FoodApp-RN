@@ -9,7 +9,7 @@ import SafeAreaView from 'react-native-safe-area-view';
 import BaseScreen from '../BaseScreen/BaseScreen';
 import Header from '../../components/common/BackHeader'
 import { NAV_COLOR, BASE_COLOR } from '../../styles'
-import { ScreenName, MESSAGE_EMPTY_ARRAY } from '../../helpers'
+import { ScreenName } from '../../helpers'
 import { PlaceList } from '../../components/Place/PlaceList'
 import { PlaceNetwork, ParamsUrl } from '../../service/api'
 import { connect } from 'react-redux';
@@ -62,7 +62,7 @@ class PlaceListScreen extends BaseScreen {
         PlaceNetwork.fetchPlaces(params).then(
             res => {
                 if (res.length == 0) {
-                    this.showAlertMessage(MESSAGE_EMPTY_ARRAY)
+                    this.showAlertMessage(this.props.strings.thereIsNoResults)
                 }
                 this.setNewStateHandler({
                     loading: false,
@@ -122,8 +122,8 @@ class PlaceListScreen extends BaseScreen {
                         _id: item._id
                     }
                 })}
-                 loadMoreComponents={() => this.loadMoreComponents()}
-                // loadingMore={loadingMore}
+                loadMoreComponents={() => this.loadMoreComponents()}
+            // loadingMore={loadingMore}
             />
         )
     }
@@ -166,6 +166,7 @@ const styles = StyleSheet.create({
 const mapStateToProps = state => {
     return {
         filter: state.filter.filter,
+        strings: state.location.language.strings,
     };
 };
 

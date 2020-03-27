@@ -26,6 +26,12 @@ class MenuItemDetailsScreen extends BaseScreen {
     };
     constructor(props) {
         super(props)
+        noneRadioOption = {
+            amount: 0,
+            _id: props.strings.noBasicExtras,
+            text: props.strings.noBasicExtras,
+        }
+
         this.state = {
             order: props.order,
             loading: true,
@@ -285,7 +291,8 @@ class MenuItemDetailsScreen extends BaseScreen {
                     if (options.length < maximumSelection) {
                         options.push(selectedCheckbox)
                     } else {
-                        alert(`Ne mozete uzeti više od ${maximumSelection} dodatka`)
+
+                        alert(String(this.props.strings.youCannotTakeMoreThanSupplements).replace("%d", `${maximumSelection}`))
                     }
                 }
             }
@@ -436,7 +443,7 @@ class MenuItemDetailsScreen extends BaseScreen {
                 <View style={{ alignItems: 'center', justifyContent: 'center', margin: 20, marginBottom: 30 }}>
                     <TouchableOpacity onPress={() => this.onPressAddToBag()}>
                         <View style={{ backgroundColor: BASE_COLOR.blue, width: 280, height: 45, justifyContent: 'center', alignItems: 'center', borderRadius: 4 }}>
-                            <Text style={{ color: BASE_COLOR.white, fontWeight: '600', fontSize: 16 }}>{cathering != null && cathering.isFromCathering ? "Poruči hranu" : "Dodaj u korpu"}</Text>
+                            <Text style={{ color: BASE_COLOR.white, fontWeight: '600', fontSize: 16 }}>{cathering != null && cathering.isFromCathering ? this.props.strings.orderFood : this.props.strings.addToCart}</Text>
                         </View>
                     </TouchableOpacity>
                 </View>
@@ -499,7 +506,7 @@ class MenuItemDetailsScreen extends BaseScreen {
                             this.showAlertMessage(String(err))
                         })
             } else {
-                alert("Nemate dovoljno sredstava na Vašem nalogu!")
+                alert(this.props.strings.youDoNotHaveEnoughFundsInYourAccount)
             }
 
 
@@ -509,7 +516,7 @@ class MenuItemDetailsScreen extends BaseScreen {
             } else if (orderForPlace._id === item.place._id) {
                 this.putInBagHandler()
             } else if (orderForPlace._id !== item.place._id) {
-                this.showDialogMessage("U korpi trenutno imate jela iz drugog restorana. Ako nastavite sa kupovinom, korpa sa vec unetim jelima ce se isprazniti.", this.onPressOkPutInBagNHandler)
+                this.showDialogMessage(this.props.strings.youCurrentlyHaveDishesInYourCartFromAnotherRestaurant, this.onPressOkPutInBagNHandler)
             }
         }
 
@@ -583,6 +590,7 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = state => {
     return {
+        strings: state.location.language.strings,
         order: state.order.order,
         orderForPlace: state.order.orderForPlace,
         isLogin: state.user.isLogin,

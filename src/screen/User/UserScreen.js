@@ -14,7 +14,7 @@ import { ScreenName, keyAdress } from '../../helpers'
 import Header from '../../components/common/UserHeader'
 import SegmentedControlTab from "react-native-segmented-control-tab";
 import BaseScreen from "../BaseScreen/BaseScreen"
-import { HistoryOrderList } from '../../components/HistoryOrder'
+import HistoryOrderList from '../../components/HistoryOrder/HistoryOrderList'
 import { PlaceSectionList } from '../../components/Place/PlaceList'
 import MenuItemList from '../../components/MenuItem/MenuItemList'
 import {

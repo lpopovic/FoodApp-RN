@@ -3,7 +3,7 @@ import {
     UPDATE_LANGUAGE,
 } from "./actionTypes";
 import {
-    updateHederLocationForAxios
+    updateHederLocationForAxios, saveStorageData, STORAGE_KEY
 } from '../../helpers'
 
 export const locationUpdateCity = (city) => {
@@ -27,4 +27,10 @@ export const setLanguage = (language) => {
         payload: language
     }
 }
+export const saveLanguageSetup = (language) => {
+    saveStorageData(language, STORAGE_KEY.LANGUAGE_APP)
+    return dispatch => {
+        dispatch(setLanguage(language))
 
+    }
+}

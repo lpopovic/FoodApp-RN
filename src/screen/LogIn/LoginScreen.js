@@ -13,7 +13,6 @@ import SafeAreaView from 'react-native-safe-area-view';
 import DefaultInput from '../../components/common/DefaultInput'
 import {
     ScreenName,
-    MESSAGE_NO_VALIDE_INPUT_FORM
 } from '../../helpers'
 import { IconAssets } from '../../assets'
 import { BASE_COLOR } from '../../styles';

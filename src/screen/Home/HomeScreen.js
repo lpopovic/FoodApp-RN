@@ -175,13 +175,16 @@ class HomeScreen extends BaseScreen {
 
     placeListNewContent = () => {
         const { newPlaces } = this.state
+        const title = String(this.props.strings.new).toUpperCase()
+        const seeMore = String(this.props.strings.seeMore).toLowerCase()
         if (newPlaces.length > 0) {
             return (
                 <PlaceSectionList
-                    titleSection="NOVO"
+                    titleSection={title}
+                    titleSeeMore={seeMore}
                     arrayObject={newPlaces}
                     onPressItem={(item) => this.pushNewScreen({ routeName: ScreenName.PlaceDetailScreen(), key: `${Math.random() * 10000}${item._id}`, params: { _id: item._id } })}
-                    onPressSeeMore={() => this.pushNewScreen({ routeName: ScreenName.PlaceListScreen(), key: `${Math.random() * 10000}`, params: { title: "NOVO" } })}
+                    onPressSeeMore={() => this.pushNewScreen({ routeName: ScreenName.PlaceListScreen(), key: `${Math.random() * 10000}`, params: { title } })}
                 />
             )
         }
@@ -189,17 +192,20 @@ class HomeScreen extends BaseScreen {
     }
     placeListMostRatingContent = () => {
         const { mostRatingPlaces } = this.state
+        const title = String(this.props.strings.bestEvaluations).toUpperCase()
+        const seeMore = String(this.props.strings.seeMore).toLowerCase()
         if (mostRatingPlaces.length > 0) {
             return (
                 <PlaceSectionList
-                    titleSection="NAJBOLJE OCENE"
+                    titleSection={title}
+                    titleSeeMore={seeMore}
                     arrayObject={mostRatingPlaces}
                     onPressItem={(item) => this.pushNewScreen({ routeName: ScreenName.PlaceDetailScreen(), key: `${Math.random() * 10000}${item._id}`, params: { _id: item._id } })}
                     onPressSeeMore={() => this.pushNewScreen({
                         routeName: ScreenName.PlaceListScreen(),
                         key: `${Math.random() * 10000}`,
                         params: {
-                            title: "NAJBOLJE OCENE",
+                            title,
                             apiParams: 'sort=-avgRating'
                         }
                     })}
@@ -209,28 +215,32 @@ class HomeScreen extends BaseScreen {
     }
     placeListRecommendedContent = () => {
         const { recommendedPlaces } = this.state
-
+        const title = String(this.props.strings.recommended).toUpperCase()
+        const seeMore = String(this.props.strings.seeMore).toLowerCase()
         if (recommendedPlaces.length > 0) {
             return (
                 <PlaceSectionList
-                    titleSection="PREPORUČENO"
+                    titleSection={title}
+                    titleSeeMore={seeMore}
                     arrayObject={recommendedPlaces}
                     onPressItem={(item) => this.pushNewScreen({ routeName: ScreenName.PlaceDetailScreen(), key: `${Math.random() * 10000}${item._id}`, params: { _id: item._id } })}
-                    onPressSeeMore={() => this.pushNewScreen({ routeName: ScreenName.PlaceListScreen(), key: `${Math.random() * 10000}`, params: { title: "PREPORUČENO" } })}
+                    onPressSeeMore={() => this.pushNewScreen({ routeName: ScreenName.PlaceListScreen(), key: `${Math.random() * 10000}`, params: { title } })}
                 />
             )
         }
     }
     placeListActionContent = () => {
         const { actionPlaces } = this.state
-
+        const title = String(this.props.strings.actions).toUpperCase()
+        const seeMore = String(this.props.strings.seeMore).toLowerCase()
         if (actionPlaces.length > 0) {
             return (
                 <PlaceSectionList
-                    titleSection={"AKCIJE"}
+                    titleSection={title}
+                    titleSeeMore={seeMore}
                     arrayObject={actionPlaces}
                     onPressItem={(item) => this.pushNewScreen({ routeName: ScreenName.PlaceDetailScreen(), key: `${Math.random() * 10000}${item._id}`, params: { _id: item._id } })}
-                    onPressSeeMore={() => this.pushNewScreen({ routeName: ScreenName.PlaceListScreen(), key: `${Math.random() * 10000}`, params: { title: "AKCIJE" } })}
+                    onPressSeeMore={() => this.pushNewScreen({ routeName: ScreenName.PlaceListScreen(), key: `${Math.random() * 10000}`, params: { title } })}
                 />
             )
         }
@@ -238,18 +248,20 @@ class HomeScreen extends BaseScreen {
     }
     placeListDeliveryContent = () => {
         const { deliveryPlaces } = this.state
-
+        const title = String(this.props.strings.delivery).toUpperCase()
+        const seeMore = String(this.props.strings.seeMore).toLowerCase()
         if (deliveryPlaces.length > 0) {
             return (
                 <PlaceSectionList
-                    titleSection={"DOSTAVA"}
+                    titleSection={title}
+                    titleSeeMore={seeMore}
                     arrayObject={deliveryPlaces}
                     onPressItem={(item) => this.pushNewScreen({ routeName: ScreenName.PlaceDetailScreen(), key: `${Math.random() * 10000}${item._id}`, params: { _id: item._id } })}
                     onPressSeeMore={() => this.pushNewScreen({
                         routeName: ScreenName.PlaceListScreen(),
                         key: `${Math.random() * 10000}`,
                         params: {
-                            title: "DOSTAVA",
+                            title,
                             apiParams: ParamsUrl.delivery(true)
                         }
                     })}
@@ -261,18 +273,20 @@ class HomeScreen extends BaseScreen {
 
     placeListPickupContent = () => {
         const { pickupPlaces } = this.state
-
+        const title = String(this.props.strings.pickup).toUpperCase()
+        const seeMore = String(this.props.strings.seeMore).toLowerCase()
         if (pickupPlaces.length > 0) {
             return (
                 <PlaceSectionList
-                    titleSection={"PREUZMITE"}
+                    titleSection={title}
+                    titleSeeMore={seeMore}
                     arrayObject={pickupPlaces}
                     onPressItem={(item) => this.pushNewScreen({ routeName: ScreenName.PlaceDetailScreen(), key: `${Math.random() * 10000}${item._id}`, params: { _id: item._id } })}
                     onPressSeeMore={() => this.pushNewScreen({
                         routeName: ScreenName.PlaceListScreen(),
                         key: `${Math.random() * 10000}`,
                         params: {
-                            title: "PREUZMITE",
+                            title: title,
                             apiParams: ParamsUrl.pickup(true)
                         }
                     })}
@@ -284,12 +298,12 @@ class HomeScreen extends BaseScreen {
     placeListFavoriteContent = () => {
         const { userFavoritePlaces } = this.props
         const { isLogin } = this.props
-
+        const title = String(this.props.strings.favoriteRestaurants).toUpperCase()
         if (userFavoritePlaces.length > 0 && isLogin == true) {
             return (
                 <PlaceSectionList
                     hideSeeMore={true}
-                    titleSection={"❤️ OMILJENI RESTORANI"}
+                    titleSection={`❤️ ${title}`}
                     arrayObject={userFavoritePlaces}
                     onPressItem={(item) => this.pushNewScreen({ routeName: ScreenName.PlaceDetailScreen(), key: `${Math.random() * 10000}${item._id}`, params: { _id: item._id } })}
                     // onPressSeeMore={() => this.pushNewScreen({
@@ -308,12 +322,12 @@ class HomeScreen extends BaseScreen {
     menuItemsListFavoriteContent = () => {
         const { userFavoriteMenuItems } = this.props
         const { isLogin } = this.props
-
+        const title = String(this.props.strings.favoriteMeals).toUpperCase()
 
         if (userFavoriteMenuItems.length > 0 && isLogin == true) {
             return (
                 <MenuItemList
-                    titleSection={"❤️ OMILJENA JELA"}
+                    titleSection={`❤️ ${title}`}
                     arrayObject={userFavoriteMenuItems}
                     onPressItem={(item) => this.pushNewScreen({ routeName: ScreenName.MenuItemDetailsScreen(), key: `${Math.random() * 10000}${item._id}`, params: { _id: item._id } })}
                     onPressSeeMore={() => console.log("see more")}
@@ -324,8 +338,12 @@ class HomeScreen extends BaseScreen {
     }
     categoryListContent = () => {
         const { categories } = this.state
+        const title = String(this.props.strings.categories).toUpperCase()
+        const seeMore = String(this.props.strings.seeMore).toLowerCase()
         return (
             <CategorySectionList
+                titleSection={title}
+                titleSeeMore={seeMore}
                 arrayObject={categories}
                 onPressItem={(item) => this.pushNewScreen({
                     routeName: ScreenName.PlaceListScreen(),
@@ -448,7 +466,8 @@ const mapStateToProps = state => {
         isLogin: state.user.isLogin,
         userInfo: state.user.userInfo,
         userFavoritePlaces: state.user.userFavoritePlaces,
-        userFavoriteMenuItems: state.user.userFavoriteMenuItems
+        userFavoriteMenuItems: state.user.userFavoriteMenuItems,
+        strings: state.location.language.strings,
     };
 };
 

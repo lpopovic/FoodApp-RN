@@ -17,37 +17,44 @@ import RegisterScreen from '../../screen/LogIn/RegisterScreen'
 import MainLocationScreen from '../../screen/IntroLocation/MainLocationScreen'
 import OnboardingScreen from '../../screen/Intro/OnboardingScreen'
 import SplashScreen from '../../screen/Intro/SplashScreen'
+import LanguageScreen from '../../screen/Intro/LanguageScreen'
 import { ScreenName } from '../../helpers'
 
 
 // cateringapp_NAME: NAME_SCREEN
 const Navigator = createStackNavigator({
 
-    cateringapp_Splash:{
+    cateringapp_Splash: {
         screen: SplashScreen,
         navigationOptions: () => ({
             header: null
         })
     },
-    cateringapp_Onboarding:{
+    cateringapp_Language: {
+        screen: LanguageScreen,
+        navigationOptions: () => ({
+            header: null
+        })
+    },
+    cateringapp_Onboarding: {
         screen: OnboardingScreen,
         navigationOptions: () => ({
             header: null
         })
     },
-    cateringapp_MainLocation :{
+    cateringapp_MainLocation: {
         screen: MainLocationScreen,
         navigationOptions: () => ({
             header: null
         })
     },
-    cateringapp_Login :{
+    cateringapp_Login: {
         screen: LoginScreen,
         navigationOptions: () => ({
             header: null
         })
     },
-    cateringapp_Register :{
+    cateringapp_Register: {
         screen: RegisterScreen,
         navigationOptions: () => ({
             header: null
