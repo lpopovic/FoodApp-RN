@@ -7,11 +7,11 @@ import {
     TouchableOpacity,
     StyleSheet,
 } from 'react-native';
+import { connect } from 'react-redux';
 import BaseScreen from '../BaseScreen/BaseScreen';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import Header from '../../components/common/BackHeader'
 import StarRating from 'react-native-star-rating';
-
 
 import {
     BASE_COLOR,
@@ -30,7 +30,6 @@ class ReviewScreen extends BaseScreen {
 
     constructor(props) {
         super(props)
-        this.bottomBtnTitle = 'POŠALJI'
         this.state = {
             loading: false,
             avgRating: 0,
@@ -95,7 +94,7 @@ class ReviewScreen extends BaseScreen {
         });
     }
     ratingContent = () => {
-        const text = 'RATING'
+        const text = String(this.props.strings.rating).toUpperCase()
         const { avgRating } = this.state
         return (
             <View style={styles.baseContainer}>
@@ -130,7 +129,7 @@ class ReviewScreen extends BaseScreen {
         });
     }
     priceContent = () => {
-        const text = 'PRICE TAG'
+        const text = String(this.props.strings.priceTag).toUpperCase()
         const { avgPriceTag } = this.state
         return (
             <View style={styles.baseContainer}>
@@ -172,7 +171,8 @@ class ReviewScreen extends BaseScreen {
         })
     }
     reviewTextContent = () => {
-        const text = 'REVIEW TEXT'
+        const { strings } = this.props
+        const text = String(strings.reviewText).toUpperCase()
         const { textReview } = this.state
         return (
             <View style={styles.baseContainer}>
@@ -185,7 +185,7 @@ class ReviewScreen extends BaseScreen {
                         value={textReview}
                         onChangeText={(text) => this.reviewTextChangeHandler(text)}
                         multiline
-                        placeholder={"Unesite vaš tekst."}
+                        placeholder={strings.enterYourText}
                         style={{
                             fontSize: 15,
                             padding: 8,
@@ -236,6 +236,7 @@ class ReviewScreen extends BaseScreen {
         )
     }
     mainContent = () => {
+        const { strings } = this.props
         const { avgRating, textReview, avgPriceTag } = this.state
         const disabled = !this.validateInputForme(avgRating, textReview, avgPriceTag)
         return (
@@ -249,7 +250,7 @@ class ReviewScreen extends BaseScreen {
                             style={[styles.bottomButtonContainer,
                             disabled ? { backgroundColor: BASE_COLOR.lightGray }
                                 : { backgroundColor: BASE_COLOR.blue }]}>
-                            <Text style={[styles.baseText, styles.btnTitleSave]}>{this.bottomBtnTitle}</Text>
+                            <Text style={[styles.baseText, styles.btnTitleSave]}>{String(strings.send).toUpperCase()}</Text>
                         </View>
                     </TouchableOpacity>
                 </View>
@@ -354,5 +355,10 @@ const styles = StyleSheet.create({
 
 });
 
+const mapStateToProps = state => {
+    return {
+        strings: state.location.language.strings,
+    };
+};
 
-export default ReviewScreen;
+export default connect(mapStateToProps, null)(ReviewScreen);

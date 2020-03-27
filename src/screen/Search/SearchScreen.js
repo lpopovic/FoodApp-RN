@@ -27,7 +27,8 @@ class SearchScreen extends BaseScreen {
 
     constructor(props) {
         super(props)
-        this.typeOfSortRestMap = ["Near me", "Pickup", "Delivery"]
+        const { strings } = props
+        this.typeOfSortRestMap = [strings.nearMe, strings.pickup, strings.delivery]
         this.state = {
             selectedIndex: 0,
             loading: false,
@@ -56,6 +57,7 @@ class SearchScreen extends BaseScreen {
     };
 
     searchApiHandler = ({ text, index }) => {
+        const { strings } = this.props
         const {
             pickup,
             delivery,
@@ -65,7 +67,7 @@ class SearchScreen extends BaseScreen {
         let sort = null
         let search = null
         let params = []
-        
+
         switch (selectedIndex) {
             case 1:
                 sort = ParamsUrl.pickup(true)
@@ -102,6 +104,9 @@ class SearchScreen extends BaseScreen {
                             showNoResult: res.length > 0 ? false : true,
                             showError: false,
                         })
+                        if (res.length == 0) {
+                            this.showAlertMessage(strings.thereIsNoNearbyPlaces)
+                        }
                     },
                     err => {
                         this.showAlertMessage(err)
@@ -114,7 +119,7 @@ class SearchScreen extends BaseScreen {
                 )
 
         } else {
-            this.showAlertMessage("Insert key word for search.")
+            this.showAlertMessage(strings.insertKeyWordForSearch)
         }
     }
     clearTextHandler = () => {
@@ -205,7 +210,7 @@ class SearchScreen extends BaseScreen {
 
     _filterData = () => {
         setTimeout(() => {
-           this.searchApiHandler({})
+            this.searchApiHandler({})
         }, 100);
     }
 }
@@ -242,6 +247,7 @@ const mapStateToProps = state => {
     return {
         city: state.location.city,
         filter: state.filter.filter,
+        strings: state.location.language.strings,
     };
 };
 

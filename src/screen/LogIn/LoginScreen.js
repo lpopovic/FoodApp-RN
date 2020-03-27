@@ -28,7 +28,6 @@ import Header from '../../components/common/BackHeader'
 class LoginScreen extends BaseScreen {
     constructor(props) {
         super(props)
-        this.title = "PRIJAVI SE";
         this.state = {
             showBackButton: false,
             loading: false,
@@ -93,7 +92,8 @@ class LoginScreen extends BaseScreen {
     }
 
     onPressSignInHandler = () => {
-        disabled = !this.state.controls.email.valid || !this.state.controls.password.valid
+        const { strings } = this.props
+        const disabled = !this.state.controls.email.valid || !this.state.controls.password.valid
         const { controls } = this.state
         if (!disabled) {
             this.apiCallSignUpHandler(controls.email.value, controls.password.value)
@@ -101,13 +101,13 @@ class LoginScreen extends BaseScreen {
             if (controls.email.value !== '' && controls.password.value !== '') {
                 if (!this.state.controls.email.valid) {
 
-                    this.showAlertMessage("Must be email addrese.")
+                    this.showAlertMessage(strings.notValideEmailAddrese)
                 } else if (!this.state.controls.password.valid) {
 
-                    this.showAlertMessage("Password must be minumum 6 characters and include both numbers and letters.")
+                    this.showAlertMessage(strings.passwordMustBeMinumum)
                 }
             } else {
-                this.showAlertMessage(MESSAGE_NO_VALIDE_INPUT_FORM)
+                this.showAlertMessage(strings.allFieldsAreRequired)
             }
         }
     }
@@ -117,79 +117,83 @@ class LoginScreen extends BaseScreen {
     onPressSkipHandler = () => {
         this.resetNavigationStack(ScreenName.MainLocationScreen())
     }
-    mainContent = () => (
-        <KeyboardAwareScrollView
-            style={styles.mainDisplay}
-            resetScrollToCoords={{ x: 0, y: 0 }}
-            contentContainerStyle={{ flex: 1 }}
-            scrollEnabled={false}
-            bounces={false}
-            keyboardShouldPersistTaps='handled'
-            enableOnAndroid={false} >
-            <View style={{ flex: 0.8 }}>
+    mainContent = () => {
+        const { strings } = this.props
+        return (
+            <KeyboardAwareScrollView
+                style={styles.mainDisplay}
+                resetScrollToCoords={{ x: 0, y: 0 }}
+                contentContainerStyle={{ flex: 1 }}
+                scrollEnabled={false}
+                bounces={false}
+                keyboardShouldPersistTaps='handled'
+                enableOnAndroid={false} >
+                <View style={{ flex: 0.8 }}>
 
-                <View style={styles.headerContainer}>
-                    <View style={styles.logoContainer} >
-                        <Image source={IconAssets.appIcon256} style={styles.logoImage} resizeMode='contain' />
+                    <View style={styles.headerContainer}>
+                        <View style={styles.logoContainer} >
+                            <Image source={IconAssets.appIcon256} style={styles.logoImage} resizeMode='contain' />
+                        </View>
+                        <View style={styles.titleContainer}>
+                            <Text style={styles.textHeaderStyle}>{String(strings.signUp).toUpperCase()}</Text>
+                        </View>
                     </View>
-                    <View style={styles.titleContainer}>
-                        <Text style={styles.textHeaderStyle}>{this.title}</Text>
+                    <View style={{ marginTop: 20, marginBottom: 20, justifyContent: 'center' }}>
+
+                        <DefaultInput
+                            placeholder={strings.email}
+                            value={this.state.controls.email.value}
+                            onChangeText={(val) => this.updateInputState('email', val)}
+                            valid={this.state.controls.email.valid}
+                            touched={this.state.controls.email.touched}
+                            autoCapitalize="none"
+                            autoCorrect={false}
+                            keyboardType="email-address"
+                            returnKeyType='next'
+                            onSubmitEditing={() => this.pass.getInnerRef().focus()}
+                        />
+
+                        <DefaultInput
+                            placeholder={strings.password}
+                            style={{ marginTop: 16 }}
+                            value={this.state.controls.password.value}
+                            onChangeText={val => this.updateInputState('password', val)}
+                            valid={this.state.controls.password.valid}
+                            touched={this.state.controls.password.touched}
+                            secureTextEntry={true}
+                            returnKeyType='done'
+                            ref={(input) => this.pass = input}
+                        />
+
                     </View>
+                    <View style={styles.buttonsContainer}>
+                        <View style={{ width: 130, margin: 8, alignSelf: 'center', }}>
+                            <TouchableOpacity
+                                onPress={() => this.onPressSignInHandler()}>
+                                <View style={styles.buttonSignIn}>
+                                    <Text style={styles.textButtonStyle}>{String(strings.ok).toUpperCase()}</Text>
+                                </View>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+
                 </View>
-                <View style={{ marginTop: 20, marginBottom: 20, justifyContent: 'center' }}>
-
-                    <DefaultInput
-                        placeholder='Email'
-                        value={this.state.controls.email.value}
-                        onChangeText={(val) => this.updateInputState('email', val)}
-                        valid={this.state.controls.email.valid}
-                        touched={this.state.controls.email.touched}
-                        autoCapitalize="none"
-                        autoCorrect={false}
-                        keyboardType="email-address"
-                        returnKeyType='next'
-                        onSubmitEditing={() => this.pass.getInnerRef().focus()}
-                    />
-
-                    <DefaultInput
-                        placeholder='Password'
-                        style={{ marginTop: 16 }}
-                        value={this.state.controls.password.value}
-                        onChangeText={val => this.updateInputState('password', val)}
-                        valid={this.state.controls.password.valid}
-                        touched={this.state.controls.password.touched}
-                        secureTextEntry={true}
-                        returnKeyType='done'
-                        ref={(input) => this.pass = input}
-                    />
-
-                </View>
-                <View style={styles.buttonsContainer}>
-                    <View style={{ width: 130, margin: 8, alignSelf: 'center', }}>
-                        <TouchableOpacity
-                            onPress={() => this.onPressSignInHandler()}>
-                            <View style={styles.buttonSignIn}>
-                                <Text style={styles.textButtonStyle}>OK</Text>
-                            </View>
-                        </TouchableOpacity>
-                    </View>
+                <View style={{ flex: 0.2, alignSelf: 'center', alignContent: 'center', justifyContent: 'center' }}>
+                    <TouchableOpacity
+                        onPress={() => this.onPressRegisterHandler()}>
+                        <View style={styles.buttonRegister}>
+                            <Text style={styles.titleBtnRegister}>{strings.noAccount}</Text>
+                            <Text style={[styles.titleBtnRegister, { fontWeight: 'bold' }]}>{String(strings.register).toUpperCase()}</Text>
+                        </View>
+                    </TouchableOpacity>
                 </View>
 
-            </View>
-            <View style={{ flex: 0.2, alignSelf: 'center', alignContent: 'center', justifyContent: 'center' }}>
-                <TouchableOpacity
-                    onPress={() => this.onPressRegisterHandler()}>
-                    <View style={styles.buttonRegister}>
-                        <Text style={styles.titleBtnRegister}>Nemaš nalog?</Text>
-                        <Text style={[styles.titleBtnRegister, { fontWeight: 'bold' }]}>REGISTRUJ SE</Text>
-                    </View>
-                </TouchableOpacity>
-            </View>
+            </KeyboardAwareScrollView>
 
-        </KeyboardAwareScrollView>
-
-    )
+        )
+    }
     showHeaderContent = (showBackButton) => {
+        const { strings } = this.props
         if (showBackButton) {
             return (
                 <Header
@@ -202,7 +206,7 @@ class LoginScreen extends BaseScreen {
                         <TouchableOpacity
                             onPress={() => this.onPressSkipHandler()}>
                             <View style={[styles.buttonSignIn, { backgroundColor: BASE_COLOR.red }]}>
-                                <Text style={styles.textButtonStyle}>Preskoči</Text>
+                                <Text style={styles.textButtonStyle}>{strings.skip}</Text>
                             </View>
                         </TouchableOpacity>
                     </View>
@@ -273,7 +277,7 @@ const styles = StyleSheet.create({
         marginTop: 16,
         justifyContent: 'center',
         alignItems: 'center',
-    }, 
+    },
     logoImage: {
         height: 120,
         width: 120,
@@ -326,7 +330,11 @@ const styles = StyleSheet.create({
     }
 
 });
-
+const mapStateToProps = state => {
+    return {
+        strings: state.location.language.strings,
+    };
+};
 const mapDispatchToProps = dispatch => {
     return {
         updateUserJWTHandler: (token) => dispatch(updateUserJWT(token)),
@@ -336,4 +344,4 @@ const mapDispatchToProps = dispatch => {
 };
 
 
-export default connect(null, mapDispatchToProps)(LoginScreen);
+export default connect(mapStateToProps, mapDispatchToProps)(LoginScreen);

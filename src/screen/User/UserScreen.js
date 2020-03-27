@@ -35,7 +35,8 @@ class UserScreen extends BaseScreen {
     };
     constructor(props) {
         super(props)
-        this.typeOfSortOrder = ["Porudžbine", "Ketering"]
+        const { strings } = props
+        this.typeOfSortOrder = [strings.orders, strings.catering]
         this.state = {
             refreshing: false,
             selectedIndex: 0,
@@ -143,7 +144,7 @@ class UserScreen extends BaseScreen {
         )
     }
     placeListFavoriteContent = () => {
-        const { userFavoritePlaces } = this.props
+        const { userFavoritePlaces, strings } = this.props
 
         if (userFavoritePlaces.length > 0) {
             return (
@@ -156,7 +157,7 @@ class UserScreen extends BaseScreen {
                 }}>
                     <PlaceSectionList
                         style={{ marginLeft: -8 }}
-                        titleSection={"❤️ OMILJENI RESTORANI"}
+                        titleSection={`❤️ ${String(strings.favoriteRestaurants).toUpperCase()}`}
                         hideSeeMore={true}
                         arrayObject={userFavoritePlaces}
                         onPressItem={(item) => this.pushNewScreen({ routeName: ScreenName.PlaceDetailScreen(), key: `${Math.random() * 10000}${item._id}`, params: { _id: item._id } })}
@@ -169,7 +170,7 @@ class UserScreen extends BaseScreen {
     }
     menuItemsListFavoriteContent = () => {
 
-        const { userFavoriteMenuItems } = this.props
+        const { userFavoriteMenuItems, strings } = this.props
 
         if (userFavoriteMenuItems.length > 0) {
             return (
@@ -182,7 +183,7 @@ class UserScreen extends BaseScreen {
                 }}>
                     <MenuItemList
                         style={{ marginLeft: -8, }}
-                        titleSection={"❤️ OMILJENA JELA"}
+                        titleSection={`❤️ ${String(strings.favoriteMeals).toUpperCase()}`}
                         arrayObject={userFavoriteMenuItems}
                         onPressItem={(item) => this.pushNewScreen({ routeName: ScreenName.MenuItemDetailsScreen(), key: `${Math.random() * 10000}${item._id}`, params: { _id: item._id } })}
                         onPressSeeMore={() => console.log("see more")}
@@ -193,7 +194,7 @@ class UserScreen extends BaseScreen {
 
     }
     recentOrdersContent = () => {
-        const type = "Recent"
+        const type = this.props.strings.recent
         const { selectedIndex } = this.state
         const { userOrders, userCatherings, userInfo } = this.props
         if (userInfo.catheringIsAvailable == true) {
@@ -245,6 +246,7 @@ class UserScreen extends BaseScreen {
     }
     mainContent = () => {
         const { refreshing } = this.state
+        const { strings } = this.props
         const {
             email,
             username,
@@ -254,6 +256,7 @@ class UserScreen extends BaseScreen {
             name,
             lastName
         } = this.props.userInfo
+
         let lastUseAddress = address.filter(
             (data) => {
                 if (data.includes(keyAdress(this.props.city._id))) {
@@ -262,7 +265,7 @@ class UserScreen extends BaseScreen {
 
             }
         ).slice(-1)[0]
-        lastUseAddress = lastUseAddress ? lastUseAddress.replace(keyAdress(this.props.city._id), '') : "Nedostupna"
+        lastUseAddress = lastUseAddress ? lastUseAddress.replace(keyAdress(this.props.city._id), '') : strings.notAvailable
         return (
             <ScrollView
                 refreshControl={
@@ -276,12 +279,12 @@ class UserScreen extends BaseScreen {
                 style={{ flex: 1 }}>
                 <View style={styles.scrollViewContainer}>
                     {this.userImageContent()}
-                    {this.infoContent("Username", username)}
-                    {this.infoContent("First name", name)}
-                    {this.infoContent("Last name", lastName)}
-                    {this.infoContent("Email", email)}
-                    {this.infoContent("Phone number", phoneNumber.trim() != '' ? phoneNumber : "Nedostupna")}
-                    {this.infoContent("Adress", lastUseAddress)}
+                    {this.infoContent(strings.username, username)}
+                    {this.infoContent(strings.firstName, name)}
+                    {this.infoContent(strings.lastName, lastName)}
+                    {this.infoContent(strings.email, email)}
+                    {this.infoContent(strings.phoneNumber, phoneNumber.trim() != '' ? phoneNumber : strings.notAvailable)}
+                    {this.infoContent(strings.address, lastUseAddress)}
 
                     {this.placeListFavoriteContent()}
 
@@ -320,7 +323,7 @@ class UserScreen extends BaseScreen {
                         textAlignVertical: 'center',
                         textAlign: 'center',
                         margin: 16,
-                    }}>Da bi ste koristili korisnikicki tab, molimo vas da se prijavite.</Text>
+                    }}>{this.props.strings.toUseTheUserTabPleaseLogIn}</Text>
                 </View>
                 <View style={{ flex: 0.4, alignItems: 'center', justifyContent: 'center' }}>
                     <TouchableOpacity onPress={() => this.onPressLogInHandler()}>
@@ -339,7 +342,7 @@ class UserScreen extends BaseScreen {
                                 fontWeight: 'bold',
                                 textAlignVertical: 'center',
                                 textAlign: 'center',
-                            }}>PRIJAVITE SE</Text>
+                            }}>{String(this.props.strings.signUp).toUpperCase()}</Text>
                         </View>
                     </TouchableOpacity>
                 </View>
@@ -429,6 +432,7 @@ const mapStateToProps = state => {
         userOrders: state.user.userOrders,
         userCatherings: state.user.userCatherings,
         city: state.location.city,
+        strings: state.location.language.strings,
         userFavoritePlaces: state.user.userFavoritePlaces,
         userFavoriteMenuItems: state.user.userFavoriteMenuItems
     };
