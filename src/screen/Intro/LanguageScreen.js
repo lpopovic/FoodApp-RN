@@ -43,13 +43,14 @@ class LanguageScreen extends BaseScreen {
         this.props.setLanguageHandler(language)
         // func koja pored promene jezika cuva u async storage setovani jezik
         // this.props.saveLanguageSetupHandler(language)
-        
+
         this.resetNavigationStack(ScreenName.OnboardingScreen())
     }
     render() {
         return (
             <View style={styles.mainContainer}>
                 <Text>LanguageScreen</Text>
+                <Text>za 5s pokrece sledecu stranicu sa SRB jeziku</Text>
             </View>
         )
     }
