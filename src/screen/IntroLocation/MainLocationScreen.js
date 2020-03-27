@@ -11,7 +11,7 @@ import {
 import SafeAreaView from 'react-native-safe-area-view';
 import BaseScreen from '../BaseScreen/BaseScreen';
 import { TestAssets, IconAssets } from '../../assets'
-import { ScreenName } from '../../helpers'
+import { ScreenName, removeAccents } from '../../helpers'
 import { BASE_COLOR } from '../../styles'
 import { LocationNetwork } from '../../service/api'
 import CountryCityList from '../../components/Location/CountryCityList';
@@ -80,9 +80,11 @@ class MainLocationScreen extends BaseScreen {
     filterArrayObjectByStringValue = (value) => {
 
         const { arrayCities } = this.state
-
+        const searchValue = removeAccents(value).toUpperCase()
+        
         return arrayCities.filter(function (item) {
-            return ((item.name.toUpperCase()).includes(value.toUpperCase()));
+            const name = removeAccents(item.name).toUpperCase()
+            return name.includes(searchValue);
         });
 
     }
