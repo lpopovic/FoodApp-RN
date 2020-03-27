@@ -9,6 +9,7 @@ import {
 import { TestAssets, IconAssets } from '../../assets'
 import { NAV_COLOR, headerStyles, BASE_COLOR } from '../../styles'
 import { connect } from 'react-redux';
+import { setLanguage } from '../../store/actions'
 import { withNavigation } from 'react-navigation'
 import { ScreenName } from '../../helpers'
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
@@ -26,7 +27,7 @@ class BaseHeader extends Component {
     }
     badgeContent = () => {
         const { order } = this.props
-         if (order.length > 0) {
+        if (order.length > 0) {
             return <Badge
                 // status="primary"
                 value={order.length}
@@ -35,7 +36,7 @@ class BaseHeader extends Component {
                 containerStyle={{ position: 'absolute', bottom: 0, right: 0 }}
             />
         } else {
-            return <View/>
+            return <View />
         }
     }
     render() {
@@ -71,6 +72,9 @@ class BaseHeader extends Component {
                             </View>
                         </TouchableOpacity>
                     </View>
+
+                    <Text onPress={() => this.props.setLanguage('en')} style={{ fontSize: 20 }}>EN</Text>
+                    <Text onPress={() => this.props.setLanguage('srb')} style={{ fontSize: 20 }}>SRB</Text>
 
                     <View style={styles.rightBtn}>
                         <TouchableOpacity onPress={() => this.props.navigation.navigate(ScreenName.SearchTab())}>
@@ -160,4 +164,4 @@ const mapStateToProps = state => {
     };
 };
 
-export default connect(mapStateToProps, null)(withNavigation(BaseHeader));
+export default connect(mapStateToProps, { setLanguage })(withNavigation(BaseHeader));

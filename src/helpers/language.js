@@ -1,9 +1,7 @@
 export const LANGUAGE_KEY = {
     EN: 'en',
     SRB: 'srb'
-
 }
-
 
 export const setLanguage = language => {
     let strings = {};
