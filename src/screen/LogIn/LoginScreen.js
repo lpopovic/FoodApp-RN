@@ -128,7 +128,6 @@ class LoginScreen extends BaseScreen {
                 keyboardShouldPersistTaps='handled'
                 enableOnAndroid={false} >
                 <View style={{ flex: 0.8 }}>
-
                     <View style={styles.headerContainer}>
                         <View style={styles.logoContainer} >
                             <Image source={IconAssets.appIcon256} style={styles.logoImage} resizeMode='contain' />

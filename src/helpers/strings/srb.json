@@ -65,7 +65,7 @@
     "onboardingTitle2": "Kada putujete ili kod kuće",
     "onboardingText2": "Jednostavno bilo gde!",
     "getStarted": "Krenite",
-    "next": "Sledeći",
+    "next": "Dalje",
     "note": "Napomena",
     "theBasketIsEmpty": "Korpa je prazna.",
     "basket": "Korpa",
@@ -117,5 +117,6 @@
     "thereIsNoResults": "Nema rezultata!",
     "order": "Naruči",
     "review": "Komentar",
-    "details": "Detalji"
+    "details": "Detalji",
+    "chooseLanguage": "Izaberite jezik"
 }

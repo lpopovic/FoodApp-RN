@@ -9,7 +9,6 @@ import {
 import { TestAssets, IconAssets } from '../../assets'
 import { NAV_COLOR, headerStyles, BASE_COLOR } from '../../styles'
 import { connect } from 'react-redux';
-import { setLanguage } from '../../store/actions'
 import { withNavigation } from 'react-navigation'
 import { ScreenName } from '../../helpers'
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
@@ -72,10 +71,6 @@ class BaseHeader extends Component {
                             </View>
                         </TouchableOpacity>
                     </View>
-
-                    <Text onPress={() => this.props.setLanguage('en')} style={{ fontSize: 20 }}>EN</Text>
-                    <Text onPress={() => this.props.setLanguage('srb')} style={{ fontSize: 20 }}>SRB</Text>
-
                     <View style={styles.rightBtn}>
                         <TouchableOpacity onPress={() => this.props.navigation.navigate(ScreenName.SearchTab())}>
                             <View style={[styles.imageOtherContainer, styles.imageContainer]}>
@@ -164,4 +159,4 @@ const mapStateToProps = state => {
     };
 };
 
-export default connect(mapStateToProps, { setLanguage })(withNavigation(BaseHeader));
+export default connect(mapStateToProps, null)(withNavigation(BaseHeader));
