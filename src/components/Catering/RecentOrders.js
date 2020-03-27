@@ -44,6 +44,7 @@ class RecentOrders extends Component {
             return (
                 <FlatList
                     data={menuItems}
+                    keyExtractor={(item, index) => index.toString()}
                     renderItem={({ item }) => {
                         return (
                             <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginHorizontal: 20, marginVertical: 10 }}>

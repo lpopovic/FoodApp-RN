@@ -15,11 +15,7 @@ import {
     NAV_COLOR
 } from '../../styles'
 import {
-    LANGUAGE_KEY,
-    ScreenName,
-    getStorageData,
-    saveStorageData,
-    STORAGE_KEY
+    ScreenName, saveStorageData, STORAGE_KEY,
 } from '../../helpers'
 import { setLanguage, saveLanguageSetup } from '../../store/actions'
 import { IconAssets } from '../../assets';
@@ -38,9 +34,6 @@ class LanguageScreen extends BaseScreen {
     componentDidMount() {
         super.componentDidMount()
         this.setStatusBarStyle(NAV_COLOR.headerBackground, true);
-        // setTimeout(() => {
-        //     this.onPressLanguage(LANGUAGE_KEY.SRB)
-        // }, 5000);
     }
     componentWillUnmount() {
         super.componentWillUnmount()
@@ -48,11 +41,12 @@ class LanguageScreen extends BaseScreen {
     onPressLanguage = (obj) => {
         this.setNewStateHandler({ chosenLanguage: obj.text, langClicked: false })
         // func koja samo menja jezik i njegova promena traje dok traje sesija app
-        this.props.setLanguageHandler(obj.name)
+        // this.props.setLanguageHandler(obj.name)
         // func koja pored promene jezika cuva u async storage setovani jezik
-        // this.props.saveLanguageSetupHandler(language)
-
-        // this.resetNavigationStack(ScreenName.OnboardingScreen())
+        this.props.saveLanguageSetupHandler(obj.name)
+    }
+    onPressNext = () => {
+        this.resetNavigationStack(ScreenName.OnboardingScreen())
     }
     render() {
         const { langClicked, languages, chosenLanguage } = this.state;
@@ -81,10 +75,14 @@ class LanguageScreen extends BaseScreen {
                             </View>
                         }
                     </View>
-                    <TouchableOpacity onPress={() => this.resetNavigationStack(ScreenName.OnboardingScreen())}
-                        style={styles.nextBtn}>
-                        <Text style={styles.textButtonStyle}>{strings.next.toUpperCase()}</Text>
-                    </TouchableOpacity>
+                    {chosenLanguage !== this.props.strings.chooseLanguage ?
+                        <TouchableOpacity onPress={() => this.onPressNext()}
+                            style={styles.nextBtn}>
+                            <Text style={styles.textButtonStyle}>{strings.next.toUpperCase()}</Text>
+                        </TouchableOpacity>
+                        :
+                        <View/>
+                    }
                 </TouchableOpacity>
             </SafeAreaView>
         )
@@ -128,7 +126,7 @@ const styles = StyleSheet.create({
         width: '50%',
         height: 50,
         borderWidth: 1,
-        backgroundColor: 'red',
+        backgroundColor: BASE_COLOR.green,
         alignSelf: 'center',
         marginBottom: 30,
         justifyContent: 'center',

@@ -49,7 +49,7 @@ class SplashScreen extends BaseScreen {
 
     nextPageHandler = async () => {
         const firstLaunch = await getStorageData(STORAGE_KEY.FIRST_TIME_START_APP)
-        if (firstLaunch !== null) {
+        if (firstLaunch === null) {
             saveStorageData(true, STORAGE_KEY.FIRST_TIME_START_APP)
             this.resetNavigationStack(ScreenName.LanguageScreen())
         } else {
