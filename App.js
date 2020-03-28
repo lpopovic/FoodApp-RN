@@ -21,6 +21,7 @@ const store = configurateStore();
 
 if (Text.defaultProps == null) Text.defaultProps = {};
 Text.defaultProps.allowFontScaling = false;
+Text.defaultProps.color = BASE_COLOR.black
 
 if (TextInput.defaultProps == null) TextInput.defaultProps = {};
 TextInput.defaultProps.placeholderTextColor = BASE_COLOR.gray
