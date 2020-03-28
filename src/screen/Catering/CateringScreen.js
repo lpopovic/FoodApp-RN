@@ -6,7 +6,7 @@ import {
     StyleSheet,
     SafeAreaView,
 } from 'react-native';
-import { ScreenName, STORAGE_KEY, getStorageData } from '../../helpers'
+import { ScreenName, LANGUAGE_KEY } from '../../helpers'
 import BaseScreen from "../BaseScreen/BaseScreen"
 import PlaceCard from '../../components/Catering/PlaceCard';
 import PlaceList from '../../components/Catering/PlaceList';
@@ -42,14 +42,19 @@ class CateringScreen extends BaseScreen {
             balance: null,
             recentMenuItemsOrder: []
         }
-        Moment.locale('Latinica', {
-            months: 'Januar_Februar_Mart_April_Maj_Jun_Jul_Avgust_Septembar_Oktobar_Novembar_Decembar'.split('_'),
-            monthsShort: 'Jan_Feb_Mar_Apr_Maj_Jun_Jul_Avg_Sep_Okt_Nov_Dec'.split('_'),
-            weekdays: 'Ponedeljak_Utorak_Sreda_Četvrtak_Petak_Subota_Nedelja'.split('_'),
-            weekdaysShort: 'NED_PON_UTO_SRE_ČET_PET_SUB'.split('_'),
-            weekdaysMin: 'PO_UT_SR_ČE_PE_SU_NE'.split('_'),
-            weekdaysParseExact: true,
-        });
+        if (props.language == LANGUAGE_KEY.EN) {
+            Moment.locale('en')
+        } else if (props.language == LANGUAGE_KEY.SRB) {
+            Moment.locale('Latinica', {
+                months: 'Januar_Februar_Mart_April_Maj_Jun_Jul_Avgust_Septembar_Oktobar_Novembar_Decembar'.split('_'),
+                monthsShort: 'Jan_Feb_Mar_Apr_Maj_Jun_Jul_Avg_Sep_Okt_Nov_Dec'.split('_'),
+                weekdays: 'Ponedeljak_Utorak_Sreda_Četvrtak_Petak_Subota_Nedelja'.split('_'),
+                weekdaysShort: 'NED_PON_UTO_SRE_ČET_PET_SUB'.split('_'),
+                weekdaysMin: 'PO_UT_SR_ČE_PE_SU_NE'.split('_'),
+                weekdaysParseExact: true,
+            });
+        }
+
 
 
     }
@@ -630,6 +635,7 @@ const mapStateToProps = state => {
         isLogin: state.user.isLogin,
         userCatherings: state.user.userCatherings,
         strings: state.location.language.strings,
+        language: state.location.language.name,
     };
 };
 const mapDispatchToProps = dispatch => {
