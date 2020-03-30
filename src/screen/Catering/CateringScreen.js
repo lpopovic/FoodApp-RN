@@ -5,6 +5,8 @@ import {
     TouchableOpacity,
     StyleSheet,
     SafeAreaView,
+    ScrollView,
+    RefreshControl,
 } from 'react-native';
 import { ScreenName, LANGUAGE_KEY } from '../../helpers'
 import BaseScreen from "../BaseScreen/BaseScreen"
@@ -31,6 +33,7 @@ class CateringScreen extends BaseScreen {
     constructor(props) {
         super(props)
         this.state = {
+            refreshing: false,
             loading: true,
             isCatheringAvailable: null,
             selectedDate: Moment().format('YYYY-MM-DD'),
@@ -116,8 +119,7 @@ class CateringScreen extends BaseScreen {
             CatheringNetwork.fetchCatheringOrderFromDateToDateByCompany(fromDate, toDate, this.props.userInfo.company._id)
                 .then(
                     res => {
-                        console.log("RES", res)
-                        this.sortRecentMenuItemsOrders2(res)
+                        this.sortRecentMenuItemsOrders(res)
 
                     },
                     err => {
@@ -465,52 +467,6 @@ class CateringScreen extends BaseScreen {
     sortRecentMenuItemsOrders = (userCatherings) => {
 
         // recentMenuItemsOrder.push({
-        //     menuItem: currentMenuItem,
-        //     place: currentMenuItem.place,
-        //     quantityNumber: 1
-        // })
-        let { recentMenuItemsOrder } = this.state
-
-
-        recentMenuItemsOrder = []
-
-        userCatherings.map(item => {
-
-            if (item.orderedMenuItems.length > 0) {
-
-                let currentMenuItem = new MenuItem(item.orderedMenuItems[0].food)
-                let existMenuItem = false
-                for (let index = 0; index < recentMenuItemsOrder.length; index++) {
-
-                    if (currentMenuItem._id === recentMenuItemsOrder[index].menuItem._id) {
-
-                        recentMenuItemsOrder[index].quantityNumber = recentMenuItemsOrder[index].quantityNumber + 1
-                        existMenuItem = true
-                        index = recentMenuItemsOrder.length
-                    }
-                }
-                if (existMenuItem == false) {
-                    recentMenuItemsOrder.push({
-                        menuItem: currentMenuItem,
-                        place: currentMenuItem.place,
-                        quantityNumber: 1
-                    })
-                }
-
-            }
-
-
-
-        })
-        this.setNewStateHandler({
-            recentMenuItemsOrder
-        })
-        // recentMenuItemsOrder for catheringOrder Home Screen
-        console.log("TEST - Array", recentMenuItemsOrder)
-    }
-    sortRecentMenuItemsOrders2 = (userCatherings) => {
-
-        // recentMenuItemsOrder.push({
         //     menuItemArray: [{
         //             menuItem: currentMenuItem,
         //             quantityNumber: 1
@@ -518,7 +474,6 @@ class CateringScreen extends BaseScreen {
         //     place: currentMenuItem.place,
 
         // })
-
 
         let { recentMenuItemsOrder } = this.state
 
@@ -531,23 +486,22 @@ class CateringScreen extends BaseScreen {
                 let currentMenuItem = new MenuItem(item.orderedMenuItems[0].food)
                 let existMenuItem = false
                 let existPlace = null
-                for (let position = 0; position < recentMenuItemsOrder.length; position++) {
 
+                recentMenuItemsOrder.map((item, position) => {
                     if (currentMenuItem.place._id === recentMenuItemsOrder[position].place._id) {
                         existPlace = position
 
-                        for (let index = 0; index < recentMenuItemsOrder[position].menuItemArray.length; index++) {
-
+                        recentMenuItemsOrder[position].menuItemArray.map((i, index) => {
                             if (currentMenuItem._id === recentMenuItemsOrder[position].menuItemArray[index].menuItem._id) {
 
                                 recentMenuItemsOrder[position].menuItemArray[index].quantityNumber = recentMenuItemsOrder[position].menuItemArray[index].quantityNumber + 1
                                 existMenuItem = true
                                 index = recentMenuItemsOrder.length
                             }
-                        }
+                        })
                         position = recentMenuItemsOrder.length
                     }
-                }
+                })
 
 
                 if (existPlace !== null) {
@@ -574,8 +528,6 @@ class CateringScreen extends BaseScreen {
         this.setNewStateHandler({
             recentMenuItemsOrder
         })
-        // recentMenuItemsOrder for catheringOrder Home Screen
-        console.log("TEST", recentMenuItemsOrder)
     }
 
     onPressSectionListHeader = (sectionIndex) => {
@@ -597,7 +549,7 @@ class CateringScreen extends BaseScreen {
     }
 
     render() {
-        const { loading, isCatheringAvailable } = this.state
+        const { loading, isCatheringAvailable, refreshing } = this.state
         const { isLogin } = this.props
         const mainDisplay = loading ? this.activityIndicatorContent(BASE_COLOR.blue) : this.renderList()
         return (
@@ -606,7 +558,16 @@ class CateringScreen extends BaseScreen {
                     {isLogin ? isCatheringAvailable != false ?
                         <>
                             {this.cateringCalendarStrip()}
-                            {mainDisplay}
+                            <ScrollView style={{ flexGrow: 1 }}
+                                refreshControl={<RefreshControl
+                                    refreshing={refreshing}
+                                    onRefresh={this._onRefresh}
+                                    tintColor={BASE_COLOR.blue}
+                                    colors={[BASE_COLOR.blue]}
+                                />}
+                            >
+                                {mainDisplay}
+                            </ScrollView>
                         </>
                         : this.signUpToCatheringMesage()
                         : this.loginToCatheringMesage()
@@ -616,6 +577,12 @@ class CateringScreen extends BaseScreen {
 
 
         )
+    }
+    _onRefresh = () => {
+        this.setNewStateHandler({ refreshing: true })
+        setTimeout(() => {
+            this.setNewStateHandler({ refreshing: false })
+        }, 1000);
     }
 }
 
