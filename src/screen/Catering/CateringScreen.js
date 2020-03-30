@@ -23,6 +23,7 @@ import { BASE_COLOR, NAV_COLOR } from '../../styles';
 import { ImageAssets } from '../../model/image';
 import { MenuItem, Place } from '../../model';
 import RecentOrders from '../../components/Catering//RecentOrders'
+import UrlOpen from '../../components/common/UrlOpen';
 
 class CateringScreen extends BaseScreen {
 
@@ -358,7 +359,7 @@ class CateringScreen extends BaseScreen {
         this.pushNewScreen({ routeName: ScreenName.PlaceDetailScreen(), key: `${Math.random() * 10000}`, params: { _id: placeId, cathering: cathering } })
     }
     onPressContactUs = () => {
-
+        UrlOpen.sendEmailViaEmailApp("test@test.com", "KETERING APP", "SPORTSKI POZDRAV.")
     }
     signUpToCatheringMesage() {
         return (
