@@ -340,19 +340,21 @@ class HomeScreen extends BaseScreen {
         const { categories } = this.state
         const title = String(this.props.strings.categories).toUpperCase()
         const seeMore = String(this.props.strings.seeMore).toLowerCase()
-        return (
-            <CategorySectionList
-                titleSection={title}
-                titleSeeMore={seeMore}
-                arrayObject={categories}
-                onPressItem={(item) => this.pushNewScreen({
-                    routeName: ScreenName.PlaceListScreen(),
-                    key: `${Math.random() * 10000}`,
-                    params: { title: item.name.toUpperCase(), apiParams: ParamsUrl.category(item._id) }
-                })}
-                onPressSeeMore={() => this.pushNewScreen(ScreenName.CategoryScreen())}
-            />
-        )
+        if (categories.length > 0) {
+            return (
+                <CategorySectionList
+                    titleSection={title}
+                    titleSeeMore={seeMore}
+                    arrayObject={categories}
+                    onPressItem={(item) => this.pushNewScreen({
+                        routeName: ScreenName.PlaceListScreen(),
+                        key: `${Math.random() * 10000}`,
+                        params: { title: item.name.toUpperCase(), apiParams: ParamsUrl.category(item._id) }
+                    })}
+                    onPressSeeMore={() => this.pushNewScreen(ScreenName.CategoryScreen())}
+                />
+            )
+        }
     }
 
     caroselContent = () => {
