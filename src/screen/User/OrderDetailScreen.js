@@ -40,51 +40,54 @@ class OrderDetailScreen extends BaseScreen {
 
         const order = this.props.navigation.getParam('order', null)
         if (order !== null) {
-            const { orderedMenuItems } = order
-            let orderAgainMenuItems = []
-
-            orderedMenuItems.map(item => {
-                let menuItem = new MenuItem(item.food)
-
-                var found = -1;
-                for (var i = 0; i < orderAgainMenuItems.length; i++) {
-                    if (orderAgainMenuItems[i]._id == menuItem._id) {
-                        found = i;
-                        break;
-                    }
-                }
-                if (found > -1) {
-                    orderAgainMenuItems[found].quantity += 1
-                    orderAgainMenuItems[found].menuItemTotalPrice = subTotalPrice(menuItem, orderAgainMenuItems[found].selectedOptions, orderAgainMenuItems[found].quantity)
-                } else {
-                    const selectedOptions = [{
-                        groupId: "undefined",
-                        text: this.props.strings.supplements,
-                        type: "undefined",
-                        options: item.options
-                    }]
-                    const quantity = 1
-                    const orderdMenuItem = {
-                        _id: menuItem._id,
-                        quantity,
-                        menuItem,
-                        menuItemTotalPrice: subTotalPrice(menuItem, selectedOptions, quantity),
-                        selectedOptions: selectedOptions,
-                    }
-                    orderAgainMenuItems.push(orderdMenuItem)
-                }
-
-            })
-
-            this.setNewStateHandler({
-                order,
-                menuItems: orderAgainMenuItems,
-            })
+            this.generateData(order)
         }
 
     }
     componentWillUnmount() {
         super.componentWillUnmount()
+    }
+    generateData = (order) => {
+        const { orderedMenuItems } = order
+        let orderAgainMenuItems = []
+
+        orderedMenuItems.map(item => {
+            let menuItem = new MenuItem(item.food)
+
+            var found = -1;
+            for (var i = 0; i < orderAgainMenuItems.length; i++) {
+                if (orderAgainMenuItems[i]._id == menuItem._id) {
+                    found = i;
+                    break;
+                }
+            }
+            if (found > -1) {
+                orderAgainMenuItems[found].quantity += 1
+                orderAgainMenuItems[found].menuItemTotalPrice = subTotalPrice(menuItem, orderAgainMenuItems[found].selectedOptions, orderAgainMenuItems[found].quantity)
+            } else {
+                const selectedOptions = [{
+                    groupId: "undefined",
+                    text: this.props.strings.supplements,
+                    type: "undefined",
+                    options: item.options
+                }]
+                const quantity = 1
+                const orderdMenuItem = {
+                    _id: menuItem._id,
+                    quantity,
+                    menuItem,
+                    menuItemTotalPrice: subTotalPrice(menuItem, selectedOptions, quantity),
+                    selectedOptions: selectedOptions,
+                }
+                orderAgainMenuItems.push(orderdMenuItem)
+            }
+
+        })
+
+        this.setNewStateHandler({
+            order,
+            menuItems: orderAgainMenuItems,
+        })
     }
     infoOrderContent = (order) => {
         const { strings } = this.props
@@ -180,14 +183,14 @@ class OrderDetailScreen extends BaseScreen {
                         </View>
                     </View>
                 </View>
-                 <View style={{ flex: 1, justifyContent: 'flex-start', margin: 12, marginBottom: 0, }}>
+                <View style={{ flex: 1, justifyContent: 'flex-start', margin: 12, marginBottom: 0, }}>
                     <Text
                         numberOfLines={6}
                         ellipsizeMode={'tail'}>
                         {this.renderMenuItemsOptions(selectedOptions)}
                     </Text>
 
-                </View> 
+                </View>
             </View>
 
         )
