@@ -47,10 +47,13 @@ class RecentOrders extends Component {
                     keyExtractor={(item, index) => index.toString()}
                     renderItem={({ item }) => {
                         return (
-                            <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginHorizontal: 20, marginVertical: 10 }}>
-                                <Text numberOfLines={1} ellipsizeMode='tail' style={{ justifyContent: 'flex-start' }}>{item.menuItem.name}</Text>
-                                <Text style={{ justifyContent: 'flex-end', fontWeight: 'bold' }}>  x{item.quantityNumber}</Text>
-                            </View>
+                            <>
+                                <TouchableOpacity onPress={() => this.props.onPressItem(item)}
+                                    style={{ flexDirection: 'row', justifyContent: 'space-between', marginHorizontal: 20, marginVertical: 10 }}>
+                                    <Text numberOfLines={1} ellipsizeMode='tail' style={{ justifyContent: 'flex-start' }}>{item.menuItem.name}</Text>
+                                    <Text style={{ justifyContent: 'flex-end', fontWeight: 'bold' }}>  x{item.quantityNumber}</Text>
+                                </TouchableOpacity>
+                            </>
                         )
                     }}
                 />

@@ -116,17 +116,24 @@ class CateringScreen extends BaseScreen {
                 })
             }
         )
-        if (isDay) {
-            CatheringNetwork.fetchCatheringOrderFromDateToDateByCompany(fromDate, toDate, this.props.userInfo.company._id)
-                .then(
-                    res => {
-                        this.sortRecentMenuItemsOrders(res)
 
-                    },
-                    err => {
-                        alert(err)
-                    }
-                )
+        if (isDay) {
+            if (Moment(fromDate).isAfter(Moment().subtract(1, 'day')) &&
+                Moment(toDate).isAfter(Moment().subtract(1, 'day'))) {
+
+                CatheringNetwork.fetchCatheringOrderFromDateToDateByCompany(fromDate, toDate, this.props.userInfo.company._id)
+                    .then(
+                        res => {
+                            this.sortRecentMenuItemsOrders(res)
+
+                        },
+                        err => {
+                            alert(err)
+                        }
+                    )
+            } else {
+                this.sortRecentMenuItemsOrders([])
+            }
         }
     }
 
@@ -213,13 +220,6 @@ class CateringScreen extends BaseScreen {
             var allMarkedDates = this.state.markedDates.concat(markedDate)
             this.setState({ markedDates: allMarkedDates })
         })
-    }
-    showContactFormHandler = () => {
-        const { isLogin, userInfo } = this.props
-        if (!isLogin) {
-            this.replaceScreenNavigationStack(ScreenName.ContactFormScreen())
-        }
-
     }
     onDateSelected(value) {
 
@@ -327,19 +327,18 @@ class CateringScreen extends BaseScreen {
 
         const { markedDates, recentMenuItemsOrder } = this.state
         if (markedDates.some(item => item.date === this.state.selectedDate)) {
-            console.log("DISH DATA")
-            console.log(DishData)
+
             return (
                 <>
-                    {recentMenuItemsOrder.length > 0 ? <RecentOrders recentOrders={recentMenuItemsOrder} onPressSection={(sectionIndex) => this.onPressSectionListHeader(sectionIndex)} /> : null}
+                    {recentMenuItemsOrder.length > 0 ? <RecentOrders recentOrders={recentMenuItemsOrder} onPressSection={(sectionIndex) => this.onPressSectionListHeader(sectionIndex)} onPressItem={(item) => this.onPressSectionListItem(item)} /> : null}
                     <DishList data={DishData} isCathering={true} recentOrders={recentMenuItemsOrder} selectedDate={this.state.selectedDate} selectPlace={(placeId) => this.placeSelectHandler(placeId)} />
                 </>
             )
         } else if (Moment(this.state.selectedDate).isAfter(Moment().subtract(1, 'day'))) {
-            console.log(placesCathering)
+
             return (
                 <>
-                    {recentMenuItemsOrder.length > 0 ? <RecentOrders recentOrders={recentMenuItemsOrder} onPressSection={(sectionIndex) => this.onPressSectionListHeader(sectionIndex)} /> : null}
+                    {recentMenuItemsOrder.length > 0 ? <RecentOrders recentOrders={recentMenuItemsOrder} onPressSection={(sectionIndex) => this.onPressSectionListHeader(sectionIndex)} onPressItem={(item) => this.onPressSectionListItem(item)} /> : null}
                     <PlaceList data={PlaceData} clickOnPlace={(placeId) => this.placeSelectHandler(placeId)} />
                 </>
 
@@ -548,27 +547,46 @@ class CateringScreen extends BaseScreen {
         // this.setState({ sectionItems })
         this.setNewStateHandler({ recentMenuItemsOrder })
     }
+    onPressSectionListItem = (item) => {
+        let cathering = {
+            isFromCathering: true,
+            selectedDate: this.state.selectedDate,
+        }
+        this.pushNewScreen({
+            routeName: ScreenName.MenuItemDetailsScreen(),
+            key: `${Math.random() * 10000}`,
+            params: {
+                _id: item.menuItem._id, cathering: cathering
+            }
+        })
+    }
+    mainContent = () => {
+        const { refreshing } = this.state
+        return (
+            <ScrollView style={{ flexGrow: 1 }}
+                refreshControl={<RefreshControl
+                    refreshing={refreshing}
+                    onRefresh={this._onRefresh}
+                    tintColor={BASE_COLOR.blue}
+                    colors={[BASE_COLOR.blue]}
+                />}
+            >
+                {this.renderList()}
+            </ScrollView>
+        )
+    }
 
     render() {
-        const { loading, isCatheringAvailable, refreshing } = this.state
+        const { loading, isCatheringAvailable, } = this.state
         const { isLogin } = this.props
-        const mainDisplay = loading ? this.activityIndicatorContent(BASE_COLOR.blue) : this.renderList()
+        const mainDisplay = loading ? this.activityIndicatorContent(BASE_COLOR.blue) : this.mainContent()
         return (
             <SafeAreaView style={styles.safeAreaHeader}>
                 <View style={styles.mainContainer}>
                     {isLogin ? isCatheringAvailable != false ?
                         <>
                             {this.cateringCalendarStrip()}
-                            <ScrollView style={{ flexGrow: 1 }}
-                                refreshControl={<RefreshControl
-                                    refreshing={refreshing}
-                                    onRefresh={this._onRefresh}
-                                    tintColor={BASE_COLOR.blue}
-                                    colors={[BASE_COLOR.blue]}
-                                />}
-                            >
-                                {mainDisplay}
-                            </ScrollView>
+                            {mainDisplay}
                         </>
                         : this.signUpToCatheringMesage()
                         : this.loginToCatheringMesage()
@@ -580,10 +598,7 @@ class CateringScreen extends BaseScreen {
         )
     }
     _onRefresh = () => {
-        this.setNewStateHandler({ refreshing: true })
-        setTimeout(() => {
-            this.setNewStateHandler({ refreshing: false })
-        }, 1000);
+        this.apiDidMountFunction()
     }
 }
 
