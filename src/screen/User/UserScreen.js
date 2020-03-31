@@ -10,7 +10,7 @@ import {
     TouchableOpacity,
     StyleSheet
 } from 'react-native';
-import { ScreenName, keyAdress } from '../../helpers'
+import { ScreenName, keyAdress, subTotalPrice } from '../../helpers'
 import Header from '../../components/common/UserHeader'
 import SegmentedControlTab from "react-native-segmented-control-tab";
 import BaseScreen from "../BaseScreen/BaseScreen"
@@ -33,6 +33,7 @@ import {
 } from '../../store/actions'
 import { UserNetwork, OrderNetwork } from '../../service/api'
 import { TestAssets, } from '../../assets'
+import { MenuItem } from '../../model';
 
 class UserScreen extends BaseScreen {
     static navigationOptions = {
@@ -126,21 +127,61 @@ class UserScreen extends BaseScreen {
     }
 
     pressOrderAgainHandler = (order) => {
-        console.log("ORDER", order)
-        // const selectedOptions = [{ groupId: "", text: "", type: "", options: [] }]
-        // const { orderForPlace } = this.props
-        // const { menuItem, selectedOptions, quantity, menuItemType } = this.state
-        // let item = menuItem.hasSubtypes ? menuItemType : menuItem
+        const { orderedMenuItems } = order
+        let orderAgainMenuItems = []
 
-        // const orderdMenuItem = {
-        //     _id: `${Math.random()}${Math.random()}${Math.random()}`,
-        //     quantity: quantity,
-        //     menuItem: item,
-        //     menuItemTotalPrice: this.subTotalPrice(item, selectedOptions, quantity),
-        //     selectedOptions: selectedOptions,
-        // }
+        orderedMenuItems.map(item => {
+            let menuItem = new MenuItem(item.food)
 
-        // this.props.addOrderMenuItemHandler([orderdMenuItem, ...this.props.order])
+            var found = -1;
+            for (var i = 0; i < orderAgainMenuItems.length; i++) {
+                if (orderAgainMenuItems[i]._id == menuItem._id) {
+                    found = i;
+                    break;
+                }
+            }
+            if (found > -1) {
+                orderAgainMenuItems[found].quantity += 1
+                orderAgainMenuItems[found].menuItemTotalPrice = subTotalPrice(menuItem, orderAgainMenuItems[found].selectedOptions, orderAgainMenuItems[found].quantity)
+            } else {
+                const selectedOptions = [{
+                    groupId: "undefined",
+                    text: this.props.strings.supplements,
+                    type: "undefined",
+                    options: item.options
+                }]
+                const quantity = 1
+                const orderdMenuItem = {
+                    _id: menuItem._id,
+                    quantity,
+                    menuItem,
+                    menuItemTotalPrice: subTotalPrice(menuItem, selectedOptions, quantity),
+                    selectedOptions: selectedOptions,
+                }
+                orderAgainMenuItems.push(orderdMenuItem)
+            }
+
+        })
+
+
+        if (orderAgainMenuItems.length > 0) {
+            const item = orderAgainMenuItems[0].menuItem
+            const { orderForPlace } = this.props
+            if (orderForPlace == null) {
+                this.props.addOrderMenuItemHandler([...orderAgainMenuItems, ...this.props.order])
+                this.pushNewScreen(ScreenName.ShopScreen())
+            } else if (orderForPlace._id === item.place._id) {
+                this.props.addOrderMenuItemHandler([...orderAgainMenuItems, ...this.props.order])
+                this.pushNewScreen(ScreenName.ShopScreen())
+            } else if (orderForPlace._id !== item.place._id) {
+                const okPress = () => {
+                    this.props.addOrderMenuItemHandler([...orderAgainMenuItems,])
+                    this.pushNewScreen(ScreenName.ShopScreen())
+                }
+                this.showDialogMessage(this.props.strings.youCurrentlyHaveDishesInYourCartFromAnotherRestaurant, okPress)
+            }
+        }
+
     }
 
     userImageContent = () => {
@@ -460,6 +501,7 @@ const mapStateToProps = state => {
         userFavoritePlaces: state.user.userFavoritePlaces,
         userFavoriteMenuItems: state.user.userFavoriteMenuItems,
         orderForPlace: state.order.orderForPlace,
+        order: state.order.order,
     };
 };
 

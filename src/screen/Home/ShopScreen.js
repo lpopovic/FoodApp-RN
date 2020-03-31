@@ -392,6 +392,7 @@ class ShoopScreen extends BaseScreen {
             case 60:
                 return 60
             default:
+                return 0
                 break;
         }
     }

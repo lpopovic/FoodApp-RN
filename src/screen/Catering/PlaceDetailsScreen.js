@@ -112,9 +112,14 @@ class PlaceDetailsScreen extends BaseScreen {
             return <Badge
                 // status="primary"
                 value={order.length}
-                textStyle={{ color: BASE_COLOR.white, fontSize: 12 }}
+                textStyle={{ color: BASE_COLOR.white, fontSize: 11 }}
                 badgeStyle={{ backgroundColor: BASE_COLOR.red, }}
-                containerStyle={{ position: 'absolute', bottom: 0, right: 0 }}
+                containerStyle={{
+                    position: 'absolute',
+                    bottom: 0,
+                    right: 0,
+                    width: order.length > 99 ? 30 : undefined
+                }}
             />
         } else {
             return <View />

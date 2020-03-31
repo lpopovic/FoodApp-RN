@@ -118,5 +118,7 @@
     "order": "Naruči",
     "review": "Komentar",
     "details": "Detalji",
-    "chooseLanguage": "Izaberite jezik"
+    "chooseLanguage": "Izaberite jezik",
+    "supplements": "Dodaci",
+    "status": "Status"
 }

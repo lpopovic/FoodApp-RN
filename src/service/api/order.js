@@ -14,8 +14,9 @@ class OrderNetwork {
             let orderedItems = []
 
             order.map(item => {
-                let options = []
+
                 for (let index = 0; index < item.quantity; index++) {
+                    let options = []
                     item.selectedOptions.map(group => {
                         group.options.map(option => {
                             options.push(option._id)
@@ -69,7 +70,7 @@ class OrderNetwork {
 
             selectedOptions.map(group => {
                 group.options.map(option => {
-                    
+
                     options.push(option._id)
                 })
             })

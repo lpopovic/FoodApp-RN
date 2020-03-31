@@ -7,7 +7,7 @@ import { IconAssets, TestAssets } from '../../assets';
 import { PlaceNetwork, OrderNetwork } from '../../service/api'
 import { MenuItem } from '../../model';
 import { connect } from 'react-redux';
-import { ScreenName } from '../../helpers'
+import { ScreenName, subTotalPrice } from '../../helpers'
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { BASE_COLOR, NAV_COLOR } from '../../styles';
 import { addOrderMenuItem, emptyOrder, userFavoriteMenuItems } from '../../store/actions'
@@ -466,22 +466,7 @@ class MenuItemDetailsScreen extends BaseScreen {
         )
     }
 
-    subTotalPrice = (menuItem, selectedOptions, quantity, menuItemType) => {
-        var totalPrice = 0
-        if (menuItem.hasSubtypes) {
-            totalPrice += menuItemType.nominalPrice
-        } else {
-            totalPrice += menuItem.nominalPrice //* quantity
-        }
 
-        selectedOptions.map(item => {
-            item.options.map(option => {
-                totalPrice += option.amount
-                return totalPrice
-            })
-        })
-        return totalPrice * quantity
-    }
 
     onPressAddToBag = () => {
         const { orderForPlace } = this.props
@@ -492,7 +477,7 @@ class MenuItemDetailsScreen extends BaseScreen {
         const catheringOptions = this.props.userInfo.catheringOptions
 
         if (cathering != null && cathering.isFromCathering) {
-            if (catheringOptions.package == 'unlimited' || catheringOptions.balance + Math.abs(catheringOptions.reserved) >= this.subTotalPrice(item, selectedOptions, 1)) {
+            if (catheringOptions.package == 'unlimited' || catheringOptions.balance + Math.abs(catheringOptions.reserved) >= subTotalPrice(item, selectedOptions, 1)) {
                 OrderNetwork.fetchCatheringOrder(menuItem, selectedOptions, "delivery", "cash", '', cathering.selectedDate)
                     .then(
                         res => {
@@ -531,7 +516,7 @@ class MenuItemDetailsScreen extends BaseScreen {
             _id: `${Math.random()}${Math.random()}${Math.random()}`,
             quantity: quantity,
             menuItem: item,
-            menuItemTotalPrice: this.subTotalPrice(item, selectedOptions, quantity),
+            menuItemTotalPrice: subTotalPrice(item, selectedOptions, quantity),
             selectedOptions: selectedOptions,
         }
         this.props.addOrderMenuItemHandler([orderdMenuItem])
@@ -545,7 +530,7 @@ class MenuItemDetailsScreen extends BaseScreen {
             _id: `${Math.random()}${Math.random()}${Math.random()}`,
             quantity: quantity,
             menuItem: item,
-            menuItemTotalPrice: this.subTotalPrice(item, selectedOptions, quantity),
+            menuItemTotalPrice: subTotalPrice(item, selectedOptions, quantity),
             selectedOptions: selectedOptions,
         }
 

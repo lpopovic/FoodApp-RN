@@ -118,5 +118,7 @@
    "order": "Order",
    "review": "Review",
    "details": "Details",
-   "chooseLanguage": "Choose language"
+   "chooseLanguage": "Choose language",
+   "supplements": "Supplements",
+   "status": "Status"
 }
