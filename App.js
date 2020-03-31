@@ -8,11 +8,11 @@
 import 'react-native-gesture-handler'
 import React, { Component } from 'react';
 import {
-Text,
-TextInput,
-ScrollView,
+  Text,
+  TextInput,
+  ScrollView,
 } from 'react-native'
-import Navigator  from './src/components/TabNavigation/Navigator'
+import Navigator from './src/components/TabNavigation/Navigator'
 
 import { Provider } from 'react-redux'
 import configurateStore from './src/store/configureStore'

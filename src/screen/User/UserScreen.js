@@ -23,11 +23,17 @@ import {
     segmentedControlStyles
 } from '../../styles';
 import { connect } from 'react-redux';
-import { updateUserProfile, fetchUserListOrders, fetchUserProfile, userLogOut } from '../../store/actions'
+import {
+    updateUserProfile,
+    fetchUserListOrders,
+    fetchUserProfile,
+    userLogOut,
+    addOrderMenuItem,
+    emptyOrder
+} from '../../store/actions'
 import { UserNetwork, OrderNetwork } from '../../service/api'
 import { TestAssets, } from '../../assets'
-import { Place, MenuItem } from '../../model';
-import testMenuItems from '../../static/menuItems.json'
+
 class UserScreen extends BaseScreen {
     static navigationOptions = {
         header: null,
@@ -117,6 +123,24 @@ class UserScreen extends BaseScreen {
     pressOrderDetailHandler = (order) => {
 
         this.pushNewScreen({ routeName: ScreenName.OrderDetailScreen(), key: `${Math.random() * 10000}`, params: { order } })
+    }
+
+    pressOrderAgainHandler = (order) => {
+        console.log("ORDER", order)
+        // const selectedOptions = [{ groupId: "", text: "", type: "", options: [] }]
+        // const { orderForPlace } = this.props
+        // const { menuItem, selectedOptions, quantity, menuItemType } = this.state
+        // let item = menuItem.hasSubtypes ? menuItemType : menuItem
+
+        // const orderdMenuItem = {
+        //     _id: `${Math.random()}${Math.random()}${Math.random()}`,
+        //     quantity: quantity,
+        //     menuItem: item,
+        //     menuItemTotalPrice: this.subTotalPrice(item, selectedOptions, quantity),
+        //     selectedOptions: selectedOptions,
+        // }
+
+        // this.props.addOrderMenuItemHandler([orderdMenuItem, ...this.props.order])
     }
 
     userImageContent = () => {
@@ -221,7 +245,7 @@ class UserScreen extends BaseScreen {
                         arrayObject={selectedIndex == 0 ? userOrders : userCatherings}
                         isCatheringOrder={selectedIndex == 0 ? false : true}
                         PressDetailOrder={(order) => this.pressOrderDetailHandler(order)}
-                        PressOrderAgain={(order) => alert(order)}
+                        PressOrderAgain={(order) => this.pressOrderAgainHandler(order)}
                         PressReview={(order) => this.pressReviewOrderHandler(order)}
                     />
                 </View>
@@ -434,7 +458,8 @@ const mapStateToProps = state => {
         city: state.location.city,
         strings: state.location.language.strings,
         userFavoritePlaces: state.user.userFavoritePlaces,
-        userFavoriteMenuItems: state.user.userFavoriteMenuItems
+        userFavoriteMenuItems: state.user.userFavoriteMenuItems,
+        orderForPlace: state.order.orderForPlace,
     };
 };
 
@@ -443,7 +468,9 @@ const mapDispatchToProps = dispatch => {
         fetchUserListOrdersHandler: () => dispatch(fetchUserListOrders()),
         updateUserProfileHandler: (user) => dispatch(updateUserProfile(user)),
         fetchUserProfileHandler: () => dispatch(fetchUserProfile()),
-        userLogOutHandler: () => dispatch(userLogOut())
+        userLogOutHandler: () => dispatch(userLogOut()),
+        addOrderMenuItemHandler: (orderdMenuItem) => dispatch(addOrderMenuItem(orderdMenuItem)),
+        emptyCurentOrderHandler: () => dispatch(emptyOrder()),
     };
 };
 
