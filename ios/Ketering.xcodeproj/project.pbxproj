@@ -689,7 +689,7 @@
 			baseConfigurationReference = C33CB300FC17EF207724746E /* Pods-Ketering.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = XQALFL32WM;
 				INFOPLIST_FILE = Ketering/Info.plist;
@@ -711,7 +711,7 @@
 			baseConfigurationReference = 938D50DABF4D39EE8AE6A9CB /* Pods-Ketering.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = XQALFL32WM;
 				INFOPLIST_FILE = Ketering/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
