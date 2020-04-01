@@ -659,7 +659,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Ketering.app/Ketering";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/KLOPAJ.app/KLOPAJ";
 			};
 			name = Debug;
 		};
@@ -680,7 +680,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Ketering.app/Ketering";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/KLOPAJ.app/KLOPAJ";
 			};
 			name = Release;
 		};
