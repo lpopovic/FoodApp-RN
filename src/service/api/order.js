@@ -120,6 +120,24 @@ class OrderNetwork {
                 }
             }
         });
+    static fetchGetOrder = (id) =>
+        new Promise(async (resolve, reject) => {
+            const url = `${RestUrl.order}/${id}`
+            try {
+                const { data } = await axios.get(url)
+                const order = new Order(data)
+                resolve(order)
+
+            } catch (error) {
+                try {
+                    const { message } = error.response.data.error
+                    reject(message)
+                } catch  {
+                    reject(error.message)
+
+                }
+            }
+        });
 
     static fetchGetAllCatheringOrders = () =>
         new Promise(async (resolve, reject) => {

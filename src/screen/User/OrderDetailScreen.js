@@ -5,7 +5,8 @@ import {
     FlatList,
     Text,
     Image,
-    StyleSheet
+    StyleSheet,
+    RefreshControl,
 } from 'react-native';
 import { connect } from 'react-redux';
 import BaseScreen from '../BaseScreen/BaseScreen';
@@ -18,6 +19,7 @@ import {
 } from '../../styles'
 import { subTotalPrice } from '../../helpers'
 import { Order, MenuItem } from '../../model';
+import { OrderNetwork } from '../../service/api/order';
 
 class OrderDetailScreen extends BaseScreen {
     static navigationOptions = {
@@ -29,6 +31,7 @@ class OrderDetailScreen extends BaseScreen {
 
         this.state = {
             loading: false,
+            refreshing: false,
             order: null,
             menuItems: [],
         }
@@ -46,6 +49,20 @@ class OrderDetailScreen extends BaseScreen {
     }
     componentWillUnmount() {
         super.componentWillUnmount()
+    }
+    apiCallHandler = (orderId) => {
+        OrderNetwork.fetchGetOrder(orderId).then(
+            res => {
+                this.generateData(res)
+                this.setNewStateHandler({
+                    refreshing: false
+                })
+            }, err => {
+                this.showAlertMessage(err)
+                this.setNewStateHandler({
+                    refreshing: false
+                })
+            })
     }
     generateData = (order) => {
         const { orderedMenuItems } = order
@@ -196,11 +213,17 @@ class OrderDetailScreen extends BaseScreen {
         )
     }
     mainContent = () => {
-        const { order, menuItems } = this.state
+        const { order, menuItems, refreshing } = this.state
         return (
-            <View style={[styles.mainContainer, { margin: 16 }]}>
+            <View style={[styles.mainContainer, { marginHorizontal: 16 }]}>
                 <FlatList
                     data={menuItems}
+                    refreshControl={<RefreshControl
+                        refreshing={refreshing}
+                        onRefresh={this._onRefresh}
+                        tintColor={BASE_COLOR.blue}
+                        colors={[BASE_COLOR.blue]}
+                    />}
                     keyExtractor={(item, index) => `${index.toString()}`}
                     renderItem={(info) => (
                         <>
@@ -227,6 +250,14 @@ class OrderDetailScreen extends BaseScreen {
                 </View>
             </SafeAreaView>
         )
+    }
+    _onRefresh = () => {
+        const { order } = this.state
+        if (order !== null) {
+            this.setNewStateHandler({ refreshing: true })
+            this.apiCallHandler(order._id)
+        }
+
     }
 }
 
