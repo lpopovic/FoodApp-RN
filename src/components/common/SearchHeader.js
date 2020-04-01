@@ -20,7 +20,6 @@ class SearchHeader extends Component {
 
     constructor(props) {
         super(props)
-        this.searchPlaceholder = 'Explore food...'
         this.state = {
             searchText: ''
         }
@@ -92,7 +91,7 @@ class SearchHeader extends Component {
                             resizeMode='contain' />
                     </View>
                     <DefaultInput
-                        placeholder={this.searchPlaceholder}
+                        placeholder={this.props.strings.exploreFood}
                         placeholderTextColor={BASE_COLOR.gray}
                         value={this.state.searchText}
                         style={[styles.searchInput, { color: tintColor }]}
@@ -167,7 +166,8 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = state => {
     return {
-        order: state.order.order
+        order: state.order.order,
+        strings: state.location.language.strings,
     };
 };
 
