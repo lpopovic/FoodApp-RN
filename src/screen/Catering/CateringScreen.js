@@ -5,8 +5,10 @@ import {
     TouchableOpacity,
     StyleSheet,
     SafeAreaView,
+    ScrollView,
+    RefreshControl,
 } from 'react-native';
-import { ScreenName, STORAGE_KEY, getStorageData } from '../../helpers'
+import { ScreenName, LANGUAGE_KEY } from '../../helpers'
 import BaseScreen from "../BaseScreen/BaseScreen"
 import PlaceCard from '../../components/Catering/PlaceCard';
 import PlaceList from '../../components/Catering/PlaceList';
@@ -21,6 +23,7 @@ import { BASE_COLOR, NAV_COLOR } from '../../styles';
 import { ImageAssets } from '../../model/image';
 import { MenuItem, Place } from '../../model';
 import RecentOrders from '../../components/Catering//RecentOrders'
+import UrlOpen from '../../components/common/UrlOpen';
 
 class CateringScreen extends BaseScreen {
 
@@ -31,6 +34,7 @@ class CateringScreen extends BaseScreen {
     constructor(props) {
         super(props)
         this.state = {
+            refreshing: false,
             loading: true,
             isCatheringAvailable: null,
             selectedDate: Moment().format('YYYY-MM-DD'),
@@ -42,14 +46,19 @@ class CateringScreen extends BaseScreen {
             balance: null,
             recentMenuItemsOrder: []
         }
-        Moment.locale('Latinica', {
-            months: 'Januar_Februar_Mart_April_Maj_Jun_Jul_Avgust_Septembar_Oktobar_Novembar_Decembar'.split('_'),
-            monthsShort: 'Jan_Feb_Mar_Apr_Maj_Jun_Jul_Avg_Sep_Okt_Nov_Dec'.split('_'),
-            weekdays: 'Ponedeljak_Utorak_Sreda_Četvrtak_Petak_Subota_Nedelja'.split('_'),
-            weekdaysShort: 'NED_PON_UTO_SRE_ČET_PET_SUB'.split('_'),
-            weekdaysMin: 'PO_UT_SR_ČE_PE_SU_NE'.split('_'),
-            weekdaysParseExact: true,
-        });
+        if (props.language == LANGUAGE_KEY.EN) {
+            Moment.locale('en')
+        } else if (props.language == LANGUAGE_KEY.SRB) {
+            Moment.locale('Latinica', {
+                months: 'Januar_Februar_Mart_April_Maj_Jun_Jul_Avgust_Septembar_Oktobar_Novembar_Decembar'.split('_'),
+                monthsShort: 'Jan_Feb_Mar_Apr_Maj_Jun_Jul_Avg_Sep_Okt_Nov_Dec'.split('_'),
+                weekdays: 'Ponedeljak_Utorak_Sreda_Četvrtak_Petak_Subota_Nedelja'.split('_'),
+                weekdaysShort: 'NED_PON_UTO_SRE_ČET_PET_SUB'.split('_'),
+                weekdaysMin: 'PO_UT_SR_ČE_PE_SU_NE'.split('_'),
+                weekdaysParseExact: true,
+            });
+        }
+
 
 
     }
@@ -107,18 +116,24 @@ class CateringScreen extends BaseScreen {
                 })
             }
         )
-        if (isDay) {
-            CatheringNetwork.fetchCatheringOrderFromDateToDateByCompany(fromDate, toDate, this.props.userInfo.company._id)
-                .then(
-                    res => {
-                        console.log("RES", res)
-                        this.sortRecentMenuItemsOrders2(res)
 
-                    },
-                    err => {
-                        alert(err)
-                    }
-                )
+        if (isDay) {
+            if (Moment(fromDate).isAfter(Moment().subtract(1, 'day')) &&
+                Moment(toDate).isAfter(Moment().subtract(1, 'day'))) {
+
+                CatheringNetwork.fetchCatheringOrderFromDateToDateByCompany(fromDate, toDate, this.props.userInfo.company._id)
+                    .then(
+                        res => {
+                            this.sortRecentMenuItemsOrders(res)
+
+                        },
+                        err => {
+                            alert(err)
+                        }
+                    )
+            } else {
+                this.sortRecentMenuItemsOrders([])
+            }
         }
     }
 
@@ -205,13 +220,6 @@ class CateringScreen extends BaseScreen {
             var allMarkedDates = this.state.markedDates.concat(markedDate)
             this.setState({ markedDates: allMarkedDates })
         })
-    }
-    showContactFormHandler = () => {
-        const { isLogin, userInfo } = this.props
-        if (!isLogin) {
-            this.replaceScreenNavigationStack(ScreenName.ContactFormScreen())
-        }
-
     }
     onDateSelected(value) {
 
@@ -319,19 +327,18 @@ class CateringScreen extends BaseScreen {
 
         const { markedDates, recentMenuItemsOrder } = this.state
         if (markedDates.some(item => item.date === this.state.selectedDate)) {
-            console.log("DISH DATA")
-            console.log(DishData)
+
             return (
                 <>
-                    {recentMenuItemsOrder.length > 0 ? <RecentOrders recentOrders={recentMenuItemsOrder} onPressSection={(sectionIndex) => this.onPressSectionListHeader(sectionIndex)} /> : null}
+                    {recentMenuItemsOrder.length > 0 ? <RecentOrders recentOrders={recentMenuItemsOrder} onPressSection={(sectionIndex) => this.onPressSectionListHeader(sectionIndex)} onPressItem={(item) => this.onPressSectionListItem(item)} /> : null}
                     <DishList data={DishData} isCathering={true} recentOrders={recentMenuItemsOrder} selectedDate={this.state.selectedDate} selectPlace={(placeId) => this.placeSelectHandler(placeId)} />
                 </>
             )
         } else if (Moment(this.state.selectedDate).isAfter(Moment().subtract(1, 'day'))) {
-            console.log(placesCathering)
+
             return (
                 <>
-                    {recentMenuItemsOrder.length > 0 ? <RecentOrders recentOrders={recentMenuItemsOrder} onPressSection={(sectionIndex) => this.onPressSectionListHeader(sectionIndex)} /> : null}
+                    {recentMenuItemsOrder.length > 0 ? <RecentOrders recentOrders={recentMenuItemsOrder} onPressSection={(sectionIndex) => this.onPressSectionListHeader(sectionIndex)} onPressItem={(item) => this.onPressSectionListItem(item)} /> : null}
                     <PlaceList data={PlaceData} clickOnPlace={(placeId) => this.placeSelectHandler(placeId)} />
                 </>
 
@@ -351,7 +358,7 @@ class CateringScreen extends BaseScreen {
         this.pushNewScreen({ routeName: ScreenName.PlaceDetailScreen(), key: `${Math.random() * 10000}`, params: { _id: placeId, cathering: cathering } })
     }
     onPressContactUs = () => {
-
+        UrlOpen.sendEmailViaEmailApp("test@test.com", "KETERING APP", "SPORTSKI POZDRAV.")
     }
     signUpToCatheringMesage() {
         return (
@@ -460,52 +467,6 @@ class CateringScreen extends BaseScreen {
     sortRecentMenuItemsOrders = (userCatherings) => {
 
         // recentMenuItemsOrder.push({
-        //     menuItem: currentMenuItem,
-        //     place: currentMenuItem.place,
-        //     quantityNumber: 1
-        // })
-        let { recentMenuItemsOrder } = this.state
-
-
-        recentMenuItemsOrder = []
-
-        userCatherings.map(item => {
-
-            if (item.orderedMenuItems.length > 0) {
-
-                let currentMenuItem = new MenuItem(item.orderedMenuItems[0].food)
-                let existMenuItem = false
-                for (let index = 0; index < recentMenuItemsOrder.length; index++) {
-
-                    if (currentMenuItem._id === recentMenuItemsOrder[index].menuItem._id) {
-
-                        recentMenuItemsOrder[index].quantityNumber = recentMenuItemsOrder[index].quantityNumber + 1
-                        existMenuItem = true
-                        index = recentMenuItemsOrder.length
-                    }
-                }
-                if (existMenuItem == false) {
-                    recentMenuItemsOrder.push({
-                        menuItem: currentMenuItem,
-                        place: currentMenuItem.place,
-                        quantityNumber: 1
-                    })
-                }
-
-            }
-
-
-
-        })
-        this.setNewStateHandler({
-            recentMenuItemsOrder
-        })
-        // recentMenuItemsOrder for catheringOrder Home Screen
-        console.log("TEST - Array", recentMenuItemsOrder)
-    }
-    sortRecentMenuItemsOrders2 = (userCatherings) => {
-
-        // recentMenuItemsOrder.push({
         //     menuItemArray: [{
         //             menuItem: currentMenuItem,
         //             quantityNumber: 1
@@ -513,7 +474,6 @@ class CateringScreen extends BaseScreen {
         //     place: currentMenuItem.place,
 
         // })
-
 
         let { recentMenuItemsOrder } = this.state
 
@@ -526,23 +486,22 @@ class CateringScreen extends BaseScreen {
                 let currentMenuItem = new MenuItem(item.orderedMenuItems[0].food)
                 let existMenuItem = false
                 let existPlace = null
-                for (let position = 0; position < recentMenuItemsOrder.length; position++) {
 
+                recentMenuItemsOrder.map((item, position) => {
                     if (currentMenuItem.place._id === recentMenuItemsOrder[position].place._id) {
                         existPlace = position
 
-                        for (let index = 0; index < recentMenuItemsOrder[position].menuItemArray.length; index++) {
-
+                        recentMenuItemsOrder[position].menuItemArray.map((i, index) => {
                             if (currentMenuItem._id === recentMenuItemsOrder[position].menuItemArray[index].menuItem._id) {
 
                                 recentMenuItemsOrder[position].menuItemArray[index].quantityNumber = recentMenuItemsOrder[position].menuItemArray[index].quantityNumber + 1
                                 existMenuItem = true
                                 index = recentMenuItemsOrder.length
                             }
-                        }
+                        })
                         position = recentMenuItemsOrder.length
                     }
-                }
+                })
 
 
                 if (existPlace !== null) {
@@ -569,8 +528,6 @@ class CateringScreen extends BaseScreen {
         this.setNewStateHandler({
             recentMenuItemsOrder
         })
-        // recentMenuItemsOrder for catheringOrder Home Screen
-        console.log("TEST", recentMenuItemsOrder)
     }
 
     onPressSectionListHeader = (sectionIndex) => {
@@ -590,11 +547,39 @@ class CateringScreen extends BaseScreen {
         // this.setState({ sectionItems })
         this.setNewStateHandler({ recentMenuItemsOrder })
     }
+    onPressSectionListItem = (item) => {
+        let cathering = {
+            isFromCathering: true,
+            selectedDate: this.state.selectedDate,
+        }
+        this.pushNewScreen({
+            routeName: ScreenName.MenuItemDetailsScreen(),
+            key: `${Math.random() * 10000}`,
+            params: {
+                _id: item.menuItem._id, cathering: cathering
+            }
+        })
+    }
+    mainContent = () => {
+        const { refreshing } = this.state
+        return (
+            <ScrollView style={{ flexGrow: 1 }}
+                refreshControl={<RefreshControl
+                    refreshing={refreshing}
+                    onRefresh={this._onRefresh}
+                    tintColor={BASE_COLOR.blue}
+                    colors={[BASE_COLOR.blue]}
+                />}
+            >
+                {this.renderList()}
+            </ScrollView>
+        )
+    }
 
     render() {
-        const { loading, isCatheringAvailable } = this.state
+        const { loading, isCatheringAvailable, } = this.state
         const { isLogin } = this.props
-        const mainDisplay = loading ? this.activityIndicatorContent(BASE_COLOR.blue) : this.renderList()
+        const mainDisplay = loading ? this.activityIndicatorContent(BASE_COLOR.blue) : this.mainContent()
         return (
             <SafeAreaView style={styles.safeAreaHeader}>
                 <View style={styles.mainContainer}>
@@ -611,6 +596,9 @@ class CateringScreen extends BaseScreen {
 
 
         )
+    }
+    _onRefresh = () => {
+        this.apiDidMountFunction()
     }
 }
 
@@ -630,6 +618,7 @@ const mapStateToProps = state => {
         isLogin: state.user.isLogin,
         userCatherings: state.user.userCatherings,
         strings: state.location.language.strings,
+        language: state.location.language.name,
     };
 };
 const mapDispatchToProps = dispatch => {

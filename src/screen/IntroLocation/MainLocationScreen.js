@@ -186,7 +186,7 @@ class MainLocationScreen extends BaseScreen {
         const mainDisplay = loading ? this.activityIndicatorContent(BASE_COLOR.backgroundBlue) : this.mainContent()
         return (
             <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-                < ImageBackground
+                <ImageBackground
                     style={styles.imageBackgroundContainer}
                     resizeMode='cover'
                     source={TestAssets.backgroudImage} >

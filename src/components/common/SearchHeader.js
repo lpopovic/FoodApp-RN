@@ -61,7 +61,7 @@ class SearchHeader extends Component {
     }
     badgeContent = () => {
         const { order } = this.props
-         if (order.length > 0) {
+        if (order.length > 0) {
             return <Badge
                 // status="primary"
                 value={order.length}
@@ -70,11 +70,11 @@ class SearchHeader extends Component {
                 containerStyle={{ position: 'absolute', bottom: 0, right: 0 }}
             />
         } else {
-            return <View/>
+            return <View />
         }
     }
     render() {
-        const tintColor = this.props.tintColor ? this.props.tintColor : NAV_COLOR.darkGray
+        const tintColor = this.props.tintColor ? this.props.tintColor : BASE_COLOR.darkGray
         const backgroundColor = this.props.backgroundColor ? this.props.backgroundColor : NAV_COLOR.headerBackground
         const borderBottomColor = this.props.borderBottomColor ? this.props.borderBottomColor : NAV_COLOR.borderBottomColor
         return (
@@ -88,7 +88,7 @@ class SearchHeader extends Component {
                     </View>
                     <DefaultInput
                         placeholder={this.searchPlaceholder}
-                        placeholderTextColor={tintColor}
+                        placeholderTextColor={BASE_COLOR.gray}
                         value={this.state.searchText}
                         style={[styles.searchInput, { color: tintColor }]}
                         onChangeText={text => this.searchTextChange(text)}
@@ -110,7 +110,7 @@ class SearchHeader extends Component {
                                     source={TestAssets.shopBagIcon}
                                     style={[styles.baseImage, { tintColor: tintColor }]}
                                     resizeMode='contain' />
-                                    {this.badgeContent()}
+                                {this.badgeContent()}
                             </View>
                         </TouchableOpacity>
                     </View>

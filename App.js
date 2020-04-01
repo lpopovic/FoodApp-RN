@@ -8,11 +8,11 @@
 import 'react-native-gesture-handler'
 import React, { Component } from 'react';
 import {
-Text,
-TextInput,
-ScrollView,
+  Text,
+  TextInput,
+  ScrollView,
 } from 'react-native'
-import Navigator  from './src/components/TabNavigation/Navigator'
+import Navigator from './src/components/TabNavigation/Navigator'
 
 import { Provider } from 'react-redux'
 import configurateStore from './src/store/configureStore'
@@ -21,6 +21,7 @@ const store = configurateStore();
 
 if (Text.defaultProps == null) Text.defaultProps = {};
 Text.defaultProps.allowFontScaling = false;
+Text.defaultProps.color = BASE_COLOR.black
 
 if (TextInput.defaultProps == null) TextInput.defaultProps = {};
 TextInput.defaultProps.placeholderTextColor = BASE_COLOR.gray

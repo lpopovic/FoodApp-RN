@@ -4,7 +4,7 @@ import {
     View,
     Text,
     StyleSheet,
-    ScrollView,
+    TouchableOpacity,
 } from 'react-native';
 import BaseScreen from '../BaseScreen/BaseScreen';
 import Header from '../../components/common/BtnHeader'
@@ -15,8 +15,9 @@ import {
     NAV_COLOR,
     BASE_COLOR,
 } from '../../styles'
-import { validate } from '../../helpers'
+import { validate, ScreenName } from '../../helpers'
 import { connect } from 'react-redux';
+import { saveLanguageSetup } from '../../store/actions'
 class UserSettingsScreen extends BaseScreen {
     static navigationOptions = {
         header: null,
@@ -28,6 +29,8 @@ class UserSettingsScreen extends BaseScreen {
             loading: true,
             image: null,
             editImage: null,
+            languages: [{ text: 'Srpski', name: 'srb' }, { text: 'English', name: 'en' }],
+            currentLanguage: props.language,
             controls: {
                 firstName: {
                     value: "",
@@ -158,11 +161,18 @@ class UserSettingsScreen extends BaseScreen {
         this.setNewStateHandler({
             loading: true
         })
-        setTimeout(() => {
-            this.showAlertMessage("BTN SAVE PRESS COMPLETE")
-            this.closeScreen()
-        }, 500);
+        if (this.props.language === this.state.currentLanguage) {
 
+            setTimeout(() => {
+                this.showAlertMessage("BTN SAVE PRESS COMPLETE")
+                this.closeScreen()
+            }, 500);
+        } else {
+            this.props.saveLanguageSetupHandler(this.state.currentLanguage)
+            setTimeout(() => {
+                this.resetNavigationStack(ScreenName.TabNavigatorScreen())
+            }, 500);
+        }
     }
     editContent = () => {
         const { strings } = this.props
@@ -244,6 +254,38 @@ class UserSettingsScreen extends BaseScreen {
             </View>
         )
     }
+    languageContent = () => {
+        const text = `${String(this.props.strings.chooseLanguage)}:`
+        const { languages, currentLanguage } = this.state
+        return (
+            <View style={{
+                marginTop: 8,
+                justifyContent: 'space-between',
+                flexDirection: 'row',
+                alignItems: 'center',
+                borderBottomColor: BASE_COLOR.gray,
+                borderBottomWidth: 1,
+                paddingBottom: 8,
+                minHeight: 50,
+            }}>
+                <View>
+                    <Text style={[styles.baseText, { color: BASE_COLOR.black }]}>{text}</Text>
+                </View>
+                <View style={{ alignSelf: 'center', justifyContent: 'center', alignItems: 'center', flexDirection: 'row' }}>
+                    <TouchableOpacity onPress={() => this.setNewStateHandler({ currentLanguage: languages[0].name })}>
+                        <View style={[styles.priceTagContainer, { backgroundColor: currentLanguage == languages[0].name ? BASE_COLOR.blue : BASE_COLOR.gray }]}>
+                            <Text style={styles.priceTagText}>{languages[0].text}</Text>
+                        </View>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => this.setNewStateHandler({ currentLanguage: languages[1].name })}>
+                        <View style={[styles.priceTagContainer, { backgroundColor: currentLanguage == languages[1].name ? BASE_COLOR.blue : BASE_COLOR.gray }]}>
+                            <Text style={styles.priceTagText}>{languages[1].text}</Text>
+                        </View>
+                    </TouchableOpacity>
+                </View>
+            </View>
+        )
+    }
     mainContent = () => {
         const { strings } = this.props
         const { company, catheringIsAvailable, catheringOptions } = this.props.userInfo
@@ -274,7 +316,7 @@ class UserSettingsScreen extends BaseScreen {
                     {catheringIsAvailable != true ? null : this.infoContent(strings.cateringOptions,
                         `${strings.package}: ${catheringOptions.package}${`\n`}${strings.balance}: ${catheringOptions.balance != null ? Number(catheringOptions.balance).toFixed(2)
                             : catheringOptions.balance}${`\n`}${strings.reserved}: ${Number(catheringOptions.reserved).toFixed(2)}`)}
-
+                    {this.languageContent()}
                 </View>
             </KeyboardAwareScrollView>
         )
@@ -366,18 +408,32 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         textAlignVertical: 'center',
     },
+    priceTagContainer: {
+        backgroundColor: BASE_COLOR.gray,
+        width: 60,
+        height: 25,
+        margin: 4,
+        borderRadius: 4,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    priceTagText: {
+        color: BASE_COLOR.white,
+        fontSize: 11
+    },
 });
 const mapStateToProps = state => {
     return {
         userInfo: state.user.userInfo,
         strings: state.location.language.strings,
+        language: state.location.language.name,
     };
 };
 
 const mapDispatchToProps = dispatch => {
     return {
-
+        saveLanguageSetupHandler: (language) => dispatch(saveLanguageSetup(language))
     };
 };
 
-export default connect(mapStateToProps, null)(UserSettingsScreen);
+export default connect(mapStateToProps, mapDispatchToProps)(UserSettingsScreen);
