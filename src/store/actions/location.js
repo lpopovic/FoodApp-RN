@@ -25,6 +25,7 @@ export const setLocationCity = (city) => {
 }
 
 export const setLanguage = (language) => {
+    updateHeaderForLanguage(language)
     return {
         type: UPDATE_LANGUAGE,
         payload: language
@@ -32,7 +33,7 @@ export const setLanguage = (language) => {
 }
 export const saveLanguageSetup = (language) => {
     saveStorageData(language, STORAGE_KEY.LANGUAGE_APP)
-    updateHeaderForLanguage(language)
+
     return dispatch => {
         dispatch(setLanguage(language))
 

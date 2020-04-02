@@ -29,7 +29,8 @@ import {
     fetchUserProfile,
     userLogOut,
     addOrderMenuItem,
-    emptyOrder
+    emptyOrder,
+    fetchUserFavorites,
 } from '../../store/actions'
 import { UserNetwork, OrderNetwork } from '../../service/api'
 import { TestAssets, } from '../../assets'
@@ -88,7 +89,7 @@ class UserScreen extends BaseScreen {
             )
     }
     apiCallHandler = () => {
-
+        this.props.fetchUserFavoritesHandler()
         UserNetwork.fetchUserInfo()
             .then(
                 result => {
@@ -513,6 +514,7 @@ const mapDispatchToProps = dispatch => {
         userLogOutHandler: () => dispatch(userLogOut()),
         addOrderMenuItemHandler: (orderdMenuItem) => dispatch(addOrderMenuItem(orderdMenuItem)),
         emptyCurentOrderHandler: () => dispatch(emptyOrder()),
+        fetchUserFavoritesHandler: () => dispatch(fetchUserFavorites()),
     };
 };
 
