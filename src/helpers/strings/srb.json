@@ -124,5 +124,15 @@
     "exploreFood": "Istražite hranu...",
     "subject": "Tema",
     "text": "Tekst",
-    "successfullySentRequest":"Uspešno poslat zahtev."
+    "successfullySentRequest": "Uspešno poslat zahtev.",
+    "ordered": "Naručiti",
+    "canceledBeforeAccepted": "Otkazano",
+    "deniedAfterOrdered": "Odbijeno nakon narudžbe",
+    "acceptedAfterOrdered": "Prihvaćeno je narudžba",
+    "modifiedOrderByPlaceAdmin": "Izmenjena narudžba od strane administratora",
+    "acceptedOrderByUserAfterModified": "Korisnik je prihvatio narudžbinu nakon modifikacije",
+    "deniedOrderByUserAfterModified": "Korisnik je odbio porudžbinu nakon modifikacije",
+    "delivered": "Isporučena",
+    "pickedUp": "Preuzeto",
+    "deliveredAndUserReviewed": "Isporučeno i korisnik je recenzirao"
 }

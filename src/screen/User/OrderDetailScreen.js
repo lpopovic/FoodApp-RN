@@ -17,7 +17,7 @@ import {
     BASE_COLOR,
     NAV_COLOR,
 } from '../../styles'
-import { subTotalPrice } from '../../helpers'
+import { subTotalPrice, generateTextStatus } from '../../helpers'
 import { Order, MenuItem } from '../../model';
 import { OrderNetwork } from '../../service/api/order';
 
@@ -139,7 +139,10 @@ class OrderDetailScreen extends BaseScreen {
                 </View>
                 <View style={{ flexDirection: 'row' }}>
                     <Text style={[styles.baseText, styles.podSectionText]}>{strings.status}:</Text>
-                    <Text style={[styles.baseText,]}>{status}</Text>
+                    <View style={{ width: '60%' }}>
+                        <Text numberOfLines={3}
+                            style={[styles.baseText,]}>{generateTextStatus(status, strings)}</Text>
+                    </View>
                 </View>
             </View>
         )

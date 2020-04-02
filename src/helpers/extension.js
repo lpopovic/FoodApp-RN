@@ -24,3 +24,15 @@ export const subTotalPrice = (menuItem, selectedOptions, quantity, menuItemType)
     })
     return totalPrice * quantity
 }
+export const statusOrderValue = {
+    ordered: 'ordered',
+    canceledBeforeAccepted: 'canceledBeforeAccepted',
+    deniedAfterOrdered: 'deniedAfterOrdered',
+    acceptedAfterOrdered: 'acceptedAfterOrdered',
+    modifiedOrderByPlaceAdmin: 'modifiedOrderByPlaceAdmin',
+    acceptedOrderByUserAfterModified: 'acceptedOrderByUserAfterModified',
+    deniedOrderByUserAfterModified: 'deniedOrderByUserAfterModified',
+    delivered: 'delivered',
+    pickedUp: 'pickedUp',
+    deliveredAndUserReviewed: 'deliveredAndUserReviewed'
+}

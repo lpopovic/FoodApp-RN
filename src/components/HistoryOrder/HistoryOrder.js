@@ -9,6 +9,7 @@ import {
 import { connect } from 'react-redux';
 import { BASE_COLOR } from '../../styles';
 import Moment from 'moment'
+import { generateTextStatus } from '../../helpers';
 const widhtBtn = Dimensions.get('screen').width / 3.8
 class HistoryOrder extends Component {
 
@@ -38,7 +39,7 @@ class HistoryOrder extends Component {
         var date = new Date(orderedTime);
 
         const dateText = Moment(date).format("DD/MM/YYYY") //orderedTime//'20.12.2019'
-        const statusOrder = status//'Delivered'
+        const statusOrder = generateTextStatus(status, strings)//status//'Delivered'
         return (
             <View style={styles.mainContainer}>
                 <View style={{ margin: 8, flex: 10 }}>
@@ -48,9 +49,9 @@ class HistoryOrder extends Component {
                                 {dateText}
                             </Text>
                         </View>
-                        <View style={{ width: '50%' }}>
+                        <View style={{ width: '70%', }}>
                             <Text
-                                numberOfLines={1}
+                                numberOfLines={3}
                                 ellipsizeMode={'tail'}
                                 style={[styles.baseText, { color: BASE_COLOR.orange, textAlign: 'right', fontSize: 14 }]}>
                                 {statusOrder}</Text>
