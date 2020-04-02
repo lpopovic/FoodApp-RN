@@ -120,14 +120,25 @@ class UserScreen extends BaseScreen {
     }
     pressReviewOrderHandler = (order) => {
 
-        this.pushNewScreen({ routeName: ScreenName.ReviewScreen(), key: `${Math.random() * 10000}`, params: { order } })
+        this.pushNewScreen({
+            routeName: ScreenName.ReviewScreen(),
+            key: `${Math.random() * 10000}`,
+            params: { order }
+        })
     }
     pressOrderDetailHandler = (order) => {
 
         this.pushNewScreen({ routeName: ScreenName.OrderDetailScreen(), key: `${Math.random() * 10000}`, params: { order } })
     }
     pressSeeMyReviewOrderHandler = (order) => {
-        this.showAlertMessage("VIDI SVOJ KOMENTAR ZA ORDER")
+        this.pushNewScreen({
+            routeName: ScreenName.ReviewScreen(),
+            key: `${Math.random() * 10000}`,
+            params: {
+                order,
+                showReview: true
+            }
+        })
     }
     pressOrderAgainHandler = (order) => {
         const { orderedMenuItems } = order

@@ -29,10 +29,11 @@ class ReviewNetwork {
         });
     static fetchGetReviewsFromOrder = (orderId) =>
         new Promise(async (resolve, reject) => {
-            const url = RestUrl.templateURL()
+            const url = RestUrl.getReviewForOrder(orderId)
             try {
                 const { data } = await axios.get(url)
-                resolve(data)
+                const review = new Review(data)
+                resolve(review)
 
             } catch (error) {
                 try {

@@ -109,7 +109,7 @@ class CatheringDishCard extends Component {
         selectedOptions.map(item => {
             itemTemp = ""
             optionsTemp = ""
-            itemTemp = item.text != undefined ? `${item.text}:` : "Dodaci: "
+            itemTemp = item.text != undefined ? `${item.text}:` : `${this.props.strings.supplements}: `
 
             if (item.options.length != 0) {
                 item.options.map(option => {
