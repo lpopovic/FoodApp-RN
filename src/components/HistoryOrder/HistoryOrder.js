@@ -9,7 +9,7 @@ import {
 import { connect } from 'react-redux';
 import { BASE_COLOR } from '../../styles';
 import Moment from 'moment'
-import { generateTextStatus } from '../../helpers';
+import { generateTextStatus, statusOrderValue } from '../../helpers';
 const widhtBtn = Dimensions.get('screen').width / 3.8
 class HistoryOrder extends Component {
 
@@ -29,6 +29,9 @@ class HistoryOrder extends Component {
     }
     onPressReview = () => {
         this.props.onPressReview()
+    }
+    onPressSeeMyReview = () => {
+        this.props.onPressSeeMyReview()
     }
     render() {
         const { item, strings } = this.props
@@ -78,7 +81,19 @@ class HistoryOrder extends Component {
                     <View style={styles.footerContainer}>
                         {this.btnContent(strings.details, this.onPressDetailOrder)}
                         {this.props.isCatheringOrder == true ? null : this.btnContent(strings.order, this.onPressOrderAgain)}
-                        {this.btnContent(strings.review, this.onPressReview)}
+                        {
+                            status == statusOrderValue.delivered
+                                ||
+                                status == statusOrderValue.pickedUp
+                                ?
+                                this.btnContent(strings.review, this.onPressReview)
+                                :
+                                status == statusOrderValue.deliveredAndUserReviewed
+                                    ?
+                                    this.btnContent(strings.review, this.onPressSeeMyReview)
+                                    :
+                                    null
+                        }
                     </View>
                 </View>
             </View>

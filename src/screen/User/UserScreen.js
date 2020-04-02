@@ -126,7 +126,9 @@ class UserScreen extends BaseScreen {
 
         this.pushNewScreen({ routeName: ScreenName.OrderDetailScreen(), key: `${Math.random() * 10000}`, params: { order } })
     }
-
+    pressSeeMyReviewOrderHandler = (order) => {
+        this.showAlertMessage("VIDI SVOJ KOMENTAR ZA ORDER")
+    }
     pressOrderAgainHandler = (order) => {
         const { orderedMenuItems } = order
         let orderAgainMenuItems = []
@@ -289,6 +291,7 @@ class UserScreen extends BaseScreen {
                         PressDetailOrder={(order) => this.pressOrderDetailHandler(order)}
                         PressOrderAgain={(order) => this.pressOrderAgainHandler(order)}
                         PressReview={(order) => this.pressReviewOrderHandler(order)}
+                        PressSeeMyReview={(order) => this.pressSeeMyReviewOrderHandler(order)}
                     />
                 </View>
             )
@@ -302,8 +305,9 @@ class UserScreen extends BaseScreen {
                         arrayObject={userOrders}
                         isCatheringOrder={false}
                         PressDetailOrder={(order) => this.pressOrderDetailHandler(order)}
-                        PressOrderAgain={(order) => alert(order)}
+                        PressOrderAgain={(order) => { }}
                         PressReview={(order) => this.pressReviewOrderHandler(order)}
+                        PressSeeMyReview={(order) => this.pressSeeMyReviewOrderHandler(order)}
                     />
                 </View>
             )

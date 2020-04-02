@@ -5,7 +5,7 @@ import {
     Keyboard,
     StyleSheet
 } from 'react-native';
-import HistoryOrder  from './HistoryOrder'
+import HistoryOrder from './HistoryOrder'
 class HistoryOrderList extends Component {
     _onScroll = (event) => {
         Keyboard.dismiss()
@@ -37,6 +37,7 @@ class HistoryOrderList extends Component {
                         onPressDetailOrder={() => this.props.PressDetailOrder(info.item)}
                         onPressOrderAgain={() => this.props.PressOrderAgain(info.item)}
                         onPressReview={() => this.props.PressReview(info.item)}
+                        onPressSeeMyReview={() => this.props.PressSeeMyReview(info.item)}
                     />
                 )}
                 ItemSeparatorComponent={this.FlatListItemSeparator}
