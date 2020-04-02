@@ -81,6 +81,8 @@ class RestUrl {
         return withKey(`favoritemenuitems/${favoriteId}`)
     }
 
+    static companyBindings = withKey('companybindings')
+
 }
 
 class ParamsUrl {

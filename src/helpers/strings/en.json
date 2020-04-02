@@ -121,5 +121,8 @@
    "chooseLanguage": "Choose language",
    "supplements": "Supplements",
    "status": "Status",
-   "exploreFood": "Explore food..."
+   "exploreFood": "Explore food...",
+   "subject": "Subject",
+   "text": "Text",
+   "successfullySentRequest": "Successfully sent request."
 }

@@ -358,7 +358,8 @@ class CateringScreen extends BaseScreen {
         this.pushNewScreen({ routeName: ScreenName.PlaceDetailScreen(), key: `${Math.random() * 10000}`, params: { _id: placeId, cathering: cathering } })
     }
     onPressContactUs = () => {
-        UrlOpen.sendEmailViaEmailApp("test@test.com", "KETERING APP", "SPORTSKI POZDRAV.")
+        // UrlOpen.sendEmailViaEmailApp("test@test.com", "KETERING APP", "SPORTSKI POZDRAV.")
+        this.pushNewScreen(ScreenName.ContactFormScreen())
     }
     signUpToCatheringMesage() {
         return (
@@ -583,14 +584,15 @@ class CateringScreen extends BaseScreen {
         return (
             <SafeAreaView style={styles.safeAreaHeader}>
                 <View style={styles.mainContainer}>
-                    {isLogin ? isCatheringAvailable != false ?
+                    {/* {isLogin ? isCatheringAvailable != false ?
                         <>
                             {this.cateringCalendarStrip()}
                             {mainDisplay}
                         </>
                         : this.signUpToCatheringMesage()
                         : this.loginToCatheringMesage()
-                    }
+                    } */}
+                    {this.signUpToCatheringMesage()}
                 </View>
             </SafeAreaView>
 

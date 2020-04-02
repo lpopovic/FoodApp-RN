@@ -121,5 +121,8 @@
     "chooseLanguage": "Izaberite jezik",
     "supplements": "Dodaci",
     "status": "Status",
-    "exploreFood": "Istražite hranu..."
+    "exploreFood": "Istražite hranu...",
+    "subject": "Tema",
+    "text": "Tekst",
+    "successfullySentRequest":"Uspešno poslat zahtev."
 }
