@@ -134,5 +134,6 @@
     "deniedOrderByUserAfterModified": "Korisnik je odbio porudžbinu nakon modifikacije",
     "delivered": "Isporučena",
     "pickedUp": "Preuzeto",
-    "deliveredAndUserReviewed": "Isporučeno i korisnik je recenzirao"
+    "deliveredAndUserReviewed": "Isporučeno i korisnik je recenzirao",
+    "serviceIsCurrentlyUnavailable": "Usluga trenutno nije dostupna."
 }

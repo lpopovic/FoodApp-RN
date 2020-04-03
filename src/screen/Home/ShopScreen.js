@@ -48,7 +48,7 @@ class ShoopScreen extends BaseScreen {
             loading: false,
             cacheSelected: true,
             onlineSelected: false,
-            wayOfDelivery: DELIVERY_BUTTON_KEY.pickup,
+            wayOfDelivery: props.orderForPlace.pickup == true ? DELIVERY_BUTTON_KEY.pickup : DELIVERY_BUTTON_KEY.delivery,
             specialInstructions: '',
             userInfo: {
                 name: '',
@@ -506,12 +506,17 @@ class ShoopScreen extends BaseScreen {
         }
     }
     wayOfDeliveryHandler(type) {
-        if (type != this.state.wayOfDelivery) {
-            this.setNewStateHandler({
-                wayOfDelivery: type
-            })
-
+        const { orderForPlace, strings } = this.props
+        if (orderForPlace.delivery == true && orderForPlace.pickup == true) {
+            if (type != this.state.wayOfDelivery) {
+                this.setNewStateHandler({
+                    wayOfDelivery: type
+                })
+            }
+        } else {
+            this.showAlertMessage(strings.serviceIsCurrentlyUnavailable)
         }
+
     }
     payButttonHandler(type) {
         if ((type === PAY_BUTTON_KEY.cacheSelected && this.state.cacheSelected) || (type === PAY_BUTTON_KEY.onlineSelected && this.state.onlineSelected)) {

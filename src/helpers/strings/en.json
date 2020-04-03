@@ -134,5 +134,6 @@
    "deniedOrderByUserAfterModified": "Denied order by user after modified",
    "delivered": "Delivered",
    "pickedUp": "Picked up",
-   "deliveredAndUserReviewed": "Delivered and user reviewed"
+   "deliveredAndUserReviewed": "Delivered and user reviewed",
+   "serviceIsCurrentlyUnavailable.": "Service is currently unavailable."
 }
