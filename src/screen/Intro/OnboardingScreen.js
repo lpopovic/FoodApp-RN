@@ -6,7 +6,7 @@ import { StyleSheet, View, Text, Image, SafeAreaView, TouchableOpacity } from 'r
 import AppIntroSlider from 'react-native-app-intro-slider';
 //import AppIntroSlider to use it
 import { BASE_COLOR } from '../../styles'
-import { ScreenName } from '../../helpers'
+import { ScreenName, STORAGE_KEY, saveStorageData } from '../../helpers'
 import BaseScreen from '../BaseScreen/BaseScreen';
 import { OnboardingAssets } from '../../assets';
 import { connect } from 'react-redux';
@@ -17,6 +17,7 @@ class OnboardingScreen extends BaseScreen {
     componentDidMount() {
         super.componentDidMount()
         this.setStatusBarStyle(BASE_COLOR.red)
+        saveStorageData(true, STORAGE_KEY.FIRST_TIME_START_APP)
     }
 
     componentWillUnmount() {
