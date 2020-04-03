@@ -74,19 +74,22 @@ class CatheringDishCard extends Component {
                                 marginHorizontal: 8,
                                 marginBottom: 8,
                             }}>
-                                <Text
-                                    numberOfLines={2}
-                                    style={{
-                                        fontWeight: '800',
-                                        color: BASE_COLOR.white,
-                                        fontSize: 15,
-                                        backgroundColor: BASE_COLOR.orange,
-                                        paddingHorizontal: 8,
-                                        paddingVertical: 4,
-                                        borderRadius: 5,
-                                        minWidth: 80,
-                                        textAlign: 'center'
-                                    }}>{generateTextStatus(status, this.props.strings)}</Text>
+                                <View style={{
+                                    backgroundColor: BASE_COLOR.orange,
+                                    paddingHorizontal: 8,
+                                    paddingVertical: 4,
+                                    borderRadius: 5,
+                                    minWidth: 80,
+                                }}>
+                                    <Text
+                                        numberOfLines={2}
+                                        style={{
+                                            fontWeight: '800',
+                                            color: BASE_COLOR.white,
+                                            fontSize: 15,
+                                            textAlign: 'center'
+                                        }}>{generateTextStatus(status, this.props.strings)}</Text>
+                                </View>
                             </View>
                         </View>
                     </View>
