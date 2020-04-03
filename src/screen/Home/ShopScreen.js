@@ -507,14 +507,14 @@ class ShoopScreen extends BaseScreen {
     }
     wayOfDeliveryHandler(type) {
         const { orderForPlace, strings } = this.props
-        if (orderForPlace.delivery == true && orderForPlace.pickup == true) {
-            if (type != this.state.wayOfDelivery) {
+        if (type != this.state.wayOfDelivery) {
+            if (orderForPlace.delivery == true && orderForPlace.pickup == true) {
                 this.setNewStateHandler({
                     wayOfDelivery: type
                 })
+            } else {
+                this.showAlertMessage(strings.serviceIsCurrentlyUnavailable)
             }
-        } else {
-            this.showAlertMessage(strings.serviceIsCurrentlyUnavailable)
         }
 
     }
