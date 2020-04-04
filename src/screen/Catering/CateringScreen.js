@@ -307,7 +307,7 @@ class CateringScreen extends BaseScreen {
                 order.orderedMenuItems.map((item) => {
                     let image = new ImageAssets(item.food.image || {});
                     let dish = {
-                        _id: item._id,
+                        _id: item.food._id,
                         description: item.food.description,
                         name: item.food.name,
                         image: image,
@@ -465,7 +465,7 @@ class CateringScreen extends BaseScreen {
         )
     }
 
-    sortRecentMenuItemsOrders = (userCatherings) => {
+    sortRecentMenuItemsOrders = (orders) => {
 
         // recentMenuItemsOrder.push({
         //     menuItemArray: [{
@@ -480,7 +480,7 @@ class CateringScreen extends BaseScreen {
 
         recentMenuItemsOrder = []
 
-        userCatherings.map(item => {
+        orders.map(item => {
 
             if (item.orderedMenuItems.length > 0) {
 

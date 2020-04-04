@@ -14,10 +14,17 @@ class CatheringDishCard extends Component {
         let text = this.renderMenuOptions(selectedOptions)
         if (text.trim() !== "") {
             return (
-                <View style={{ marginHorizontal: 8, justifyContent: 'center', marginBottom: 8 }}>
+                <View style={{
+                    marginHorizontal: 8,
+                    justifyContent: 'center',
+                    marginBottom: 8,
+                }}>
                     <Text
                         ellipsizeMode={'tail'}
-                        style={{ fontSize: 12, fontWeight: '300' }}
+                        style={{
+                            fontSize: 12,
+                            fontWeight: '300',
+                        }}
                     >{text}</Text>
                 </View>
             )
@@ -128,7 +135,7 @@ class CatheringDishCard extends Component {
             menuOptions += menuOptionsTemp + "\n"
         })
 
-        return menuOptions
+        return menuOptions.slice(0, -1);
     }
 }
 
