@@ -81,7 +81,7 @@ class LanguageScreen extends BaseScreen {
                             <Text style={styles.textButtonStyle}>{strings.next.toUpperCase()}</Text>
                         </TouchableOpacity>
                         :
-                        <View/>
+                        <View />
                     }
                 </TouchableOpacity>
             </SafeAreaView>

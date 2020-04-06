@@ -149,7 +149,26 @@ class UserNetwork {
                 }
             }
         });
+    static fetchPostUserCompanyBindings = (title, text) =>
+        new Promise(async (resolve, reject) => {
+            const url = RestUrl.companyBindings
+            let formData = {
+                title,
+                text,
+            }
+            try {
+                const { data } = await axios.post(url, formData)
+                resolve(data)
+            } catch (error) {
+                try {
+                    const { message } = error.response.data.error
+                    reject(message)
+                } catch  {
+                    reject(error.message)
 
+                }
+            }
+        });
 }
 
 export { UserNetwork }

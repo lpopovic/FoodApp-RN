@@ -6,9 +6,23 @@ import {
 import { connect } from 'react-redux';
 import { userFavoriteMenuItems } from '../../store/actions'
 import { BASE_COLOR } from '../../styles';
+import { generateTextStatus } from '../../helpers';
 
 class CatheringDishCard extends Component {
 
+    menuOptionsContent = (selectedOptions) => {
+        let text = this.renderMenuOptions(selectedOptions)
+        if (text.trim() !== "") {
+            return (
+                <View style={{ marginHorizontal: 8, justifyContent: 'center', marginBottom: 8 }}>
+                    <Text
+                        ellipsizeMode={'tail'}
+                        style={{ fontSize: 12, fontWeight: '300' }}
+                    >{text}</Text>
+                </View>
+            )
+        }
+    }
     render() {
         const { dish, userFavoriteMenuItemsIDs } = this.props
         const { image, description, name, _id, status, selectedOptions } = this.props.dish
@@ -50,17 +64,32 @@ class CatheringDishCard extends Component {
                             </View>
                         </View>
                     </View>
-                    <View style={{ flexDirection: 'row', height: 40 }}>
-                        <View style={{ flex: 0.6, marginHorizontal: 10, justifyContent: 'center' }}>
-                            <Text
-                                numberOfLines={2}
-                                ellipsizeMode={'tail'}
-                                style={{ fontSize: 12, fontWeight: '300' }}
-                            >{this.renderMenuOptions(selectedOptions) == "" ? "" : this.renderMenuOptions(selectedOptions)}</Text>
-                        </View>
-                        <View style={{ flex: 0.4, justifyContent: 'center' }}>
-                            <View style={{ backgroundColor: BASE_COLOR.orange, borderRadius: 5, height: 25, justifyContent: 'center', alignItems: 'center', width: 'auto', marginHorizontal: 10 }}>
-                                <Text style={{ fontWeight: '800', color: BASE_COLOR.white, fontSize: 15 }}>{status}</Text>
+                    <View style={{}}>
+                        {this.menuOptionsContent(selectedOptions)}
+                        <View style={{ justifyContent: 'center' }}>
+                            <View style={{
+                                // minHeight: 25,
+                                justifyContent: 'center',
+                                alignItems: 'flex-end',
+                                marginHorizontal: 8,
+                                marginBottom: 8,
+                            }}>
+                                <View style={{
+                                    backgroundColor: BASE_COLOR.orange,
+                                    paddingHorizontal: 8,
+                                    paddingVertical: 4,
+                                    borderRadius: 5,
+                                    minWidth: 80,
+                                }}>
+                                    <Text
+                                        numberOfLines={2}
+                                        style={{
+                                            fontWeight: '800',
+                                            color: BASE_COLOR.white,
+                                            fontSize: 15,
+                                            textAlign: 'center'
+                                        }}>{generateTextStatus(status, this.props.strings)}</Text>
+                                </View>
                             </View>
                         </View>
                     </View>
@@ -83,7 +112,7 @@ class CatheringDishCard extends Component {
         selectedOptions.map(item => {
             itemTemp = ""
             optionsTemp = ""
-            itemTemp = item.text != undefined ? `${item.text}:` : "Dodaci: "
+            itemTemp = item.text != undefined ? `${item.text}:` : `${this.props.strings.supplements}: `
 
             if (item.options.length != 0) {
                 item.options.map(option => {
@@ -108,7 +137,7 @@ const styles = StyleSheet.create({
         margin: 10,
         overflow: 'hidden',
         borderRadius: 5,
-        height: 140,
+        minHeight: 140,
         borderWidth: 1.5,
         borderColor: BASE_COLOR.gray
     }
@@ -116,7 +145,8 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = state => {
     return {
-        userFavoriteMenuItemsIDs: state.user.userFavoriteMenuItemsIDs
+        userFavoriteMenuItemsIDs: state.user.userFavoriteMenuItemsIDs,
+        strings: state.location.language.strings,
     };
 };
 const mapDispatchToProps = dispatch => {

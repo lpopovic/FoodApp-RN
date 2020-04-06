@@ -3,7 +3,7 @@ import { ImageAssets, Place, Category } from './index'
 class MenuItem {
 
     constructor(object) {
-        try{
+        try {
             this._id = object._id || 'nesto';
             this.description = object.description;
             this.image = new ImageAssets(object.image || {});
@@ -16,7 +16,7 @@ class MenuItem {
             this.sizeName = object.sizeName;
             this.subtypes = MenuItem.createArrayMenuItems(object.subtypes)
 
-        } catch ( error){
+        } catch (error) {
             this._id = object._id || 'nesto';
             this.description = object.description;
             this.image = new ImageAssets(object.image || {});
@@ -54,13 +54,19 @@ class MenuItemFavorite {
 
     static createArrayMenuItemsFavorite(objectArray) {
 
-        const arrayTemplate = objectArray.map(item => {
+        let arrayTemplate = objectArray.map(item => {
 
-            return new MenuItemFavorite(item);
+            if (item.menuItem !== null) {
+                return new MenuItemFavorite(item);
+            } else {
+                return null
+            }
 
         })
-    
-        return arrayTemplate;
+        arrayTemplate = arrayTemplate.filter(function (el) {
+            return el != null;
+        });
+        return arrayTemplate
     }
 }
 
@@ -77,9 +83,11 @@ class MenuItemFavoriteSmallObject {
             return new MenuItemFavoriteSmallObject(item)
         })
 
+
+
         return arrayTemplate;
     }
 }
 
 
-export { MenuItem, MenuItemFavorite, MenuItemFavoriteSmallObject};
+export { MenuItem, MenuItemFavorite, MenuItemFavoriteSmallObject };

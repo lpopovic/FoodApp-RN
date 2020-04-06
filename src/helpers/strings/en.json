@@ -118,5 +118,22 @@
    "order": "Order",
    "review": "Review",
    "details": "Details",
-   "chooseLanguage": "Choose language"
+   "chooseLanguage": "Choose language",
+   "supplements": "Supplements",
+   "status": "Status",
+   "exploreFood": "Explore food...",
+   "subject": "Subject",
+   "text": "Text",
+   "successfullySentRequest": "Successfully sent request.",
+   "ordered": "Ordered",
+   "canceledBeforeAccepted": "Canceled before accepted",
+   "deniedAfterOrdered": "Denied after ordered",
+   "acceptedAfterOrdered": "Accepted after ordered",
+   "modifiedOrderByPlaceAdmin": "Modified order by place admin",
+   "acceptedOrderByUserAfterModified": "Accepted order by user after modified",
+   "deniedOrderByUserAfterModified": "Denied order by user after modified",
+   "delivered": "Delivered",
+   "pickedUp": "Picked up",
+   "deliveredAndUserReviewed": "Delivered and user reviewed",
+   "serviceIsCurrentlyUnavailable.": "Service is currently unavailable."
 }

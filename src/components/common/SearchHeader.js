@@ -20,7 +20,6 @@ class SearchHeader extends Component {
 
     constructor(props) {
         super(props)
-        this.searchPlaceholder = 'Explore food...'
         this.state = {
             searchText: ''
         }
@@ -65,9 +64,14 @@ class SearchHeader extends Component {
             return <Badge
                 // status="primary"
                 value={order.length}
-                textStyle={{ color: BASE_COLOR.white, fontSize: 12 }}
+                textStyle={{ color: BASE_COLOR.white, fontSize: 11 }}
                 badgeStyle={{ backgroundColor: BASE_COLOR.red, }}
-                containerStyle={{ position: 'absolute', bottom: 0, right: 0 }}
+                containerStyle={{
+                    position: 'absolute',
+                    bottom: 0,
+                    right: 0,
+                    width: order.length > 99 ? 30 : undefined
+                }}
             />
         } else {
             return <View />
@@ -87,7 +91,7 @@ class SearchHeader extends Component {
                             resizeMode='contain' />
                     </View>
                     <DefaultInput
-                        placeholder={this.searchPlaceholder}
+                        placeholder={this.props.strings.exploreFood}
                         placeholderTextColor={BASE_COLOR.gray}
                         value={this.state.searchText}
                         style={[styles.searchInput, { color: tintColor }]}
@@ -162,7 +166,8 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = state => {
     return {
-        order: state.order.order
+        order: state.order.order,
+        strings: state.location.language.strings,
     };
 };
 

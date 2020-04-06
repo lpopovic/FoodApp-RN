@@ -5,7 +5,8 @@ import {
     FlatList,
     Text,
     Image,
-    StyleSheet
+    StyleSheet,
+    RefreshControl,
 } from 'react-native';
 import { connect } from 'react-redux';
 import BaseScreen from '../BaseScreen/BaseScreen';
@@ -16,7 +17,9 @@ import {
     BASE_COLOR,
     NAV_COLOR,
 } from '../../styles'
-import { Order } from '../../model';
+import { subTotalPrice, generateTextStatus } from '../../helpers'
+import { Order, MenuItem } from '../../model';
+import { OrderNetwork } from '../../service/api/order';
 
 class OrderDetailScreen extends BaseScreen {
     static navigationOptions = {
@@ -28,10 +31,9 @@ class OrderDetailScreen extends BaseScreen {
 
         this.state = {
             loading: false,
+            refreshing: false,
             order: null,
             menuItems: [],
-            quantityItems: []
-
         }
     }
 
@@ -41,39 +43,68 @@ class OrderDetailScreen extends BaseScreen {
 
         const order = this.props.navigation.getParam('order', null)
         if (order !== null) {
-            let menuItems = Order.createArrayOrderFoodMenuItems(order.orderedMenuItems)
-            let quantityItems = []
-            for (let i = 0; i < menuItems.length; i++) {
-
-                let quantity = 1
-                const element = menuItems[i]
-                for (let j = i + 1; j < menuItems.length; j++) {
-                    if (element._id === menuItems[j]._id) {
-                        quantity = quantity + 1
-                        delete menuItems[j]
-
-                    }
-
-                }
-
-                menuItems = menuItems.filter(function (el) {
-                    return el != null;
-                });
-                quantityItems.push(quantity)
-
-
-            }
-
-            this.setNewStateHandler({
-                order,
-                menuItems,
-                quantityItems
-            })
+            this.generateData(order)
         }
 
     }
     componentWillUnmount() {
         super.componentWillUnmount()
+    }
+    apiCallHandler = (orderId) => {
+        OrderNetwork.fetchGetOrder(orderId).then(
+            res => {
+                this.generateData(res)
+                this.setNewStateHandler({
+                    refreshing: false
+                })
+            }, err => {
+                this.showAlertMessage(err)
+                this.setNewStateHandler({
+                    refreshing: false
+                })
+            })
+    }
+    generateData = (order) => {
+        const { orderedMenuItems } = order
+        let orderAgainMenuItems = []
+
+        orderedMenuItems.map(item => {
+            let menuItem = new MenuItem(item.food)
+
+            var found = -1;
+            for (var i = 0; i < orderAgainMenuItems.length; i++) {
+                if (orderAgainMenuItems[i]._id == menuItem._id) {
+                    found = i;
+                    break;
+                }
+            }
+            if (found > -1) {
+                orderAgainMenuItems[found].quantity += 1
+                orderAgainMenuItems[found].menuItemTotalPrice = subTotalPrice(menuItem, orderAgainMenuItems[found].selectedOptions, orderAgainMenuItems[found].quantity)
+            } else {
+                const selectedOptions = [{
+                    groupId: "undefined",
+                    text: this.props.strings.supplements,
+                    type: "undefined",
+                    options: item.options
+                }]
+                const quantity = 1
+                const orderdMenuItem = {
+                    _id: menuItem._id,
+                    quantity,
+                    menuItem,
+                    menuItemTotalPrice: subTotalPrice(menuItem, selectedOptions, quantity),
+                    selectedOptions: selectedOptions,
+                }
+                orderAgainMenuItems.push(orderdMenuItem)
+            }
+
+        })
+
+        this.setNewStateHandler({
+            order,
+            menuItems: orderAgainMenuItems,
+        })
     }
     infoOrderContent = (order) => {
         const { strings } = this.props
@@ -102,65 +133,105 @@ class OrderDetailScreen extends BaseScreen {
                     <Text style={[styles.baseText]}>{orderTypeText}</Text>
                 </View>
 
-                <View style={{ flexDirection: 'row' }}>
+                <View style={{ marginBottom: 8, flexDirection: 'row' }}>
                     <Text style={[styles.baseText, styles.podSectionText]}>{strings.totalPrice}</Text>
                     <Text style={[styles.baseText]}>{priceText}</Text>
+                </View>
+                <View style={{ flexDirection: 'row' }}>
+                    <Text style={[styles.baseText, styles.podSectionText]}>{strings.status}:</Text>
+                    <View style={{ width: '60%' }}>
+                        <Text numberOfLines={3}
+                            style={[styles.baseText,]}>{generateTextStatus(status, strings)}</Text>
+                    </View>
                 </View>
             </View>
         )
     }
-    mainContent = () => {
-        const { order, menuItems } = this.state
-        return (
-            <View style={[styles.mainContainer, { margin: 16 }]}>
-                <FlatList
-                    data={menuItems}
-                    keyExtractor={(item, index) => `${index.toString()}`}
-                    renderItem={(info) => (
-                        <View style={{
-                            flex: 1,
-                            backgroundColor: BASE_COLOR.lightGray,
-                            margin: 10,
-                            minHeight: 110,
-                            flexDirection: 'column',
-                        }}>
-                            <View style={{ flex: 1, flexDirection: 'row' }}>
-                                <View style={{ flex: 3, justifyContent: 'center', marginTop: 12 }}>
-                                    <Image
-                                        style={{ aspectRatio: 1 / 1, height: 86, marginLeft: 12, borderTopLeftRadius: 5, borderBottomLeftRadius: 5 }}
-                                        source={{ uri: info.item.image.image169 }} />
-                                </View>
-                                <View style={{ flex: 7.8, flexDirection: 'column' }}>
-                                    <View style={{ flex: 7.8, flexDirection: 'row' }}>
-                                        <View style={{ flex: 6, marginLeft: 15, justifyContent: 'center' }}>
-                                            <Text
-                                                style={{ fontWeight: '600', fontSize: 19, marginBottom: 8 }}
-                                                numberOfLines={2}
-                                                ellipsizeMode={'tail'}>
-                                                {info.item.name}
-                                            </Text>
-                                        </View>
-                                    </View>
-                                    <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-                                        <View style={{ alignItems: 'center', justifyContent: 'center', marginLeft: 15 }}>
-                                            <Text style={{ color: BASE_COLOR.darkGray }}>Qty: {this.state.quantityItems[info.index]}</Text>
-                                        </View>
-                                        <View style={{ marginRight: 15 }}>
-                                            <Text style={{ color: BASE_COLOR.blue, fontWeight: '600', fontSize: 18, textAlignVertical: 'center' }}>{Number(info.item.nominalPrice).toFixed(2)}</Text>
-                                        </View>
-                                    </View>
-                                </View>
-                            </View>
-                            <View style={{ flex: 1, justifyContent: 'flex-start', margin: 12, marginBottom: 0, }}>
-                                <Text
-                                    numberOfLines={6}
-                                    ellipsizeMode={'tail'}>
-                                    menu options prikazati niz stringova
-                                    </Text>
+    renderMenuItemsOptions = (selectedOptions) => {
 
+        let text = ''
+        selectedOptions[0].options.map(item => {
+            text = text + item.text + ', '
+        })
+        if (text.length > 0) {
+            text = text.substring(0, text.length - 2);
+        } else {
+            text = '-'
+        }
+        return String(`${this.props.strings.supplements}: ${text}`)
+    }
+    orderedItem = (item) => {
+        const {
+            _id,
+            quantity,
+            menuItem,
+            menuItemTotalPrice,
+            selectedOptions,
+        } = item
+        return (
+            <View style={{
+                flex: 1,
+                backgroundColor: BASE_COLOR.lightGray,
+                margin: 10,
+                minHeight: 110,
+                flexDirection: 'column',
+            }}>
+                <View style={{ flex: 1, flexDirection: 'row' }}>
+                    <View style={{ flex: 3, justifyContent: 'center', marginTop: 12 }}>
+                        <Image
+                            style={{ aspectRatio: 1 / 1, height: 86, marginLeft: 12, borderTopLeftRadius: 5, borderBottomLeftRadius: 5 }}
+                            source={{ uri: menuItem.image.image169 }} />
+                    </View>
+                    <View style={{ flex: 7.8, flexDirection: 'column' }}>
+                        <View style={{ flex: 7.8, flexDirection: 'row' }}>
+                            <View style={{ flex: 6, marginLeft: 15, justifyContent: 'center' }}>
+                                <Text
+                                    style={{ fontWeight: '600', fontSize: 19, marginBottom: 8 }}
+                                    numberOfLines={2}
+                                    ellipsizeMode={'tail'}>
+                                    {menuItem.name}
+                                </Text>
                             </View>
                         </View>
+                        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+                            <View style={{ alignItems: 'center', justifyContent: 'center', marginLeft: 15 }}>
+                                <Text style={{ color: BASE_COLOR.darkGray }}>Qty: {quantity}</Text>
+                            </View>
+                            <View style={{ marginRight: 15 }}>
+                                <Text style={{ color: BASE_COLOR.blue, fontWeight: '600', fontSize: 18, textAlignVertical: 'center' }}>{Number(menuItemTotalPrice).toFixed(2)}</Text>
+                            </View>
+                        </View>
+                    </View>
+                </View>
+                <View style={{ flex: 1, justifyContent: 'flex-start', margin: 12, marginBottom: 0, }}>
+                    <Text
+                        numberOfLines={6}
+                        ellipsizeMode={'tail'}>
+                        {this.renderMenuItemsOptions(selectedOptions)}
+                    </Text>
 
+                </View>
+            </View>
+
+        )
+    }
+    mainContent = () => {
+        const { order, menuItems, refreshing } = this.state
+        return (
+            <View style={[styles.mainContainer, { marginHorizontal: 16 }]}>
+                <FlatList
+                    data={menuItems}
+                    refreshControl={<RefreshControl
+                        refreshing={refreshing}
+                        onRefresh={this._onRefresh}
+                        tintColor={BASE_COLOR.blue}
+                        colors={[BASE_COLOR.blue]}
+                    />}
+                    keyExtractor={(item, index) => `${index.toString()}`}
+                    renderItem={(info) => (
+                        <>
+                            {this.orderedItem(info.item)}
+                        </>
                     )}
                 />
                 {order !== null ? this.infoOrderContent(order) : <View />}
@@ -182,6 +253,14 @@ class OrderDetailScreen extends BaseScreen {
                 </View>
             </SafeAreaView>
         )
+    }
+    _onRefresh = () => {
+        const { order } = this.state
+        if (order !== null) {
+            this.setNewStateHandler({ refreshing: true })
+            this.apiCallHandler(order._id)
+        }
+
     }
 }
 

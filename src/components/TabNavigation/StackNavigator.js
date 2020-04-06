@@ -143,6 +143,7 @@ CateringStack.navigationOptions = ({ navigation }) => {
         case ScreenName.FilterScreen():
         case ScreenName.ShopScreen():
         case ScreenName.ReviewListScreen():
+        case ScreenName.ContactFormScreen():
             tabBarVisible = false;
             break
         default:

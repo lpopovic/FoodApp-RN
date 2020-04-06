@@ -14,8 +14,9 @@ class OrderNetwork {
             let orderedItems = []
 
             order.map(item => {
-                let options = []
+
                 for (let index = 0; index < item.quantity; index++) {
+                    let options = []
                     item.selectedOptions.map(group => {
                         group.options.map(option => {
                             options.push(option._id)
@@ -69,7 +70,7 @@ class OrderNetwork {
 
             selectedOptions.map(group => {
                 group.options.map(option => {
-                    
+
                     options.push(option._id)
                 })
             })
@@ -108,6 +109,24 @@ class OrderNetwork {
             try {
                 const { data } = await axios.get(url)
                 resolve(Order.createArrayOrder(data))
+
+            } catch (error) {
+                try {
+                    const { message } = error.response.data.error
+                    reject(message)
+                } catch  {
+                    reject(error.message)
+
+                }
+            }
+        });
+    static fetchGetOrder = (id) =>
+        new Promise(async (resolve, reject) => {
+            const url = `${RestUrl.order}/${id}`
+            try {
+                const { data } = await axios.get(url)
+                const order = new Order(data)
+                resolve(order)
 
             } catch (error) {
                 try {

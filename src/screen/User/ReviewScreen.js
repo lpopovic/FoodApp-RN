@@ -18,7 +18,7 @@ import {
     NAV_COLOR,
     STAR_COLOR
 } from '../../styles'
-import { Order } from '../../model';
+import { Order, Review } from '../../model';
 import { ReviewNetwork } from '../../service/api';
 
 
@@ -35,7 +35,8 @@ class ReviewScreen extends BaseScreen {
             avgRating: 0,
             textReview: '',
             avgPriceTag: 0,
-            order: new Order({})
+            order: new Order({}),
+            showReview: false,
         }
     }
 
@@ -44,10 +45,15 @@ class ReviewScreen extends BaseScreen {
         this.setStatusBarStyle(NAV_COLOR.headerBackground, true)
 
         const order = this.props.navigation.getParam('order', null)
+        const showReview = this.props.navigation.getParam('showReview', false)
         if (order !== null) {
             this.setNewStateHandler({
-                order
+                order,
+                showReview,
             })
+            if (showReview == true) {
+                this.apiCallReviewFromOrderHandler(order._id)
+            }
         }
 
 
@@ -65,6 +71,31 @@ class ReviewScreen extends BaseScreen {
 
 
     }
+
+    apiCallReviewFromOrderHandler = (id) => {
+        this.setNewStateHandler({
+            loading: true
+        })
+        ReviewNetwork.fetchGetReviewsFromOrder(id)
+            .then(
+                res => {
+                    const data = new Review(res)
+                    this.setNewStateHandler({
+                        loading: false,
+                        avgPriceTag: data.priceTag,
+                        avgRating: data.rating,
+                        textReview: data.text,
+
+                    })
+                }, err => {
+                    this.showAlertMessage(err)
+                    this.setNewStateHandler({
+                        loading: false
+                    })
+                }
+            )
+    }
+
     onSaveChangesBtnPress = () => {
         const { avgRating, textReview, avgPriceTag, order } = this.state
         if (this.validateInputForme(avgRating, textReview, avgPriceTag) == true) {
@@ -166,14 +197,16 @@ class ReviewScreen extends BaseScreen {
 
 
     reviewTextChangeHandler = (text) => {
+
         this.setNewStateHandler({
             textReview: text
         })
+
     }
     reviewTextContent = () => {
         const { strings } = this.props
         const text = String(strings.reviewText).toUpperCase()
-        const { textReview } = this.state
+        const { textReview, } = this.state
         return (
             <View style={styles.baseContainer}>
                 <View style={{ alignSelf: 'flex-start' }}>
@@ -237,23 +270,27 @@ class ReviewScreen extends BaseScreen {
     }
     mainContent = () => {
         const { strings } = this.props
-        const { avgRating, textReview, avgPriceTag } = this.state
+        const { avgRating, textReview, avgPriceTag, showReview } = this.state
         const disabled = !this.validateInputForme(avgRating, textReview, avgPriceTag)
         return (
             <View style={styles.mainContainer}>
                 {this.reviewContent()}
-                <View style={styles.bottomMainContainer}>
-                    <TouchableOpacity
-                        disabled={disabled}
-                        onPress={() => this.onSaveChangesBtnPress()}>
-                        <View
-                            style={[styles.bottomButtonContainer,
-                            disabled ? { backgroundColor: BASE_COLOR.lightGray }
-                                : { backgroundColor: BASE_COLOR.blue }]}>
-                            <Text style={[styles.baseText, styles.btnTitleSave]}>{String(strings.send).toUpperCase()}</Text>
-                        </View>
-                    </TouchableOpacity>
-                </View>
+                {showReview == false ?
+                    <View style={styles.bottomMainContainer}>
+                        <TouchableOpacity
+                            disabled={disabled}
+                            onPress={() => this.onSaveChangesBtnPress()}>
+                            <View
+                                style={[styles.bottomButtonContainer,
+                                disabled ? { backgroundColor: BASE_COLOR.lightGray }
+                                    : { backgroundColor: BASE_COLOR.blue }]}>
+                                <Text style={[styles.baseText, styles.btnTitleSave]}>{String(strings.send).toUpperCase()}</Text>
+                            </View>
+                        </TouchableOpacity>
+                    </View>
+                    :
+                    null
+                }
             </View>
         )
     }

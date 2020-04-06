@@ -10,7 +10,7 @@ import {
     TouchableOpacity,
     StyleSheet
 } from 'react-native';
-import { ScreenName, keyAdress } from '../../helpers'
+import { ScreenName, keyAdress, subTotalPrice } from '../../helpers'
 import Header from '../../components/common/UserHeader'
 import SegmentedControlTab from "react-native-segmented-control-tab";
 import BaseScreen from "../BaseScreen/BaseScreen"
@@ -29,10 +29,12 @@ import {
     fetchUserProfile,
     userLogOut,
     addOrderMenuItem,
-    emptyOrder
+    emptyOrder,
+    fetchUserFavorites,
 } from '../../store/actions'
 import { UserNetwork, OrderNetwork } from '../../service/api'
 import { TestAssets, } from '../../assets'
+import { MenuItem } from '../../model';
 
 class UserScreen extends BaseScreen {
     static navigationOptions = {
@@ -87,7 +89,7 @@ class UserScreen extends BaseScreen {
             )
     }
     apiCallHandler = () => {
-
+        this.props.fetchUserFavoritesHandler()
         UserNetwork.fetchUserInfo()
             .then(
                 result => {
@@ -118,29 +120,82 @@ class UserScreen extends BaseScreen {
     }
     pressReviewOrderHandler = (order) => {
 
-        this.pushNewScreen({ routeName: ScreenName.ReviewScreen(), key: `${Math.random() * 10000}`, params: { order } })
+        this.pushNewScreen({
+            routeName: ScreenName.ReviewScreen(),
+            key: `${Math.random() * 10000}`,
+            params: { order }
+        })
     }
     pressOrderDetailHandler = (order) => {
 
         this.pushNewScreen({ routeName: ScreenName.OrderDetailScreen(), key: `${Math.random() * 10000}`, params: { order } })
     }
-
+    pressSeeMyReviewOrderHandler = (order) => {
+        this.pushNewScreen({
+            routeName: ScreenName.ReviewScreen(),
+            key: `${Math.random() * 10000}`,
+            params: {
+                order,
+                showReview: true
+            }
+        })
+    }
     pressOrderAgainHandler = (order) => {
-        console.log("ORDER", order)
-        // const selectedOptions = [{ groupId: "", text: "", type: "", options: [] }]
-        // const { orderForPlace } = this.props
-        // const { menuItem, selectedOptions, quantity, menuItemType } = this.state
-        // let item = menuItem.hasSubtypes ? menuItemType : menuItem
+        const { orderedMenuItems } = order
+        let orderAgainMenuItems = []
 
-        // const orderdMenuItem = {
-        //     _id: `${Math.random()}${Math.random()}${Math.random()}`,
-        //     quantity: quantity,
-        //     menuItem: item,
-        //     menuItemTotalPrice: this.subTotalPrice(item, selectedOptions, quantity),
-        //     selectedOptions: selectedOptions,
-        // }
+        orderedMenuItems.map(item => {
+            let menuItem = new MenuItem(item.food)
 
-        // this.props.addOrderMenuItemHandler([orderdMenuItem, ...this.props.order])
+            var found = -1;
+            for (var i = 0; i < orderAgainMenuItems.length; i++) {
+                if (orderAgainMenuItems[i]._id == menuItem._id) {
+                    found = i;
+                    break;
+                }
+            }
+            if (found > -1) {
+                orderAgainMenuItems[found].quantity += 1
+                orderAgainMenuItems[found].menuItemTotalPrice = subTotalPrice(menuItem, orderAgainMenuItems[found].selectedOptions, orderAgainMenuItems[found].quantity)
+            } else {
+                const selectedOptions = [{
+                    groupId: "undefined",
+                    text: this.props.strings.supplements,
+                    type: "undefined",
+                    options: item.options
+                }]
+                const quantity = 1
+                const orderdMenuItem = {
+                    _id: menuItem._id,
+                    quantity,
+                    menuItem,
+                    menuItemTotalPrice: subTotalPrice(menuItem, selectedOptions, quantity),
+                    selectedOptions: selectedOptions,
+                }
+                orderAgainMenuItems.push(orderdMenuItem)
+            }
+
+        })
+
+
+        if (orderAgainMenuItems.length > 0) {
+            const item = orderAgainMenuItems[0].menuItem
+            const { orderForPlace } = this.props
+            if (orderForPlace == null) {
+                this.props.addOrderMenuItemHandler([...orderAgainMenuItems, ...this.props.order])
+                this.pushNewScreen(ScreenName.ShopScreen())
+            } else if (orderForPlace._id === item.place._id) {
+                this.props.addOrderMenuItemHandler([...orderAgainMenuItems, ...this.props.order])
+                this.pushNewScreen(ScreenName.ShopScreen())
+            } else if (orderForPlace._id !== item.place._id) {
+                const okPress = () => {
+                    this.props.addOrderMenuItemHandler([...orderAgainMenuItems,])
+                    this.pushNewScreen(ScreenName.ShopScreen())
+                }
+                this.showDialogMessage(this.props.strings.youCurrentlyHaveDishesInYourCartFromAnotherRestaurant, okPress)
+            }
+        }
+
     }
 
     userImageContent = () => {
@@ -247,6 +302,7 @@ class UserScreen extends BaseScreen {
                         PressDetailOrder={(order) => this.pressOrderDetailHandler(order)}
                         PressOrderAgain={(order) => this.pressOrderAgainHandler(order)}
                         PressReview={(order) => this.pressReviewOrderHandler(order)}
+                        PressSeeMyReview={(order) => this.pressSeeMyReviewOrderHandler(order)}
                     />
                 </View>
             )
@@ -260,8 +316,9 @@ class UserScreen extends BaseScreen {
                         arrayObject={userOrders}
                         isCatheringOrder={false}
                         PressDetailOrder={(order) => this.pressOrderDetailHandler(order)}
-                        PressOrderAgain={(order) => alert(order)}
+                        PressOrderAgain={(order) => { }}
                         PressReview={(order) => this.pressReviewOrderHandler(order)}
+                        PressSeeMyReview={(order) => this.pressSeeMyReviewOrderHandler(order)}
                     />
                 </View>
             )
@@ -460,6 +517,7 @@ const mapStateToProps = state => {
         userFavoritePlaces: state.user.userFavoritePlaces,
         userFavoriteMenuItems: state.user.userFavoriteMenuItems,
         orderForPlace: state.order.orderForPlace,
+        order: state.order.order,
     };
 };
 
@@ -471,6 +529,7 @@ const mapDispatchToProps = dispatch => {
         userLogOutHandler: () => dispatch(userLogOut()),
         addOrderMenuItemHandler: (orderdMenuItem) => dispatch(addOrderMenuItem(orderdMenuItem)),
         emptyCurentOrderHandler: () => dispatch(emptyOrder()),
+        fetchUserFavoritesHandler: () => dispatch(fetchUserFavorites()),
     };
 };
 
