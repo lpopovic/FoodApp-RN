@@ -199,7 +199,7 @@ class CateringScreen extends BaseScreen {
                     })
                 } else {
                     this.setNewStateHandler({
-                        balance: catheringOptions.balance + catheringOptions.reserved
+                        balance: catheringOptions.balance - catheringOptions.reserved
                     })
                 }
             }

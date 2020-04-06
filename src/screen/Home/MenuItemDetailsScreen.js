@@ -477,7 +477,7 @@ class MenuItemDetailsScreen extends BaseScreen {
         const catheringOptions = this.props.userInfo.catheringOptions
 
         if (cathering != null && cathering.isFromCathering) {
-            if (catheringOptions.package == 'unlimited' || catheringOptions.balance + Math.abs(catheringOptions.reserved) >= subTotalPrice(item, selectedOptions, 1)) {
+            if (catheringOptions.package == 'unlimited' || catheringOptions.balance - Math.abs(catheringOptions.reserved) >= subTotalPrice(item, selectedOptions, 1)) {
                 OrderNetwork.fetchCatheringOrder(menuItem, selectedOptions, "delivery", "cash", '', cathering.selectedDate)
                     .then(
                         res => {
