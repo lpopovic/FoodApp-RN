@@ -45,7 +45,24 @@ class ReviewNetwork {
                 }
             }
         });
+    static fetchGetAllReviews = () =>
+        new Promise(async (resolve, reject) => {
+            const url = RestUrl.postReview
+            try {
+                const { data } = await axios.get(url)
+                const reviewArray = Review.createArrayReview(data)
+                resolve(reviewArray)
 
+            } catch (error) {
+                try {
+                    const { message } = error.response.data.error
+                    reject(message)
+                } catch  {
+                    reject(error.message)
+
+                }
+            }
+        });
     static fetchPostCreateReview = (textReview, avgRating, avgPriceTag, orderId, placeId) =>
         new Promise(async (resolve, reject) => {
             const url = RestUrl.postReview

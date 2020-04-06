@@ -7,7 +7,8 @@ import {
     UPDATE_USER_FAVORITE_PLACES,
     USER_FAVORITE_PLACES,
     UPDATE_USER_FAVORITE_MENU_ITEMS,
-    USER_FAVORITE_MENU_ITEMS
+    USER_FAVORITE_MENU_ITEMS,
+    USER_UPDATE_REVIEWS
 } from '../actions/actionTypes';
 import { FavoriteNetwork } from '../../service/api'
 import { Place, MenuItem } from '../../model'
@@ -21,6 +22,7 @@ const initialState = {
     userFavoritePlacesIDs: [],
     userFavoriteMenuItems: [],
     userFavoriteMenuItemsIDs: [],
+    userReviews: [],
     userInfo: {
         _id: 'Unknown id',
         username: 'Unknown username',
@@ -51,12 +53,7 @@ const reducer = (state = initialState, action) => {
             }
         case USER_LOG_OUT:
             return {
-                ...state,
-                JWT: null,
-                isLogin: false,
-                userOrders: [],
-                userCatherings: [],
-                userInfo: initialState.userInfo,
+                ...initialState,
             }
         case UPDATE_LIST_USER_ORDERS:
             return {
@@ -69,7 +66,11 @@ const reducer = (state = initialState, action) => {
                 ...state,
                 userCatherings: action.payload
             }
-
+        case USER_UPDATE_REVIEWS:
+            return {
+                ...state,
+                userReviews: action.payload,
+            }
         case UPDATE_USER_FAVORITE_PLACES:
             return {
                 ...state,
@@ -88,7 +89,7 @@ const reducer = (state = initialState, action) => {
                     FavoriteNetwork.fetchDeleteFavoritePlace(action.payload._id)
                 } else {
                     userFavoritePlacesIDs.push(String(action.payload._id))
-                    userFavoritePlaces = [...userFavoritePlaces ,new Place(action.payload)]
+                    userFavoritePlaces = [...userFavoritePlaces, new Place(action.payload)]
                     // userFavoritePlaces.push(new Place(action.payload))
                     FavoriteNetwork.fetchPostFavoritePlace(action.payload._id)
                 }
@@ -98,7 +99,7 @@ const reducer = (state = initialState, action) => {
             return {
                 ...state,
                 userFavoritePlacesIDs: userFavoritePlacesIDs,
-                userFavoritePlaces : userFavoritePlaces
+                userFavoritePlaces: userFavoritePlaces
             }
 
 
@@ -110,7 +111,7 @@ const reducer = (state = initialState, action) => {
             }
 
         case USER_FAVORITE_MENU_ITEMS:
-            
+
             let userFavoriteMenuItems = state.userFavoriteMenuItems
             let favoriteMenuItemsIDs = [...state.userFavoriteMenuItemsIDs]
             if (state.isLogin === true) {
@@ -120,7 +121,7 @@ const reducer = (state = initialState, action) => {
                     FavoriteNetwork.fetchDeleteFavoriteMenuItem(action.payload._id)
                 } else {
                     favoriteMenuItemsIDs.push(String(action.payload._id))
-                    userFavoriteMenuItems = [...userFavoriteMenuItems ,new MenuItem(action.payload)]
+                    userFavoriteMenuItems = [...userFavoriteMenuItems, new MenuItem(action.payload)]
                     FavoriteNetwork.fetchPostFavoriteMenuItem(action.payload._id)
                 }
             } else {

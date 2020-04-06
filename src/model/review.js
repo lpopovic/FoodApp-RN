@@ -8,6 +8,7 @@ class Review {
         this.priceTag = object.type || '1';
         this.author = object.author
         this.createdate = object.createdAt || null;
+        this.orderId = object.order != null ? object.order._id : null;
     }
 
     getTextReview = () => {
@@ -52,10 +53,10 @@ class Review {
             } else {
                 return "USERNAME"
             }
-        }else {
+        } else {
             return name
         }
-        
+
     }
     getHoursOrDate = () => {
         if (this.createdate !== null) {
