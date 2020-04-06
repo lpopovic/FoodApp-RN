@@ -38,7 +38,8 @@ class MenuItemDetailsScreen extends BaseScreen {
             quantity: 1,
             menuItem: new MenuItem({}),
             menuItemType: new MenuItem({}),
-            selectedOptions: [{ groupId: "", text: "", type: "", options: [] }]
+            selectedOptions: [{ groupId: "", text: "", type: "", options: [] }],
+            selectedTime: null,
         }
     }
 
@@ -329,6 +330,51 @@ class MenuItemDetailsScreen extends BaseScreen {
     onPressShowPlaceOnMap = (place) => {
         UrlOpen.openUrlInBrowser(UrlOpen.generateUrlForGoogleMap(place.coordinate.latitude, place.coordinate.longitude))
     }
+    setTimeForDeliveryCatheringContent = () => {
+        const title = this.props.strings.delivery
+        let time = ['10:00h', '16:00h', '22:00h']
+        const { selectedTime } = this.state
+        return (
+            <View>
+                <View>
+                    <Text style={{
+                        fontWeight: '500',
+                        fontSize: 20,
+                        color: BASE_COLOR.darkGray,
+                        marginLeft: 20,
+                        marginBottom: 10,
+                        marginTop: 40
+                    }}>{title}</Text>
+                </View>
+                <View style={{ backgroundColor: BASE_COLOR.gray, height: 1 }} />
+                {
+                    time.map((item, index) => {
+                        return (
+                            <View
+                                key={`${index}`}>
+                                <View
+                                    style={{ flexDirection: 'row', alignItems: 'center', marginLeft: 10, marginRight: 25 }}>
+                                    <CheckBox
+                                        key={`item:${index}`}
+                                        checked={selectedTime == item}
+                                        onPress={(_id, index) => this.setNewStateHandler({ selectedTime: item })}
+                                        checkedIcon='dot-circle-o'
+                                        uncheckedIcon='circle-o'
+                                        title={item}
+                                        textStyle={{ fontWeight: '400', fontSize: 18, color: BASE_COLOR.darkGray, backgroundColor: 'transparent' }}
+                                        containerStyle={{ flex: 7, backgroundColor: 'transparent', borderColor: 'transparent' }}
+                                    />
+                                </View>
+                                <View style={{ backgroundColor: BASE_COLOR.gray, height: 1 }}></View>
+                            </View>
+                        )
+
+                    })
+                }
+
+            </View>
+        )
+    }
     mainContent = () => {
         const { name, description, image, nominalPrice, menuItemOptions, place, hasSubtypes, subtypes } = this.state.menuItem
         const cathering = this.props.navigation.getParam('cathering', null)
@@ -439,7 +485,12 @@ class MenuItemDetailsScreen extends BaseScreen {
                 {this._renderMenuItemTypeWithOptions(subtypes)}
                 {/* {hasSubtypes === true && subtypes != [] ? this._renderMenuItemOptions(subtypes.menuItemOptions) : null} */}
                 {this._renderMenuItemOptions(hasSubtypes ? this.state.menuItemType.menuItemOptions : menuItemOptions)}
-
+                {
+                    cathering != null && cathering.isFromCathering ?
+                        // null
+                        this.setTimeForDeliveryCatheringContent()
+                        : null
+                }
                 <View style={{ alignItems: 'center', justifyContent: 'center', margin: 20, marginBottom: 30 }}>
                     <TouchableOpacity onPress={() => this.onPressAddToBag()}>
                         <View style={{ backgroundColor: BASE_COLOR.blue, width: 280, height: 45, justifyContent: 'center', alignItems: 'center', borderRadius: 4 }}>
