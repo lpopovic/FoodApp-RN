@@ -274,26 +274,14 @@ class UserScreen extends BaseScreen {
     }
     recentOrdersContent = () => {
         const { selectedIndex } = this.state
-        const { userOrders, userCatherings, userInfo } = this.props
-        if (userInfo.catheringIsAvailable == true) {
+        const { userOrders, userCatherings, } = this.props
+        const listOrders = selectedIndex == 0 ? userOrders : userCatherings
+        if (listOrders.length > 0) {
             return (
                 <View style={[styles.baseContainer, { flexDirection: 'column' }]}>
                     <HistoryOrderList
-                        arrayObject={selectedIndex == 0 ? userOrders : userCatherings}
+                        arrayObject={listOrders}
                         isCatheringOrder={selectedIndex == 0 ? false : true}
-                        PressDetailOrder={(order) => this.pressOrderDetailHandler(order)}
-                        PressOrderAgain={(order) => this.pressOrderAgainHandler(order)}
-                        PressReview={(order) => this.pressReviewOrderHandler(order)}
-                        PressSeeMyReview={(order) => this.pressSeeMyReviewOrderHandler(order)}
-                    />
-                </View>
-            )
-        } else {
-            return (
-                <View style={[styles.baseContainer, { flexDirection: 'column' }]}>
-                    <HistoryOrderList
-                        arrayObject={userOrders}
-                        isCatheringOrder={false}
                         PressDetailOrder={(order) => this.pressOrderDetailHandler(order)}
                         PressOrderAgain={(order) => this.pressOrderAgainHandler(order)}
                         PressReview={(order) => this.pressReviewOrderHandler(order)}
