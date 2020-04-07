@@ -24,6 +24,7 @@ import { TestAssets, IconAssets } from '../../assets'
 import Icon from 'react-native-vector-icons/dist/Ionicons';
 import MapView from 'react-native-maps';
 import { connect } from 'react-redux';
+import UrlOpen from '../../components/common/UrlOpen';
 
 // default params for mapView
 const zoom = 10
@@ -456,6 +457,8 @@ class MapScreen extends BaseScreen {
                             description={`${Math.round(place.coordinate.latitude * 100) / 100}°N, ${Math.round(place.coordinate.longitude * 100) / 100}°E`}
                             pinColor={currentSlideIndex == index ? BASE_COLOR.green : BASE_COLOR.red}
                             onPress={() => this.onPressMarkerHandler(index)}
+                            // onCalloutPress={() => UrlOpen.openUrlInBrowser(UrlOpen.generateUrlForGoogleMap(place.coordinate.latitude, place.coordinate.longitude))}
+
                         />
 
                     )
