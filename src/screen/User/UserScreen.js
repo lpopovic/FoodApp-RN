@@ -33,7 +33,7 @@ import {
     fetchUserFavorites,
 } from '../../store/actions'
 import { UserNetwork, OrderNetwork } from '../../service/api'
-import { TestAssets, } from '../../assets'
+import { TestAssets, IconAssets, } from '../../assets'
 import { MenuItem } from '../../model';
 
 class UserScreen extends BaseScreen {
@@ -202,7 +202,12 @@ class UserScreen extends BaseScreen {
         return (
             <View style={{ justifyContent: 'center', alignContent: 'center', alignItems: 'center' }}>
                 <View style={styles.userImage}>
-                    <Image source={TestAssets.KFC_logo} style={{ width: '100%', height: '100%' }} resizeMode='contain' />
+                    <Image source={IconAssets.userProfile}
+                        style={{
+                            width: '100%',
+                            height: '100%',
+                            tintColor: BASE_COLOR.blue,
+                        }} resizeMode='contain' />
                 </View>
             </View>
         )
@@ -492,9 +497,10 @@ const styles = StyleSheet.create({
         aspectRatio: 1,
         borderColor: BASE_COLOR.blue,
         borderRadius: 75,
-        borderWidth: 2,
-        backgroundColor: BASE_COLOR.blue,
-        overflow: 'hidden'
+        borderWidth: 1,
+        backgroundColor: BASE_COLOR.white,
+        overflow: 'hidden',
+        paddingTop: 4,
     },
     segmentedControlContainer: {
         paddingLeft: 16,
