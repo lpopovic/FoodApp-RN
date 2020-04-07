@@ -9,7 +9,7 @@ import {
 import { ScreenName } from '../../helpers'
 import BaseScreen from "../BaseScreen/BaseScreen"
 import Header from '../../components/common/BaseHeader'
-import { fetchUserProfile } from '../../store/actions'
+import { fetchUserProfile, fetchUserFavorites } from '../../store/actions'
 import { connect } from 'react-redux';
 import { NAV_COLOR, BASE_COLOR } from '../../styles';
 import { CategorySectionList } from '../../components/Category/CategoryList'
@@ -90,6 +90,8 @@ class HomeScreen extends BaseScreen {
         let params = []
         params.push(ParamsUrl.avgPriceTag(avgPriceTag))
         params.push(ParamsUrl.avgRating(avgRating))
+
+        this.props.fetchUserFavoriteHandler()
 
         PlaceNetwork.fetchPlaces(params).then(
             res => {
@@ -475,8 +477,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-
         fetchUserProfileHandler: () => dispatch(fetchUserProfile()),
+        fetchUserFavoriteHandler: () => dispatch(fetchUserFavorites())
     };
 };
 
