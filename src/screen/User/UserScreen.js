@@ -360,18 +360,19 @@ class UserScreen extends BaseScreen {
                     />
                 }
                 style={{ flex: 1 }}
-                stickyHeaderIndices={[9]}
+                stickyHeaderIndices={[1]}
                 contentContainerStyle={styles.scrollViewContainer}>
-
-                {this.userImageContent()}
-                {this.infoContent(strings.username, username)}
-                {this.infoContent(strings.firstName, name)}
-                {this.infoContent(strings.lastName, lastName)}
-                {this.infoContent(strings.email, email)}
-                {this.infoContent(strings.phoneNumber, phoneNumber.trim() != '' ? phoneNumber : strings.notAvailable)}
-                {this.infoContent(strings.address, lastUseAddress)}
-                {this.placeListFavoriteContent()}
-                {this.menuItemsListFavoriteContent()}
+                <>
+                    {this.userImageContent()}
+                    {this.infoContent(strings.username, username)}
+                    {this.infoContent(strings.firstName, name)}
+                    {this.infoContent(strings.lastName, lastName)}
+                    {this.infoContent(strings.email, email)}
+                    {this.infoContent(strings.phoneNumber, phoneNumber.trim() != '' ? phoneNumber : strings.notAvailable)}
+                    {this.infoContent(strings.address, lastUseAddress)}
+                    {this.placeListFavoriteContent()}
+                    {this.menuItemsListFavoriteContent()}
+                </>
                 {this.renderStickyHeaderIndices()}
                 {this.recentOrdersContent()}
 
