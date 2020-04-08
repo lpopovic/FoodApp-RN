@@ -106,7 +106,7 @@ class HistoryOrder extends Component {
 
         userReviews.map(item => {
             if (item.orderId == _id) {
-                rating = `${this.props.strings.review}: ${item.rating}`
+                rating = `${item.rating} ★`
 
             }
         })
