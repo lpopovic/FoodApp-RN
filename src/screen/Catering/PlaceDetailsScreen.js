@@ -23,8 +23,9 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import IconMaterial from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Badge } from 'react-native-elements'
 import Moment from 'moment'
-const HEADER_MIN_HEIGHT = 65 + getStatusBarHeight()
+const HEADER_MIN_HEIGHT = 75 + getStatusBarHeight()
 const HEADER_PADDING_TOP = isAndroid ? 25 : getStatusBarHeight() + 5;
+let detectOnScrollChange = true;
 class PlaceDetailsScreen extends BaseScreen {
 
     static navigationOptions = {
@@ -42,7 +43,7 @@ class PlaceDetailsScreen extends BaseScreen {
             sectionMeniItems: [],
             place: new Place({}),
             categoryList: [],
-            selectedCategory: null,
+            selectedCategory: 0,
         }
 
         this.dayOfWeek = Moment().day()
@@ -87,6 +88,8 @@ class PlaceDetailsScreen extends BaseScreen {
                     loading: false,
                     menuItems: res,
                     refreshing: false,
+                    selectedCategory: 0,
+                    sectionMeniItems: [],
                 })
                 this.setupSectionList()
 
@@ -165,27 +168,33 @@ class PlaceDetailsScreen extends BaseScreen {
         )
     }
     onPressItemCategoryList = (index) => {
-        this.setNewStateHandler({
-            selectedCategory: index
-        })
-        const { categoryList } = this.state
-        // this.onPressSectionListHeader(index)
-        this.refs.scrollView.scrollTo({
-            x: 0,
-            y: Number(categoryList[index].coordinate.startPosition),
-            animated: true
-        })
+        const { categoryList, selectedCategory } = this.state
+
+        if (selectedCategory != index) {
+            detectOnScrollChange = false
+            setTimeout(() => {
+                detectOnScrollChange = true
+            }, 1000);
+            this.setNewStateHandler({
+                selectedCategory: index
+            })
+            this.refs.scrollView.scrollTo({
+                x: 0,
+                y: Number(categoryList[index].coordinate.startPosition),
+                animated: false
+            })
+        }
     }
     categoryListContent = () => {
         //sectionMeniItems.push({ category, menuItems: [], hide: true })
         const { categoryList, selectedCategory } = this.state
         return (
             <View style={{
-                backgroundColor: 'red',
-                height: 30,
+                backgroundColor: BASE_COLOR.lightGray,
                 width: '100%',
                 justifyContent: 'center',
-                alignItems: 'center'
+                alignItems: 'center',
+                height: 40,
             }}>
                 <FlatList
                     style={{
@@ -195,28 +204,32 @@ class PlaceDetailsScreen extends BaseScreen {
                     extraData={selectedCategory}
                     horizontal
                     showsHorizontalScrollIndicator={false}
-                    keyExtractor={(item, index) => index}
+                    keyExtractor={(item, index) => index.toString()}
                     renderItem={({ item, index }) => {
                         const { category } = item
                         const isSelected = selectedCategory != null ? index == selectedCategory ? true : false : false
                         return (
                             <View style={{
                                 marginHorizontal: 4,
-                                // padding: 4,
-                                backgroundColor: 'transparent',
                                 justifyContent: 'center',
                                 alignItems: 'center',
+                                marginVertical: 8,
                             }}>
                                 <TouchableOpacity
                                     onPress={() => this.onPressItemCategoryList(index)}>
                                     <View style={{
+                                        height: '100%',
                                         borderRadius: 2,
-                                        paddingHorizontal: 4,
+                                        paddingHorizontal: 8,
                                         backgroundColor: isSelected ? BASE_COLOR.blue : BASE_COLOR.white,
+                                        justifyContent: 'center',
+                                        alignItems: 'center',
                                     }}>
                                         <Text
                                             style={{
                                                 color: isSelected ? BASE_COLOR.white : BASE_COLOR.black,
+                                                fontSize: 14,
+                                                fontWeight: 'bold'
                                             }}
                                         >{category.name}</Text>
                                     </View>
@@ -231,19 +244,21 @@ class PlaceDetailsScreen extends BaseScreen {
         )
     }
     handleScroll = (event) => {
-        const currentPosition = Number(event.nativeEvent.contentOffset.y).toFixed(2)
+        if (detectOnScrollChange) {
+            const currentPosition = Number(event.nativeEvent.contentOffset.y).toFixed(4)
 
-        const { categoryList } = this.state
+            const { categoryList } = this.state
 
-        categoryList.map((item, index) => {
-            const { coordinate } = item
-            if (currentPosition >= coordinate.startPosition && currentPosition <= coordinate.endPosition) {
-                this.setNewStateHandler({
-                    selectedCategory: index
-                })
+            for (let index = 0; index < categoryList.length; index++) {
+                const { coordinate } = categoryList[index];
+                if (currentPosition >= coordinate.startPosition - 10 && currentPosition <= coordinate.endPosition - 10) {
+                    this.setNewStateHandler({
+                        selectedCategory: index
+                    })
+                    index = categoryList.length
+                }
             }
-        })
-
+        }
     }
     render() {
         const { place, menuItems, loading, refreshing } = this.state
@@ -415,7 +430,6 @@ class PlaceDetailsScreen extends BaseScreen {
                         {this.menuItemsListFavoriteContent()}
                     </>
                     {this.sectionListContent(menuItems)}
-                    <Image source={{ uri: place.image169 }} />
                 </HeaderImageScrollView>
             </View>
         )
@@ -461,13 +475,14 @@ class PlaceDetailsScreen extends BaseScreen {
 
     }
     setupSectionList = () => {
-        const { menuItems, place } = this.state
+        const { menuItems, place, } = this.state
         let { categories } = place
 
         let sectionMeniItems = []
+        let categoryList = []
 
         categories.forEach(category => {
-            sectionMeniItems.push({ category, menuItems: [], hide: true, })
+            sectionMeniItems.push({ category, menuItems: [], hide: false, })
         });
 
         for (let i = 0; i < menuItems.length; i++) {
@@ -488,12 +503,13 @@ class PlaceDetailsScreen extends BaseScreen {
         }
         sectionMeniItems = sectionMeniItems.filter(item => {
             if (item.menuItems.length > 0) {
+                categoryList.push({ category: item.category })
                 return item
             }
         })
 
 
-        this.setNewStateHandler({ sectionMeniItems })
+        this.setNewStateHandler({ sectionMeniItems, categoryList })
     }
     dishlistContent = (menuItems, hide) => {
         if (hide == false) {
@@ -552,8 +568,8 @@ class PlaceDetailsScreen extends BaseScreen {
                     <View key={indexInArray}
                         onLayout={(event) => {
                             let { x, y, width, height } = event.nativeEvent.layout;
-                            const startPosition = Number(y).toFixed(2)
-                            const endPosition = Number(y + height).toFixed(2)
+                            const startPosition = Number(y).toFixed(4)
+                            const endPosition = Number(y + height).toFixed(4)
 
                             let { categoryList } = this.state
                             if (categoryList.length > indexInArray) {
@@ -573,10 +589,25 @@ class PlaceDetailsScreen extends BaseScreen {
                             }
                             this.setNewStateHandler({ categoryList: [...categoryList] })
                         }}>
-                        <TouchableOpacity onPress={() => this.onPressSectionListHeader(indexInArray)}>
+                        <TouchableOpacity
+                            activeOpacity={1}>
+                            {/* onPress={() => this.onPressSectionListHeader(indexInArray)}> */}
                             <View
-
-                                style={{ borderRadius: 8, borderColor: tintColor, borderWidth: 0.7, marginTop: 4, marginBottom: 4, marginLeft: 8, marginRight: 8, padding: 8, backgroundColor: BASE_COLOR.white, flexDirection: 'row', justifyContent: 'space-between', alignContent: 'center', alignItems: 'center' }}>
+                                style={{
+                                    borderRadius: 8,
+                                    borderColor: tintColor,
+                                    // borderBottomWidth: 0.7,
+                                    marginTop: 4,
+                                    marginBottom: 4,
+                                    marginLeft: 8,
+                                    marginRight: 8,
+                                    padding: 8,
+                                    backgroundColor: BASE_COLOR.lightGray,
+                                    flexDirection: 'row',
+                                    justifyContent: 'space-between',
+                                    alignContent: 'center',
+                                    alignItems: 'center'
+                                }}>
                                 <Text
                                     numberOfLines={1}
                                     ellipsizeMode='tail'
@@ -584,7 +615,7 @@ class PlaceDetailsScreen extends BaseScreen {
                                     {section.category.name}</Text>
 
                                 <Icon
-                                    name={!section.hide ? "md-arrow-dropdown-circle" : "md-arrow-dropright-circle"}
+                                    name={"ios-arrow-down"} //{!section.hide ? "md-arrow-dropdown-circle" : "md-arrow-dropright-circle"}
                                     size={25}
                                     color={tintColor} />
                             </View>
