@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image, Dimensions, Platform, LayoutAnimation, UIManager, RefreshControl } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image, Dimensions, Platform, LayoutAnimation, UIManager, RefreshControl, FlatList } from 'react-native';
 import HeaderImageScrollView, { TriggeringView } from 'react-native-image-header-scroll-view';
 import { getStatusBarHeight } from 'react-native-status-bar-height';
 import * as Animatable from 'react-native-animatable';
@@ -23,6 +23,8 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import IconMaterial from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Badge } from 'react-native-elements'
 import Moment from 'moment'
+const HEADER_MIN_HEIGHT = 65 + getStatusBarHeight()
+const HEADER_PADDING_TOP = isAndroid ? 25 : getStatusBarHeight() + 5;
 class PlaceDetailsScreen extends BaseScreen {
 
     static navigationOptions = {
@@ -39,6 +41,8 @@ class PlaceDetailsScreen extends BaseScreen {
             menuItems: [],
             sectionMeniItems: [],
             place: new Place({}),
+            categoryList: [],
+            selectedCategory: null,
         }
 
         this.dayOfWeek = Moment().day()
@@ -125,6 +129,122 @@ class PlaceDetailsScreen extends BaseScreen {
             return <View />
         }
     }
+    closeBtnContent = () => {
+        return (
+            <TouchableOpacity
+                onPress={() => this.closeScreen()}>
+                <View>
+                    <Image
+                        style={{
+                            height: 25,
+                            aspectRatio: 1
+                        }}
+                        resizeMode='contain'
+                        source={IconAssets.backIcon} />
+
+                </View>
+            </TouchableOpacity>
+        )
+    }
+    shopBtnContent = () => {
+        return (
+            <TouchableOpacity
+                onPress={() => this.pushNewScreen(ScreenName.ShopScreen())}
+                style={{}}>
+                <View style={{ padding: 4 }}>
+                    <Image
+                        style={{
+                            height: 25,
+                            aspectRatio: 1
+                        }}
+                        resizeMode='contain'
+                        source={TestAssets.shopBagIcon} />
+                    {this.badgeContent()}
+                </View>
+            </TouchableOpacity>
+        )
+    }
+    onPressItemCategoryList = (index) => {
+        this.setNewStateHandler({
+            selectedCategory: index
+        })
+        const { categoryList } = this.state
+        // this.onPressSectionListHeader(index)
+        this.refs.scrollView.scrollTo({
+            x: 0,
+            y: Number(categoryList[index].coordinate.startPosition),
+            animated: true
+        })
+    }
+    categoryListContent = () => {
+        //sectionMeniItems.push({ category, menuItems: [], hide: true })
+        const { categoryList, selectedCategory } = this.state
+        return (
+            <View style={{
+                backgroundColor: 'red',
+                height: 30,
+                width: '100%',
+                justifyContent: 'center',
+                alignItems: 'center'
+            }}>
+                <FlatList
+                    style={{
+                        width: '100%',
+                    }}
+                    data={categoryList}
+                    extraData={selectedCategory}
+                    horizontal
+                    showsHorizontalScrollIndicator={false}
+                    keyExtractor={(item, index) => index}
+                    renderItem={({ item, index }) => {
+                        const { category } = item
+                        const isSelected = selectedCategory != null ? index == selectedCategory ? true : false : false
+                        return (
+                            <View style={{
+                                marginHorizontal: 4,
+                                // padding: 4,
+                                backgroundColor: 'transparent',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                            }}>
+                                <TouchableOpacity
+                                    onPress={() => this.onPressItemCategoryList(index)}>
+                                    <View style={{
+                                        borderRadius: 2,
+                                        paddingHorizontal: 4,
+                                        backgroundColor: isSelected ? BASE_COLOR.blue : BASE_COLOR.white,
+                                    }}>
+                                        <Text
+                                            style={{
+                                                color: isSelected ? BASE_COLOR.white : BASE_COLOR.black,
+                                            }}
+                                        >{category.name}</Text>
+                                    </View>
+                                </TouchableOpacity>
+                            </View>
+                        )
+                    }}
+
+                />
+
+            </View>
+        )
+    }
+    handleScroll = (event) => {
+        const currentPosition = Number(event.nativeEvent.contentOffset.y).toFixed(2)
+
+        const { categoryList } = this.state
+
+        categoryList.map((item, index) => {
+            const { coordinate } = item
+            if (currentPosition >= coordinate.startPosition && currentPosition <= coordinate.endPosition) {
+                this.setNewStateHandler({
+                    selectedCategory: index
+                })
+            }
+        })
+
+    }
     render() {
         const { place, menuItems, loading, refreshing } = this.state
         const { strings } = this.props
@@ -138,46 +258,38 @@ class PlaceDetailsScreen extends BaseScreen {
         }
         return (
             <View style={styles.mainContainer}>
-                <View style={{ width: '100%', paddingLeft: 16, paddingRight: 16, justifyContent: 'space-between', position: 'absolute', zIndex: 100, flexDirection: 'row', top: Platform.OS == "ios" ? getStatusBarHeight() + 5 : 25, }}>
-                    <TouchableOpacity
-                        onPress={() => this.closeScreen()}
-                        style={{}}>
-                        <View>
-                            <Image
-                                style={{
-                                    height: 25,
-                                    aspectRatio: 1
-                                }}
-                                resizeMode='contain'
-                                source={IconAssets.backIcon} />
-
-                        </View>
-                    </TouchableOpacity>
+                <View style={{
+                    width: '100%',
+                    paddingLeft: 16,
+                    paddingRight: 16,
+                    justifyContent: 'space-between',
+                    position: 'absolute',
+                    zIndex: 100,
+                    flexDirection: 'row',
+                    top: HEADER_PADDING_TOP,
+                }}>
+                    {this.closeBtnContent()}
                     {cathering != null && cathering.isFromCathering ? null :
-                        <TouchableOpacity
-                            onPress={() => this.pushNewScreen(ScreenName.ShopScreen())}
-                            style={{}}>
-                            <View style={{ padding: 4 }}>
-                                <Image
-                                    style={{
-                                        height: 25,
-                                        aspectRatio: 1
-                                    }}
-                                    resizeMode='contain'
-                                    source={TestAssets.shopBagIcon} />
-                                {this.badgeContent()}
-                            </View>
-                        </TouchableOpacity>
+                        this.shopBtnContent()
                     }
                 </View>
                 <HeaderImageScrollView
+                    ref='scrollView'
+                    onScroll={this.handleScroll}
                     maxHeight={180}
-                    minHeight={(40 + getStatusBarHeight())}
+                    minHeight={HEADER_MIN_HEIGHT}
                     overlayColor='white'
                     maxOverlayOpacity={1}
                     minOverlayOpacity={0}
                     fadeOutForeground
-                    renderHeader={() => <Image source={{ uri: place.image.image169 }} style={{ height: Dimensions.get('screen').width * 9 / 16, width: Dimensions.get('window').width }} />}
+                    renderHeader={() =>
+                        <Image
+                            source={{ uri: place.image.image169 }}
+                            style={{
+                                aspectRatio: 16 / 9,
+                                width: '100%'
+                            }} />
+                    }
                     renderFixedForeground={() => (
                         <Animatable.View
                             style={styles.navTitleView}
@@ -186,6 +298,7 @@ class PlaceDetailsScreen extends BaseScreen {
                             }}
                         >
                             <Text style={styles.navTitle}>{place.name}</Text>
+                            {this.categoryListContent()}
                         </Animatable.View>
                     )}
 
@@ -200,7 +313,7 @@ class PlaceDetailsScreen extends BaseScreen {
                     <TriggeringView
                         style={{ flexDirection: 'column', height: this.state.expanded ? 'auto' : 60, paddingLeft: 15, paddingRight: 15, justifyContent: 'center', overflow: 'hidden' }}
                         onHide={() => this.navTitleView.fadeInUp(180)}
-                        onDisplay={() => this.navTitleView.fadeOut((40 + getStatusBarHeight()))}
+                        onDisplay={() => this.navTitleView.fadeOut(HEADER_MIN_HEIGHT)}
                     >
                         <View style={{ flexDirection: 'row', height: this.state.expanded ? 'auto' : 40 }}>
                             <View style={{ flex: 5.5, justifyContent: 'center' }}>
@@ -354,7 +467,7 @@ class PlaceDetailsScreen extends BaseScreen {
         let sectionMeniItems = []
 
         categories.forEach(category => {
-            sectionMeniItems.push({ category, menuItems: [], hide: true })
+            sectionMeniItems.push({ category, menuItems: [], hide: true, })
         });
 
         for (let i = 0; i < menuItems.length; i++) {
@@ -373,6 +486,12 @@ class PlaceDetailsScreen extends BaseScreen {
                 }
             });
         }
+        sectionMeniItems = sectionMeniItems.filter(item => {
+            if (item.menuItems.length > 0) {
+                return item
+            }
+        })
+
 
         this.setNewStateHandler({ sectionMeniItems })
     }
@@ -424,13 +543,36 @@ class PlaceDetailsScreen extends BaseScreen {
     }
     sectionListContent = () => {
 
-        const { sectionMeniItems } = this.state
+        let { sectionMeniItems } = this.state
         let returnSectionView = []
         sectionMeniItems.map((section, indexInArray) => {
             if (section.menuItems.length > 0) {
                 const tintColor = section.hide ? BASE_COLOR.black : BASE_COLOR.blue
                 returnSectionView.push(
-                    <View key={indexInArray}>
+                    <View key={indexInArray}
+                        onLayout={(event) => {
+                            let { x, y, width, height } = event.nativeEvent.layout;
+                            const startPosition = Number(y).toFixed(2)
+                            const endPosition = Number(y + height).toFixed(2)
+
+                            let { categoryList } = this.state
+                            if (categoryList.length > indexInArray) {
+                                categoryList[indexInArray] = {
+                                    coordinate: {
+                                        startPosition, endPosition
+                                    },
+                                    category: section.category
+                                }
+                            } else {
+                                categoryList.push({
+                                    coordinate: {
+                                        startPosition, endPosition
+                                    },
+                                    category: section.category
+                                })
+                            }
+                            this.setNewStateHandler({ categoryList: [...categoryList] })
+                        }}>
                         <TouchableOpacity onPress={() => this.onPressSectionListHeader(indexInArray)}>
                             <View
 
@@ -453,8 +595,6 @@ class PlaceDetailsScreen extends BaseScreen {
             }
 
         })
-
-
         return returnSectionView
     }
     dishSelectHandler(menuItemId) {
@@ -471,10 +611,10 @@ const styles = StyleSheet.create({
         flex: 1
     },
     navTitleView: {
-        height: 40 + getStatusBarHeight(),
-        justifyContent: 'center',
+        height: HEADER_MIN_HEIGHT,
+        justifyContent: 'space-between',
         alignItems: 'center',
-        paddingTop: Platform.OS == "ios" ? getStatusBarHeight() : 16,
+        paddingTop: HEADER_PADDING_TOP,
         opacity: 0,
         borderBottomColor: 'grey',
         borderBottomWidth: 0.5,
@@ -485,7 +625,7 @@ const styles = StyleSheet.create({
         },
         shadowColor: '#000000',
         elevation: 4,
-        backgroundColor: 'white',
+        backgroundColor: BASE_COLOR.white,
     },
     navTitle: {
         color: 'black',
