@@ -213,7 +213,7 @@ class ReviewListScreen extends BaseScreen {
                             ellipsizeMode='tail'
                             style={{
                                 fontWeight: 'bold',
-                                fontSize: 20,
+                                fontSize: 18,
                             }}>
                             {place.name}
                         </Text>
@@ -232,7 +232,7 @@ class ReviewListScreen extends BaseScreen {
                             backgroundColor: 'white',
                             justifyContent: 'flex-end',
                         }}>
-                            <Text style={{ fontSize: 15, color: BASE_COLOR.darkGray, marginRight: 8 }}>{place.returnAvgPriceTag()}</Text>
+                            <Text style={{ ...styles.infoBaseText, marginRight: 8 }}>{place.returnAvgPriceTag()}</Text>
                             <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginRight: 8 }}>
                                 <Image
                                     style={{
@@ -241,7 +241,7 @@ class ReviewListScreen extends BaseScreen {
                                     }}
                                     source={IconAssets.starIcon}
                                 />
-                                <Text style={{ color: '#646464', fontWeight: 'normal', fontSize: 15, marginLeft: 2 }}>{Number(place.avgRating).toFixed(1)}</Text>
+                                <Text style={{ ...styles.infoBaseText, marginLeft: 2 }}>{Number(place.avgRating).toFixed(1)}</Text>
                             </View>
                             <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginRight: 8 }}>
                                 <IconMaterial
@@ -249,7 +249,7 @@ class ReviewListScreen extends BaseScreen {
                                     color={'#646464'}
                                     name={'comment-text-multiple'}
                                 />
-                                <Text style={{ color: '#646464', fontWeight: 'normal', fontSize: 15, marginLeft: 2 }}>{abbrNum(Number(place.numberOfReviews), 1)}</Text>
+                                <Text style={{ ...styles.infoBaseText, marginLeft: 2 }}>{abbrNum(Number(place.numberOfReviews), 1)}</Text>
                             </View>
                         </View>
                     </View>
@@ -305,15 +305,19 @@ const styles = StyleSheet.create({
     infoContainer: {
         padding: 16,
         flexDirection: 'row',
-        paddingVertical: 8
-
+        paddingVertical: 8,
     },
     segmentedControlContainer: {
         paddingLeft: 16,
         paddingRight: 16,
-        paddingTop: 8,
+        // paddingTop: 8,
         paddingBottom: 8,
     },
+    infoBaseText: {
+        color: BASE_COLOR.darkGray,
+        fontWeight: 'normal',
+        fontSize: 14,
+    }
 });
 const mapStateToProps = state => {
     return {
