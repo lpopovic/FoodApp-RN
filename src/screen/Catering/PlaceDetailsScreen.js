@@ -17,7 +17,7 @@ import { PlaceNetwork } from '../../service/api'
 import { Place, Category } from '../../model';
 import { userFavoritePlaces } from '../../store/actions'
 import { connect } from 'react-redux';
-import { avgPriceTag, openDays } from '../../helpers/numberHelper';
+import { openDays } from '../../helpers/numberHelper';
 import UrlOpen from '../../components/common/UrlOpen'
 import Icon from 'react-native-vector-icons/Ionicons';
 import IconMaterial from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -401,7 +401,7 @@ class PlaceDetailsScreen extends BaseScreen {
                         <View style={{ height: this.state.expanded ? 'auto' : 0 }}>
                             <View style={{ flex: 2.5, overflow: 'hidden', height: 180 }}>
                                 <View style={{ justifyContent: 'center', alignItems: 'flex-start', flex: 0.5 }}>
-                                    <Text style={{ fontSize: 15, color: BASE_COLOR.darkGray }}>{avgPriceTag(place.avgPriceTag)}</Text>
+                                    <Text style={{ fontSize: 15, color: BASE_COLOR.darkGray }}>{place.returnAvgPriceTag()}</Text>
                                 </View>
                                 <View style={{ flexDirection: 'row', alignItems: 'center', flex: 0.5 }}>
                                     <Image style={{ width: 24 }} resizeMode='contain' source={IconAssets.deliveryTimeIcon}></Image>

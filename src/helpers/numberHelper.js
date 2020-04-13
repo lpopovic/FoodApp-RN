@@ -37,29 +37,39 @@ function abbrNum(number, decPlaces) {
 }
 
 
-function avgPriceTag(avgPriceTag) {
-    switch (Number(avgPriceTag).toFixed(0)) {
-        case '2':
-            return "$$"
-        case '3':
-            return "$$$"
-        case '4':
-            return "$$$$"
-        case '5':
-            return "$$$$$"
+export const generatePriceTagString = (tag) => {
+    let value = '-'
+    const roundValue = Math.round(Number(tag))
+    switch (roundValue) {
+        case 1:
+            value = '$'
+            break
+        case 2:
+            value = '$$'
+            break
+        case 3:
+            value = '$$$'
+            break
+        case 4:
+            value = '$$$$'
+            break
+        case 5:
+            value = '$$$$$'
+            break
         default:
-            return "-"
+            break
     }
+    return value
 }
 
 function openDays(openDays) {
-    
+
     let currentDay;
-    currentDay = openDays.find(item => { return item.day === Moment().day()})
+    currentDay = openDays.find(item => { return item.day === Moment().day() })
     let from = Moment(currentDay.from).local().format('HH:mm')
     let to = Moment(currentDay.to).local().format('HH:mm')
 
     return `${from}-${to}`
 }
 
-export { abbrNum, avgPriceTag, openDays };
+export { abbrNum, openDays };
