@@ -1,7 +1,9 @@
 /**
  * Sample React Native App
  * https://github.com/facebook/react-native
- *
+ * verzija APP 09.04.2020
+ * iOS version 1.0 (build 9)
+ * Android version
  * @format
  * @flow
  */

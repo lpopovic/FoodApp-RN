@@ -15,7 +15,8 @@ const IconAssets = {
     mapTabIcon: require('./map_tab_icon.png'),
     ceteringTabIcon: require('./cetering_tab_icon.png'),
     userTabIcon: require('./user_tab_icon.png'),
-    deliveryIcon:require('./delivery-van.png'),
-    sliderMarkerIcon:require('./dot-and-circle.png')
+    deliveryIcon: require('./delivery-van.png'),
+    sliderMarkerIcon: require('./dot-and-circle.png'),
+    userProfile: require('./userProfile.png'),
 }
 export { IconAssets }

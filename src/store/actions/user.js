@@ -2,7 +2,7 @@ import {
     UPDATE_USER_PROFILE_DATA,
     UPDATE_USER_JWT_DATA,
     USER_LOG_OUT,
-
+    USER_UPDATE_REVIEWS,
 } from "./actionTypes";
 import {
     uiStartLoading,
@@ -19,13 +19,20 @@ import {
     STORAGE_KEY,
 } from '../../helpers'
 
-import { UserNetwork, OrderNetwork, FavoriteNetwork } from '../../service/api'
+import { UserNetwork, OrderNetwork, FavoriteNetwork, ReviewNetwork } from '../../service/api'
 
 export const updateUserProfile = (userProfile) => {
     saveStorageData(userProfile, STORAGE_KEY.USER_APP_DATA)
     return {
         type: UPDATE_USER_PROFILE_DATA,
         payload: userProfile
+    };
+};
+
+export const updateUserReviews = (reviews) => {
+    return {
+        type: USER_UPDATE_REVIEWS,
+        payload: reviews
     };
 };
 
@@ -69,6 +76,14 @@ export const fetchUserListOrders = () => {
             },
             error => {
                 alert(error)
+            }
+        )
+
+        ReviewNetwork.fetchGetAllReviews().then(
+            res => {
+                dispatch(updateUserReviews(res))
+            }, err => {
+
             }
         )
     }

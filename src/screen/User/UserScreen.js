@@ -33,7 +33,7 @@ import {
     fetchUserFavorites,
 } from '../../store/actions'
 import { UserNetwork, OrderNetwork } from '../../service/api'
-import { TestAssets, } from '../../assets'
+import { TestAssets, IconAssets, } from '../../assets'
 import { MenuItem } from '../../model';
 
 class UserScreen extends BaseScreen {
@@ -202,7 +202,12 @@ class UserScreen extends BaseScreen {
         return (
             <View style={{ justifyContent: 'center', alignContent: 'center', alignItems: 'center' }}>
                 <View style={styles.userImage}>
-                    <Image source={TestAssets.KFC_logo} style={{ width: '100%', height: '100%' }} resizeMode='contain' />
+                    <Image source={IconAssets.userProfile}
+                        style={{
+                            width: '100%',
+                            height: '100%',
+                            tintColor: BASE_COLOR.blue,
+                        }} resizeMode='contain' />
                 </View>
             </View>
         )
@@ -273,12 +278,31 @@ class UserScreen extends BaseScreen {
 
     }
     recentOrdersContent = () => {
-        const type = this.props.strings.recent
         const { selectedIndex } = this.state
-        const { userOrders, userCatherings, userInfo } = this.props
-        if (userInfo.catheringIsAvailable == true) {
+        const { userOrders, userCatherings, } = this.props
+        const listOrders = selectedIndex == 0 ? userOrders : userCatherings
+        if (listOrders.length > 0) {
             return (
                 <View style={[styles.baseContainer, { flexDirection: 'column' }]}>
+                    <HistoryOrderList
+                        arrayObject={listOrders}
+                        isCatheringOrder={selectedIndex == 0 ? false : true}
+                        PressDetailOrder={(order) => this.pressOrderDetailHandler(order)}
+                        PressOrderAgain={(order) => this.pressOrderAgainHandler(order)}
+                        PressReview={(order) => this.pressReviewOrderHandler(order)}
+                        PressSeeMyReview={(order) => this.pressSeeMyReviewOrderHandler(order)}
+                    />
+                </View>
+            )
+        }
+
+    }
+    renderStickyHeaderIndices = () => {
+        const type = this.props.strings.recent
+        const { userInfo } = this.props
+        if (userInfo.catheringIsAvailable == true) {
+            return (
+                <View style={[styles.baseContainer, { flexDirection: 'column', backgroundColor: BASE_COLOR.white }]}>
                     <View style={{ alignSelf: 'flex-start', marginBottom: 8 }}>
                         <Text style={[styles.baseText, { color: BASE_COLOR.black }]}>{type}:</Text>
                     </View>
@@ -295,31 +319,14 @@ class UserScreen extends BaseScreen {
                             activeTabTextStyle={segmentedControlStyles.text}
                         />
                     </View>
-
-                    <HistoryOrderList
-                        arrayObject={selectedIndex == 0 ? userOrders : userCatherings}
-                        isCatheringOrder={selectedIndex == 0 ? false : true}
-                        PressDetailOrder={(order) => this.pressOrderDetailHandler(order)}
-                        PressOrderAgain={(order) => this.pressOrderAgainHandler(order)}
-                        PressReview={(order) => this.pressReviewOrderHandler(order)}
-                        PressSeeMyReview={(order) => this.pressSeeMyReviewOrderHandler(order)}
-                    />
                 </View>
             )
         } else {
             return (
-                <View style={[styles.baseContainer, { flexDirection: 'column' }]}>
+                <View style={[styles.baseContainer, { flexDirection: 'column', backgroundColor: BASE_COLOR.white }]}>
                     <View style={{ alignSelf: 'flex-start', marginBottom: 8 }}>
                         <Text style={[styles.baseText, { color: BASE_COLOR.black }]}>{type}:</Text>
                     </View>
-                    <HistoryOrderList
-                        arrayObject={userOrders}
-                        isCatheringOrder={false}
-                        PressDetailOrder={(order) => this.pressOrderDetailHandler(order)}
-                        PressOrderAgain={(order) => { }}
-                        PressReview={(order) => this.pressReviewOrderHandler(order)}
-                        PressSeeMyReview={(order) => this.pressSeeMyReviewOrderHandler(order)}
-                    />
                 </View>
             )
         }
@@ -357,8 +364,10 @@ class UserScreen extends BaseScreen {
                         colors={[BASE_COLOR.blue]}
                     />
                 }
-                style={{ flex: 1 }}>
-                <View style={styles.scrollViewContainer}>
+                style={{ flex: 1 }}
+                stickyHeaderIndices={[1]}
+                contentContainerStyle={styles.scrollViewContainer}>
+                <>
                     {this.userImageContent()}
                     {this.infoContent(strings.username, username)}
                     {this.infoContent(strings.firstName, name)}
@@ -366,13 +375,12 @@ class UserScreen extends BaseScreen {
                     {this.infoContent(strings.email, email)}
                     {this.infoContent(strings.phoneNumber, phoneNumber.trim() != '' ? phoneNumber : strings.notAvailable)}
                     {this.infoContent(strings.address, lastUseAddress)}
-
                     {this.placeListFavoriteContent()}
-
                     {this.menuItemsListFavoriteContent()}
+                </>
+                {this.renderStickyHeaderIndices()}
+                {this.recentOrdersContent()}
 
-                    {this.recentOrdersContent()}
-                </View>
             </ScrollView >
         )
     }
@@ -463,7 +471,7 @@ const styles = StyleSheet.create({
         backgroundColor: BASE_COLOR.white
     },
     scrollViewContainer: {
-        flex: 1,
+        // flex: 1,
         padding: 8,
         // paddingTop: 8,
     },
@@ -489,9 +497,10 @@ const styles = StyleSheet.create({
         aspectRatio: 1,
         borderColor: BASE_COLOR.blue,
         borderRadius: 75,
-        borderWidth: 2,
-        backgroundColor: BASE_COLOR.blue,
-        overflow: 'hidden'
+        borderWidth: 1,
+        backgroundColor: BASE_COLOR.white,
+        overflow: 'hidden',
+        paddingTop: 4,
     },
     segmentedControlContainer: {
         paddingLeft: 16,

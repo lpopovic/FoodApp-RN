@@ -90,7 +90,7 @@ class HistoryOrder extends Component {
                                 :
                                 status == statusOrderValue.deliveredAndUserReviewed
                                     ?
-                                    this.btnContent(strings.review, this.onPressSeeMyReview)
+                                    this.btnContent(this.getRatingOfReview(), this.onPressSeeMyReview)
                                     :
                                     null
                         }
@@ -98,6 +98,20 @@ class HistoryOrder extends Component {
                 </View>
             </View>
         )
+    }
+    getRatingOfReview = () => {
+        let rating = this.props.strings.review
+        const { _id } = this.props.item
+        const { userReviews } = this.props
+
+        userReviews.map(item => {
+            if (item.orderId == _id) {
+                rating = `${item.rating} ★`
+
+            }
+        })
+        return rating
+
     }
 }
 
@@ -146,6 +160,7 @@ const styles = StyleSheet.create({
 const mapStateToProps = state => {
     return {
         strings: state.location.language.strings,
+        userReviews: state.user.userReviews,
     };
 };
 export default connect(mapStateToProps, null)(HistoryOrder);
