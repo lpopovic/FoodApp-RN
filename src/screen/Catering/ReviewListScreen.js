@@ -8,6 +8,7 @@ import {
     RefreshControl,
     Dimensions,
     ActivityIndicator,
+    Image,
 } from 'react-native';
 import { connect } from 'react-redux';
 import BaseScreen from '../BaseScreen/BaseScreen';
@@ -20,11 +21,13 @@ import {
 import {
     NAV_COLOR,
     BASE_COLOR,
-    segmentedControlStyles
+    segmentedControlStyles,
+    segmentedControlStylesReview,
 } from '../../styles'
 import { Place } from '../../model';
 import { ReviewNetwork, ParamsUrl } from '../../service/api';
-
+import { IconAssets } from '../../assets';
+import IconMaterial from 'react-native-vector-icons/MaterialCommunityIcons';
 const widthScreen = Dimensions.get('screen').width - 32
 class ReviewListScreen extends BaseScreen {
 
@@ -192,7 +195,6 @@ class ReviewListScreen extends BaseScreen {
                     <ReviewItem
                         review={info.item} />
                 )}
-                ItemSeparatorComponent={this.FlatListItemSeparator}
                 onEndReachedThreshold={0.4}
                 onEndReached={() => this.handleLoadMore()}
                 ListFooterComponent={this.renderFooter.bind(this)}
@@ -216,26 +218,40 @@ class ReviewListScreen extends BaseScreen {
                             {place.name}
                         </Text>
                     </View>
-                    <View style={{ flexDirection: 'column', width: widthScreen * 0.5 }}>
-                        <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
-                            <View>
-                                <Text
-                                    style={{ fontWeight: 'bold' }}
-                                    numberOfLines={3}
-                                    ellipsizeMode='tail'>
-                                    {this.props.strings.priceTag}:{"\n"}{this.props.strings.rating}:{"\n"}{this.props.strings.reviews}:
-                                </Text>
+                    <View style={{
+                        flexDirection: 'column',
+                        width: widthScreen * 0.5,
+                        backgroundColor: 'red',
+
+                    }}>
+                        <View style={{
+                            flexDirection: 'row',
+                            height: 30,
+                            alignItems: 'center',
+                            alignContent: 'center',
+                            backgroundColor: 'white',
+                            justifyContent: 'flex-end',
+                        }}>
+                            <Text style={{ fontSize: 15, color: BASE_COLOR.darkGray, marginRight: 8 }}>{place.returnAvgPriceTag()}</Text>
+                            <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginRight: 8 }}>
+                                <Image
+                                    style={{
+                                        width: 23,
+                                        height: 20,
+                                    }}
+                                    source={IconAssets.starIcon}
+                                />
+                                <Text style={{ color: '#646464', fontWeight: 'normal', fontSize: 15, marginLeft: 2 }}>{Number(place.avgRating).toFixed(1)}</Text>
                             </View>
-                            <View style={{ marginLeft: 4 }}>
-                                <Text
-                                    style={{ textAlign: 'center', fontWeight: 'bold' }}
-                                    numberOfLines={3}
-                                    ellipsizeMode='tail'>
-                                    {place.returnAvgPriceTag()}{"\n"}{Number(place.avgRating).toFixed(1)}{"\n"}{abbrNum(Number(place.numberOfReviews), 1)}
-                                </Text>
+                            <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginRight: 8 }}>
+                                <IconMaterial
+                                    size={23}
+                                    color={'#646464'}
+                                    name={'comment-text-multiple'}
+                                />
+                                <Text style={{ color: '#646464', fontWeight: 'normal', fontSize: 15, marginLeft: 2 }}>{abbrNum(Number(place.numberOfReviews), 1)}</Text>
                             </View>
                         </View>
-
                     </View>
                 </View>
                 <View style={styles.segmentedControlContainer}>
@@ -244,34 +260,20 @@ class ReviewListScreen extends BaseScreen {
                         selectedIndex={this.state.selectedIndex}
                         onTabPress={this.handleOnTabPress}
                         borderRadius={8}
-                        tabsContainerStyle={segmentedControlStyles.container}
-                        tabStyle={segmentedControlStyles.commonStyle}
-                        activeTabStyle={{ ...segmentedControlStyles.commonStyle, ...segmentedControlStyles.activeStyle }}
-                        tabTextStyle={segmentedControlStyles.text}
-                        activeTabTextStyle={segmentedControlStyles.text}
+                        tabsContainerStyle={segmentedControlStylesReview.container}
+                        tabStyle={segmentedControlStylesReview.commonStyle}
+                        activeTabStyle={{
+                            ...segmentedControlStylesReview.commonStyle,
+                            ...segmentedControlStylesReview.activeStyle,
+                            backgroundColor: BASE_COLOR.orange,
+                        }}
+                        tabTextStyle={segmentedControlStylesReview.commonText}
+                        activeTabTextStyle={{ ...segmentedControlStylesReview.activeText }}
                     />
                 </View>
                 {this.reviewContent()}
             </View>
         )
-    }
-
-    FlatListItemSeparator = () => {
-        return (
-            <View
-                style={{
-                    height: 0.7,
-                    width: "100%",
-                    paddingLeft: 16,
-                    paddingRight: 16,
-                }}
-            >
-                <View style={{
-                    backgroundColor: BASE_COLOR.blue,
-                    height: 0.7,
-                }} />
-            </View>
-        );
     }
     render() {
         const { loading } = this.state
@@ -282,7 +284,7 @@ class ReviewListScreen extends BaseScreen {
                     <Header
                         backgroundColor={NAV_COLOR.headerBackground}
                         tintColor={BASE_COLOR.darkGray}
-                        borderBottomColor={loading ? NAV_COLOR.borderBottomColor : 'transparent'}
+                        borderBottomColor={NAV_COLOR.borderBottomColor}
                     />
                     {mainDisplay}
                 </View>
@@ -302,19 +304,15 @@ const styles = StyleSheet.create({
     },
     infoContainer: {
         padding: 16,
-        paddingBottom: 8,
-        paddingTop: 0,
         flexDirection: 'row',
-        backgroundColor: NAV_COLOR.headerBackground
+        paddingVertical: 8
+
     },
     segmentedControlContainer: {
         paddingLeft: 16,
         paddingRight: 16,
         paddingTop: 8,
         paddingBottom: 8,
-        backgroundColor: NAV_COLOR.headerBackground,
-        borderBottomColor: NAV_COLOR.borderBottomColor,
-        borderBottomWidth: 0.7
     },
 });
 const mapStateToProps = state => {
