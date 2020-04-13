@@ -89,6 +89,7 @@ class PlaceDetailsScreen extends BaseScreen {
                     menuItems: res,
                     refreshing: false,
                     selectedCategory: 0,
+                    categoryList: [],
                     sectionMeniItems: [],
                 })
                 this.setupSectionList()
@@ -278,6 +279,7 @@ class PlaceDetailsScreen extends BaseScreen {
                     paddingLeft: 16,
                     paddingRight: 16,
                     justifyContent: 'space-between',
+                    alignItems: 'center',
                     position: 'absolute',
                     zIndex: 100,
                     flexDirection: 'row',
@@ -310,8 +312,7 @@ class PlaceDetailsScreen extends BaseScreen {
                             style={styles.navTitleView}
                             ref={navTitleView => {
                                 this.navTitleView = navTitleView;
-                            }}
-                        >
+                            }}>
                             <Text style={styles.navTitle}>{place.name}</Text>
                             {this.categoryListContent()}
                         </Animatable.View>
@@ -503,7 +504,13 @@ class PlaceDetailsScreen extends BaseScreen {
         }
         sectionMeniItems = sectionMeniItems.filter(item => {
             if (item.menuItems.length > 0) {
-                categoryList.push({ category: item.category })
+                categoryList.push({
+                    category: item.category,
+                    coordinate: {
+                        startPosition: 0,
+                        endPosition: 0,
+                    }
+                })
                 return item
             }
         })
