@@ -39,25 +39,27 @@ function abbrNum(number, decPlaces) {
 
 export const generatePriceTagString = (tag) => {
     let value = '-'
-    const roundValue = Math.round(Number(tag))
-    switch (roundValue) {
-        case 1:
-            value = '$'
-            break
-        case 2:
-            value = '$$'
-            break
-        case 3:
-            value = '$$$'
-            break
-        case 4:
-            value = '$$$$'
-            break
-        case 5:
-            value = '$$$$$'
-            break
-        default:
-            break
+    if (tag !== null) {
+        const roundValue = Math.round(Number(tag))
+        switch (roundValue) {
+            case 1:
+                value = '$'
+                break
+            case 2:
+                value = '$$'
+                break
+            case 3:
+                value = '$$$'
+                break
+            case 4:
+                value = '$$$$'
+                break
+            case 5:
+                value = '$$$$$'
+                break
+            default:
+                break
+        }
     }
     return value
 }
