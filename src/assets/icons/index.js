@@ -2,6 +2,8 @@ const IconAssets = {
     appIcon80: require(`./appIcon80x80.png`),
     appIcon256: require(`./appIcon256x256l.png`),
     leftArrow: require(`./left-arrow.png`),
+    downArrow: require(`./down-arrow.png`),
+    upArrow: require(`./up-arrow.png`),
     starIcon: require('./Star.png'),
     heartIcon: require('./Union.png'),
     heartFillIcon: require('./UnionFill.png'),
@@ -10,6 +12,7 @@ const IconAssets = {
     cardIcon: require('./card_icon.png'),
     minimumPriceIcon: require('./minimum_price.png'),
     deliveryTimeIcon: require('./delivery_time_icon.png'),
+    reviewIcon: require(`./review_icon.png`),
 
     homeTabIcon: require('./home_tab_icon.png'),
     mapTabIcon: require('./map_tab_icon.png'),

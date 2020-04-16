@@ -8,10 +8,11 @@ const BASE_COLOR = {
     black: '#000000',
     lightGray: '#EEEEEE',
     darkGray: '#333333',
-    backgroundColor: '#F8F8F8',
+    backgroundColor: '#F6F6F6',
     facebookBlue: '#3b5998',
     green: '#40B36D',
     blue: '#399BF1',
+    catheringOrange: '#FF7A01'
 }
 
 const TAB_COLOR = {
