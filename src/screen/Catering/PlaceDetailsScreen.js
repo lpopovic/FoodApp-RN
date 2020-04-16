@@ -1,10 +1,26 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image, Dimensions, Platform, LayoutAnimation, UIManager, RefreshControl, FlatList } from 'react-native';
+import {
+    View,
+    Text,
+    StyleSheet,
+    TouchableOpacity,
+    Image,
+    Dimensions,
+    Platform,
+    LayoutAnimation,
+    UIManager,
+    RefreshControl,
+    FlatList
+} from 'react-native';
 import HeaderImageScrollView, { TriggeringView } from 'react-native-image-header-scroll-view';
 import { getStatusBarHeight } from 'react-native-status-bar-height';
 import * as Animatable from 'react-native-animatable';
 import BaseScreen from '../BaseScreen/BaseScreen';
-import { ScreenName, isAndroid } from '../../helpers'
+import {
+    ScreenName,
+    isAndroid,
+    isUndefined
+} from '../../helpers'
 import DishCard from '../../components/Catering/DishCard';
 import DishList from '../../components/Catering/DishList';
 import MenuItemList from '../../components/MenuItem/MenuItemList'
@@ -176,15 +192,39 @@ class PlaceDetailsScreen extends BaseScreen {
             setTimeout(() => {
                 detectOnScrollChange = true
             }, 1000);
-            this.setNewStateHandler({
-                selectedCategory: index
-            })
+            this.scrollToCategoryListItem(index)
             this.refs.scrollView.scrollTo({
                 x: 0,
                 y: Number(categoryList[index].coordinate.startPosition),
                 animated: false
             })
         }
+    }
+    _layouts = []
+    scrollToCategoryListItem = (newIndex) => {
+        this.scrollToFlatListItem(newIndex)
+        this.setNewStateHandler({
+            selectedCategory: newIndex
+        })
+    }
+
+    getOffsetByIndex(index) {
+        let offset = 0;
+        for (let i = 0; i < index; i += 1) {
+            const elementLayout = this._layouts[i];
+            if (elementLayout && elementLayout.width) {
+                offset += this._layouts[i].width;
+            }
+        }
+        return offset;
+    }
+
+    scrollToFlatListItem(commentIndex) {
+        const offset = this.getOffsetByIndex(commentIndex);
+        this.flatListRef.scrollToOffset({ offset, animated: true });
+    }
+    addToLayoutsMap = (layout, index) => {
+        this._layouts[index] = layout;
     }
     categoryListContent = () => {
         //sectionMeniItems.push({ category, menuItems: [], hide: true })
@@ -201,11 +241,14 @@ class PlaceDetailsScreen extends BaseScreen {
                     style={{
                         width: '100%',
                     }}
+                    ref={(ref) => { this.flatListRef = ref; }}
                     data={categoryList}
                     extraData={selectedCategory}
                     horizontal
+                    // snapToAlignment={'end'}
                     showsHorizontalScrollIndicator={false}
                     keyExtractor={(item, index) => index.toString()}
+                    // getItemLayout={this.getItemLayout}
                     renderItem={({ item, index }) => {
                         const { category } = item
                         const isSelected = selectedCategory != null ? index == selectedCategory ? true : false : false
@@ -215,7 +258,10 @@ class PlaceDetailsScreen extends BaseScreen {
                                 justifyContent: 'center',
                                 alignItems: 'center',
                                 marginVertical: 8,
-                            }}>
+                            }}
+                                onLayout={({ nativeEvent: { layout } }) => {
+                                    this.addToLayoutsMap(layout, index);
+                                }}>
                                 <TouchableOpacity
                                     onPress={() => this.onPressItemCategoryList(index)}>
                                     <View style={{
@@ -253,9 +299,10 @@ class PlaceDetailsScreen extends BaseScreen {
             for (let index = 0; index < categoryList.length; index++) {
                 const { coordinate } = categoryList[index];
                 if (currentPosition >= coordinate.startPosition - 10 && currentPosition <= coordinate.endPosition - 10) {
-                    this.setNewStateHandler({
-                        selectedCategory: index
-                    })
+                    // this.setNewStateHandler({
+                    //     selectedCategory: index
+                    // })
+                    this.scrollToCategoryListItem(index)
                     index = categoryList.length
                 }
             }
@@ -481,6 +528,7 @@ class PlaceDetailsScreen extends BaseScreen {
 
         let sectionMeniItems = []
         let categoryList = []
+        this._layouts = []
 
         categories.forEach(category => {
             sectionMeniItems.push({ category, menuItems: [], hide: false, })
