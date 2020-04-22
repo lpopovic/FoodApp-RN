@@ -1,5 +1,6 @@
 
 import { ImageAssets, Category } from './index'
+import { generatePriceTagString } from '../helpers';
 
 class Place {
     constructor(object) {
@@ -21,28 +22,12 @@ class Place {
     }
 
     returnAvgPriceTag = () => {
-        let value = '$'
+        let value = '-'
         if (this.avgPriceTag) {
-            const roundValue = Math.round(Number(this.avgPriceTag))
-            switch (roundValue) {
-                case 1:
-                    value = '$$'
-                    break
-                case 2:
-                    value = '$$$'
-                    break
-                case 3:
-                    value = '$$$$'
-                    break
-                case 4:
-                    value = '$$$$$'
-                    break
-                default:
-                    break
-            }
-
+            return generatePriceTagString(this.avgRating)
+        } else {
+            return value
         }
-        return value
     }
     setupCoordinate = (location) => {
         if (location) {
@@ -90,7 +75,7 @@ class PlaceCathering {
             return new PlaceCathering(item);
 
         })
-    
+
         return arrayTemplate;
     }
 }
@@ -108,7 +93,7 @@ class PlaceFavorite {
             return new PlaceFavorite(item);
 
         })
-    
+
         return arrayTemplate;
     }
 }

@@ -15,9 +15,16 @@ class ReviewItem extends Component {
 
     render() {
         const { review } = this.props
-        
+
         return (
-            <View style={{ margin: 12, flex: 10, flexDirection: 'row' }}>
+            <View style={{
+                marginHorizontal: 16,
+                marginTop:8,
+                flex: 10,
+                flexDirection: 'row',
+                backgroundColor: BASE_COLOR.lightGray,
+                padding: 8
+            }}>
 
                 <View style={{ flexDirection: 'column', alignItems: 'stretch', flex: 10 }}>
                     <View style={{ flexDirection: 'row', flex: 6 }}>
@@ -25,7 +32,11 @@ class ReviewItem extends Component {
                             <Text
                                 numberOfLines={1}
                                 ellipsizeMode='tail'
-                                style={{ fontWeight: 'bold', color: 'black', fontSize: 15 }}>
+                                style={{
+                                    color: '#9B9B9B',
+                                    fontSize: 15,
+                                    fontStyle: 'italic'
+                                }}>
                                 {review.getAuthorReview()}
                             </Text>
 

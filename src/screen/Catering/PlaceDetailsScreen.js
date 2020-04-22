@@ -1,10 +1,26 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image, Dimensions, Platform, LayoutAnimation, UIManager, RefreshControl, FlatList } from 'react-native';
+import {
+    View,
+    Text,
+    StyleSheet,
+    TouchableOpacity,
+    Image,
+    Dimensions,
+    Platform,
+    LayoutAnimation,
+    UIManager,
+    RefreshControl,
+    FlatList
+} from 'react-native';
 import HeaderImageScrollView, { TriggeringView } from 'react-native-image-header-scroll-view';
 import { getStatusBarHeight } from 'react-native-status-bar-height';
 import * as Animatable from 'react-native-animatable';
 import BaseScreen from '../BaseScreen/BaseScreen';
-import { ScreenName, isAndroid } from '../../helpers'
+import {
+    ScreenName,
+    isAndroid,
+    isUndefined
+} from '../../helpers'
 import DishCard from '../../components/Catering/DishCard';
 import DishList from '../../components/Catering/DishList';
 import MenuItemList from '../../components/MenuItem/MenuItemList'
@@ -17,7 +33,7 @@ import { PlaceNetwork } from '../../service/api'
 import { Place, Category } from '../../model';
 import { userFavoritePlaces } from '../../store/actions'
 import { connect } from 'react-redux';
-import { avgPriceTag, openDays } from '../../helpers/numberHelper';
+import { openDays, generatePriceTagString } from '../../helpers/numberHelper';
 import UrlOpen from '../../components/common/UrlOpen'
 import Icon from 'react-native-vector-icons/Ionicons';
 import IconMaterial from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -176,15 +192,39 @@ class PlaceDetailsScreen extends BaseScreen {
             setTimeout(() => {
                 detectOnScrollChange = true
             }, 1000);
-            this.setNewStateHandler({
-                selectedCategory: index
-            })
+            this.scrollToCategoryListItem(index)
             this.refs.scrollView.scrollTo({
                 x: 0,
                 y: Number(categoryList[index].coordinate.startPosition),
                 animated: false
             })
         }
+    }
+    _layouts = []
+    scrollToCategoryListItem = (newIndex) => {
+        this.scrollToFlatListItem(newIndex)
+        this.setNewStateHandler({
+            selectedCategory: newIndex
+        })
+    }
+
+    getOffsetByIndex(index) {
+        let offset = 0;
+        for (let i = 0; i < index; i += 1) {
+            const elementLayout = this._layouts[i];
+            if (elementLayout && elementLayout.width) {
+                offset += this._layouts[i].width;
+            }
+        }
+        return offset;
+    }
+
+    scrollToFlatListItem(commentIndex) {
+        const offset = this.getOffsetByIndex(commentIndex);
+        this.flatListRef.scrollToOffset({ offset, animated: true });
+    }
+    addToLayoutsMap = (layout, index) => {
+        this._layouts[index] = layout;
     }
     categoryListContent = () => {
         //sectionMeniItems.push({ category, menuItems: [], hide: true })
@@ -201,11 +241,14 @@ class PlaceDetailsScreen extends BaseScreen {
                     style={{
                         width: '100%',
                     }}
+                    ref={(ref) => { this.flatListRef = ref; }}
                     data={categoryList}
                     extraData={selectedCategory}
                     horizontal
+                    // snapToAlignment={'end'}
                     showsHorizontalScrollIndicator={false}
                     keyExtractor={(item, index) => index.toString()}
+                    // getItemLayout={this.getItemLayout}
                     renderItem={({ item, index }) => {
                         const { category } = item
                         const isSelected = selectedCategory != null ? index == selectedCategory ? true : false : false
@@ -214,7 +257,10 @@ class PlaceDetailsScreen extends BaseScreen {
                                 marginHorizontal: 4,
                                 justifyContent: 'center',
                                 alignItems: 'center',
-                            }}>
+                            }}
+                                onLayout={({ nativeEvent: { layout } }) => {
+                                    this.addToLayoutsMap(layout, index);
+                                }}>
                                 <TouchableOpacity
                                     onPress={() => this.onPressItemCategoryList(index)}>
                                     <View style={{
@@ -251,9 +297,10 @@ class PlaceDetailsScreen extends BaseScreen {
             for (let index = 0; index < categoryList.length; index++) {
                 const { coordinate } = categoryList[index];
                 if (currentPosition >= coordinate.startPosition - 10 && currentPosition <= coordinate.endPosition - 10) {
-                    this.setNewStateHandler({
-                        selectedCategory: index
-                    })
+                    // this.setNewStateHandler({
+                    //     selectedCategory: index
+                    // })
+                    this.scrollToCategoryListItem(index)
                     index = categoryList.length
                 }
             }
@@ -282,7 +329,6 @@ class PlaceDetailsScreen extends BaseScreen {
                     zIndex: 100,
                     flexDirection: 'row',
                     top: HEADER_PADDING_TOP,
-                    // backgroundColor: 'blue'
                 }}>
                     {this.closeBtnContent()}
                     {cathering != null && cathering.isFromCathering ? null :
@@ -358,7 +404,7 @@ class PlaceDetailsScreen extends BaseScreen {
                             </TouchableOpacity>
                             <View style={{ flex: 4.5, flexDirection: 'row', height: 60 }}>
                                 <View style={{ flex: 1.5, justifyContent: 'center', alignItems: 'center' }}>
-                                    <Text style={{ fontSize: 16, color: BASE_COLOR.darkGray, fontWeight: '300' }}>{avgPriceTag(place.avgPriceTag)}</Text>
+                                    <Text style={{ fontSize: 16, color: BASE_COLOR.darkGray, fontWeight: '300' }}>{generatePriceTagString(place.avgPriceTag)}</Text>
                                 </View>
                                 <View style={{ flex: 1.5, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginLeft: 6 }}>
                                     <Image
@@ -505,6 +551,7 @@ class PlaceDetailsScreen extends BaseScreen {
 
         let sectionMeniItems = []
         let categoryList = []
+        this._layouts = []
 
         categories.forEach(category => {
             sectionMeniItems.push({ category, menuItems: [], hide: false, })
@@ -629,24 +676,23 @@ class PlaceDetailsScreen extends BaseScreen {
                                 style={{
                                     borderTopLeftRadius: 5,
                                     borderTopRightRadius: 5,
-                                    borderWidth:1,
+                                    borderWidth: 1,
                                     borderBottomWidth: 0,
                                     borderColor: 'lightgray',
-                                    // borderBottomWidth: 0.7,
                                     marginTop: 10,
-                                    // marginBottom: 0,
                                     marginHorizontal: 8,
                                     padding: 8,
                                     backgroundColor: BASE_COLOR.white,
                                     flexDirection: 'row',
                                     justifyContent: 'space-between',
                                     alignContent: 'center',
-                                    alignItems: 'center'
+                                    alignItems: 'center',
+                                    // backgroundColor: 'red'
                                 }}>
                                 <Text
                                     numberOfLines={1}
                                     ellipsizeMode='tail'
-                                    style={{ fontWeight: '400', fontSize: 16, color: tintColor }}>
+                                    style={{ fontWeight: '400', fontSize: 16, color: tintColor, marginLeft: 10 }}>
                                     {section.category.name}</Text>
 
                             </View>

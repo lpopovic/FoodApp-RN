@@ -1,9 +1,9 @@
 import React from 'react';
 import { Image } from 'react-native';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
-import { HomeStack, MapStack, CateringStack, UserStack, SearchStack} from './StackNavigator';
+import { HomeStack, MapStack, CateringStack, UserStack, SearchStack } from './StackNavigator';
 import { IconAssets, TestAssets } from '../../assets'
-import { TAB_COLOR } from '../../styles'
+import { TAB_COLOR, BASE_COLOR } from '../../styles'
 
 
 const TabNavigatorScreen = (props) = createBottomTabNavigator(
@@ -58,7 +58,12 @@ const TabNavigatorScreen = (props) = createBottomTabNavigator(
           <Image
             source={IconAssets.ceteringTabIcon}
             resizeMode='contain'
-            style={{ width: 34, height: 34, tintColor, marginBottom: tintColor === TAB_COLOR.activeTintColor ? 2 : 0 }}
+            style={{
+              width: 34,
+              height: 34,
+              tintColor: tintColor === TAB_COLOR.activeTintColor ? BASE_COLOR.orange : tintColor,
+              marginBottom: tintColor === TAB_COLOR.activeTintColor ? 2 : 0
+            }}
           >
           </Image>
         )

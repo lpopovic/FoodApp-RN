@@ -393,7 +393,7 @@ class HomeScreen extends BaseScreen {
                 }
                 style={{ flex: 1 }}>
                 <View style={{ flex: 1 }}>
-                    <View>
+                    <View style={{ marginTop: 8 }}>
                         {this.caroselContent()}
                     </View>
                     <View style={{ marginTop: 8 }}>

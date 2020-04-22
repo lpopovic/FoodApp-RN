@@ -60,3 +60,42 @@ export const segmentedControlStyles = StyleSheet.create({
         fontWeight: 'bold'
     }
 });
+export const segmentedControlStylesReview = StyleSheet.create({
+    container: {
+        height: 36,
+        borderColor: '#eeeef0',
+        backgroundColor: 'transparent',
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: '100%',
+        borderRadius: 8,
+        overflow: 'hidden'
+    },
+    commonStyle: {
+        backgroundColor: 'rgb(192,192,192)',
+        height: 30,
+        borderTopRightRadius: 8,
+        borderTopLeftRadius: 8,
+        borderBottomLeftRadius: 8,
+        borderBottomRightRadius: 8,
+        padding: 2,
+        margin: 5,
+        borderWidth: 0,
+        borderColor: 'transparent'
+    },
+    activeStyle: {
+        backgroundColor: BASE_COLOR.blue,
+        shadowOffset: { width: 0.95, height: 0.95 },
+        shadowColor: '#a2a2a2',
+        shadowOpacity: 0.5,
+        shadowRadius: 2
+    },
+    activeText: {
+        color: BASE_COLOR.white,
+        fontWeight: 'bold'
+    },
+    commonText: {
+        color: BASE_COLOR.white,
+        fontWeight: 'normal'
+    }
+});

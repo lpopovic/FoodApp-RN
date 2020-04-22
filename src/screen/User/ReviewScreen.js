@@ -12,7 +12,7 @@ import BaseScreen from '../BaseScreen/BaseScreen';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import Header from '../../components/common/BackHeader'
 import StarRating from 'react-native-star-rating';
-
+import { generatePriceTagString } from '../../helpers'
 import {
     BASE_COLOR,
     NAV_COLOR,
@@ -141,7 +141,7 @@ class ReviewScreen extends BaseScreen {
                         maxStars={5}
                         rating={avgRating}
                         starSize={50}
-                        halfStarEnabled={true}
+                        // halfStarEnabled={true}
                         emptyStarColor={BASE_COLOR.lightGray}
                         fullStarColor={STAR_COLOR}
                         selectedStar={(rating) => this.onStarRatingPress(rating)}
@@ -171,22 +171,22 @@ class ReviewScreen extends BaseScreen {
 
                     <TouchableOpacity onPress={() => this.onPriceTagPress(1)}>
                         <View style={[styles.priceTagContainer, { backgroundColor: avgPriceTag >= 1 ? BASE_COLOR.blue : BASE_COLOR.gray }]}>
-                            <Text style={styles.priceTagText}>$$</Text>
+                            <Text style={styles.priceTagText}>{generatePriceTagString(1)}</Text>
                         </View>
                     </TouchableOpacity>
                     <TouchableOpacity onPress={() => this.onPriceTagPress(2)}>
                         <View style={[styles.priceTagContainer, { backgroundColor: avgPriceTag >= 2 ? BASE_COLOR.blue : BASE_COLOR.gray }]}>
-                            <Text style={styles.priceTagText}>$$$</Text>
+                            <Text style={styles.priceTagText}>{generatePriceTagString(2)}</Text>
                         </View>
                     </TouchableOpacity>
                     <TouchableOpacity onPress={() => this.onPriceTagPress(3)}>
                         <View style={[styles.priceTagContainer, { backgroundColor: avgPriceTag >= 3 ? BASE_COLOR.blue : BASE_COLOR.gray }]}>
-                            <Text style={styles.priceTagText}>$$$$</Text>
+                            <Text style={styles.priceTagText}>{generatePriceTagString(3)}</Text>
                         </View>
                     </TouchableOpacity>
                     <TouchableOpacity onPress={() => this.onPriceTagPress(4)}>
                         <View style={[styles.priceTagContainer, { backgroundColor: avgPriceTag >= 4 ? BASE_COLOR.blue : BASE_COLOR.gray }]}>
-                            <Text style={styles.priceTagText}>$$$$$</Text>
+                            <Text style={styles.priceTagText}>{generatePriceTagString(4)}</Text>
                         </View>
                     </TouchableOpacity>
                 </View>
