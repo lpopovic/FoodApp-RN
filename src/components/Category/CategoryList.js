@@ -77,7 +77,7 @@ const styles = StyleSheet.create({
         width: "100%",
     },
     sectionContainer: {
-        paddingLeft: 16,
+        paddingLeft: 8, //16
         paddingRight: 16,
         justifyContent: 'space-between',
         flexDirection: 'row',

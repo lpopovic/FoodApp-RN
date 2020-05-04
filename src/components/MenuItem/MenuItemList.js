@@ -67,8 +67,9 @@ const styles = StyleSheet.create({
         width: "100%",
     },
     sectionContainer: {
-        paddingLeft: 16,
+        paddingLeft: 8, //16
         paddingRight: 16,
+        paddingBottom: 5,
         justifyContent: 'space-between',
         flexDirection: 'row',
         alignItems: 'center',

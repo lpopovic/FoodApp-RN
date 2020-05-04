@@ -49,10 +49,10 @@ const stylesSmall = StyleSheet.create({
     mainContainer: {
         marginTop: 4,
         marginLeft: 8,
-        borderRadius: 8,
+        borderRadius: 5,
         overflow: 'hidden',
-        borderWidth: 1,
-        borderColor: BASE_COLOR.blue,
+        // borderWidth: 1,
+        // borderColor: BASE_COLOR.blue,
         width: 150,
     },
     imageBackgroundContainer: {
@@ -65,7 +65,7 @@ const stylesSmall = StyleSheet.create({
     imageContainer: {
         width: '100%',
         height: '100%',
-        backgroundColor: 'rgba(0, 0, 0,0.5)',
+        backgroundColor: 'rgba(0, 0, 0, 0.35)',
         justifyContent: 'flex-end'
     },
     otherImage: {
@@ -81,6 +81,7 @@ const stylesSmall = StyleSheet.create({
     titleContainer: {
         marginLeft: 8,
         marginRight: 8,
+        marginBottom: 8
     },
     baseText: {
         color: BASE_COLOR.darkGray,

@@ -29,10 +29,10 @@ class HomeCaroselComponent extends Component {
                     alignContent: 'center',
                     justifyContent: 'flex-end',
                 }}>
-                    <Icon
+                    {/* <Icon
                         name="ios-bicycle"
                         size={25} color={BASE_COLOR.white} />
-                    <Text style={[styles.baseText, { marginLeft: 4 }]}>{deliveryTime} min.</Text>
+                    <Text style={[styles.baseText, { marginLeft: 4 }]}>{deliveryTime} min.</Text> */}
 
                 </View>
 
@@ -61,13 +61,14 @@ class HomeCaroselComponent extends Component {
                         aspectRatio: 16 / 9,
                         width: ITEM_WIDTH,
                         resizeMode: 'cover',
-                        backgroundColor: BASE_COLOR.blue
+                        borderRadius: 5,
+                        overflow: 'hidden'
                     }}
                         source={{ uri: item.image.image169t }} >
                         <View style={styles.imageContainer}>
                             {this.deliveryIcon(item.delivery, item.estimatedDeliveryTime)}
                             <View>
-                                <View style={{ marginLeft: 8, alignContent: 'center', alignItems: 'flex-start' }}>
+                                {/* <View style={{ marginLeft: 8, alignContent: 'center', alignItems: 'flex-start' }}>
                                     <TouchableOpacity
                                         onPress={() => alert("press heart image")}>
                                         <View style={{ padding: 4, flexDirection: 'row', alignItems: 'center' }}>
@@ -78,7 +79,7 @@ class HomeCaroselComponent extends Component {
                                             <Text style={[styles.baseText, { marginLeft: 4 }]}>31{index}</Text>
                                         </View>
                                     </TouchableOpacity>
-                                </View>
+                                </View> */}
                                 <View style={styles.titleContainer}>
                                     <Text
                                         numberOfLines={3}
@@ -115,6 +116,7 @@ class HomeCaroselComponent extends Component {
                     enableMomentum={false}
                     loopClonesPerSide={10}
                     enableSnap={true}
+                    inactiveSlideOpacity={1}
                     layout={"default"} />
                 <Pagination
                     dotsLength={this.props.data.length}
@@ -124,7 +126,7 @@ class HomeCaroselComponent extends Component {
                     dotStyle={styles.paginationDot}
                     inactiveDotColor={BASE_COLOR.black}
                     inactiveDotOpacity={0.4}
-                    inactiveDotScale={0.6}
+                    inactiveDotScale={1}
                     carouselRef={this._carousel}
                     tappableDots={!!this._carousel} />
             </View>
@@ -138,11 +140,11 @@ const styles = StyleSheet.create({
     imageContainer: {
         width: '100%',
         height: '100%',
-        backgroundColor: 'rgba(0, 0, 0,0.5)',
+        backgroundColor: 'rgba(0, 0, 0,0.4)',
         justifyContent: 'space-between'
     },
     titleContainer: {
-        margin: 8,
+        margin: 18,
     },
     baseText: {
         color: BASE_COLOR.white,
@@ -165,7 +167,9 @@ const styles = StyleSheet.create({
         paddingVertical: 12,
     },
     paginationDot: {
-
+        width: 9,
+        height: 9,
+        borderRadius: 10,
     }
 });
 

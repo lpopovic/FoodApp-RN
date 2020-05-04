@@ -72,9 +72,9 @@ class AddDish extends Component {
                         <View style={styles.iconContent}>
                             {
                                 hide ?
-                                    <Icon name="ios-add" size={90} color={BASE_COLOR.blue} />
+                                    <Icon name="ios-add" size={90} color={BASE_COLOR.orange} />
                                     :
-                                    <Icon name="ios-arrow-up" size={35} color={BASE_COLOR.blue} />
+                                    <Icon name="ios-arrow-up" size={35} color={BASE_COLOR.orange} />
                             }
                         </View>
                     </View>
@@ -96,18 +96,12 @@ const styles = StyleSheet.create({
         flex: 1,
         width: Dimensions.get('window').width - 20,
         alignSelf: 'center',
-        borderColor: BASE_COLOR.blue,
+        borderColor: BASE_COLOR.orange,
         borderWidth: 1.5,
         borderRadius: 5,
     },
     cardContainerHidden: {
-        // width: Dimensions.get('window').width - 40,
         height: 90,
-        // alignSelf: 'center',
-        // justifyContent: 'center',
-        // borderColor: BASE_COLOR.blue,
-        // borderWidth: 5,
-        // borderRadius: 5,
     },
     cardContainerShow: {
         height: 30,

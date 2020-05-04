@@ -229,6 +229,7 @@ class PlaceDetailsScreen extends BaseScreen {
     categoryListContent = () => {
         //sectionMeniItems.push({ category, menuItems: [], hide: true })
         const { categoryList, selectedCategory } = this.state
+        const cathering = this.props.navigation.getParam('cathering', null)
         return (
             <View style={{
                 backgroundColor: BASE_COLOR.backgroundColor,
@@ -266,7 +267,7 @@ class PlaceDetailsScreen extends BaseScreen {
                                     <View style={{
                                         height: '100%',
                                         paddingHorizontal: 8,
-                                        backgroundColor: isSelected ? BASE_COLOR.catheringOrange : BASE_COLOR.backgroundColor,
+                                        backgroundColor: isSelected ? cathering ? BASE_COLOR.catheringOrange : BASE_COLOR.blue : BASE_COLOR.backgroundColor,
                                         justifyContent: 'center',
                                         alignItems: 'center',
                                     }}>
@@ -402,21 +403,24 @@ class PlaceDetailsScreen extends BaseScreen {
                                     </Text>
                                 </View>
                             </TouchableOpacity>
-                            <View style={{ flex: 4.5, flexDirection: 'row', height: 60 }}>
-                                <View style={{ flex: 1.5, justifyContent: 'center', alignItems: 'center' }}>
+                            <View style={{ flex: 4.5, flexDirection: 'row', height: 60, justifyContent: 'space-between', maxWidth: 120 }}>
+                                <View style={{ justifyContent: 'center', alignItems: 'flex-start' }}>
                                     <Text style={{ fontSize: 16, color: BASE_COLOR.darkGray, fontWeight: '300' }}>{generatePriceTagString(place.avgPriceTag)}</Text>
                                 </View>
-                                <View style={{ flex: 1.5, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginLeft: 6 }}>
-                                    <Image
-                                        style={{
-                                            width: 23,
-                                            height: 20,
-                                        }}
-                                        source={IconAssets.starIcon}
-                                    />
-                                    <Text style={{ color: '#646464', fontWeight: 'normal', fontSize: 12, marginLeft: 3 }}>{Number(place.avgRating).toFixed(1)}</Text>
+                                {/* marginLeft: 6, */}
+                                <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+                                    <TouchableOpacity style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }} onPress={() => this.onPressShowReviewHandler()}>
+                                        <Image
+                                            style={{
+                                                width: 23,
+                                                height: 20,
+                                            }}
+                                            source={IconAssets.starIcon}
+                                        />
+                                        <Text style={{ color: '#646464', fontWeight: 'normal', fontSize: 12, marginLeft: 3 }}>{Number(place.avgRating).toFixed(1)}</Text>
+                                    </TouchableOpacity>
                                 </View>
-                                <View style={{ flex: 1.5, justifyContent: 'center', alignItems: 'center' }}>
+                                <View style={{ justifyContent: 'center', alignItems: 'center' }}>
                                     <TouchableOpacity onPress={() => this.onPressFavoritePlaceHandler(place)}>
                                         <Image
                                             style={{
@@ -479,7 +483,7 @@ class PlaceDetailsScreen extends BaseScreen {
                                     </View>
                                     <View style={{ flexDirection: 'row', justifyContent: 'flex-end', height: '100%' }}>
                                         <Image style={{ width: 30, height: '100%' }} resizeMode='contain' source={IconAssets.cashIcon}></Image>
-                                        {place.onlinePayment === false ? <Image style={{ width: 28, height: '100%', marginLeft: 8 }} resizeMode='contain' source={IconAssets.cardIcon}></Image> : null}
+                                        {place.onlinePayment ? <Image style={{ width: 28, height: '100%', marginLeft: 8 }} resizeMode='contain' source={IconAssets.cardIcon}></Image> : null}
                                     </View>
                                 </View>
                             </View>
@@ -625,7 +629,7 @@ class PlaceDetailsScreen extends BaseScreen {
             return (
                 <View style={{ marginTop: 16, marginBottom: 16 }}>
                     <MenuItemList
-                        titleSection={`❤️ ${title}`}
+                        titleSection={`${title} ❤️`}
                         arrayObject={menuItemsForPlaceAndDay}
                         onPressItem={(item) => this.pushNewScreen({ routeName: ScreenName.MenuItemDetailsScreen(), key: `${Math.random() * 10000}${item._id}`, params: { _id: item._id, cathering: this.props.navigation.state.params.cathering } })}
                         onPressSeeMore={() => console.log("see more")}

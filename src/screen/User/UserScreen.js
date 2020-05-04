@@ -241,7 +241,8 @@ class UserScreen extends BaseScreen {
                 }}>
                     <PlaceSectionList
                         style={{ marginLeft: -8 }}
-                        titleSection={`❤️ ${String(strings.favoriteRestaurants).toUpperCase()}`}
+                        titleSection={`${String(strings.favoriteRestaurants).toUpperCase()} ❤️`}
+                        isFavoritePlace={true}
                         hideSeeMore={true}
                         arrayObject={userFavoritePlaces}
                         onPressItem={(item) => this.pushNewScreen({ routeName: ScreenName.PlaceDetailScreen(), key: `${Math.random() * 10000}${item._id}`, params: { _id: item._id } })}
@@ -267,7 +268,7 @@ class UserScreen extends BaseScreen {
                 }}>
                     <MenuItemList
                         style={{ marginLeft: -8, }}
-                        titleSection={`❤️ ${String(strings.favoriteMeals).toUpperCase()}`}
+                        titleSection={`${String(strings.favoriteMeals).toUpperCase()} ❤️`}
                         arrayObject={userFavoriteMenuItems}
                         onPressItem={(item) => this.pushNewScreen({ routeName: ScreenName.MenuItemDetailsScreen(), key: `${Math.random() * 10000}${item._id}`, params: { _id: item._id } })}
                         onPressSeeMore={() => console.log("see more")}

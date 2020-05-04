@@ -11,7 +11,7 @@ class RecentOrders extends Component {
         let returnSectionView = []
         sectionItems.map((section, indexInArray) => {
             if (section.menuItemArray.length > 0) {
-                const tintColor = section.hide ? BASE_COLOR.black : BASE_COLOR.blue
+                const tintColor = section.hide ? BASE_COLOR.black : BASE_COLOR.orange
                 returnSectionView.push(
                     <View key={indexInArray}>
                         <TouchableOpacity onPress={() => this.props.onPressSection(indexInArray)}>

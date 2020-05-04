@@ -19,7 +19,7 @@ class PlaceSmallItem extends Component {
         const { item } = this.props
         const title = item.name
         const rating = Number(item.avgRating).toFixed(1)
-        const delivery = item.delivery // == true ? '45 min.' : 'No delivery'
+        const delivery = item.delivery
         const timeDelivery = item.estimatedDeliveryTime
         const priceTag = item.returnAvgPriceTag()
 
@@ -34,7 +34,6 @@ class PlaceSmallItem extends Component {
                                 source={{ uri: item.image.image169t }}
                                 resizeMode='cover'>
                                 <View style={stylesSmall.imageContainer}>
-
                                     <View style={stylesSmall.titleContainer}>
                                         <Text
                                             numberOfLines={2}
@@ -110,11 +109,6 @@ const stylesSmall = StyleSheet.create({
         height: 12,
         width: 12,
         marginRight: 4
-    },
-    heartImage: {
-        height: 25,
-        width: 25,
-        tintColor: BASE_COLOR.white,
     },
     titleContainer: {
         marginLeft: 8,

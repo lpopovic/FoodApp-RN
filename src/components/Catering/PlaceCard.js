@@ -60,7 +60,7 @@ class PlaceCard extends Component {
                             </View>
                         </TouchableOpacity>
                         <TouchableOpacity onPress={() => this.props.onClick()} activeOpacity={0.5} style={{ flex: 3, marginTop: 10, marginLeft: 10 }}>
-                            <View style={{ backgroundColor: BASE_COLOR.blue, height: 26, justifyContent: 'center', alignItems: 'center', borderRadius: 5 }}>
+                            <View style={{ backgroundColor: BASE_COLOR.orange, height: 26, justifyContent: 'center', alignItems: 'center', borderRadius: 5 }}>
                                 <Text style={{ color: 'white', fontWeight: '600', fontSize: 16 }}>Meni</Text>
                             </View>
                         </TouchableOpacity>

@@ -304,8 +304,9 @@ class HomeScreen extends BaseScreen {
         if (userFavoritePlaces.length > 0 && isLogin == true) {
             return (
                 <PlaceSectionList
+                    isFavoritePlace={true}
                     hideSeeMore={true}
-                    titleSection={`❤️ ${title}`}
+                    titleSection={`${title} ❤️`}
                     arrayObject={userFavoritePlaces}
                     onPressItem={(item) => this.pushNewScreen({ routeName: ScreenName.PlaceDetailScreen(), key: `${Math.random() * 10000}${item._id}`, params: { _id: item._id } })}
                     // onPressSeeMore={() => this.pushNewScreen({
@@ -329,7 +330,7 @@ class HomeScreen extends BaseScreen {
         if (userFavoriteMenuItems.length > 0 && isLogin == true) {
             return (
                 <MenuItemList
-                    titleSection={`❤️ ${title}`}
+                    titleSection={`${title} ❤️`}
                     arrayObject={userFavoriteMenuItems}
                     onPressItem={(item) => this.pushNewScreen({ routeName: ScreenName.MenuItemDetailsScreen(), key: `${Math.random() * 10000}${item._id}`, params: { _id: item._id } })}
                     onPressSeeMore={() => console.log("see more")}

@@ -281,7 +281,7 @@ class CateringScreen extends BaseScreen {
                     }}
                     style={{ height: 120, paddingTop: 10, paddingBottom: 10, backgroundColor: NAV_COLOR.headerBackground }}
                     // locale={locale}
-                    daySelectionAnimation={{ type: 'background', duration: 200, highlightColor: BASE_COLOR.blue }}
+                    daySelectionAnimation={{ type: 'background', duration: 200, highlightColor: BASE_COLOR.orange }}
                     minDate={Moment().subtract(21, 'd')}
                     maxDate={Moment().add(7, 'd')}
                     updateWeek={true}
@@ -580,7 +580,7 @@ class CateringScreen extends BaseScreen {
     render() {
         const { loading, isCatheringAvailable, } = this.state
         const { isLogin } = this.props
-        const mainDisplay = loading ? this.activityIndicatorContent(BASE_COLOR.blue) : this.mainContent()
+        const mainDisplay = loading ? this.activityIndicatorContent(BASE_COLOR.orange) : this.mainContent()
         return (
             <SafeAreaView style={styles.safeAreaHeader}>
                 <View style={styles.mainContainer}>

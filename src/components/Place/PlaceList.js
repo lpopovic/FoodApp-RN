@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import PlaceItem from './PlaceItem'
 import PlaceSmallItem from './PlaceSmallItem'
+import PlaceFavoriteItem from './PlaceFavoriteItem'
 import { BASE_COLOR } from '../../styles'
 
 
@@ -108,11 +109,18 @@ class PlaceSectionList extends Component {
                     horizontal
                     keyExtractor={(item, index) => `${index.toString()}`}
                     renderItem={(info) => (
-                        <PlaceSmallItem
-                            item={info.item}
-                            setSmall
-                            onPress={() => this.props.onPressItem(info.item)}
-                        />
+                        this.props.isFavoritePlace ?
+                            <PlaceFavoriteItem
+                                item={info.item}
+                                setSmall
+                                onPress={() => this.props.onPressItem(info.item)}
+                            />
+                            :
+                            <PlaceSmallItem
+                                item={info.item}
+                                setSmall
+                                onPress={() => this.props.onPressItem(info.item)}
+                            />
                     )}
                     ListFooterComponent={this.render_FlatList_footer}
                 />
@@ -131,7 +139,7 @@ const styles = StyleSheet.create({
         width: "100%",
     },
     sectionContainer: {
-        paddingLeft: 16,
+        paddingLeft: 8, //16
         paddingRight: 16,
         justifyContent: 'space-between',
         flexDirection: 'row',

@@ -117,7 +117,7 @@ class MenuItemDetailsScreen extends BaseScreen {
         }
     }
 
-    _renderMenuItemOptions = (menuItemOptions) => {
+    _renderMenuItemOptions = (menuItemOptions, cathering) => {
         var allOptions = [];
         if (menuItemOptions.length == 0 || menuItemOptions === undefined) {
             return <Text style={{ marginTop: 40, marginLeft: 20 }}>Nema dodataka!</Text>
@@ -140,7 +140,7 @@ class MenuItemDetailsScreen extends BaseScreen {
                                             textStyle={{ fontWeight: '400', fontSize: 18, color: BASE_COLOR.darkGray, backgroundColor: 'transparent' }}
                                             containerStyle={{ flex: 7, backgroundColor: 'transparent', borderColor: 'transparent' }}
                                             title={option.text}
-                                            checkedColor={BASE_COLOR.blue}
+                                            checkedColor={cathering ? BASE_COLOR.orange : BASE_COLOR.blue}
                                             checked={this.selectedOptionsFromGroup(item._id, option._id)}
                                             onPress={(_id, index) => this.selectCheckboxHandler(item._id, option, item.maximumSelection === null ? item.options.length : item.maximumSelection)}
                                         />
@@ -168,6 +168,7 @@ class MenuItemDetailsScreen extends BaseScreen {
                                                 onPress={(_id, index) => this.selectedRadioButtonHandler(item._id, noneRadioOption)}
                                                 checkedIcon='dot-circle-o'
                                                 uncheckedIcon='circle-o'
+                                                checkedColor={cathering ? BASE_COLOR.orange : BASE_COLOR.blue}
                                                 title={noneRadioOption.text}
                                                 textStyle={{ fontWeight: '400', fontSize: 18, color: BASE_COLOR.darkGray, backgroundColor: 'transparent' }}
                                                 containerStyle={{ flex: 7, backgroundColor: 'transparent', borderColor: 'transparent' }}
@@ -197,6 +198,7 @@ class MenuItemDetailsScreen extends BaseScreen {
                                             onPress={(_id, index) => this.selectedRadioButtonHandler(item._id, option)}
                                             checkedIcon='dot-circle-o'
                                             uncheckedIcon='circle-o'
+                                            checkedColor={cathering ? BASE_COLOR.orange : BASE_COLOR.blue}
                                             title={option.text}
                                             textStyle={{ fontWeight: '400', fontSize: 18, color: BASE_COLOR.darkGray, backgroundColor: 'transparent' }}
                                             containerStyle={{ flex: 7, backgroundColor: 'transparent', borderColor: 'transparent' }}
@@ -217,7 +219,7 @@ class MenuItemDetailsScreen extends BaseScreen {
         }
     }
 
-    _renderMenuItemTypeWithOptions = (subtypes) => {
+    _renderMenuItemTypeWithOptions = (subtypes, cathering) => {
         var allTypes = []
         subtypes.map((item, index) => {
             allTypes.push(
@@ -230,6 +232,7 @@ class MenuItemDetailsScreen extends BaseScreen {
                             onPress={(_id, index) => this.selectTypeHandler(item)}
                             checkedIcon='dot-circle-o'
                             uncheckedIcon='circle-o'
+                            checkedColor={cathering ? BASE_COLOR.orange : BASE_COLOR.blue}
                             title={item.sizeName}
                             textStyle={{ fontWeight: '400', fontSize: 18, color: BASE_COLOR.darkGray, backgroundColor: 'transparent' }}
                             containerStyle={{ flex: 7, backgroundColor: 'transparent', borderColor: 'transparent' }}
@@ -360,6 +363,7 @@ class MenuItemDetailsScreen extends BaseScreen {
                                         onPress={(_id, index) => this.setNewStateHandler({ selectedTime: item })}
                                         checkedIcon='dot-circle-o'
                                         uncheckedIcon='circle-o'
+                                        checkedColor={BASE_COLOR.orange}
                                         title={item}
                                         textStyle={{ fontWeight: '400', fontSize: 18, color: BASE_COLOR.darkGray, backgroundColor: 'transparent' }}
                                         containerStyle={{ flex: 7, backgroundColor: 'transparent', borderColor: 'transparent' }}
@@ -426,7 +430,7 @@ class MenuItemDetailsScreen extends BaseScreen {
                         <Text numberOfLines={2} ellipsizeMode='tail' style={{ fontWeight: '500', fontSize: 20 }}>{name}</Text>
                     </View>
                     <View style={{ flex: 3, alignItems: 'flex-end' }}>
-                        <Text style={{ color: BASE_COLOR.blue, fontWeight: 'bold', fontSize: 19 }}>{hasSubtypes ? nominalPrice + '.00 +' : nominalPrice + '.00'}</Text>
+                        <Text style={{ color: cathering ? BASE_COLOR.orange : BASE_COLOR.blue, fontWeight: 'bold', fontSize: 19 }}>{hasSubtypes ? nominalPrice + '.00 +' : nominalPrice + '.00'}</Text>
                     </View>
                 </View>
                 <View style={{ margin: 20, marginTop: -10 }}>
@@ -482,9 +486,9 @@ class MenuItemDetailsScreen extends BaseScreen {
                         </TouchableOpacity>
                     </View>
                 }
-                {this._renderMenuItemTypeWithOptions(subtypes)}
+                {this._renderMenuItemTypeWithOptions(subtypes, cathering)}
                 {/* {hasSubtypes === true && subtypes != [] ? this._renderMenuItemOptions(subtypes.menuItemOptions) : null} */}
-                {this._renderMenuItemOptions(hasSubtypes ? this.state.menuItemType.menuItemOptions : menuItemOptions)}
+                {this._renderMenuItemOptions(hasSubtypes ? this.state.menuItemType.menuItemOptions : menuItemOptions, cathering)}
                 {
                     cathering != null && cathering.isFromCathering ?
                         // null
@@ -493,7 +497,7 @@ class MenuItemDetailsScreen extends BaseScreen {
                 }
                 <View style={{ alignItems: 'center', justifyContent: 'center', margin: 20, marginBottom: 30 }}>
                     <TouchableOpacity onPress={() => this.onPressAddToBag()}>
-                        <View style={{ backgroundColor: BASE_COLOR.blue, width: 280, height: 45, justifyContent: 'center', alignItems: 'center', borderRadius: 4 }}>
+                        <View style={{ backgroundColor: cathering ? BASE_COLOR.orange : BASE_COLOR.blue, width: 280, height: 45, justifyContent: 'center', alignItems: 'center', borderRadius: 4 }}>
                             <Text style={{ color: BASE_COLOR.white, fontWeight: '600', fontSize: 16 }}>{cathering != null && cathering.isFromCathering ? this.props.strings.orderFood : this.props.strings.addToCart}</Text>
                         </View>
                     </TouchableOpacity>

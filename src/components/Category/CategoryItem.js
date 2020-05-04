@@ -8,7 +8,7 @@ import {
     Dimensions
 } from 'react-native';
 import { BASE_COLOR } from '../../styles';
-const cardSmallWidth = 80
+const cardSmallWidth = 110
 const cardBigWidth = Dimensions.get('screen').width / 2 - 8
 class CategoryItem extends Component {
     constructor(props) {
