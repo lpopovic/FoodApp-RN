@@ -10,7 +10,8 @@ import {
     LayoutAnimation,
     UIManager,
     RefreshControl,
-    FlatList
+    FlatList,
+    ImageBackground
 } from 'react-native';
 import HeaderImageScrollView, { TriggeringView } from 'react-native-image-header-scroll-view';
 import { getStatusBarHeight } from 'react-native-status-bar-height';
@@ -33,7 +34,7 @@ import { PlaceNetwork } from '../../service/api'
 import { Place, Category } from '../../model';
 import { userFavoritePlaces } from '../../store/actions'
 import { connect } from 'react-redux';
-import { openDays, generatePriceTagString } from '../../helpers/numberHelper';
+import { openDays, abbrNum } from '../../helpers/numberHelper';
 import UrlOpen from '../../components/common/UrlOpen'
 import Icon from 'react-native-vector-icons/Ionicons';
 import IconMaterial from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -158,7 +159,8 @@ class PlaceDetailsScreen extends BaseScreen {
                         style={{
                             height: 25,
                             aspectRatio: 1,
-                            marginLeft: 7
+                            marginLeft: 7,
+                            tintColor: BASE_COLOR.darkGray
                         }}
                         resizeMode='contain'
                         source={IconAssets.backIcon} />
@@ -175,7 +177,8 @@ class PlaceDetailsScreen extends BaseScreen {
                     <Image
                         style={{
                             height: 25,
-                            aspectRatio: 1
+                            aspectRatio: 1,
+                            tintColor: BASE_COLOR.darkGray
                         }}
                         resizeMode='contain'
                         source={TestAssets.shopBagIcon} />
@@ -386,9 +389,10 @@ class PlaceDetailsScreen extends BaseScreen {
                                             height: 34,
                                             justifyContent: 'center',
                                             marginRight: 10,
+                                            tintColor: BASE_COLOR.darkGray
                                         }}
                                         resizeMode='center'
-                                        source={this.state.expanded ? IconAssets.upArrow : IconAssets.downArrow}
+                                        source={this.state.expanded == true ? IconAssets.upArrow : IconAssets.downArrow}
                                     />
                                 </View>
                                 <View style={{ flex: 7 }}>
@@ -405,7 +409,7 @@ class PlaceDetailsScreen extends BaseScreen {
                             </TouchableOpacity>
                             <View style={{ flex: 4.5, flexDirection: 'row', height: 60, justifyContent: 'space-between', maxWidth: 120 }}>
                                 <View style={{ justifyContent: 'center', alignItems: 'flex-start' }}>
-                                    <Text style={{ fontSize: 16, color: BASE_COLOR.darkGray, fontWeight: '300' }}>{generatePriceTagString(place.avgPriceTag)}</Text>
+                                    <Text style={{ fontSize: 16, color: BASE_COLOR.darkGray, fontWeight: '300' }}>{place.returnAvgPriceTag()}</Text>
                                 </View>
                                 {/* marginLeft: 6, */}
                                 <View style={{ justifyContent: 'center', alignItems: 'center' }}>
@@ -443,20 +447,29 @@ class PlaceDetailsScreen extends BaseScreen {
                                         <Image style={{ width: 24, height: '100%' }} resizeMode='contain' source={IconAssets.deliveryTimeIcon}></Image>
                                         <Text style={{ fontSize: 15, marginLeft: 8, color: BASE_COLOR.darkGray, fontWeight: 'bold' }}>{place.estimatedDeliveryTime ? place.estimatedDeliveryTime : 'any'} min</Text>
                                     </View>
-                                    <View style={{ justifyContent: 'flex-end', }}>
-                                        <TouchableOpacity onPress={() => this.onPressShowReviewHandler()}>
-                                            <Image
-                                                style={{
-                                                    width: 23,
-                                                    height: 23,
-                                                    tintColor: '#646464',
-                                                }}
-                                                resizeMode='contain'
-                                                source={IconAssets.reviewIcon}
-                                            />
-                                            <Text style={{ fontSize: 11, fontWeight: '400', color: BASE_COLOR.white, position: 'absolute', width: 23, top: 2, textAlign: 'center' }}>232</Text>
-                                        </TouchableOpacity>
-                                    </View>
+                                    <TouchableOpacity onPress={() => this.onPressShowReviewHandler()}>
+
+                                        <ImageBackground
+                                            style={{
+                                                height: 23,
+                                                width: 23,
+                                                alignItems: 'center',
+                                             
+                                            }}
+                                            imageStyle={{
+                                                tintColor: '#646464',
+                                            }}
+                                            resizeMode='contain'
+                                            source={IconAssets.reviewIcon}>
+                                            <Text style={{
+                                                fontSize: 11,
+                                                fontWeight: '400',
+                                                color: BASE_COLOR.white,
+                                                width: 23,
+                                                textAlign: 'center',
+                                            }}>{abbrNum(place.numberOfReviews, 1)}</Text>
+                                        </ImageBackground>
+                                    </TouchableOpacity>
                                 </View>
                                 <View style={{ flexDirection: 'row', alignItems: 'center', flex: 0.5, justifyContent: 'space-between' }}>
                                     <View style={{ flexDirection: 'row' }}>

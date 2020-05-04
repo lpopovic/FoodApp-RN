@@ -94,7 +94,7 @@ class UserHeader extends Component {
         }
     }
     render() {
-        const tintColor = NAV_COLOR.darkGray
+        const tintColor = BASE_COLOR.darkGray
         const backgroundColor = this.props.backgroundColor ? this.props.backgroundColor : NAV_COLOR.headerBackground
 
         return (
