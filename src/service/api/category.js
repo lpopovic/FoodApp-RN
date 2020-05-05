@@ -4,7 +4,7 @@ import { Category } from '../../model'
 class CategoryNetwork {
     static fetchCategories = () =>
         new Promise(async (resolve, reject) => {
-            const url = RestUrl.getAllcategories
+            const url = RestUrl.getAllCategoriesByCity
             try {
                 const { data } = await axios.get(url)
                 const categories = Category.createArrayCategory(data)

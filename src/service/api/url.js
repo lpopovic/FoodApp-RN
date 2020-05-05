@@ -55,7 +55,8 @@ class RestUrl {
         return withKey(`orders?from=${fromDate}&to=${toDate}&isCatheringOrder=true&company=${companyId}`)
     }
 
-    static getAllcategories = withKey(`categories`)
+    static getCategories = withKey(`categories`)
+    static getAllCategoriesByCity = withKey(`categories/byCity`)
 
     static getCompanyReguest = (id) => {
         return withKey(`companyrequests${id ? `/${id}` : ''}`)
