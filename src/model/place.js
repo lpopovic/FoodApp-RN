@@ -29,6 +29,11 @@ class Place {
             return value
         }
     }
+    getAvgRating = () => {
+        let value = Number(this.avgRating)
+        return value.toFixed(1)
+
+    }
     setupCoordinate = (location) => {
         if (location) {
             if (location.coordinates.length == 2) {

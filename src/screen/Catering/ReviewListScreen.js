@@ -240,7 +240,7 @@ class ReviewListScreen extends BaseScreen {
                                     }}
                                     source={IconAssets.starIcon}
                                 />
-                                <Text style={{ ...styles.infoBaseText, marginLeft: 2 }}>{Number(place.avgRating).toFixed(1)}</Text>
+                                <Text style={{ ...styles.infoBaseText, marginLeft: 2 }}>{place.getAvgRating()}</Text>
                             </View>
                             <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginRight: 8 }}>
                                 <IconMaterial

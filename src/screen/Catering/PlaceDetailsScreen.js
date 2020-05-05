@@ -421,7 +421,7 @@ class PlaceDetailsScreen extends BaseScreen {
                                             }}
                                             source={IconAssets.starIcon}
                                         />
-                                        <Text style={{ color: '#646464', fontWeight: 'normal', fontSize: 12, marginLeft: 3 }}>{Number(place.avgRating).toFixed(1)}</Text>
+                                        <Text style={{ color: '#646464', fontWeight: 'normal', fontSize: 12, marginLeft: 3 }}>{place.getAvgRating()}</Text>
                                     </TouchableOpacity>
                                 </View>
                                 <View style={{ justifyContent: 'center', alignItems: 'center' }}>
