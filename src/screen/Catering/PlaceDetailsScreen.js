@@ -454,7 +454,6 @@ class PlaceDetailsScreen extends BaseScreen {
                                                 height: 23,
                                                 width: 23,
                                                 alignItems: 'center',
-                                             
                                             }}
                                             imageStyle={{
                                                 tintColor: '#646464',
@@ -467,7 +466,7 @@ class PlaceDetailsScreen extends BaseScreen {
                                                 color: BASE_COLOR.white,
                                                 width: 23,
                                                 textAlign: 'center',
-                                            }}>{abbrNum(place.numberOfReviews, 1)}</Text>
+                                            }}>•••</Text>
                                         </ImageBackground>
                                     </TouchableOpacity>
                                 </View>

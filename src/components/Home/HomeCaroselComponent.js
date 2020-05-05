@@ -16,34 +16,19 @@ class HomeCaroselComponent extends Component {
             sliderActiveSlide: SLIDER_FIRST_ITEM
         }
     }
-
-    deliveryIcon = (delivery, deliveryTime) => {
-
-
-        if (delivery == true) {
-            return (
-                <View style={{
-                    padding: 4,
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    alignContent: 'center',
-                    justifyContent: 'flex-end',
-                }}>
-                    {/* <Icon
-                        name="ios-bicycle"
-                        size={25} color={BASE_COLOR.white} />
-                    <Text style={[styles.baseText, { marginLeft: 4 }]}>{deliveryTime} min.</Text> */}
-
-                </View>
-
-            )
-        } else {
-            return (
-                <View />
-            )
-        }
-
+    onPressPlace = (place) => {
+        this.props.onPressPlace(place)
     }
+    onPressMenuItem = (menuItem) => {
+        this.props.onPressMenuItem(menuItem)
+    }
+    onPressCustom = (url) => {
+        this.props.onPressCustom(url)
+    }
+    onPressItem = (item) => {
+        item.onPressHeroTypeBanner(this.onPressPlace, this.onPressMenuItem, this.onPressCustom)
+    }
+
     _renderItem = ({ item, index }) => {
 
         return (
@@ -56,7 +41,7 @@ class HomeCaroselComponent extends Component {
                 }}>
                 <TouchableOpacity
                     activeOpacity={1}
-                    onPress={() => this.props.onPressItem(item)}>
+                    onPress={() => this.onPressItem(item)}>
                     <ImageBackground style={{
                         aspectRatio: 16 / 9,
                         width: ITEM_WIDTH,
@@ -64,30 +49,22 @@ class HomeCaroselComponent extends Component {
                         borderRadius: 5,
                         overflow: 'hidden'
                     }}
-                        source={{ uri: item.image.image169t }} >
+                        source={{ uri: item.getImage() }} >
                         <View style={styles.imageContainer}>
-                            {this.deliveryIcon(item.delivery, item.estimatedDeliveryTime)}
-                            <View>
-                                {/* <View style={{ marginLeft: 8, alignContent: 'center', alignItems: 'flex-start' }}>
-                                    <TouchableOpacity
-                                        onPress={() => alert("press heart image")}>
-                                        <View style={{ padding: 4, flexDirection: 'row', alignItems: 'center' }}>
-                                            <Image
-                                                style={[styles.heartImage]}
-                                                source={IconAssets.heartIcon}
-                                                resizeMode='contain' />
-                                            <Text style={[styles.baseText, { marginLeft: 4 }]}>31{index}</Text>
-                                        </View>
-                                    </TouchableOpacity>
-                                </View> */}
-                                <View style={styles.titleContainer}>
-                                    <Text
-                                        numberOfLines={3}
-                                        ellipsizeMode="tail"
-                                        style={[styles.baseText, styles.title]}>
-                                        {item.name}
-                                    </Text>
-                                </View>
+                            <View />
+                            <View style={styles.titleContainer}>
+                                <Text
+                                    numberOfLines={3}
+                                    ellipsizeMode="tail"
+                                    style={[styles.baseText, styles.title]}>
+                                    {item.getTitle()}
+                                </Text>
+                                <Text
+                                    numberOfLines={3}
+                                    ellipsizeMode="tail"
+                                    style={[styles.baseText, styles.description]}>
+                                    {item.getDescription()}
+                                </Text>
                             </View>
                         </View>
                     </ImageBackground>
@@ -141,7 +118,8 @@ const styles = StyleSheet.create({
         width: '100%',
         height: '100%',
         backgroundColor: 'rgba(0, 0, 0,0.4)',
-        justifyContent: 'space-between'
+        justifyContent: 'space-between',
+
     },
     titleContainer: {
         margin: 18,
@@ -155,6 +133,10 @@ const styles = StyleSheet.create({
     title: {
         fontSize: 24,
         fontWeight: 'bold',
+        textAlign: 'left',
+    },
+    description: {
+        fontWeight: 'normal',
         textAlign: 'left',
     },
     heartImage: {

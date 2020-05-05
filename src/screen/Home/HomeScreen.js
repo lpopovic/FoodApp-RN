@@ -16,8 +16,9 @@ import { CategorySectionList } from '../../components/Category/CategoryList'
 import { PlaceSectionList } from '../../components/Place/PlaceList'
 import MenuItemList from '../../components/MenuItem/MenuItemList'
 import HomeCaroselComponent from '../../components/Home/HomeCaroselComponent';
-import { PlaceNetwork, CategoryNetwork, ParamsUrl, UserNetwork } from '../../service/api'
+import { PlaceNetwork, CategoryNetwork, ParamsUrl, UserNetwork, BannerNetwork } from '../../service/api'
 import { MenuItem } from '../../model';
+import UrlOpen from '../../components/common/UrlOpen';
 
 class HomeScreen extends BaseScreen {
     static navigationOptions = {
@@ -30,13 +31,13 @@ class HomeScreen extends BaseScreen {
             loading: true,
             refreshing: false,
             categories: [],
-            caroselPlaces: [],
             newPlaces: [],
             actionPlaces: [],
             mostRatingPlaces: [],
             recommendedPlaces: [],
             pickupPlaces: [],
             deliveryPlaces: [],
+            heroBanners: [],
         }
 
     }
@@ -98,7 +99,6 @@ class HomeScreen extends BaseScreen {
                 this.setNewStateHandler({
                     loading: false,
                     refreshing: false,
-                    caroselPlaces: res.slice(0, 3),
                     newPlaces: res,
                     actionPlaces: res,
                     recommendedPlaces: res,
@@ -170,6 +170,18 @@ class HomeScreen extends BaseScreen {
             err => {
                 this.setNewStateHandler({
                     categories: []
+                })
+            }
+        )
+        BannerNetwork.fetchHeroBanners().then(
+            res => {
+                this.setNewStateHandler({
+                    heroBanners: res,
+                })
+            },
+            err => {
+                this.setNewStateHandler({
+                    heroBanners: [],
                 })
             }
         )
@@ -361,20 +373,30 @@ class HomeScreen extends BaseScreen {
     }
 
     caroselContent = () => {
-        const { caroselPlaces } = this.state
-        return (
-            <HomeCaroselComponent
-                data={caroselPlaces}
-                onPressItem={(place) => this.pushNewScreen({
-                    routeName: ScreenName.PlaceDetailScreen(),
-                    key: `${Math.random() * 10000}${place._id}`,
-                    params: {
-                        _id: place._id
+        const { heroBanners } = this.state
+        if (heroBanners.length > 0) {
+            return (
+                <HomeCaroselComponent
+                    data={heroBanners}
+                    onPressPlace={(place) => this.pushNewScreen({
+                        routeName: ScreenName.PlaceDetailScreen(),
+                        key: `${Math.random() * 10000}${place}`,
+                        params: {
+                            _id: place
+                        }
+                    })}
+                    onPressMenuItem={(menuItem) => this.pushNewScreen({
+                        routeName: ScreenName.MenuItemDetailsScreen(),
+                        key: `${Math.random() * 10000}`,
+                        params: {
+                            _id: menuItem,
+                        }
+                    })
                     }
-                })}
-
-            />
-        )
+                    onPressCustom={(url) => UrlOpen.openUrlInBrowser(url)}
+                />
+            )
+        }
     }
     _onRefresh = () => {
         this.setNewStateHandler({ refreshing: true });

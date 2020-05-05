@@ -83,6 +83,11 @@ class RestUrl {
 
     static companyBindings = withKey('companybindings')
 
+    //BANNER
+
+    static banners = (value) => {
+        return withKey(`banners/${value}`)
+    }
 }
 
 class ParamsUrl {
@@ -97,6 +102,7 @@ class ParamsUrl {
     static isCatheringOrder = (value) => { return `isCatheringOrder=${value}` }
     static sort = (value) => { return `sort=${value}` }
     static offset = (value) => { return `offset=${value}` }
+    static hero = 'hero'
 
 }
 
