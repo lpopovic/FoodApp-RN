@@ -617,7 +617,7 @@ const stylesCard = StyleSheet.create({
         alignContent: 'center',
         alignItems: 'center',
         justifyContent: 'space-between',
-        backgroundColor: 'red'
+        // backgroundColor: 'red'
     },
     spaceView: {
         marginLeft: 4,
