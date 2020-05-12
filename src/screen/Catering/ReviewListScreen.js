@@ -22,7 +22,6 @@ import {
     NAV_COLOR,
     BASE_COLOR,
     segmentedControlStyles,
-    segmentedControlStylesReview,
 } from '../../styles'
 import { Place } from '../../model';
 import { ReviewNetwork, ParamsUrl } from '../../service/api';
@@ -241,7 +240,7 @@ class ReviewListScreen extends BaseScreen {
                                     }}
                                     source={IconAssets.starIcon}
                                 />
-                                <Text style={{ ...styles.infoBaseText, marginLeft: 2 }}>{Number(place.avgRating).toFixed(1)}</Text>
+                                <Text style={{ ...styles.infoBaseText, marginLeft: 2 }}>{place.getAvgRating()}</Text>
                             </View>
                             <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginRight: 8 }}>
                                 <IconMaterial
@@ -260,15 +259,14 @@ class ReviewListScreen extends BaseScreen {
                         selectedIndex={this.state.selectedIndex}
                         onTabPress={this.handleOnTabPress}
                         borderRadius={8}
-                        tabsContainerStyle={segmentedControlStylesReview.container}
-                        tabStyle={segmentedControlStylesReview.commonStyle}
+                        tabsContainerStyle={segmentedControlStyles.container}
+                        tabStyle={segmentedControlStyles.commonStyle}
                         activeTabStyle={{
-                            ...segmentedControlStylesReview.commonStyle,
-                            ...segmentedControlStylesReview.activeStyle,
-                            backgroundColor: BASE_COLOR.orange,
+                            ...segmentedControlStyles.commonStyle,
+                            ...segmentedControlStyles.activeStyle,
                         }}
-                        tabTextStyle={segmentedControlStylesReview.commonText}
-                        activeTabTextStyle={{ ...segmentedControlStylesReview.activeText }}
+                        tabTextStyle={segmentedControlStyles.commonText}
+                        activeTabTextStyle={{ ...segmentedControlStyles.activeText }}
                     />
                 </View>
                 {this.reviewContent()}

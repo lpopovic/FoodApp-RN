@@ -194,8 +194,8 @@ class SearchScreen extends BaseScreen {
                                 tabsContainerStyle={segmentedControlStyles.container}
                                 tabStyle={segmentedControlStyles.commonStyle}
                                 activeTabStyle={{ ...segmentedControlStyles.commonStyle, ...segmentedControlStyles.activeStyle }}
-                                tabTextStyle={segmentedControlStyles.text}
-                                activeTabTextStyle={segmentedControlStyles.text}
+                                tabTextStyle={segmentedControlStyles.commonText}
+                                activeTabTextStyle={segmentedControlStyles.activeText}
                             />
                         </View>
                         {mainDisplay}

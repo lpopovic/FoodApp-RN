@@ -25,19 +25,19 @@ class BackHeader extends Component {
         this.props.navigation.navigate(ScreenName.FilterScreen(), { filter: this.props.showFilter })
     }
     filterContent = (tintColor) => (
-        <TouchableOpacity onPress={() => this.filterPressHandler()}>
-            <View style={[styles.rightBtn, { flex: 1 }]}>
+        <View style={[styles.rightBtn,]}>
+            <TouchableOpacity onPress={() => this.filterPressHandler()}>
                 <View style={[styles.imageOtherContainer, styles.imageContainer]}>
                     <Icon name="sliders" size={25} color={tintColor} />
                 </View>
-            </View>
-        </TouchableOpacity>
+            </TouchableOpacity>
+        </View>
     )
     titleDisplay = (tintColor) => {
         const title = this.props.navigation.getParam('title', null)
         if (title) {
             return (
-                <View style={[styles.titleContainer, { flex: 1, alignContent: 'center', alignItems: 'center' }]}>
+                <View style={[styles.titleContainer]}>
                     <Text
                         numberOfLines={1}
                         ellipsizeMode='tail'
@@ -55,23 +55,25 @@ class BackHeader extends Component {
         const borderBottomColor = this.props.borderBottomColor ? this.props.borderBottomColor : NAV_COLOR.borderBottomColor
         return (
             <View style={[headerStyles.mainContainer, { backgroundColor, borderBottomColor, borderBottomWidth: tintColor == BASE_COLOR.white ? 0 : 0.7 }]}>
-                <View style={{ flex: 3, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <TouchableOpacity onPress={() => this.backPressHandler()}>
-                        <View style={[styles.leftBtn, { flex: 1 }]}>
-                            <View style={styles.imageContainer}>
-                                <Image
-                                    source={IconAssets.leftArrow}
-                                    style={[headerStyles.btnImage, { tintColor }]}
-                                    resizeMode='contain' />
+                <View style={{ flex: 10, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <View style={[styles.leftBtn]}>
+                        <TouchableOpacity onPress={() => this.backPressHandler()}>
+                            <View style={{ flexDirection: 'row', alignItems: 'center', paddingVertical: 4 }}>
+                                <View style={styles.imageContainer}>
+                                    <Image
+                                        source={IconAssets.leftArrow}
+                                        style={[headerStyles.btnImage, { tintColor }]}
+                                        resizeMode='contain' />
+                                </View>
+                                <Text style={[headerStyles.btnText, { color: tintColor }]}>{this.props.strings.back}</Text>
                             </View>
-                            <Text style={[headerStyles.btnText, { color: tintColor }]}>{this.props.strings.back}</Text>
-                        </View>
-                    </TouchableOpacity>
+                        </TouchableOpacity>
+                    </View>
                     {this.titleDisplay(tintColor)}
                     {filterDisplay}
 
                 </View>
-            </View>
+            </View >
         )
     }
 }
@@ -79,9 +81,17 @@ class BackHeader extends Component {
 const styles = StyleSheet.create({
     leftBtn: {
         ...headerStyles.alignCentarBetweenRow,
+        flex: 2
     },
     rightBtn: {
         ...headerStyles.alignCentarBetweenRow,
+        flex: 2,
+        justifyContent: 'flex-end'
+    },
+    titleContainer: {
+        flex: 6,
+        justifyContent: 'center',
+        alignItems: 'center',
     },
     imageContainer: {
         marginRight: 4

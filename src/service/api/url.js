@@ -55,7 +55,8 @@ class RestUrl {
         return withKey(`orders?from=${fromDate}&to=${toDate}&isCatheringOrder=true&company=${companyId}`)
     }
 
-    static getAllcategories = withKey(`categories`)
+    static getCategories = withKey(`categories`)
+    static getAllCategoriesByCity = withKey(`categories/byCity`)
 
     static getCompanyReguest = (id) => {
         return withKey(`companyrequests${id ? `/${id}` : ''}`)
@@ -83,6 +84,11 @@ class RestUrl {
 
     static companyBindings = withKey('companybindings')
 
+    //BANNER
+
+    static banners = (value) => {
+        return withKey(`banners/${value}`)
+    }
 }
 
 class ParamsUrl {
@@ -97,6 +103,7 @@ class ParamsUrl {
     static isCatheringOrder = (value) => { return `isCatheringOrder=${value}` }
     static sort = (value) => { return `sort=${value}` }
     static offset = (value) => { return `offset=${value}` }
+    static hero = 'hero'
 
 }
 

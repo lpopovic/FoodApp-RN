@@ -1,14 +1,14 @@
 import axios from '../axios'
-import { RestUrl } from './url'
-import { Category } from '../../model'
-class CategoryNetwork {
-    static fetchCategories = () =>
+import { RestUrl, ParamsUrl } from './url'
+import { Banner } from '../../model';
+class BannerNetwork {
+    static fetchHeroBanners = () =>
         new Promise(async (resolve, reject) => {
-            const url = RestUrl.getAllCategoriesByCity
+            const url = RestUrl.banners(ParamsUrl.hero)
             try {
                 const { data } = await axios.get(url)
-                const categories = Category.createArrayCategory(data)
-                resolve(categories)
+                const banners = Banner.createArrayTemplate(data)
+                resolve(banners)
 
             } catch (error) {
                 try {
@@ -22,4 +22,4 @@ class CategoryNetwork {
         });
 }
 
-export { CategoryNetwork }
+export { BannerNetwork }

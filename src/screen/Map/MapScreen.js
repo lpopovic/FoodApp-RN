@@ -275,16 +275,14 @@ class MapScreen extends BaseScreen {
     deliveryContent = (delivery, timeDelivery) => {
         if (delivery) {
             return (
-                <>
-                    <View style={stylesCard.spaceView} />
-                    <View style={stylesCard.itemOtherContainer}>
-                        <Icon name="ios-bicycle" size={16} color={BASE_COLOR.black} />
-                        <Text
-                            style={[stylesCard.baseText, { marginLeft: 4 }]}>
-                            {timeDelivery} min.
+
+                <View style={stylesCard.itemOtherContainer}>
+                    <Icon name="ios-bicycle" size={16} color={BASE_COLOR.black} />
+                    <Text
+                        style={[stylesCard.baseText, { marginLeft: 4 }]}>
+                        {timeDelivery} min.
                         </Text>
-                    </View>
-                </>
+                </View>
             )
         } else {
             return null
@@ -293,7 +291,7 @@ class MapScreen extends BaseScreen {
     _renderItem = ({ item, index }) => {
         const image = item.image.image11t
         const title = item.name
-        const rating = item.avgRating
+        const rating = item.getAvgRating()
         const delivery = item.delivery || false
         const timeDelivery = item.estimatedDeliveryTime
         const priceTag = item.returnAvgPriceTag()
@@ -318,6 +316,15 @@ class MapScreen extends BaseScreen {
                                 {title}
                             </Text>
                         </View>
+
+                        <View style={stylesCard.descriptionContainer}>
+                            <Text
+                                numberOfLines={3}
+                                ellipsizeMode='tail'
+                                style={stylesCard.cardDescription}>
+                                {item.description}
+                            </Text>
+                        </View>
                         <View style={stylesCard.otherContainer}>
                             <View style={stylesCard.itemOtherContainer}>
                                 <Text
@@ -325,7 +332,10 @@ class MapScreen extends BaseScreen {
                                     {priceTag}
                                 </Text>
                             </View>
-                            {this.deliveryContent(delivery, timeDelivery)}
+                            <View style={stylesCard.spaceView} />
+                            <View>
+                                {this.deliveryContent(delivery, timeDelivery)}
+                            </View>
                             <View style={stylesCard.spaceView} />
                             <View style={stylesCard.itemOtherContainer}>
                                 <Image
@@ -338,15 +348,6 @@ class MapScreen extends BaseScreen {
                                 </Text>
                             </View>
                         </View>
-                        <View style={stylesCard.descriptionContainer}>
-                            <Text
-                                numberOfLines={3}
-                                ellipsizeMode='tail'
-                                style={stylesCard.cardDescription}>
-                                {item.description}
-                            </Text>
-                        </View>
-
 
                     </View>
                 </View>
@@ -457,7 +458,7 @@ class MapScreen extends BaseScreen {
                             description={`${Math.round(place.coordinate.latitude * 100) / 100}°N, ${Math.round(place.coordinate.longitude * 100) / 100}°E`}
                             pinColor={currentSlideIndex == index ? BASE_COLOR.green : BASE_COLOR.red}
                             onPress={() => this.onPressMarkerHandler(index)}
-                            // onCalloutPress={() => UrlOpen.openUrlInBrowser(UrlOpen.generateUrlForGoogleMap(place.coordinate.latitude, place.coordinate.longitude))}
+                        // onCalloutPress={() => UrlOpen.openUrlInBrowser(UrlOpen.generateUrlForGoogleMap(place.coordinate.latitude, place.coordinate.longitude))}
 
                         />
 
@@ -494,8 +495,8 @@ class MapScreen extends BaseScreen {
                                 tabsContainerStyle={segmentedControlStyles.container}
                                 tabStyle={segmentedControlStyles.commonStyle}
                                 activeTabStyle={{ ...segmentedControlStyles.commonStyle, ...segmentedControlStyles.activeStyle }}
-                                tabTextStyle={segmentedControlStyles.text}
-                                activeTabTextStyle={segmentedControlStyles.text}
+                                tabTextStyle={segmentedControlStyles.commonText}
+                                activeTabTextStyle={segmentedControlStyles.activeText}
                             />
                         </View>
                         {mainDisplay}
@@ -588,9 +589,8 @@ const stylesCard = StyleSheet.create({
     },
     textContent: {
         flex: 2,
-        marginLeft: 0,
-        marginTop: 10,
-        marginBottom: 10,
+        margin: 8,
+        marginLeft: 0
     },
     cardtitle: {
         fontSize: 14,
@@ -615,8 +615,9 @@ const stylesCard = StyleSheet.create({
         flex: 0.5,
         flexDirection: 'row',
         alignContent: 'center',
-        justifyContent: 'flex-start',
         alignItems: 'center',
+        justifyContent: 'space-between',
+        // backgroundColor: 'red'
     },
     spaceView: {
         marginLeft: 4,
@@ -630,14 +631,13 @@ const stylesCard = StyleSheet.create({
         flexDirection: 'row',
         alignContent: 'center',
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
     },
     descriptionContainer: {
         flex: 1.5,
-        justifyContent: 'flex-end',
     },
     titleContainer: {
-        flex: 1
+        flex: 1,
     },
 });
 

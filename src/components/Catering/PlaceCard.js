@@ -56,7 +56,7 @@ class PlaceCard extends Component {
                                     }}
                                     source={IconAssets.starIcon}
                                 />
-                                <Text style={{ color: '#646464', fontWeight: '400', fontSize: 11, marginLeft: 2 }}>{Number(data.avgRating).toFixed(1)}</Text>
+                                <Text style={{ color: '#646464', fontWeight: '400', fontSize: 11, marginLeft: 2 }}>{data.getAvgRating()}</Text>
                             </View>
                         </TouchableOpacity>
                         <TouchableOpacity onPress={() => this.props.onClick()} activeOpacity={0.5} style={{ flex: 3, marginTop: 10, marginLeft: 10 }}>

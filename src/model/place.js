@@ -5,8 +5,8 @@ import { generatePriceTagString } from '../helpers';
 class Place {
     constructor(object) {
         this._id = object._id;
-        this.avgRating = object.avgRating || '5.0';
-        this.avgPriceTag = object.avgPriceTag || '1';
+        this.avgRating = object.avgRating || '0';
+        this.avgPriceTag = object.avgPriceTag || '0';
         this.numberOfReviews = object.numberOfReviews || '0';
         this.pickup = object.pickup;
         this.delivery = object.delivery || false;
@@ -24,10 +24,15 @@ class Place {
     returnAvgPriceTag = () => {
         let value = '-'
         if (this.avgPriceTag) {
-            return generatePriceTagString(this.avgRating)
+            return generatePriceTagString(this.avgPriceTag)
         } else {
             return value
         }
+    }
+    getAvgRating = () => {
+        let value = Number(this.avgRating)
+        return value.toFixed(1)
+
     }
     setupCoordinate = (location) => {
         if (location) {
