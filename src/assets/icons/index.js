@@ -13,6 +13,7 @@ const IconAssets = {
     minimumPriceIcon: require('./minimum_price.png'),
     deliveryTimeIcon: require('./delivery_time_icon.png'),
     reviewIcon: require(`./review_icon.png`),
+    specialImportantMark: require(`./special_important_mark.png`),
 
     homeTabIcon: require('./home_tab_icon.png'),
     mapTabIcon: require('./map_tab_icon.png'),

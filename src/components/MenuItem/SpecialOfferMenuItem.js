@@ -1,45 +1,42 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
-import {
-    IconAssets
-} from '../../assets';
+import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { connect } from 'react-redux';
+import { IconAssets } from '../../assets';
 import { userFavoriteMenuItems } from '../../store/actions'
 import { BASE_COLOR } from '../../styles';
 
-class DishCard extends Component {
+class SpecialOfferMenuItem extends Component {
 
     render() {
         const { dish, userFavoriteMenuItemsIDs } = this.props
         const { image, description, name, _id, nominalPrice } = this.props.dish
         return (
             <View style={styles.mainContainer}>
-                <TouchableOpacity style={{ flex: 1, flexDirection: 'row' }} onPress={() => this.props.onClick()}>
+                <TouchableOpacity style={{ flex: 1, flexDirection: 'row' }} activeOpacity={1} onPress={() => this.props.onPress()}>
                     <Image
                         style={{
                             height: 90,
                             aspectRatio: 1,
-                            marginVertical: 5,
-                            marginLeft: 6,
+                            borderTopLeftRadius: 5,
+                            borderBottomLeftRadius: 5,
                             marginRight: 10,
-                            borderRadius: 5
                         }}
                         source={{ uri: image.image169t }}
                     />
-                    <View style={{ flex: 10, flexDirection: 'column', height: '100%', paddingRight: 6 }}>
-                        <View style={{ height: 50, flexDirection: 'row', paddingTop: 10, }}>
+                    <View style={{ flex: 10, flexDirection: 'column', height: '100%', paddingRight: 6,}}>
+                        <View style={{ height: 45, flexDirection: 'row', paddingTop: 5, alignItems: 'center' }}>
                             <View style={{ flex: 7.5 }}>
-                                <Text numberOfLines={2} ellipsizeMode='tail' style={{ fontSize: 14, fontWeight: '600' }}>{name}</Text>
+                                <Text numberOfLines={2} ellipsizeMode='tail' style={{ fontSize: 19, fontWeight: '400' }}>{name}</Text>
                             </View>
                             <View style={{ width: 58, flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'flex-start' }}>
-                                <Text style={{ fontSize: 14, fontWeight: '400', }}>{nominalPrice}.00</Text>
+                                <Text style={{ fontSize: 17, fontWeight: '400', }}>{nominalPrice}.00</Text>
                             </View>
                         </View>
-                        <View style={{ height: 50, flexDirection: 'row', paddingTop: 5 }}>
+                        <View style={{ height: 45, flexDirection: 'row', paddingTop: 0 }}>
                             <View style={{ flex: 8.5 }}>
-                                <Text numberOfLines={2} ellipsizeMode='tail' style={{ fontSize: 13, fontWeight: '300', color: BASE_COLOR.darkGray }}>{description}</Text>
+                                <Text numberOfLines={1} ellipsizeMode='tail' style={{ fontSize: 14, fontWeight: '400', color: BASE_COLOR.black }}>{description}</Text>
                             </View>
-                            <View style={{ width: 32, flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'flex-start' }}>
+                            <View style={{ width: 32, flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center' }}>
                                 <TouchableOpacity onPress={() => this.onPressFavoriteMenuItemHandler(dish)}>
                                     <View style={{ height: 32, width: 32, justifyContent: "flex-start", alignItems: "flex-end" }}>
                                         <Image
@@ -59,17 +56,17 @@ class DishCard extends Component {
             </View>
         )
     }
-
-    onPressFavoriteMenuItemHandler = (menuItem) => {
-        this.props.userFavoriteMenuItemsHandler(menuItem)
-    }
 }
 
 const styles = StyleSheet.create({
     mainContainer: {
-        flexDirection: 'row',
-        margin: 10,
-        height: 100,
+        flex: 1,
+        width: 300,
+        height: 95,
+        marginLeft: 8,
+        borderWidth: 2.5,
+        borderRadius: 8,
+        borderColor: BASE_COLOR.blue
     }
 });
 
@@ -84,4 +81,4 @@ const mapDispatchToProps = dispatch => {
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(DishCard);
+export default connect(mapStateToProps, mapDispatchToProps)(SpecialOfferMenuItem);

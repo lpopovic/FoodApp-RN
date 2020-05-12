@@ -13,6 +13,8 @@ import { fetchUserProfile, fetchUserFavorites } from '../../store/actions'
 import { connect } from 'react-redux';
 import { NAV_COLOR, BASE_COLOR } from '../../styles';
 import { CategorySectionList } from '../../components/Category/CategoryList'
+import { DishSectionList } from '../../components/Catering/DishList'
+import { PlaceVerticalList } from '../../components/Place/PlaceList'
 import { PlaceSectionList } from '../../components/Place/PlaceList'
 import MenuItemList from '../../components/MenuItem/MenuItemList'
 import HomeCaroselComponent from '../../components/Home/HomeCaroselComponent';
@@ -279,7 +281,7 @@ class HomeScreen extends BaseScreen {
         const seeMore = String(this.props.strings.seeMore).toLowerCase()
         if (pickupPlaces.length > 0) {
             return (
-                <PlaceSectionList
+                <DishSectionList
                     titleSection={title}
                     titleSeeMore={seeMore}
                     arrayObject={pickupPlaces}
@@ -293,6 +295,20 @@ class HomeScreen extends BaseScreen {
                         }
                     })}
                 />
+                // <PlaceSectionList
+                //     titleSection={title}
+                //     titleSeeMore={seeMore}
+                //     arrayObject={pickupPlaces}
+                //     onPressItem={(item) => this.pushNewScreen({ routeName: ScreenName.PlaceDetailScreen(), key: `${Math.random() * 10000}${item._id}`, params: { _id: item._id } })}
+                //     onPressSeeMore={() => this.pushNewScreen({
+                //         routeName: ScreenName.PlaceListScreen(),
+                //         key: `${Math.random() * 10000}`,
+                //         params: {
+                //             title: title,
+                //             apiParams: ParamsUrl.pickup(true)
+                //         }
+                //     })}
+                // />
             )
         }
 
@@ -359,7 +375,6 @@ class HomeScreen extends BaseScreen {
             )
         }
     }
-
     caroselContent = () => {
         const { caroselPlaces } = this.state
         return (
@@ -375,6 +390,17 @@ class HomeScreen extends BaseScreen {
 
             />
         )
+    }
+    placeVerticalListContent = () => {
+        const { recommendedPlaces } = this.state
+        if (recommendedPlaces.length > 0) {
+            return (
+                <PlaceVerticalList
+                    arrayObject={recommendedPlaces}
+                    onPressItem={(item) => this.pushNewScreen({ routeName: ScreenName.PlaceDetailScreen(), key: `${Math.random() * 10000}${item._id}`, params: { _id: item._id } })}
+                />
+            )
+        }
     }
     _onRefresh = () => {
         this.setNewStateHandler({ refreshing: true });
@@ -396,6 +422,9 @@ class HomeScreen extends BaseScreen {
                 <View style={{ flex: 1 }}>
                     <View style={{ marginTop: 8 }}>
                         {this.caroselContent()}
+                    </View>
+                    <View style={{ marginTop: 8 }}>
+                        {this.placeVerticalListContent()}
                     </View>
                     <View style={{ marginTop: 8 }}>
                         {this.placeListRecommendedContent()}

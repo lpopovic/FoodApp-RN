@@ -22,7 +22,7 @@ import {
     isUndefined
 } from '../../helpers'
 import DishCard from '../../components/Catering/DishCard';
-import DishList from '../../components/Catering/DishList';
+import { DishList } from '../../components/Catering/DishList';
 import MenuItemList from '../../components/MenuItem/MenuItemList'
 import {
     IconAssets,

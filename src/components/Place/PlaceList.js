@@ -11,6 +11,7 @@ import {
 import PlaceItem from './PlaceItem'
 import PlaceSmallItem from './PlaceSmallItem'
 import PlaceFavoriteItem from './PlaceFavoriteItem'
+import PlaceVerticalCard from './PlaceVerticalCard'
 import { BASE_COLOR } from '../../styles'
 
 
@@ -128,7 +129,40 @@ class PlaceSectionList extends Component {
         )
     }
 }
+class PlaceVerticalList extends Component {
+    constructor(props) {
+        super(props)
+    }
+    render_FlatList_footer = () => {
+        var footer_View = (
+            <View style={{ width: 8 }}>
+            </View>
 
+        );
+        return footer_View;
+    };
+
+    render() {
+        return (
+            <View>
+                <FlatList
+                    showsVerticalScrollIndicator={false}
+                    style={styles.listContainer}
+                    data={this.props.arrayObject}
+                    vertical
+                    keyExtractor={(item, index) => `${index.toString()}`}
+                    renderItem={(info) => (
+                        <PlaceVerticalCard 
+                            item={info.item}
+                            onPress={() => this.props.onPressItem(info.item)}
+                        />
+                    )}
+                    ListFooterComponent={this.render_FlatList_footer}
+                />
+            </View>
+        )
+    }
+}
 
 const styles = StyleSheet.create({
     mainContainer: {
@@ -139,7 +173,7 @@ const styles = StyleSheet.create({
         width: "100%",
     },
     sectionContainer: {
-        paddingLeft: 8, //16
+        paddingLeft: 8,
         paddingRight: 16,
         justifyContent: 'space-between',
         flexDirection: 'row',
@@ -157,4 +191,4 @@ const styles = StyleSheet.create({
 });
 
 
-export { PlaceSectionList, PlaceList };
+export { PlaceSectionList, PlaceList, PlaceVerticalList };
