@@ -114,7 +114,7 @@ class DishSectionList extends Component {
                     renderItem={(info) => (
                         <SpecialOfferMenuItem
                             dish={info.item}
-                            onClick={() => this.props.onPressItem(info.item)}
+                            onPress={() => this.props.onPressItem(info.item)}
                         />
                         //     <PlaceSmallItem
                         //         item={info.item}

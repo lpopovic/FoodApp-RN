@@ -102,11 +102,11 @@ class PlaceVerticalCard extends Component {
         categories.map((category, index) => {
             if (index <= 1) {
                 threeCategories.push(
-                    <Text style={{ marginLeft: index == 0 ? 6 : 14, color: BASE_COLOR.darkGray }}>{category.name}</Text>
+                    <Text key={index} style={{ marginLeft: index == 0 ? 6 : 14, color: BASE_COLOR.darkGray }}>{category.name}</Text>
                 )
             } else if (index === 2) {
                 threeCategories.push(
-                    <Text numberOfLines={1} ellipsizeMode={'tail'} style={{ flex: 1, marginLeft: 14, color: BASE_COLOR.darkGray }}>{category.name}</Text>
+                    <Text key={index} numberOfLines={1} ellipsizeMode={'tail'} style={{ flex: 1, marginLeft: 14, color: BASE_COLOR.darkGray }}>{category.name}</Text>
                 )
             }
         })

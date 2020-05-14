@@ -391,7 +391,7 @@ class PlaceDetailsScreen extends BaseScreen {
                                             marginRight: 10,
                                             tintColor: BASE_COLOR.darkGray
                                         }}
-                                        resizeMode='center'
+                                        resizeMode='contain'
                                         source={this.state.expanded == true ? IconAssets.upArrow : IconAssets.downArrow}
                                     />
                                 </View>

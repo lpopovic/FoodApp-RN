@@ -66,7 +66,7 @@ const styles = StyleSheet.create({
         marginLeft: 8,
         borderRadius: 5,
         overflow: 'hidden',
-        width: 220,
+        width: 221,
     },
     imageBackground: {
         width: "100%",
