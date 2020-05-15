@@ -12,7 +12,7 @@ import { ScreenName, LANGUAGE_KEY } from '../../helpers'
 import BaseScreen from "../BaseScreen/BaseScreen"
 import PlaceCard from '../../components/Catering/PlaceCard';
 import PlaceList from '../../components/Catering/PlaceList';
-import DishList from '../../components/Catering/DishList';
+import { DishList } from '../../components/Catering/DishList';
 import DishCard from '../../components/Catering/DishCard';
 import CalendarStrip from 'react-native-calendar-strip';
 import { CatheringNetwork, UserNetwork } from '../../service/api'
