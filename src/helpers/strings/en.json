@@ -135,5 +135,5 @@
    "delivered": "Delivered",
    "pickedUp": "Picked up",
    "deliveredAndUserReviewed": "Delivered and user reviewed",
-   "serviceIsCurrentlyUnavailable.": "Service is currently unavailable."
+   "serviceIsCurrentlyUnavailable": "Service is currently unavailable."
 }
