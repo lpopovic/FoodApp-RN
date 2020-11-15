@@ -5,7 +5,8 @@ import {
     StyleSheet,
     TouchableOpacity,
     SafeAreaView,
-    Image
+    Image,
+    ImageBackground
 } from 'react-native';
 import { connect } from 'react-redux';
 import FontAwesome from 'react-native-vector-icons/dist/FontAwesome';
@@ -18,7 +19,7 @@ import {
     ScreenName, saveStorageData, STORAGE_KEY,
 } from '../../helpers'
 import { setLanguage, saveLanguageSetup } from '../../store/actions'
-import { IconAssets } from '../../assets';
+import { IconAssets, TestAssets } from '../../assets';
 
 class LanguageScreen extends BaseScreen {
 
@@ -26,7 +27,7 @@ class LanguageScreen extends BaseScreen {
         super(props)
         this.state = {
             langClicked: false,
-            languages: [{ text: 'Srpski', name: 'srb' }, { text: 'English', name: 'en' }],
+            languages: [{ text: 'English', name: 'en' }, { text: 'Srpski', name: 'srb' },],
             chosenLanguage: this.props.strings.chooseLanguage
         }
     }
@@ -48,41 +49,61 @@ class LanguageScreen extends BaseScreen {
     onPressNext = () => {
         this.resetNavigationStack(ScreenName.OnboardingScreen())
     }
-    render() {
+
+    mainContent = () => {
         const { langClicked, languages, chosenLanguage } = this.state;
         const { strings } = this.props;
         return (
-            <SafeAreaView style={{ flex: 1 }}>
-                <TouchableOpacity onPress={() => this.setNewStateHandler({ langClicked: false })} activeOpacity={1} style={{ flex: 1, backgroundColor: BASE_COLOR.backgroundBlue }}>
-                    <View style={styles.headerContainer}>
-                        <View style={styles.logoContainer} >
-                            <Image source={IconAssets.appIcon256} style={styles.logoImage} resizeMode='contain' />
+            <View style={styles.mainContainer}>
+                <View style={styles.headerContainer}>
+                    <View style={styles.logoContainer} >
+                        <Image source={IconAssets.appIcon256} style={styles.logoImage} resizeMode='contain' />
+                    </View>
+                </View>
+                <View style={styles.dropDownsMainCont}>
+                    <TouchableOpacity onPress={() => this.setNewStateHandler({ langClicked: !langClicked })} style={[styles.dropDownTitleCont]}>
+                        <Text style={{ color: 'white' }}>{chosenLanguage}</Text>
+                        <FontAwesome name='caret-down' size={20} color='white' />
+                    </TouchableOpacity>
+                    {langClicked &&
+                        <View style={[styles.dropDownStyle, styles.shadowStyle, { top: '27%' }]}>
+                            {languages.map((l, i) => (
+                                <Text
+                                    onPress={() => this.onPressLanguage(l)}
+                                    style={{ marginBottom: i == languages.length - 1 ? 0 : 20, fontSize: 16 }}
+                                    key={i}>{l.text}</Text>
+                            ))}
                         </View>
-                    </View>
-                    <View style={styles.dropDownsMainCont}>
-                        <TouchableOpacity onPress={() => this.setNewStateHandler({ langClicked: !langClicked })} style={[styles.dropDownTitleCont]}>
-                            <Text style={{ color: 'white' }}>{chosenLanguage}</Text>
-                            <FontAwesome name='caret-down' size={20} color='white' />
-                        </TouchableOpacity>
-                        {langClicked &&
-                            <View style={[styles.dropDownStyle, styles.shadowStyle, { top: '27%' }]}>
-                                {languages.map((l, i) => (
-                                    <Text
-                                        onPress={() => this.onPressLanguage(l)}
-                                        style={{ marginBottom: i == languages.length - 1 ? 0 : 20, fontSize: 16 }}
-                                        key={i}>{l.text}</Text>
-                                ))}
-                            </View>
-                        }
-                    </View>
-                    {chosenLanguage !== this.props.strings.chooseLanguage ?
-                        <TouchableOpacity onPress={() => this.onPressNext()}
-                            style={styles.nextBtn}>
-                            <Text style={styles.textButtonStyle}>{strings.next.toUpperCase()}</Text>
-                        </TouchableOpacity>
-                        :
-                        <View />
                     }
+                </View>
+                {chosenLanguage !== this.props.strings.chooseLanguage ?
+                    <TouchableOpacity onPress={() => this.onPressNext()}
+                        style={styles.nextBtn}>
+                        <Text style={styles.textButtonStyle}>{strings.next.toUpperCase()}</Text>
+                    </TouchableOpacity>
+                    :
+                    <View
+                        style={{ ...styles.nextBtn, backgroundColor: 'transparent', borderWidth: 0 }} />
+                }
+            </View>
+        )
+    }
+
+    render() {
+        const mainDisplay = this.mainContent()
+
+        return (
+            <SafeAreaView style={styles.mainContainer}>
+                <TouchableOpacity
+                    onPress={() => this.setNewStateHandler({ langClicked: false })}
+                    activeOpacity={1}
+                    style={styles.mainContainer}>
+                    <ImageBackground
+                        style={styles.imageBackgroundContainer}
+                        resizeMode='cover'
+                        source={TestAssets.backgroudImage} >
+                        {mainDisplay}
+                    </ImageBackground>
                 </TouchableOpacity>
             </SafeAreaView>
         )
@@ -90,6 +111,14 @@ class LanguageScreen extends BaseScreen {
 }
 
 const styles = StyleSheet.create({
+    mainContainer: {
+        flex: 1,
+        backgroundColor: 'rgba(0, 0, 0, 0.5)'
+    },
+    imageBackgroundContainer: {
+        flex: 1,
+        backgroundColor: BASE_COLOR.backgroundBlue
+    },
     dropDownsMainCont: {
         flex: 1.5,
         justifyContent: 'center',
@@ -125,7 +154,8 @@ const styles = StyleSheet.create({
     nextBtn: {
         width: '50%',
         height: 50,
-        borderWidth: 1,
+        borderWidth: 0.7,
+        borderColor: BASE_COLOR.white,
         backgroundColor: BASE_COLOR.green,
         alignSelf: 'center',
         marginBottom: 30,
