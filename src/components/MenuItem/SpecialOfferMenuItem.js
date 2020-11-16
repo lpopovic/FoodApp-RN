@@ -23,7 +23,7 @@ class SpecialOfferMenuItem extends Component {
                         }}
                         source={{ uri: image.image169t }}
                     />
-                    <View style={{ flex: 10, flexDirection: 'column', height: '100%', paddingRight: 6,}}>
+                    <View style={{ flex: 10, flexDirection: 'column', height: '100%', paddingRight: 6, }}>
                         <View style={{ height: 45, flexDirection: 'row', paddingTop: 5, alignItems: 'center' }}>
                             <View style={{ flex: 7.5 }}>
                                 <Text numberOfLines={2} ellipsizeMode='tail' style={{ fontSize: 19, fontWeight: '400' }}>{name}</Text>
@@ -55,6 +55,10 @@ class SpecialOfferMenuItem extends Component {
                 </TouchableOpacity>
             </View>
         )
+    }
+    
+    onPressFavoriteMenuItemHandler = (menuItem) => {
+        this.props.userFavoriteMenuItemsHandler(menuItem)
     }
 }
 
