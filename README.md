@@ -10,7 +10,7 @@
 [![Maintenance](https://img.shields.io/badge/Multi%20Language-yes-green.svg)]()
 [![Generic badge](https://img.shields.io/badge/Axios-3.4-blue.svg)]()
 
-# Dish App
+# Klopaj App
 > React Native cross-platform mobile application. Applicaton for ordering food for individuals and companies.
 
 ## Table of contents
@@ -56,7 +56,8 @@ Applicaton for ordering food for individuals and companies.
 
 ## Status
 
-Project is _in progress_.
+* Project is _in progress_
+* Backend service is _not available currently_
 
 ## Inspiration
 
